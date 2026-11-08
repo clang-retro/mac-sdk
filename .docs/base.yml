@@ -68,6 +68,8 @@ markdown_extensions:
 validation:
   nav:
     omitted_files: info
+    # The API reference (api/) is made by doxygen after the site.
+    not_found: info
   links:
     not_found: warn
     anchors: info
@@ -78,7 +80,7 @@ extra:
   generator: false
   social:
     - icon: material/view-grid-outline
-      link: https://clang-retro.github.io/dos-sdk/projects/
+      link: https://clang-retro.github.io/
       name: All clang-retro projects
     - icon: fontawesome/brands/github
       link: https://github.com/clang-retro
