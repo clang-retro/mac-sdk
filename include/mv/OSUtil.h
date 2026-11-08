@@ -639,9 +639,17 @@ static __inline__ void Restart(void);
 pascal void Restart(void);
 #endif
 
+#if TARGET_CPU_68K
+static __inline__ void SetUpA5(void);
+#else
 pascal void SetUpA5(void);
+#endif
 
+#if TARGET_CPU_68K
+static __inline__ void RestoreA5(void);
+#else
 pascal void RestoreA5(void);
+#endif
 
 #if TARGET_CPU_68K
 static __inline__ Byte GetMMUMode(void);
@@ -1075,6 +1083,33 @@ static __inline__ void Environs(INTEGER *rom, INTEGER *machine) {
 
 static __inline__ void Restart(void) {
     ShutDwnStart();
+}
+
+static __inline__ void SetUpA5(void) {
+    /* MPW's SetUpA5 pushes the caller's A5 on the stack, which code from clang
+       cannot allow: it addresses its locals from SP. This keeps them in a
+       common block, a count of bytes used followed by up to 32 saved values;
+       the count goes up in one instruction before the save, so an interrupt
+       between the two takes the next slot. */
+    __asm__ __volatile__(
+        ".comm __mv_a5_stack, 132, 4\n\t"
+        "lea (__mv_a5_stack,%%pc), %%a0\n\t"
+        "add.l #4, (%%a0)\n\t"
+        "move.l (%%a0), %%d0\n\t"
+        ".short 0x218D, 0x0800\n\t"          /* move.l %a5, (0,%a0,%d0.l) */
+        ".short 0x2A78, 0x0904"               /* movea.l $904.w, %a5 */
+        : : : "d0", "a0", "cc", "memory");
+}
+
+static __inline__ void RestoreA5(void) {
+    /* Undoes the latest SetUpA5 (see there). */
+    __asm__ __volatile__(
+        ".comm __mv_a5_stack, 132, 4\n\t"
+        "lea (__mv_a5_stack,%%pc), %%a0\n\t"
+        "move.l (%%a0), %%d0\n\t"
+        ".short 0x2A70, 0x0800\n\t"          /* movea.l (0,%a0,%d0.l), %a5 */
+        "sub.l #4, (%%a0)"
+        : : : "d0", "a0", "cc", "memory");
 }
 
 static __inline__ Byte GetMMUMode(void) {

@@ -215,9 +215,17 @@ static __inline__ wide* WideNegate(wide *target);
 pascal wide* WideNegate(wide *target);
 #endif
 
+#if TARGET_CPU_68K
+static __inline__ wide* WideShift(wide *target, long shift);
+#else
 pascal wide* WideShift(wide *target, long shift);
+#endif
 
+#if TARGET_CPU_68K
+static __inline__ unsigned long WideSquareRoot(const wide *source);
+#else
 pascal unsigned long WideSquareRoot(const wide *source);
+#endif
 
 #if TARGET_CPU_68K
 static __inline__ wide* WideMultiply(long multiplicand, long multiplier, wide *target);
@@ -237,7 +245,11 @@ static __inline__ wide* WideWideDivide(wide *dividend, long divisor, long *remai
 pascal wide* WideWideDivide(wide *dividend, long divisor, long *remainder);
 #endif
 
+#if TARGET_CPU_68K
+static __inline__ wide* WideBitShift(wide *src, long shift);
+#else
 pascal wide* WideBitShift(wide *src, long shift);
+#endif
 
 #if TARGET_CPU_68K
 static __inline__ void GetIndString(StringPtr s, INTEGER sid, INTEGER index) {
@@ -336,6 +348,42 @@ static __inline__ wide* WideNegate(wide *target) {
     return target;
 }
 
+static __inline__ wide* WideShift(wide *target, long shift) {
+    /* Positive shifts right, rounding (halves up); negative shifts left. */
+    long long n = (long long)(((unsigned long long)(UInt32)target->hi << 32) | target->lo);
+    if (shift >= 64)
+        n = 0;
+    else if (shift > 0)
+        n = (n >> shift) + ((n >> (shift - 1)) & 1);
+    else if (shift <= -64)
+        n = 0;
+    else if (shift < 0)
+        n = (long long)((unsigned long long)n << -shift);
+    target->hi = (SInt32)(n >> 32);
+    target->lo = (UInt32)n;
+    return target;
+}
+
+static __inline__ unsigned long WideSquareRoot(const wide *source) {
+    /* The source is unsigned; the root is rounded to nearest. */
+    unsigned long long x = ((unsigned long long)(UInt32)source->hi << 32) | source->lo;
+    unsigned long long r = 0, bit = 1ULL << 62;
+    while (bit > x)
+        bit >>= 2;
+    while (bit) {
+        if (x >= r + bit) {
+            x -= r + bit;
+            r = (r >> 1) + bit;
+        } else {
+            r >>= 1;
+        }
+        bit >>= 2;
+    }
+    if (x > r)
+        r++;
+    return r > 0xFFFFFFFFULL ? 0xFFFFFFFFUL : (uint32_t)r;
+}
+
 static __inline__ wide* WideMultiply(long multiplicand, long multiplier, wide *target) {
     long long p = (long long)multiplicand * multiplier;
     target->hi = (SInt32)(p >> 32);
@@ -344,36 +392,85 @@ static __inline__ wide* WideMultiply(long multiplicand, long multiplier, wide *t
 }
 
 static __inline__ long WideDivide(const wide *dividend, long divisor, long *remainder) {
-    /* The quotient must fit in 32 bits; otherwise (or for a zero divisor)
-       the result is 0x80000000 and the remainder is left alone. */
+    /* As QuickDraw GX documents it: with no remainder (nil, or (int32_t *)-1)
+       the quotient is rounded to nearest, halves away from zero. A quotient
+       that does not fit (or a zero divisor) is pinned to 0x7FFFFFFF or
+       0x80000000 and the remainder set to 0x80000000; with (int32_t *)-1 the
+       result is then 0x80000000. */
     long long n = (long long)(((unsigned long long)(UInt32)dividend->hi << 32) | dividend->lo);
     long long q;
-    if (divisor == 0 || (divisor == -1 && dividend->hi == (SInt32)0x80000000 && dividend->lo == 0))
-        return (int32_t)0x80000000;
-    q = n / divisor;
-    if (q > 0x7FFFFFFFLL || q < -0x7FFFFFFFLL - 1)
-        return (int32_t)0x80000000;
-    if (remainder)
-        *remainder = (int32_t)(n - q * divisor);
+    if (divisor == 0) {
+        q = n < 0 ? -0x80000001LL : 0x80000000LL;
+    } else if (divisor == -1 && n == -0x7FFFFFFFFFFFFFFFLL - 1) {
+        q = 0x80000000LL;
+    } else {
+        long long r;
+        q = n / divisor;
+        r = n - q * divisor;
+        if (!remainder || (void *)remainder == (void *)-1) {
+            long long r2 = r < 0 ? -r : r;
+            long long d = divisor < 0 ? -(long long)divisor : divisor;
+            if (2 * r2 >= d)
+                q += (n < 0) != (divisor < 0) ? -1 : 1;
+        } else if (q >= -0x80000000LL && q <= 0x7FFFFFFFLL) {
+            *remainder = (int32_t)r;
+        }
+    }
+    if (q > 0x7FFFFFFFLL || q < -0x80000000LL) {
+        if ((void *)remainder == (void *)-1)
+            return (int32_t)0x80000000;
+        if (remainder)
+            *remainder = (int32_t)0x80000000;
+        return q < 0 ? (int32_t)0x80000000 : 0x7FFFFFFF;
+    }
     return (int32_t)q;
 }
 
 static __inline__ wide* WideWideDivide(wide *dividend, long divisor, long *remainder) {
-    /* The 64-bit quotient replaces the dividend; one that does not fit (or a
-       zero divisor) gives 0x80000000 00000000. */
+    /* The quotient replaces the dividend; with no remainder (nil, or
+       (int32_t *)-1) it is rounded to nearest, halves away from zero. A zero
+       divisor, or 0x80000000 00000000 / -1, gives the closest infinity
+       (0x7FFFFFFF FFFFFFFF or 0x80000000 00000000) and a remainder of
+       0x80000000. */
     long long n = (long long)(((unsigned long long)(UInt32)dividend->hi << 32) | dividend->lo);
     long long q;
-    if (divisor == 0 || (divisor == -1 && dividend->hi == (SInt32)0x80000000 && dividend->lo == 0)) {
-        dividend->hi = (SInt32)0x80000000;
-        dividend->lo = 0;
-        return dividend;
+    if (divisor == 0 || (divisor == -1 && n == -0x7FFFFFFFFFFFFFFFLL - 1)) {
+        q = divisor == 0 && n < 0 ? -0x7FFFFFFFFFFFFFFFLL - 1 : 0x7FFFFFFFFFFFFFFFLL;
+        if (remainder && (void *)remainder != (void *)-1)
+            *remainder = (int32_t)0x80000000;
+    } else {
+        long long r;
+        q = n / divisor;
+        r = n - q * divisor;
+        if (!remainder || (void *)remainder == (void *)-1) {
+            long long r2 = r < 0 ? -r : r;
+            long long d = divisor < 0 ? -(long long)divisor : divisor;
+            if (2 * r2 >= d)
+                q += (n < 0) != (divisor < 0) ? -1 : 1;
+        } else {
+            *remainder = (int32_t)r;
+        }
     }
-    q = n / divisor;
-    if (remainder)
-        *remainder = (int32_t)(n - q * divisor);
     dividend->hi = (SInt32)(q >> 32);
     dividend->lo = (UInt32)q;
     return dividend;
+}
+
+static __inline__ wide* WideBitShift(wide *src, long shift) {
+    /* Positive shifts right (keeping the sign), negative shifts left; no
+       rounding. */
+    long long n = (long long)(((unsigned long long)(UInt32)src->hi << 32) | src->lo);
+    if (shift >= 64)
+        n = n < 0 ? -1 : 0;
+    else if (shift >= 0)
+        n >>= shift;
+    else if (shift <= -64)
+        n = 0;
+    else
+        n = (long long)((unsigned long long)n << -shift);
+    src->hi = (SInt32)(n >> 32);
+    src->lo = (UInt32)n;
+    return src;
 }
 
 #endif
