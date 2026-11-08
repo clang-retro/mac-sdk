@@ -47,18 +47,23 @@ echo "examples: linked"
 # The runtime library, when LLVM_SRC names a clang-retro/llvm checkout (for
 # compiler-rt): build it, link tests/runtime.c for both CPUs, and run the
 # 68k build as a 68000 and a 68020 in tools/sim68k.py (with unicorn).
+# tests/fixmath.c does the same for the FixMath glue, which needs it.
 if [ -n "$LLVM_SRC" ]; then
   CLANG="$CLANG" LLVM_SRC="$LLVM_SRC" runtime/build.sh "$APPS/lib"
-  for cpu in 68k ppc; do
-    CLANG="$CLANG" python3 tools/macapp.py --cpu $cpu --lib "$APPS/lib" \
-      -o "$APPS/runtime-$cpu.bin" -- -Wall -Werror tests/runtime.c >/dev/null
+  for t in runtime fixmath; do
+    for cpu in 68k ppc; do
+      CLANG="$CLANG" python3 tools/macapp.py --cpu $cpu --lib "$APPS/lib" \
+        -o "$APPS/$t-$cpu.bin" -- -Wall -Werror tests/$t.c >/dev/null
+    done
   done
   if python3 -c "import unicorn" 2>/dev/null; then
-    for c in 68000 68020; do
-      python3 tools/sim68k.py --cpu $c "$APPS/runtime-68k.bin" >"$APPS/sim.txt" || {
-        cat "$APPS/sim.txt"; exit 1; }
-      grep -q "DrawString('all ok')" "$APPS/sim.txt" || {
-        grep DrawString "$APPS/sim.txt" | grep -v "'ok'"; exit 1; }
+    for t in runtime fixmath; do
+      for c in 68000 68020; do
+        python3 tools/sim68k.py --cpu $c "$APPS/$t-68k.bin" >"$APPS/sim.txt" || {
+          cat "$APPS/sim.txt"; exit 1; }
+        grep -q "DrawString('all ok')" "$APPS/sim.txt" || {
+          echo "$t on a $c:"; grep DrawString "$APPS/sim.txt" | grep -v "'ok'"; exit 1; }
+      done
     done
     echo "runtime: ok"
   else

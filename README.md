@@ -220,7 +220,13 @@ Manager and serial calls fill in a parameter block; the lowercase
 C-string calls (`fsopen`, `getwtitle`, ...) convert their strings and
 call the Pascal routine. The glue avoids `memcpy`, `memset` and 32-bit
 multiplies, so the headers work without the runtime library (BlockMoveData
-copies instead). `include/needs-glue.txt` lists what is left: mostly
+copies instead). The exceptions are the FixMath conversions between
+Fixed or Fract and floating point (`Fix2X`, `X2Fix`, `Frac2X`, `X2Frac`)
+and the 64-bit wide arithmetic (`WideAdd`, `WideMultiply`, `WideDivide`,
+...), which use soft float and 64-bit helpers and so need the runtime
+library (`X2Fix` and `X2Frac` round to nearest and saturate, as SANE
+does; a `WideDivide` quotient that does not fit gives 0x80000000).
+`include/needs-glue.txt` lists what is left: mostly
 calls that never ran on 68k (Navigation Services, Driver Services, the
 Name Registry).
 
@@ -287,8 +293,9 @@ use yourself, as `tests/runtime.c` does. Soft float is large on 68k
 and counts towards the 32 KB limit: `tests/runtime.c`, which uses float
 and double arithmetic and conversions, links to 20 KB.
 
-`tests/runtime.c` checks each helper; `tests/run.sh` runs its 68k build
-as a 68000 and a 68020 in `tools/sim68k.py`.
+`tests/runtime.c` checks each helper, and `tests/fixmath.c` the FixMath
+glue; `tests/run.sh` runs their 68k builds as a 68000 and a 68020 in
+`tools/sim68k.py`.
 
 ### Testing
 
@@ -334,9 +341,12 @@ and also fails when `include/` or `docs/coverage.md` differ from what
 
 - Coverage: the headers declare all but 3 undocumented symbols of what
   the ROM's InterfaceLib exports (see docs/coverage.md).
-- 68k glue for the rest of `needs-glue.txt` that did run on 68k (the
-  Fixed/extended conversions, the 64-bit Wide math, TESetWordBreak and
-  TESetClickLoop, which need a register trampoline).
+- 68k glue for the rest of `needs-glue.txt` that did run on 68k:
+  `WideShift`, `WideBitShift` and `WideSquareRoot`, `TESetWordBreak`
+  and `TESetClickLoop` (which need a register trampoline), the Sound
+  Driver calls (`StartSound`, ...), the Power Manager extras
+  (`BatteryStatus`, the wake-up time), `SetUpA5` and `RestoreA5`, and
+  the Component Manager 3 calls.
 - A C library (`<stdio.h>` over the File Manager, `malloc` over the
   Memory Manager).
 - Static constructors and shared libraries in the linkers, and a large
