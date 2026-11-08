@@ -225,7 +225,12 @@ Fixed or Fract and floating point (`Fix2X`, `X2Fix`, `Frac2X`, `X2Frac`)
 and the 64-bit wide arithmetic (`WideAdd`, `WideMultiply`, `WideDivide`,
 ...), which use soft float and 64-bit helpers and so need the runtime
 library (`X2Fix` and `X2Frac` round to nearest and saturate, as SANE
-does; a `WideDivide` quotient that does not fit gives 0x80000000).
+does). The wide calls follow QuickDraw GX's documentation, where they
+came from: `WideDivide` and `WideWideDivide` round the quotient when
+given no remainder, a `WideDivide` quotient that does not fit is pinned
+to 0x7FFFFFFF or 0x80000000, `WideShift` rounds a right shift and
+`WideBitShift` does not, and `WideSquareRoot` takes an unsigned value
+(its root is rounded to nearest, which the documentation does not say).
 `include/needs-glue.txt` lists what is left: mostly
 calls that never ran on 68k (Navigation Services, Driver Services, the
 Name Registry).
@@ -392,7 +397,7 @@ and also fails when `include/` or `docs/coverage.md` differ from what
 - Coverage: the headers declare all but 3 undocumented symbols of what
   the ROM's InterfaceLib exports (see docs/coverage.md).
 - 68k glue for the rest of `needs-glue.txt` that did run on 68k:
-  `WideShift`, `WideBitShift` and `WideSquareRoot`, `TESetWordBreak`
+  `TESetWordBreak`
   and `TESetClickLoop` (which need a register trampoline), the Sound
   Driver calls (`StartSound`, ...), the Power Manager extras
   (`BatteryStatus`, the wake-up time), `SetUpA5` and `RestoreA5`, and

@@ -59,9 +59,37 @@ int main(void) {
                              is(WideMultiply(0x40000000, 4, &b), 1, 0));
   report("WideDivide", WideDivide(&a, -16, &rem) == 0x12345678 && rem == 0 &&
                            WideDivide(&b, 3, &rem) == 0x55555555 && rem == 1 &&
-                           WideDivide(&b, 1, &rem) == (long)0x80000000);
+                           WideDivide(&b, 1, &rem) == 0x7FFFFFFF &&
+                           rem == (long)0x80000000);
+  /* With no remainder the quotient is rounded, halves away from zero. */
+  a.hi = 0; a.lo = 7;
+  report("WideDivide rounds", WideDivide(&a, 2, 0) == 4 && WideDivide(&a, -2, 0) == -4 &&
+                                  WideDivide(&a, 3, 0) == 2 &&
+                                  WideDivide(&a, 0, (long *)-1) == (long)0x80000000 &&
+                                  WideDivide(&a, 0, 0) == 0x7FFFFFFF);
   b.hi = 7; b.lo = 5;
-  report("WideWideDivide", is(WideWideDivide(&b, 2, &rem), 3, 0x80000002) && rem == 1);
+  report("WideWideDivide", is(WideWideDivide(&b, 2, &rem), 3, 0x80000002) && rem == 1 &&
+                               is(WideWideDivide(&b, 4, 0), 0, 0xE0000001) &&
+                               is(WideWideDivide(&b, 0, &rem), 0x7FFFFFFF, 0xFFFFFFFF) &&
+                               rem == (long)0x80000000);
+  a.hi = -1; a.lo = 0xFFFFFFFB;                    /* -5 */
+  report("WideBitShift", is(WideBitShift(&a, 1), -1, 0xFFFFFFFD) &&
+                             is(WideBitShift(&a, -33), -6, 0) &&
+                             is(WideBitShift(&a, 100), -1, 0xFFFFFFFF));
+  a.hi = 0; a.lo = 6;
+  report("WideShift", is(WideShift(&a, 2), 0, 2) && is(WideShift(&a, -40), 0x200, 0) &&
+                          is(WideShift(&a, 41), 0, 1));
+  a.hi = -1; a.lo = 0xFFFFFFFA;                    /* -6: -1.5 rounds to -1 */
+  report("WideShift negative", is(WideShift(&a, 2), -1, 0xFFFFFFFF));
+  a.hi = 0; a.lo = 0;
+  b.hi = 0; b.lo = 1000001;
+  report("WideSquareRoot", WideSquareRoot(&a) == 0 && WideSquareRoot(&b) == 1000 &&
+                               (b.lo = 1000 * 1000 + 1000, WideSquareRoot(&b)) == 1000 &&
+                               (b.lo = 1000 * 1000 + 1001, WideSquareRoot(&b)) == 1001);
+  b.hi = -1; b.lo = 0xFFFFFFFF;
+  report("WideSquareRoot max", WideSquareRoot(&b) == 0xFFFFFFFF);
+  b.hi = 0x3FFFFFFF; b.lo = 0;
+  report("WideSquareRoot big", WideSquareRoot(&b) == 0x7FFFFFFF);
   say(failures ? "FAILED" : "all ok");
   return 0;
 }

@@ -43,9 +43,6 @@ InstallExceptionHandler
 FSCreateResourceFile
 FSOpenResourceFile
 TempInsertROMMap
-WideShift
-WideSquareRoot
-WideBitShift
 CallUniversalProc
 CallOSTrapUniversalProc
 RegistryEntryIDDispose
