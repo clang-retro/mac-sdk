@@ -224,6 +224,70 @@ copies instead). `include/needs-glue.txt` lists what is left: mostly
 calls that never ran on 68k (Navigation Services, Driver Services, the
 Name Registry).
 
+## Building applications
+
+`tools/macapp.py` compiles C sources with this SDK's headers and links
+them into an application, fat (68k and PowerPC) by default:
+
+```sh
+CLANG=path/to/clang python3 tools/macapp.py -o Hello.bin examples/hello.c
+python3 tools/macapp.py --cpu 68k -o Hello68.bin examples/hello.c -- -DDEBUG
+hmount disk.img && hcopy -m Hello.bin :Hello && humount
+```
+
+Flags after `--` go to clang. The output is MacBinary II, for
+hfsutils' `hcopy -m`. `--name`, `--creator` and `--size` (the memory
+partition in KB) set the Finder name, the creator code and the `SIZE`
+resource; `--carbon` imports from CarbonLib first on PowerPC.
+
+The linkers it runs are in `tools/link/` and can be used on their own:
+
+- `codelink.py` links the ELF objects that clang's `m68k-apple-macos`
+  target makes, with `start.s` first, into one CODE 1 resource linked
+  at address 0, followed by a table of the absolute pointers in it.
+  CODE 0 is a one-entry jump table. At launch `start.s` adds the load
+  address to each pointer, calls `_FlushCodeCache` where the trap exists
+  (not on the 64K ROM, nor on System 6 on a Mac Plus or SE) and calls
+  `main`. Code reaches data PC-relative, so a 68k program must stay
+  within 32 KB until the compiler gets a large code model.
+- `peflink.py` links the XCOFF objects that `powerpc-apple-macos9`
+  makes into a PEF application (a `cfrg` 0 resource, the PEF container
+  in the data fork). Each imported call gets a glue stub that restores
+  the TOC. It finds which shared library exports each name in
+  `imports.json` (from Retro68's import libraries, by `gen-imports.py`;
+  `macos-exports.py` makes one from a real System Folder and ROM).
+  InterfaceLib wins a name that other libraries also export; CarbonLib
+  and `Apple;Carbon;Networking` are imported weakly.
+- `fatlink.py` merges the two: the PowerPC code in the data fork, named
+  by `cfrg`, and the 68k code in CODE. A Power Mac runs the PowerPC
+  code and a 68k Mac runs CODE.
+
+Not done yet in the linkers: archives (`.a`), static constructors,
+shared libraries (exports), and pattern-compressed PEF data.
+
+### Testing
+
+- `tools/sim68k.py App.bin` runs a 68k application on a 68k CPU
+  emulator (the `unicorn` Python package) and prints each Toolbox trap
+  it makes, with its arguments. Only a few traps are faked, so it checks
+  code generation, relocation and stack balance for small programs, not
+  drawing.
+- `tools/mame/` boots Apple's System disks in MAME (Systems 0.1 to 7.1)
+  with an application in place of the Finder: `mkroms.py` makes ROM sets
+  from dumps you own, `matrix.py App.bin OUTDIR` boots every System and
+  screenshots each one, `harddisk.sh` boots System 7 from a hard disk
+  image, `mfs.py` reads and writes the MFS 400K disks of Systems 0.1 to
+  2.0, `dc42.py` converts DiskCopy 4.2 images, and `crashdump.lua`
+  writes the registers when an application crashes.
+- `tools/qemu/boot-q800.sh` boots System 7.6.1 or Mac OS 8.1 on QEMU's
+  `q800` from a copy of the install CD with the application on it (you
+  supply a Quadra 800 ROM image). `tools/qemu/boot.sh` boots Mac OS 9 on
+  QEMU's `mac99` with a transfer disk, and `tools/qemu/mon.py` takes
+  screenshots and clicks through the QEMU monitor.
+- For PowerPC on Mac OS 8.1 and earlier, use SheepShaver with an
+  OldWorld ROM image (such as the beige G3's), with the install CD
+  attached as a CD-ROM.
+
 ## Tests
 
 ```sh
@@ -233,7 +297,7 @@ CLANG=path/to/clang tests/run.sh
 It compiles every header for both targets in C and C++, generates code
 for every 68k inline function, checks the size of every record whose
 definition gives one, checks the argument-block calls against the ROM,
-and builds the examples.
+and links every example into a fat application.
 
 `.github/workflows/check.yml` runs it for every pull request and push,
 with the newest clang from clang-retro/llvm's `llvm-prebuilt` release,
@@ -248,8 +312,8 @@ and also fails when `include/` or `docs/coverage.md` differ from what
   Fixed/extended conversions, the 64-bit Wide math, TESetWordBreak and TESetClickLoop, which need a register
   trampoline), and a runtime library (`__udivsi3`, `memcpy` and the
   other helpers clang calls on 68k).
-- The linkers and tools, which are still in clang-dos/dos-sdk under
-  `classicmac/`.
+- Archives, static constructors and shared libraries in the linkers,
+  and a large code model for 68k programs over 32 KB.
 
 ## License
 

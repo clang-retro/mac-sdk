@@ -1,7 +1,8 @@
 #!/bin/sh
 # Compile every header for both targets, in C and C++, and check record
 # sizes (tests/sizes.c, and every size given in defs/), and check the
-# argument-block calls against the ROM. CLANG defaults to clang on the PATH.
+# argument-block calls against the ROM, and link the examples into
+# applications. CLANG defaults to clang on the PATH.
 set -e
 cd "$(dirname "$0")/.."
 CLANG=${CLANG:-clang}
@@ -34,3 +35,11 @@ for t in m68k-apple-macos powerpc-apple-macos9; do
   done
   echo "$t: ok"
 done
+# Link every example into a fat application (68k CODE and PowerPC PEF).
+APPS=$(mktemp -d "${TMPDIR:-/tmp}/apps.XXXXXX")
+trap 'rm -rf "$SIZES" "$INLINES" "$BLOCKS" "$APPS"' EXIT
+for ex in examples/*.c; do
+  CLANG="$CLANG" python3 tools/macapp.py -o "$APPS/$(basename "$ex" .c).bin" \
+    -- -Wall -Werror "$ex" >/dev/null
+done
+echo "examples: linked"

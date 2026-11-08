@@ -25,6 +25,7 @@ nav:
   - "Mac OS 8, 9 and QuickTime": headers-newer.md
   - "Which System has which call": availability.md
   - "Systems and availability": systems.md
+  - "Building applications": building.md
   - "Coverage": coverage.md
   - "Tests": tests.md
   - "Not done yet": status.md
