@@ -8,10 +8,11 @@ the lot in CODE 1. CODE 0 holds a one-entry jump table that sends the
 Segment Loader to __start (start.s), which adds the image's load address
 to each listed pointer and calls main.
 
-    python3 codelink.py -o Hello.bin start.o hello.o [more.o ...]
+    python3 codelink.py -o Hello.bin start.o hello.o [more.o ...] [lib.a ...]
         [--name Hello] [--creator ????] [--size KB] [--map FILE]
 
 The output is MacBinary II, for hfsutils' "hcopy -m". Put start.o first.
+From archives (.a), only the members the program needs are linked.
 """
 import argparse
 import os
@@ -20,6 +21,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from macres import macbinary, resource_fork, size_res  # noqa: E402
+import archive  # noqa: E402
 
 SHT_PROGBITS, SHT_SYMTAB, SHT_NOBITS, SHT_RELA = 1, 2, 8, 4
 SHF_ALLOC = 2
@@ -103,6 +105,16 @@ class ElfObject:
                 off, info, addend = struct.unpack_from(">IIi", blob,
                                                        h[4] + 12 * k)
                 sec.relocs.append((off, info >> 8, info & 0xFF, addend))
+
+
+def defined_names(o):
+    return {s["name"] for s in o.symbols
+            if s["bind"] != STB_LOCAL and s["name"] and s["shndx"] != SHN_UNDEF}
+
+
+def referenced_names(o):
+    return {s["name"] for s in o.symbols
+            if s["bind"] != STB_LOCAL and s["name"] and s["shndx"] == SHN_UNDEF}
 
 
 def link(objs):
@@ -248,14 +260,17 @@ def main():
     ap.add_argument("--map", help="write symbol addresses here")
     a = ap.parse_args()
     try:
-        objs = []
+        objs, libs = [], []
         for p in a.inputs:
             blob = open(p, "rb").read()
-            if blob[:8] == b"!<arch>\n":
-                raise LinkError(f"{p}: archives are not supported yet")
-            objs.append(ElfObject(p, blob))
+            if archive.is_archive(blob):
+                libs.append((p, blob))
+            else:
+                objs.append(ElfObject(p, blob))
+        objs += archive.select(objs, libs, ElfObject, defined_names,
+                               referenced_names)
         image, syms, _ = link(objs)
-    except LinkError as e:
+    except (LinkError, archive.ArchiveError) as e:
         sys.exit(f"codelink: error: {e}")
     code0, code1 = code_resources(image)
     name = a.name or os.path.splitext(os.path.basename(a.output))[0]

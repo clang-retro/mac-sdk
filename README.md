@@ -219,7 +219,7 @@ as the ROM's PowerPC glue does; the high-level File Manager, Device
 Manager and serial calls fill in a parameter block; the lowercase
 C-string calls (`fsopen`, `getwtitle`, ...) convert their strings and
 call the Pascal routine. The glue avoids `memcpy`, `memset` and 32-bit
-multiplies, since there is no 68k runtime library yet (BlockMoveData
+multiplies, so the headers work without the runtime library (BlockMoveData
 copies instead). `include/needs-glue.txt` lists what is left: mostly
 calls that never ran on 68k (Navigation Services, Driver Services, the
 Name Registry).
@@ -262,8 +262,33 @@ The linkers it runs are in `tools/link/` and can be used on their own:
   by `cfrg`, and the 68k code in CODE. A Power Mac runs the PowerPC
   code and a 68k Mac runs CODE.
 
-Not done yet in the linkers: archives (`.a`), static constructors,
-shared libraries (exports), and pattern-compressed PEF data.
+Both linkers take archives (`.a`) and link only the members a program
+needs. Not done yet in them: static constructors, shared libraries
+(exports), and pattern-compressed PEF data.
+
+### The runtime library
+
+clang calls helper functions for what the CPU cannot do in a few
+instructions: on the 68000, 32-bit multiply and divide (`__mulsi3`,
+`__udivsi3`, ...), and on both CPUs 64-bit divide, soft float on 68k
+(`__adddf3`, ...), conversions, and `memcpy` and `memset` for structure
+copies. `runtime/build.sh` builds them into `libmacrt.a` for each CPU,
+from compiler-rt's builtins and `runtime/string.c` (the `mem*` functions
+and the common `str*` ones):
+
+```sh
+CLANG=path/to/clang LLVM_SRC=path/to/clang-retro/llvm runtime/build.sh
+```
+
+It writes `lib/m68k/libmacrt.a` and `lib/ppc/libmacrt.a`, which
+`tools/macapp.py` links when they are there (`--no-runtime` leaves them
+out). There is no C library yet: declare the `<string.h>` functions you
+use yourself, as `tests/runtime.c` does. Soft float is large on 68k
+and counts towards the 32 KB limit: `tests/runtime.c`, which uses float
+and double arithmetic and conversions, links to 20 KB.
+
+`tests/runtime.c` checks each helper; `tests/run.sh` runs its 68k build
+as a 68000 and a 68020 in `tools/sim68k.py`.
 
 ### Testing
 
@@ -297,7 +322,8 @@ CLANG=path/to/clang tests/run.sh
 It compiles every header for both targets in C and C++, generates code
 for every 68k inline function, checks the size of every record whose
 definition gives one, checks the argument-block calls against the ROM,
-and links every example into a fat application.
+and links every example into a fat application. With `LLVM_SRC` set it
+also builds the runtime library and runs its test.
 
 `.github/workflows/check.yml` runs it for every pull request and push,
 with the newest clang from clang-retro/llvm's `llvm-prebuilt` release,
@@ -309,11 +335,12 @@ and also fails when `include/` or `docs/coverage.md` differ from what
 - Coverage: the headers declare all but 3 undocumented symbols of what
   the ROM's InterfaceLib exports (see docs/coverage.md).
 - 68k glue for the rest of `needs-glue.txt` that did run on 68k (the
-  Fixed/extended conversions, the 64-bit Wide math, TESetWordBreak and TESetClickLoop, which need a register
-  trampoline), and a runtime library (`__udivsi3`, `memcpy` and the
-  other helpers clang calls on 68k).
-- Archives, static constructors and shared libraries in the linkers,
-  and a large code model for 68k programs over 32 KB.
+  Fixed/extended conversions, the 64-bit Wide math, TESetWordBreak and
+  TESetClickLoop, which need a register trampoline).
+- A C library (`<stdio.h>` over the File Manager, `malloc` over the
+  Memory Manager).
+- Static constructors and shared libraries in the linkers, and a large
+  code model for 68k programs over 32 KB.
 
 ## License
 

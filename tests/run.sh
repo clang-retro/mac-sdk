@@ -2,7 +2,8 @@
 # Compile every header for both targets, in C and C++, and check record
 # sizes (tests/sizes.c, and every size given in defs/), and check the
 # argument-block calls against the ROM, and link the examples into
-# applications. CLANG defaults to clang on the PATH.
+# applications. CLANG defaults to clang on the PATH. With LLVM_SRC set to
+# a clang-retro/llvm checkout, also build and check the runtime library.
 set -e
 cd "$(dirname "$0")/.."
 CLANG=${CLANG:-clang}
@@ -43,3 +44,24 @@ for ex in examples/*.c; do
     -- -Wall -Werror "$ex" >/dev/null
 done
 echo "examples: linked"
+# The runtime library, when LLVM_SRC names a clang-retro/llvm checkout (for
+# compiler-rt): build it, link tests/runtime.c for both CPUs, and run the
+# 68k build as a 68000 and a 68020 in tools/sim68k.py (with unicorn).
+if [ -n "$LLVM_SRC" ]; then
+  CLANG="$CLANG" LLVM_SRC="$LLVM_SRC" runtime/build.sh "$APPS/lib"
+  for cpu in 68k ppc; do
+    CLANG="$CLANG" python3 tools/macapp.py --cpu $cpu --lib "$APPS/lib" \
+      -o "$APPS/runtime-$cpu.bin" -- -Wall -Werror tests/runtime.c >/dev/null
+  done
+  if python3 -c "import unicorn" 2>/dev/null; then
+    for c in 68000 68020; do
+      python3 tools/sim68k.py --cpu $c "$APPS/runtime-68k.bin" >"$APPS/sim.txt" || {
+        cat "$APPS/sim.txt"; exit 1; }
+      grep -q "DrawString('all ok')" "$APPS/sim.txt" || {
+        grep DrawString "$APPS/sim.txt" | grep -v "'ok'"; exit 1; }
+    done
+    echo "runtime: ok"
+  else
+    echo "runtime: linked (install unicorn to run it)"
+  fi
+fi

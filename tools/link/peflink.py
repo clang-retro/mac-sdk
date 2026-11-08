@@ -10,7 +10,7 @@ writes the PEF loader section, and wraps the result as a Mac application
 with a 'cfrg' resource (and a 'SIZE' resource) in MacBinary form, ready
 for hfsutils' "hcopy -m".
 
-    python3 peflink.py -o Hello.bin hello.o [more.o ...]
+    python3 peflink.py -o Hello.bin hello.o [more.o ...] [lib.a ...]
         [--imports imports.json] [--carbon] [--name Hello]
         [--creator ????] [--size KB] [--pef out.pef]
 
@@ -24,6 +24,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from macres import cfrg, macbinary, resource_fork, size_res  # noqa: E402
+import archive  # noqa: E402
 
 # ---------------------------------------------------------------- XCOFF
 
@@ -145,14 +146,29 @@ class XcoffObject:
                                     f"outside every csect")
 
 
+def defined_names(o):
+    return {s.name for s in o.symbols.values()
+            if s.sclass in (C_EXT, C_WEAKEXT) and s.csect is not None
+            and s.smtyp in (XTY_SD, XTY_LD, XTY_CM)}
+
+
+def referenced_names(o):
+    return {s.name for s in o.symbols.values()
+            if s.sclass in (C_EXT, C_WEAKEXT) and s.smtyp == XTY_ER}
+
+
 def read_inputs(paths):
-    objs = []
+    """Read the objects, then the archive members they need (before the
+    shared libraries, so a library can stand in for an import)."""
+    objs, libs = [], []
     for p in paths:
         blob = open(p, "rb").read()
-        if blob[:8] == b"!<arch>\n":
-            raise LinkError(f"{p}: archives are not supported yet")
-        objs.append(XcoffObject(p, blob))
-    return objs
+        if archive.is_archive(blob) or blob[:8] == b"<bigaf>\n":
+            libs.append((p, blob))
+        else:
+            objs.append(XcoffObject(p, blob))
+    return objs + archive.select(objs, libs, XcoffObject, defined_names,
+                                 referenced_names)
 
 
 # ---------------------------------------------------------------- imports
@@ -542,7 +558,7 @@ def main():
         imports = Imports(a.imports, a.carbon)
         img = link(objs, imports)
         pef = build_pef(img, imports)
-    except LinkError as e:
+    except (LinkError, archive.ArchiveError) as e:
         sys.exit(f"peflink: error: {e}")
 
     name = a.name or os.path.splitext(os.path.basename(a.output))[0]
