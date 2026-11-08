@@ -1,0 +1,58 @@
+# Run the SDK's tests with clang-retro's clang, for every pull request and
+# push: compile every header for 68k and PowerPC, check record sizes and the
+# ROM-checked argument blocks, build the examples, and check that the
+# generated files (include/, docs/coverage.md) match their generators.
+#
+# clang comes from clang-retro/llvm's llvm-prebuilt release, which holds the
+# LLVM tools built from recent commits of its main branch; the newest Linux
+# one is used.
+name: Check
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['**/*.md', 'docs/**', '.docs/**', 'mkdocs.yml', '.github/workflows/docs.yml', 'LICENSE*']
+  pull_request:
+    paths-ignore: ['**/*.md', 'docs/**', '.docs/**', 'mkdocs.yml', '.github/workflows/docs.yml', 'LICENSE*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pyyaml
+      - name: Get clang
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          asset=$(gh api repos/clang-retro/llvm/releases/tags/llvm-prebuilt --jq \
+            '[.assets[] | select(.name | startswith("llvm-linux-"))] | sort_by(.created_at) | last | .name')
+          echo "Using $asset"
+          gh release download llvm-prebuilt -R clang-retro/llvm -p "$asset" -O llvm.tar.zst
+          mkdir -p "$RUNNER_TEMP/llvm"
+          tar --zstd -xf llvm.tar.zst -C "$RUNNER_TEMP/llvm"
+          rm llvm.tar.zst
+          echo "CLANG=$RUNNER_TEMP/llvm/bin/clang" >> "$GITHUB_ENV"
+          "$RUNNER_TEMP/llvm/bin/clang" --version
+      - name: Generated files are up to date
+        run: |
+          python3 tools/gen-headers.py
+          python3 tools/coverage.py
+          git status --porcelain
+          git diff --exit-code
+          test -z "$(git status --porcelain)"
+      - name: Tests
+        run: tests/run.sh

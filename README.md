@@ -235,6 +235,11 @@ for every 68k inline function, checks the size of every record whose
 definition gives one, checks the argument-block calls against the ROM,
 and builds the examples.
 
+`.github/workflows/check.yml` runs it for every pull request and push,
+with the newest clang from clang-retro/llvm's `llvm-prebuilt` release,
+and also fails when `include/` or `docs/coverage.md` differ from what
+`tools/gen-headers.py` and `tools/coverage.py` write.
+
 ## Not done yet
 
 - Coverage: the headers declare all but 3 undocumented symbols of what
