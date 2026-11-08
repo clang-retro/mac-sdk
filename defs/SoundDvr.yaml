@@ -221,3 +221,12 @@
     args:
       - name: vol
         type: INTEGER
+    m68k-needs: [CntrlParam, ParmBlkPtr, PBControlImmed]
+    m68k-body: |
+      /* As MPW's glue does: control call 2 to the Sound Driver (.Sound, -4),
+         made immediately. */
+      CntrlParam pb;
+      pb.ioCRefNum = -4;
+      pb.csCode = 2;
+      pb.csParam[0] = vol;
+      PBControlImmed((ParmBlkPtr)&pb);

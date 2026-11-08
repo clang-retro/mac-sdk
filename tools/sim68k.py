@@ -7,7 +7,9 @@ relocation) without a Mac ROM. It is not a Mac: only the traps listed in
 TRAPS are known, and they do nothing but log their arguments. With
 --os, the Memory Manager's pointer calls and the File Manager's basic
 calls (on files in memory, all in one folder) work too, enough for the C
-library; --files then prints the files the program left.
+library, and so do a pretend PowerBook's Power Manager (_PMgrOp) and the
+Sound Driver's volume call; --files then prints the files the program
+left.
 
     python3 sim68k.py Hello68.bin [--clicks N] [--cpu 68020] [--system6]
         [--os] [--files] [--exit-anywhere]
@@ -98,6 +100,7 @@ class FakeOS:
         self.next_ref = 100
         self.blocks = {}        # address -> size
         self.top = HEAP_AT
+        self.wakeup = (bytes(4), 0)  # wakeup time, enabled
 
     def rd(self, a, n):
         return bytes(self.uc.mem_read(a, n))
@@ -158,6 +161,35 @@ class FakeOS:
             return False
         uc.reg_write(UC_M68K_REG_D0, err)
         return True
+
+    # The Power Manager (_PMgrOp, a pmCommandRec in A0) with a battery,
+    # a modem and a wakeup timer, and the Sound Driver's volume control
+    # call (Control to refNum -4, csCode 2), which sets SdVolume.
+    def device(self, word):
+        uc = self.uc
+        pb = uc.reg_read(UC_M68K_REG_A0) & 0xFFFFFFFF
+        if word == 0xA085:
+            cmd, n = self.r16(pb), self.r16(pb + 2)
+            send, recv = self.r32(pb + 4), self.r32(pb + 8)
+            data = self.rd(send, n) if n else b""
+            reply = {0x68: b"\x05\xC8", 0x58: b"\x0A"}.get(cmd)
+            if cmd == 0x80:                     # set the wakeup time
+                self.wakeup = (data, 1)
+            elif cmd == 0x82:                   # disable it
+                self.wakeup = (self.wakeup[0], 0)
+            elif cmd == 0x88:                   # read it
+                reply = self.wakeup[0] + bytes([self.wakeup[1]])
+            if reply:
+                uc.mem_write(recv, reply)
+            uc.reg_write(UC_M68K_REG_D0, 0)
+            return True
+        if word & 0xF9FF == 0xA004 and self.r16(pb + 24) == -4:
+            if self.r16(pb + 26) == 2:
+                uc.mem_write(0x260, bytes([self.r16(pb + 28) & 7]))
+            uc.reg_write(UC_M68K_REG_D0, 0)
+            self.w16(pb + 16, 0)
+            return True
+        return False
 
     # File Manager: parameter block in A0, result in D0 and ioResult.
     def file(self, word):
@@ -275,7 +307,8 @@ def main():
     ap.add_argument("--system6", action="store_true",
                     help="no _FlushCodeCache, as on System 6 on a 68000")
     ap.add_argument("--os", action="store_true",
-                    help="fake the Memory Manager and the File Manager")
+                    help="fake the Memory Manager, the File Manager, "
+                    "_PMgrOp and the Sound Driver's volume")
     ap.add_argument("--files", action="store_true",
                     help="with --os, print the files left at the end")
     ap.add_argument("--exit-anywhere", action="store_true",
@@ -317,7 +350,8 @@ def main():
         if word & 0xF000 != 0xA000:
             return
         if fake and word & 0x0800 == 0 and (fake.memory(word) or
-                                            fake.file(word)):
+                                            fake.file(word) or
+                                            fake.device(word)):
             uc.reg_write(UC_M68K_REG_PC, pc + 2)
             return
         if word not in TRAPS:

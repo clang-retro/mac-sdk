@@ -5,6 +5,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only */
 #include <OSUtils.h>
 #include <Quickdraw.h>
+#include <Power.h>
+#include <Sound.h>
 
 static int failures;
 
@@ -43,10 +45,28 @@ static long nested(void) {
   SetA5(old);
   return seen;
 }
+
+/* tools/sim68k.py --os answers _PMgrOp as a PowerBook would. */
+static void checkPower(void) {
+  Byte status = 0, power = 0, flag = 9;
+  long when = 0;
+  short vol = 0;
+  report("BatteryStatus", BatteryStatus(&status, &power) == noErr && status == 5 &&
+                              power == 0xC8);
+  report("ModemStatus", ModemStatus(&status) == noErr && status == 10);
+  report("SetWUTime", SetWUTime(0x12345678) == noErr && GetWUTime(&when, &flag) == noErr &&
+                          when == 0x12345678 && flag == 1);
+  report("DisableWUTime", DisableWUTime() == noErr && GetWUTime(&when, &flag) == noErr &&
+                              flag == 0);
+  SetSoundVol(5);
+  GetSoundVol(&vol);
+  report("SetSoundVol", vol == 5);
+}
 #endif
 
 int main(void) {
 #if TARGET_CPU_68K
+  checkPower();
   long app = a5(), cur = *(long *)0x904, inner, outer;
   *(long *)0x904 = 0x1234;
   SetA5(0x5678);

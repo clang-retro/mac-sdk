@@ -3,6 +3,7 @@
 #define __MV_SOUNDDVR__
 
 #include "../ConditionalMacros.h"
+#include "FileMgr.h"
 #include "MacTypes.h"
 
 #pragma options align=mac68k
@@ -108,11 +109,25 @@ static __inline__ void GetSoundVol(INTEGER *volp);
 pascal void GetSoundVol(INTEGER *volp);
 #endif
 
+#if TARGET_CPU_68K
+static __inline__ void SetSoundVol(INTEGER vol);
+#else
 pascal void SetSoundVol(INTEGER vol);
+#endif
 
 #if TARGET_CPU_68K
 static __inline__ void GetSoundVol(INTEGER *volp) {
     *volp = *(Byte *)0x260 & 7;    /* SdVolume */
+}
+
+static __inline__ void SetSoundVol(INTEGER vol) {
+    /* As MPW's glue does: control call 2 to the Sound Driver (.Sound, -4),
+       made immediately. */
+    CntrlParam pb;
+    pb.ioCRefNum = -4;
+    pb.csCode = 2;
+    pb.csParam[0] = vol;
+    PBControlImmed((ParmBlkPtr)&pb);
 }
 
 #endif

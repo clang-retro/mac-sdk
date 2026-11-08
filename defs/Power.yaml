@@ -221,6 +221,23 @@
     - name: power
       type: Byte*
     comment: Power Manager extras (PowerPC)
+    m68k-body: |
+      /* As MPW's glue does: Power Manager command 0x68 (read the battery)
+         through _PMgrOp, which replies with the status byte, then the power
+         byte. */
+      struct { short command, length; Ptr send, receive; } pb;
+      Byte reply[4];
+      register OSErr err __asm__("d0") = 0;
+      register void *pbp __asm__("a0") = &pb;
+      pb.command = 0x68;
+      pb.length = 0;
+      pb.send = 0;
+      pb.receive = (Ptr)reply;
+      __asm__ __volatile__(".short 0xA085"                  /* _PMgrOp */
+          : "+r"(err), "+r"(pbp) : : "d1", "d2", "a1", "cc", "memory");
+      *status = reply[0];
+      *power = reply[1];
+      return err;
 
 # ####
 
@@ -230,6 +247,21 @@
     args:
     - name: status
       type: Byte*
+    m68k-body: |
+      /* As MPW's glue does: Power Manager command 0x58 (read the modem
+         status) through _PMgrOp. */
+      struct { short command, length; Ptr send, receive; } pb;
+      Byte reply[4];
+      register OSErr err __asm__("d0") = 0;
+      register void *pbp __asm__("a0") = &pb;
+      pb.command = 0x58;
+      pb.length = 0;
+      pb.send = 0;
+      pb.receive = (Ptr)reply;
+      __asm__ __volatile__(".short 0xA085"                  /* _PMgrOp */
+          : "+r"(err), "+r"(pbp) : : "d1", "d2", "a1", "cc", "memory");
+      *status = reply[0];
+      return err;
 
 # ####
 
@@ -241,6 +273,23 @@
       type: int32_t*
     - name: wFlag
       type: Byte*
+    m68k-body: |
+      /* As MPW's glue does: Power Manager command 0x88 (read the wakeup
+         timer) through _PMgrOp, which replies with the time, then the flags. */
+      struct { short command, length; Ptr send, receive; } pb;
+      Byte reply[8];
+      register OSErr err __asm__("d0") = 0;
+      register void *pbp __asm__("a0") = &pb;
+      pb.command = 0x88;
+      pb.length = 0;
+      pb.send = 0;
+      pb.receive = (Ptr)reply;
+      __asm__ __volatile__(".short 0xA085"                  /* _PMgrOp */
+          : "+r"(err), "+r"(pbp) : : "d1", "d2", "a1", "cc", "memory");
+      *wTime = (int32_t)(((uint32_t)reply[0] << 24) | ((uint32_t)reply[1] << 16) |
+                         ((uint32_t)reply[2] << 8) | reply[3]);
+      *wFlag = reply[4];
+      return err;
 
 # ####
 
@@ -250,12 +299,38 @@
     args:
     - name: wTime
       type: int32_t
+    m68k-body: |
+      /* As MPW's glue does: Power Manager command 0x80 (set the wakeup timer),
+         sending the 4-byte time, through _PMgrOp. */
+      struct { short command, length; Ptr send, receive; } pb;
+      register OSErr err __asm__("d0") = 0;
+      register void *pbp __asm__("a0") = &pb;
+      pb.command = 0x80;
+      pb.length = 4;
+      pb.send = (Ptr)&wTime;
+      pb.receive = 0;
+      __asm__ __volatile__(".short 0xA085"                  /* _PMgrOp */
+          : "+r"(err), "+r"(pbp) : : "d1", "d2", "a1", "cc", "memory");
+      return err;
 
 # ####
 
 - function:
     name: DisableWUTime
     return: OSErr
+    m68k-body: |
+      /* As MPW's glue does: Power Manager command 0x82 (disable the wakeup
+         timer) through _PMgrOp. */
+      struct { short command, length; Ptr send, receive; } pb;
+      register OSErr err __asm__("d0") = 0;
+      register void *pbp __asm__("a0") = &pb;
+      pb.command = 0x82;
+      pb.length = 0;
+      pb.send = 0;
+      pb.receive = 0;
+      __asm__ __volatile__(".short 0xA085"                  /* _PMgrOp */
+          : "+r"(err), "+r"(pbp) : : "d1", "d2", "a1", "cc", "memory");
+      return err;
 
 # ####
 

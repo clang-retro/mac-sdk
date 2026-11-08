@@ -150,15 +150,35 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void GetTimeout(INTEGER *count);
 #endif
 
 // Power Manager extras (PowerPC)
+#if TARGET_CPU_68K
+static __inline__ OSErr BatteryStatus(Byte *status, Byte *power);
+#else
 pascal OSErr BatteryStatus(Byte *status, Byte *power);
+#endif
 
+#if TARGET_CPU_68K
+static __inline__ OSErr ModemStatus(Byte *status);
+#else
 pascal OSErr ModemStatus(Byte *status);
+#endif
 
+#if TARGET_CPU_68K
+static __inline__ OSErr GetWUTime(long *wTime, Byte *wFlag);
+#else
 pascal OSErr GetWUTime(long *wTime, Byte *wFlag);
+#endif
 
+#if TARGET_CPU_68K
+static __inline__ OSErr SetWUTime(long wTime);
+#else
 pascal OSErr SetWUTime(long wTime);
+#endif
 
+#if TARGET_CPU_68K
+static __inline__ OSErr DisableWUTime(void);
+#else
 pascal OSErr DisableWUTime(void);
+#endif
 
 // Power Manager 2 (PowerBooks, System 7.5 and later).
 typedef struct BatteryInfo BatteryInfo;
@@ -843,6 +863,94 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
 }
 #else
 MAC_SINCE(0x0921, "9.2.1") pascal void GetBatteryTimes(INTEGER whichBattery, BatteryTimeRec *theTimes);
+#endif
+
+#if TARGET_CPU_68K
+static __inline__ OSErr BatteryStatus(Byte *status, Byte *power) {
+    /* As MPW's glue does: Power Manager command 0x68 (read the battery)
+       through _PMgrOp, which replies with the status byte, then the power
+       byte. */
+    struct { short command, length; Ptr send, receive; } pb;
+    Byte reply[4];
+    register OSErr err __asm__("d0") = 0;
+    register void *pbp __asm__("a0") = &pb;
+    pb.command = 0x68;
+    pb.length = 0;
+    pb.send = 0;
+    pb.receive = (Ptr)reply;
+    __asm__ __volatile__(".short 0xA085"                  /* _PMgrOp */
+        : "+r"(err), "+r"(pbp) : : "d1", "d2", "a1", "cc", "memory");
+    *status = reply[0];
+    *power = reply[1];
+    return err;
+}
+
+static __inline__ OSErr ModemStatus(Byte *status) {
+    /* As MPW's glue does: Power Manager command 0x58 (read the modem
+       status) through _PMgrOp. */
+    struct { short command, length; Ptr send, receive; } pb;
+    Byte reply[4];
+    register OSErr err __asm__("d0") = 0;
+    register void *pbp __asm__("a0") = &pb;
+    pb.command = 0x58;
+    pb.length = 0;
+    pb.send = 0;
+    pb.receive = (Ptr)reply;
+    __asm__ __volatile__(".short 0xA085"                  /* _PMgrOp */
+        : "+r"(err), "+r"(pbp) : : "d1", "d2", "a1", "cc", "memory");
+    *status = reply[0];
+    return err;
+}
+
+static __inline__ OSErr GetWUTime(long *wTime, Byte *wFlag) {
+    /* As MPW's glue does: Power Manager command 0x88 (read the wakeup
+       timer) through _PMgrOp, which replies with the time, then the flags. */
+    struct { short command, length; Ptr send, receive; } pb;
+    Byte reply[8];
+    register OSErr err __asm__("d0") = 0;
+    register void *pbp __asm__("a0") = &pb;
+    pb.command = 0x88;
+    pb.length = 0;
+    pb.send = 0;
+    pb.receive = (Ptr)reply;
+    __asm__ __volatile__(".short 0xA085"                  /* _PMgrOp */
+        : "+r"(err), "+r"(pbp) : : "d1", "d2", "a1", "cc", "memory");
+    *wTime = (int32_t)(((uint32_t)reply[0] << 24) | ((uint32_t)reply[1] << 16) |
+                       ((uint32_t)reply[2] << 8) | reply[3]);
+    *wFlag = reply[4];
+    return err;
+}
+
+static __inline__ OSErr SetWUTime(long wTime) {
+    /* As MPW's glue does: Power Manager command 0x80 (set the wakeup timer),
+       sending the 4-byte time, through _PMgrOp. */
+    struct { short command, length; Ptr send, receive; } pb;
+    register OSErr err __asm__("d0") = 0;
+    register void *pbp __asm__("a0") = &pb;
+    pb.command = 0x80;
+    pb.length = 4;
+    pb.send = (Ptr)&wTime;
+    pb.receive = 0;
+    __asm__ __volatile__(".short 0xA085"                  /* _PMgrOp */
+        : "+r"(err), "+r"(pbp) : : "d1", "d2", "a1", "cc", "memory");
+    return err;
+}
+
+static __inline__ OSErr DisableWUTime(void) {
+    /* As MPW's glue does: Power Manager command 0x82 (disable the wakeup
+       timer) through _PMgrOp. */
+    struct { short command, length; Ptr send, receive; } pb;
+    register OSErr err __asm__("d0") = 0;
+    register void *pbp __asm__("a0") = &pb;
+    pb.command = 0x82;
+    pb.length = 0;
+    pb.send = 0;
+    pb.receive = 0;
+    __asm__ __volatile__(".short 0xA085"                  /* _PMgrOp */
+        : "+r"(err), "+r"(pbp) : : "d1", "d2", "a1", "cc", "memory");
+    return err;
+}
+
 #endif
 
 #pragma clang diagnostic pop

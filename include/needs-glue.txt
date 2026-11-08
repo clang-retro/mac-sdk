@@ -76,13 +76,7 @@ ExpMgrConfigReadLong
 ExpMgrConfigWriteByte
 ExpMgrConfigWriteWord
 ExpMgrConfigWriteLong
-BatteryStatus
-ModemStatus
-GetWUTime
-SetWUTime
-DisableWUTime
 StartSound
 StopSound
 SoundDone
-SetSoundVol
 GetScriptLanguageSupport
