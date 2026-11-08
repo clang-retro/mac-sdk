@@ -1,0 +1,32 @@
+# The documentation site: https://clang-retro.github.io/mac-sdk/
+# Build it with `pip install -r .docs/requirements.txt` and `mkdocs serve`.
+INHERIT: .docs/base.yml
+site_name: Classic Mac OS SDK
+site_description: Classic Mac OS applications, System 0.1 to Mac OS 9, on 68k and PowerPC with clang
+site_url: https://clang-retro.github.io/mac-sdk/
+repo_url: https://github.com/clang-retro/mac-sdk
+repo_name: clang-retro/mac-sdk
+edit_uri: ""
+hooks:
+  - .docs/hooks.py
+
+extra:
+  retro:
+    github: clang-retro/mac-sdk
+    branch: main
+    pages:
+      README.md: index.md
+      CONTRIBUTING.md: contributing.md
+
+nav:
+  - "Home": index.md
+  - "The Toolbox headers": headers.md
+  - "Mac OS 8, 9 and QuickTime": headers-newer.md
+  - "Which System has which call": availability.md
+  - "Systems and availability": systems.md
+  - "Coverage": coverage.md
+  - "Tests": tests.md
+  - "Not done yet": status.md
+  - "Contributing": contributing.md
+  - "License": license.md
+  - "All clang-retro projects": https://clang-retro.github.io/dos-sdk/projects/
