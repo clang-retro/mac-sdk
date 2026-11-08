@@ -249,9 +249,9 @@ resource; `--carbon` imports from CarbonLib first on PowerPC.
 The linkers it runs are in `tools/link/` and can be used on their own:
 
 - `codelink.py` links the ELF objects that clang's `m68k-apple-macos`
-  target makes, with `start.s` first, into one CODE 1 resource linked
+  target makes, with `start.S` first, into one CODE 1 resource linked
   at address 0, followed by a table of the absolute pointers in it.
-  CODE 0 is a one-entry jump table. At launch `start.s` adds the load
+  CODE 0 is a one-entry jump table. At launch `start.S` adds the load
   address to each pointer, calls `_FlushCodeCache` where the trap exists
   (not on the 64K ROM, nor on System 6 on a Mac Plus or SE) and calls
   `main`. Code reaches data PC-relative, so a 68k program must stay
@@ -269,8 +269,11 @@ The linkers it runs are in `tools/link/` and can be used on their own:
   code and a 68k Mac runs CODE.
 
 Both linkers take archives (`.a`) and link only the members a program
-needs. Not done yet in them: static constructors, shared libraries
-(exports), and pattern-compressed PEF data.
+needs. `codelink.py` lays out `.preinit_array`, `.init_array` and
+`.fini_array` and defines the `__init_array_start`-style symbols that
+the C library walks, so static constructors run on 68k. Not done yet in
+them: static constructors on PowerPC (`peflink.py` defines the tables
+empty), shared libraries (exports), and pattern-compressed PEF data.
 
 ### The runtime library
 
@@ -288,8 +291,8 @@ CLANG=path/to/clang LLVM_SRC=path/to/clang-retro/llvm runtime/build.sh
 
 It writes `lib/m68k/libmacrt.a` and `lib/ppc/libmacrt.a`, which
 `tools/macapp.py` links when they are there (`--no-runtime` leaves them
-out). There is no C library yet: declare the `<string.h>` functions you
-use yourself, as `tests/runtime.c` does. Soft float is large on 68k
+out). Without the C library below, declare the `<string.h>` functions
+you use yourself, as `tests/runtime.c` does. Soft float is large on 68k
 and counts towards the 32 KB limit: `tests/runtime.c`, which uses float
 and double arithmetic and conversions, links to 20 KB.
 
@@ -297,13 +300,59 @@ and double arithmetic and conversions, links to 20 KB.
 glue; `tests/run.sh` runs their 68k builds as a 68000 and a 68020 in
 `tools/sim68k.py`.
 
+### The C library
+
+`runtime/build-libc.sh` builds [picolibc](https://github.com/clang-retro/picolibc)
+(stdio, stdlib, string, math, setjmp, ...) for both CPUs, and the Mac
+layer under it in `runtime/libc/`:
+
+```sh
+CLANG=path/to/clang PICOLIBC_SRC=path/to/clang-retro/picolibc runtime/build-libc.sh
+```
+
+It needs meson and ninja, and writes `lib/include` (picolibc's
+headers) and `lib/m68k` and `lib/ppc` (`libc.a` and `libmacos.a`).
+When they are there, `tools/macapp.py` compiles against those headers,
+links both archives before `libmacrt.a`, and starts the program at
+`__crt_main`, which runs the static constructors and calls
+`exit(main(argc, argv))` with the application's name as `argv[0]`;
+`--no-libc` leaves the C library out. The Mac layer gives picolibc:
+
+- files over the File Manager: `open`, `read`, `write`, `lseek`,
+  `close`, `unlink` and `rename`. Paths are POSIX (`a/b` is `:a:b`
+  under the application's folder, `/Disk/a` is `Disk:a`, `..` is the
+  parent); a name with no `/` is used as a Mac path as it is. New files
+  are `TEXT`/`ttxt` (set the globals `_ftype` and `_fcreator` to
+  change that). Data is not converted: write `\r` for Mac line ends.
+- `stdout` and `stderr` written to the file "*App* Output" in the
+  application's folder, with `\n` turned into `\r`, so SimpleText opens
+  it. `stdin` is always at end of file.
+- `malloc`, `calloc`, `realloc` and `free` over `NewPtr`, `SetPtrSize`
+  and `DisposePtr`.
+- `time` and `gettimeofday` from `GetDateTime`, and `exit` and `_exit`
+  through `ExitToShell`.
+- `errno` from File Manager and Memory Manager errors.
+
+Not done yet: `aligned_alloc` and `posix_memalign`; `rename` between
+folders (it fails with `EXDEV`); time zones (local time is reported as
+UTC); console input; static constructors on PowerPC. picolibc is built
+without debug information, since clang crashes writing it for XCOFF.
+The C library is large next to the 68k 32 KB limit: `tests/libc.c`,
+which uses stdio, `strtod` and `qsort`, links to about 34 KB, which works only
+because no reference in it spans more than 32 KB.
+
+`tests/libc.c` checks it; `tests/run.sh` runs its 68k build as a 68000
+and a 68020 in `tools/sim68k.py --os`, and links the PowerPC one.
+
 ### Testing
 
 - `tools/sim68k.py App.bin` runs a 68k application on a 68k CPU
   emulator (the `unicorn` Python package) and prints each Toolbox trap
   it makes, with its arguments. Only a few traps are faked, so it checks
   code generation, relocation and stack balance for small programs, not
-  drawing.
+  drawing. `--os` fakes the Memory Manager and the File Manager's
+  parameter-block calls with the files kept in memory, and `--files`
+  prints the files the program left.
 - `tools/mame/` boots Apple's System disks in MAME (Systems 0.1 to 7.1)
   with an application in place of the Finder: `mkroms.py` makes ROM sets
   from dumps you own, `matrix.py App.bin OUTDIR` boots every System and
@@ -330,7 +379,8 @@ It compiles every header for both targets in C and C++, generates code
 for every 68k inline function, checks the size of every record whose
 definition gives one, checks the argument-block calls against the ROM,
 and links every example into a fat application. With `LLVM_SRC` set it
-also builds the runtime library and runs its test.
+also builds the runtime library and runs its test, and with
+`PICOLIBC_SRC` set as well it builds the C library and runs its test.
 
 `.github/workflows/check.yml` runs it for every pull request and push,
 with the newest clang from clang-retro/llvm's `llvm-prebuilt` release,
@@ -347,10 +397,10 @@ and also fails when `include/` or `docs/coverage.md` differ from what
   Driver calls (`StartSound`, ...), the Power Manager extras
   (`BatteryStatus`, the wake-up time), `SetUpA5` and `RestoreA5`, and
   the Component Manager 3 calls.
-- A C library (`<stdio.h>` over the File Manager, `malloc` over the
-  Memory Manager).
-- Static constructors and shared libraries in the linkers, and a large
-  code model for 68k programs over 32 KB.
+- Running the C library on a real System (so far it has run only in
+  `tools/sim68k.py`; the PowerPC build is only linked).
+- Static constructors on PowerPC and shared libraries in the linkers,
+  and a large code model for 68k programs over 32 KB.
 
 ## License
 

@@ -4,8 +4,9 @@
 ; zeroed bss) into the heap and jumps here. The program was linked at
 ; address 0, so first add our load address to every absolute pointer
 ; listed in the relocation table, flush the instruction cache (where
-; there is one), then call
-; main and quit to the Finder.
+; there is one), then call main and quit to the Finder. With -DMAC_LIBC
+; it calls __crt_main in the C library instead, which sets up stdio and
+; calls exit(main(argc, argv)).
 
 	.text
 	.globl	__start
@@ -36,5 +37,10 @@ __start:
 	cmp.l	%a1, %d2
 	beq	3f
 	.short	0xA0BD                       ; _FlushCodeCache
-3:	jsr	main
+3:
+#ifdef MAC_LIBC
+	jsr	__crt_main                   ; in the C library: exit(main(...))
+#else
+	jsr	main
+#endif
 	.short	0xA9F4                       ; _ExitToShell
