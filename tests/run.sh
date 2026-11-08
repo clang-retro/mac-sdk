@@ -61,7 +61,7 @@ if [ -n "$LLVM_SRC" ]; then
   if python3 -c "import unicorn" 2>/dev/null; then
     for t in runtime fixmath glue; do
       for c in 68000 68020; do
-        python3 tools/sim68k.py --cpu $c "$APPS/$t-68k.bin" >"$APPS/sim.txt" || {
+        python3 tools/sim68k.py --cpu $c --os "$APPS/$t-68k.bin" >"$APPS/sim.txt" || {
           cat "$APPS/sim.txt"; exit 1; }
         grep -q "DrawString('all ok')" "$APPS/sim.txt" || {
           echo "$t on a $c:"; grep DrawString "$APPS/sim.txt" | grep -v "'ok'"; exit 1; }

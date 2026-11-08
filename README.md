@@ -233,7 +233,11 @@ to 0x7FFFFFFF or 0x80000000, `WideShift` rounds a right shift and
 (its root is rounded to nearest, which the documentation does not say).
 `SetUpA5` and `RestoreA5` keep the saved A5 in a common block of 32
 slots rather than on the stack as MPW's do, since clang addresses locals
-from SP; they nest, also from interrupts, up to 32 deep.
+from SP; they nest, also from interrupts, up to 32 deep. The Power
+Manager extras (`BatteryStatus`, `ModemStatus` and the wakeup timer)
+send the same `_PMgrOp` commands as MPW's glue (from the 1992
+`Interface.o`), and `SetSoundVol` makes the same control call to the
+Sound Driver.
 `include/needs-glue.txt` lists what is left: mostly
 calls that never ran on 68k (Navigation Services, Driver Services, the
 Name Registry).
@@ -359,8 +363,9 @@ and a 68020 in `tools/sim68k.py --os`, and links the PowerPC one.
   it makes, with its arguments. Only a few traps are faked, so it checks
   code generation, relocation and stack balance for small programs, not
   drawing. `--os` fakes the Memory Manager and the File Manager's
-  parameter-block calls with the files kept in memory, and `--files`
-  prints the files the program left.
+  parameter-block calls with the files kept in memory, a PowerBook's
+  `_PMgrOp` and the Sound Driver's volume call, and `--files` prints
+  the files the program left.
 - `tools/mame/` boots Apple's System disks in MAME (Systems 0.1 to 7.1)
   with an application in place of the Finder: `mkroms.py` makes ROM sets
   from dumps you own, `matrix.py App.bin OUTDIR` boots every System and
@@ -401,9 +406,9 @@ and also fails when `include/` or `docs/coverage.md` differ from what
   the ROM's InterfaceLib exports (see docs/coverage.md).
 - 68k glue for the rest of `needs-glue.txt` that did run on 68k:
   `TESetWordBreak` and `TESetClickLoop` (which need a register
-  trampoline), the Sound Driver calls (`StartSound`, ...), the Power
-  Manager extras (`BatteryStatus`, the wake-up time), and the Component
-  Manager 3 calls.
+  trampoline), the Sound Driver's `StartSound`, `StopSound` and
+  `SoundDone` (MPW's glue keeps its own queue of requests), and the
+  Component Manager 3 calls (QuickTime 2.5 and later).
 - Running the C library on a real System (so far it has run only in
   `tools/sim68k.py`; the PowerPC build is only linked).
 - Static constructors on PowerPC and shared libraries in the linkers,
