@@ -7,6 +7,7 @@
 #include <Quickdraw.h>
 #include <Power.h>
 #include <Sound.h>
+#include <TextEdit.h>
 
 static int failures;
 
@@ -46,6 +47,44 @@ static long nested(void) {
   return seen;
 }
 
+static pascal Boolean breakAtSpace(Ptr text, short charPos) {
+  return text[charPos] == ' ';
+}
+
+static int clicks;
+
+static pascal Boolean countClicks(void) {
+  return ++clicks < 3;
+}
+
+/* Call a TextEdit hook as TextEdit does: text in A0, position in D0, the
+   answer in the Z flag. Returns 1 for a break (Z clear), 0 for none. */
+static int callHook(ProcPtr hook, Ptr text, short charPos) {
+  register Ptr a0 __asm__("a0") = text;
+  register long d0 __asm__("d0") = charPos;
+  char z;
+  __asm__ __volatile__("jsr (%3)\n\tseq %1"
+                       : "+r"(d0), "=d"(z), "+r"(a0)
+                       : "a"(hook)
+                       : "d1", "a1", "cc", "memory");
+  return !z;
+}
+
+static void checkTextEdit(void) {
+  TERec rec;
+  TEPtr p = &rec;
+  TEHandle h = &p;
+  char text[] = "ab cd";
+  int clickOk;
+  TESetWordBreak((ProcPtr)breakAtSpace, h);
+  TESetClickLoop((ProcPtr)countClicks, h);
+  report("TESetWordBreak", callHook(rec.wordBreak, text, 2) == 1 &&
+                               callHook(rec.wordBreak, text, 1) == 0);
+  clickOk = callHook(rec.clikLoop, 0, 0) == 1 && callHook(rec.clikLoop, 0, 0) == 1 &&
+            callHook(rec.clikLoop, 0, 0) == 0;
+  report("TESetClickLoop", clickOk && clicks == 3);
+}
+
 /* tools/sim68k.py --os answers _PMgrOp as a PowerBook would. */
 static void checkPower(void) {
   Byte status = 0, power = 0, flag = 9;
@@ -66,6 +105,7 @@ static void checkPower(void) {
 
 int main(void) {
 #if TARGET_CPU_68K
+  checkTextEdit();
   checkPower();
   long app = a5(), cur = *(long *)0x904, inner, outer;
   *(long *)0x904 = 0x1234;
