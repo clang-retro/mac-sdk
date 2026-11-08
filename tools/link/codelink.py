@@ -5,7 +5,7 @@ clang --target=m68k-apple-macos makes ELF objects. This links them into
 one flat image at address 0 (code, then read-only data, data, and zeroed
 bss), appends a table of every absolute 32-bit pointer in it, and puts
 the lot in CODE 1. CODE 0 holds a one-entry jump table that sends the
-Segment Loader to __start (start.s), which adds the image's load address
+Segment Loader to __start (start.S), which adds the image's load address
 to each listed pointer and calls main.
 
     python3 codelink.py -o Hello.bin start.o hello.o [more.o ...] [lib.a ...]
@@ -119,13 +119,41 @@ def referenced_names(o):
 
 def link(objs):
     # Lay out the image: text, rodata, data, then bss.
+    # The constructor and destructor tables (.preinit_array, .init_array,
+    # .fini_array) go first in data, each in one piece, with the
+    # __*_array_start and __*_array_end symbols that the C library's
+    # __libc_init_array and __libc_fini_array walk.
     order = ["text", "rodata", "data", "bss"]
     pos = 0
     placed = []
+    tables = {}
+
+    def table_of(s):
+        for t in ("preinit_array", "init_array", "fini_array"):
+            if s.name == "." + t or s.name.startswith("." + t + "."):
+                return t
+        return None
+
+    def priority(s):
+        tail = s.name.rsplit(".", 1)[-1]
+        return int(tail) if tail.isdigit() else 65536
+
     for kind in order:
+        if kind == "data":
+            for t in ("preinit_array", "init_array", "fini_array"):
+                secs = [s for o in objs for s in o.sections.values()
+                        if s.kind == "data" and table_of(s) == t]
+                secs.sort(key=priority)    # stable: link order otherwise
+                pos = align_up(pos, 4)
+                start = pos
+                for s in secs:
+                    s.addr = pos
+                    pos += s.size
+                    placed.append(s)
+                tables[t] = (start, pos)
         for o in objs:
             for s in o.sections.values():
-                if s.kind == kind:
+                if s.kind == kind and s.addr is None:
                     pos = align_up(pos, s.align)
                     s.addr = pos
                     pos += s.size
@@ -136,6 +164,11 @@ def link(objs):
 
     # Common symbols go at the end of bss.
     globals_ = {}
+    for t, (start, end) in tables.items():
+        globals_[f"__{t}_start"] = ("rel", start)
+        globals_[f"__{t}_end"] = ("rel", end)
+    globals_["__bothinit_array_start"] = ("rel", tables["preinit_array"][0])
+    globals_["__bothinit_array_end"] = ("rel", tables["init_array"][1])
     commons = {}
     for o in objs:
         for sym in o.symbols:

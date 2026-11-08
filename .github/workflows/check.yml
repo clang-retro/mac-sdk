@@ -2,7 +2,8 @@
 # push: compile every header for 68k and PowerPC, check record sizes and the
 # ROM-checked argument blocks, build the examples, and check that the
 # generated files (include/, docs/coverage.md) match their generators.
-# It also builds the runtime library from compiler-rt and runs its test.
+# It also builds the runtime library from compiler-rt and the C library
+# from clang-retro/picolibc's main branch, and runs their tests.
 #
 # clang comes from clang-retro/llvm's llvm-prebuilt release, which holds the
 # LLVM tools built from recent commits of its main branch; the newest Linux
@@ -34,7 +35,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: pip install pyyaml unicorn
+      - run: pip install pyyaml unicorn meson ninja
       - name: Get clang
         env:
           GH_TOKEN: ${{ github.token }}
@@ -66,5 +67,11 @@ jobs:
           path: llvm
           sparse-checkout: compiler-rt/lib/builtins
           persist-credentials: false
+      - name: Get picolibc
+        uses: actions/checkout@v4
+        with:
+          repository: clang-retro/picolibc
+          path: picolibc
+          persist-credentials: false
       - name: Tests
-        run: LLVM_SRC=$PWD/llvm tests/run.sh
+        run: LLVM_SRC=$PWD/llvm PICOLIBC_SRC=$PWD/picolibc tests/run.sh

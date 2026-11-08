@@ -3,7 +3,9 @@
 # sizes (tests/sizes.c, and every size given in defs/), and check the
 # argument-block calls against the ROM, and link the examples into
 # applications. CLANG defaults to clang on the PATH. With LLVM_SRC set to
-# a clang-retro/llvm checkout, also build and check the runtime library.
+# a clang-retro/llvm checkout, also build and check the runtime library,
+# and with PICOLIBC_SRC set to a clang-retro/picolibc checkout too, the C
+# library.
 set -e
 cd "$(dirname "$0")/.."
 CLANG=${CLANG:-clang}
@@ -68,5 +70,28 @@ if [ -n "$LLVM_SRC" ]; then
     echo "runtime: ok"
   else
     echo "runtime: linked (install unicorn to run it)"
+  fi
+fi
+# The C library, when PICOLIBC_SRC names a clang-retro/picolibc checkout
+# too: build it, link tests/libc.c for both CPUs, and run the 68k build in
+# tools/sim68k.py with its Memory and File Managers, checking the console
+# output file the program leaves.
+if [ -n "$LLVM_SRC" ] && [ -n "$PICOLIBC_SRC" ]; then
+  CLANG="$CLANG" PICOLIBC_SRC="$PICOLIBC_SRC" runtime/build-libc.sh "$APPS/lib"
+  for cpu in 68k ppc; do
+    CLANG="$CLANG" python3 tools/macapp.py --cpu $cpu --lib "$APPS/lib" \
+      -o "$APPS/libc-$cpu.bin" -- -Wall -Werror tests/libc.c >/dev/null
+  done
+  if python3 -c "import unicorn" 2>/dev/null; then
+    for c in 68000 68020; do
+      python3 tools/sim68k.py --cpu $c --os --files --exit-anywhere \
+        "$APPS/libc-68k.bin" >"$APPS/sim.txt" || { cat "$APPS/sim.txt"; exit 1; }
+      if grep -q FAILED "$APPS/sim.txt" || ! grep -q "^all ok" "$APPS/sim.txt"; then
+        echo "libc on a $c:"; cat "$APPS/sim.txt"; exit 1
+      fi
+    done
+    echo "libc: ok"
+  else
+    echo "libc: linked (install unicorn to run it)"
   fi
 fi

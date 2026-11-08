@@ -12,7 +12,7 @@ for hfsutils' "hcopy -m".
 
     python3 peflink.py -o Hello.bin hello.o [more.o ...] [lib.a ...]
         [--imports imports.json] [--carbon] [--name Hello]
-        [--creator ????] [--size KB] [--pef out.pef]
+        [--creator ????] [--size KB] [--pef out.pef] [--entry main]
 
 imports.json comes from gen-imports.py.
 """
@@ -157,18 +157,18 @@ def referenced_names(o):
             if s.sclass in (C_EXT, C_WEAKEXT) and s.smtyp == XTY_ER}
 
 
-def read_inputs(paths):
+def read_inputs(paths, entry="main"):
     """Read the objects, then the archive members they need (before the
     shared libraries, so a library can stand in for an import)."""
     objs, libs = [], []
     for p in paths:
         blob = open(p, "rb").read()
-        if archive.is_archive(blob) or blob[:8] == b"<bigaf>\n":
+        if archive.is_archive(blob):
             libs.append((p, blob))
         else:
             objs.append(XcoffObject(p, blob))
     return objs + archive.select(objs, libs, XcoffObject, defined_names,
-                                 referenced_names)
+                                 referenced_names, {entry})
 
 
 # ---------------------------------------------------------------- imports
@@ -215,7 +215,7 @@ GLUE = [0x81820000, 0x90410014, 0x800C0000, 0x804C0004, 0x7C0903A6,
         0x4E800420]
 
 
-def link(objs, imports):
+def link(objs, imports, entry="main"):
     # Global symbol table: name -> (csect, offset-in-csect)
     globals_ = {}
     for o in objs:
@@ -230,7 +230,16 @@ def link(objs, imports):
                 globals_[s.name] = (s.csect, s.value - s.csect.addr,
                                     s.sclass)
 
-    code, data_head, toc, bss = [], [], [], []
+    # The C library walks constructor and destructor tables between
+    # __init_array_start and __init_array_end (and so on). XCOFF objects
+    # from clang have no such tables, so those symbols mark an empty one.
+    tables = Csect(None, None, "__array_tables", 0, 0, XTY_SD, XMC_RW, 2,
+                   None)
+    for t in ("preinit", "init", "fini", "bothinit"):
+        for end in ("start", "end"):
+            globals_.setdefault(f"__{t}_array_{end}", (tables, 0, C_EXT))
+
+    code, data_head, toc, bss = [], [tables], [], []
     for o in objs:
         for c in o.csects:
             if c.smtyp == XTY_CM or c.smclas in (XMC_BS, XMC_UC):
@@ -398,11 +407,11 @@ def link(objs, imports):
                                     f"type {rtype:#x} size {length} in "
                                     f"{c.name}")
 
-    if "main" not in globals_:
-        raise LinkError("no main")
-    mcs, moff, _ = globals_["main"]
+    if entry not in globals_:
+        raise LinkError(f"no {entry}")
+    mcs, moff, _ = globals_[entry]
     if mcs.out != "data" or mcs.smclas != XMC_DS:
-        raise LinkError("main has no function descriptor")
+        raise LinkError(f"{entry} has no function descriptor")
     main_off = mcs.pos + moff
     return dict(code=bytes(code_img), data=bytes(data_img),
                 data_size=data_size, fixups=fixups, main=main_off,
@@ -551,12 +560,14 @@ def main():
     ap.add_argument("--size", type=int, default=2048,
                     help="memory partition in KiB")
     ap.add_argument("--pef", help="also write the bare PEF container")
+    ap.add_argument("--entry", default="main",
+                    help="the function the Code Fragment Manager calls")
     a = ap.parse_args()
 
     try:
-        objs = read_inputs(a.inputs)
+        objs = read_inputs(a.inputs, a.entry)
         imports = Imports(a.imports, a.carbon)
-        img = link(objs, imports)
+        img = link(objs, imports, a.entry)
         pef = build_pef(img, imports)
     except (LinkError, archive.ArchiveError) as e:
         sys.exit(f"peflink: error: {e}")
