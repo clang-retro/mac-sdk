@@ -12,6 +12,7 @@ hooks:
 
 extra:
   retro:
+    doxygen: .docs/Doxyfile
     github: clang-retro/mac-sdk
     branch: main
     pages:
@@ -29,4 +30,5 @@ nav:
   - "Not done yet": status.md
   - "Contributing": contributing.md
   - "License": license.md
+  - API reference: api/index.html
   - "All clang-retro projects": https://clang-retro.github.io/

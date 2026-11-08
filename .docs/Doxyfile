@@ -1,0 +1,8 @@
+# The API reference of the documentation site (api/), run by .docs/hooks.py
+# from the repository's root after `mkdocs build`.
+@INCLUDE               = .docs/Doxyfile.base
+PROJECT_NAME           = "Classic Mac OS SDK"
+PROJECT_BRIEF          = "The Toolbox headers"
+INPUT                  = include
+FILE_PATTERNS          = *.h
+OPTIMIZE_OUTPUT_FOR_C  = YES
