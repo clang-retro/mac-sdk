@@ -2,6 +2,7 @@
 # push: compile every header for 68k and PowerPC, check record sizes and the
 # ROM-checked argument blocks, build the examples, and check that the
 # generated files (include/, docs/coverage.md) match their generators.
+# It also builds the runtime library from compiler-rt and runs its test.
 #
 # clang comes from clang-retro/llvm's llvm-prebuilt release, which holds the
 # LLVM tools built from recent commits of its main branch; the newest Linux
@@ -33,7 +34,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: pip install pyyaml
+      - run: pip install pyyaml unicorn
       - name: Get clang
         env:
           GH_TOKEN: ${{ github.token }}
@@ -46,6 +47,9 @@ jobs:
           tar --zstd -xf llvm.tar.zst -C "$RUNNER_TEMP/llvm"
           rm llvm.tar.zst
           echo "CLANG=$RUNNER_TEMP/llvm/bin/clang" >> "$GITHUB_ENV"
+          # llvm-linux-COMMIT-SCRIPTHASH.tar.zst: compiler-rt from the same commit.
+          sha=${asset#llvm-linux-}
+          echo "LLVM_SHA=${sha%%-*}" >> "$GITHUB_ENV"
           "$RUNNER_TEMP/llvm/bin/clang" --version
       - name: Generated files are up to date
         run: |
@@ -54,5 +58,13 @@ jobs:
           git status --porcelain
           git diff --exit-code
           test -z "$(git status --porcelain)"
+      - name: Get compiler-rt's builtins
+        uses: actions/checkout@v4
+        with:
+          repository: clang-retro/llvm
+          ref: ${{ env.LLVM_SHA }}
+          path: llvm
+          sparse-checkout: compiler-rt/lib/builtins
+          persist-credentials: false
       - name: Tests
-        run: tests/run.sh
+        run: LLVM_SRC=$PWD/llvm tests/run.sh
