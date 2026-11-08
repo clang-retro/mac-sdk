@@ -166,32 +166,76 @@ enum { _R_X2Frac = 0xA846 };
 MAC_SINCE(0x0070, "0.7") pascal Fract R_X2Frac(extended80 *x) M68K_INLINE(0xA846);
 
 // Conversions to floating point (68k needs SANE glue for these)
+#if TARGET_CPU_68K
+static __inline__ double Fix2X(Fixed x);
+#else
 pascal double Fix2X(Fixed x);
+#endif
 
+#if TARGET_CPU_68K
+static __inline__ Fixed X2Fix(double x);
+#else
 pascal Fixed X2Fix(double x);
+#endif
 
+#if TARGET_CPU_68K
+static __inline__ double Frac2X(Fract x);
+#else
 pascal double Frac2X(Fract x);
+#endif
 
+#if TARGET_CPU_68K
+static __inline__ Fract X2Frac(double x);
+#else
 pascal Fract X2Frac(double x);
+#endif
 
 // 64-bit integer arithmetic
+#if TARGET_CPU_68K
+static __inline__ wide* WideAdd(wide *target, const wide *source);
+#else
 pascal wide* WideAdd(wide *target, const wide *source);
+#endif
 
+#if TARGET_CPU_68K
+static __inline__ wide* WideSubtract(wide *target, const wide *source);
+#else
 pascal wide* WideSubtract(wide *target, const wide *source);
+#endif
 
+#if TARGET_CPU_68K
+static __inline__ INTEGER WideCompare(const wide *target, const wide *source);
+#else
 pascal INTEGER WideCompare(const wide *target, const wide *source);
+#endif
 
+#if TARGET_CPU_68K
+static __inline__ wide* WideNegate(wide *target);
+#else
 pascal wide* WideNegate(wide *target);
+#endif
 
 pascal wide* WideShift(wide *target, long shift);
 
 pascal unsigned long WideSquareRoot(const wide *source);
 
+#if TARGET_CPU_68K
+static __inline__ wide* WideMultiply(long multiplicand, long multiplier, wide *target);
+#else
 pascal wide* WideMultiply(long multiplicand, long multiplier, wide *target);
+#endif
 
+#if TARGET_CPU_68K
+static __inline__ long WideDivide(const wide *dividend, long divisor, long *remainder);
+#else
 pascal long WideDivide(const wide *dividend, long divisor, long *remainder);
+#endif
 
+#if TARGET_CPU_68K
+static __inline__ wide* WideWideDivide(wide *dividend, long divisor, long *remainder);
+#else
 pascal wide* WideWideDivide(wide *dividend, long divisor, long *remainder);
+#endif
 
 pascal wide* WideBitShift(wide *src, long shift);
 
@@ -218,6 +262,118 @@ static __inline__ void GetIndPattern(Byte *op, INTEGER plistid, INTEGER index) {
         return;
     p = *h + 2 + (index - 1) * 8;
     BlockMoveData(p, op, 8);
+}
+
+static __inline__ double Fix2X(Fixed x) {
+    return (double)x / 65536.0;
+}
+
+static __inline__ Fixed X2Fix(double x) {
+    /* Round to nearest (ties to even), as SANE does; out of range gives
+       the largest Fixed of that sign. */
+    double v = x * 65536.0;
+    long r;
+    double d;
+    if (v >= 2147483647.0)
+        return 0x7FFFFFFF;
+    if (v <= -2147483648.0)
+        return (Fixed)0x80000000;
+    r = (long)v;                    /* toward zero */
+    d = v - (double)r;
+    if (d > 0.5 || (d == 0.5 && (r & 1)))
+        r++;
+    else if (d < -0.5 || (d == -0.5 && (r & 1)))
+        r--;
+    return r;
+}
+
+static __inline__ double Frac2X(Fract x) {
+    return (double)x / 1073741824.0;
+}
+
+static __inline__ Fract X2Frac(double x) {
+    double v = x * 1073741824.0;
+    long r;
+    double d;
+    if (v >= 2147483647.0)
+        return 0x7FFFFFFF;
+    if (v <= -2147483648.0)
+        return (Fract)0x80000000;
+    r = (long)v;
+    d = v - (double)r;
+    if (d > 0.5 || (d == 0.5 && (r & 1)))
+        r++;
+    else if (d < -0.5 || (d == -0.5 && (r & 1)))
+        r--;
+    return r;
+}
+
+static __inline__ wide* WideAdd(wide *target, const wide *source) {
+    unsigned long lo = target->lo + source->lo;
+    target->hi += source->hi + (lo < target->lo);
+    target->lo = lo;
+    return target;
+}
+
+static __inline__ wide* WideSubtract(wide *target, const wide *source) {
+    unsigned long lo = target->lo - source->lo;
+    target->hi -= source->hi + (lo > target->lo);
+    target->lo = lo;
+    return target;
+}
+
+static __inline__ INTEGER WideCompare(const wide *target, const wide *source) {
+    if (target->hi != source->hi)
+        return target->hi < source->hi ? -1 : 1;
+    if (target->lo != source->lo)
+        return target->lo < source->lo ? -1 : 1;
+    return 0;
+}
+
+static __inline__ wide* WideNegate(wide *target) {
+    target->lo = ~target->lo + 1;
+    target->hi = ~target->hi + (target->lo == 0);
+    return target;
+}
+
+static __inline__ wide* WideMultiply(long multiplicand, long multiplier, wide *target) {
+    long long p = (long long)multiplicand * multiplier;
+    target->hi = (SInt32)(p >> 32);
+    target->lo = (UInt32)p;
+    return target;
+}
+
+static __inline__ long WideDivide(const wide *dividend, long divisor, long *remainder) {
+    /* The quotient must fit in 32 bits; otherwise (or for a zero divisor)
+       the result is 0x80000000 and the remainder is left alone. */
+    long long n = (long long)(((unsigned long long)(UInt32)dividend->hi << 32) | dividend->lo);
+    long long q;
+    if (divisor == 0 || (divisor == -1 && dividend->hi == (SInt32)0x80000000 && dividend->lo == 0))
+        return (int32_t)0x80000000;
+    q = n / divisor;
+    if (q > 0x7FFFFFFFLL || q < -0x7FFFFFFFLL - 1)
+        return (int32_t)0x80000000;
+    if (remainder)
+        *remainder = (int32_t)(n - q * divisor);
+    return (int32_t)q;
+}
+
+static __inline__ wide* WideWideDivide(wide *dividend, long divisor, long *remainder) {
+    /* The 64-bit quotient replaces the dividend; one that does not fit (or a
+       zero divisor) gives 0x80000000 00000000. */
+    long long n = (long long)(((unsigned long long)(UInt32)dividend->hi << 32) | dividend->lo);
+    long long q;
+    if (divisor == 0 || (divisor == -1 && dividend->hi == (SInt32)0x80000000 && dividend->lo == 0)) {
+        dividend->hi = (SInt32)0x80000000;
+        dividend->lo = 0;
+        return dividend;
+    }
+    q = n / divisor;
+    if (remainder)
+        *remainder = (int32_t)(n - q * divisor);
+    dividend->hi = (SInt32)(q >> 32);
+    dividend->lo = (UInt32)q;
+    return dividend;
 }
 
 #endif

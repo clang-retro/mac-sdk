@@ -598,6 +598,8 @@
     - name: x
       type: Fixed
     comment: Conversions to floating point (68k needs SANE glue for these)
+    m68k-body: |
+      return (double)x / 65536.0;
 
 # ####
 
@@ -607,6 +609,23 @@
     args:
     - name: x
       type: double
+    m68k-body: |
+      /* Round to nearest (ties to even), as SANE does; out of range gives
+         the largest Fixed of that sign. */
+      double v = x * 65536.0;
+      long r;
+      double d;
+      if (v >= 2147483647.0)
+          return 0x7FFFFFFF;
+      if (v <= -2147483648.0)
+          return (Fixed)0x80000000;
+      r = (long)v;                    /* toward zero */
+      d = v - (double)r;
+      if (d > 0.5 || (d == 0.5 && (r & 1)))
+          r++;
+      else if (d < -0.5 || (d == -0.5 && (r & 1)))
+          r--;
+      return r;
 
 # ####
 
@@ -616,6 +635,8 @@
     args:
     - name: x
       type: Fract
+    m68k-body: |
+      return (double)x / 1073741824.0;
 
 # ####
 
@@ -625,6 +646,21 @@
     args:
     - name: x
       type: double
+    m68k-body: |
+      double v = x * 1073741824.0;
+      long r;
+      double d;
+      if (v >= 2147483647.0)
+          return 0x7FFFFFFF;
+      if (v <= -2147483648.0)
+          return (Fract)0x80000000;
+      r = (long)v;
+      d = v - (double)r;
+      if (d > 0.5 || (d == 0.5 && (r & 1)))
+          r++;
+      else if (d < -0.5 || (d == -0.5 && (r & 1)))
+          r--;
+      return r;
 
 # ####
 
@@ -637,6 +673,11 @@
     - name: source
       type: const wide*
     comment: 64-bit integer arithmetic
+    m68k-body: |
+      unsigned long lo = target->lo + source->lo;
+      target->hi += source->hi + (lo < target->lo);
+      target->lo = lo;
+      return target;
 
 # ####
 
@@ -648,6 +689,11 @@
       type: wide*
     - name: source
       type: const wide*
+    m68k-body: |
+      unsigned long lo = target->lo - source->lo;
+      target->hi -= source->hi + (lo > target->lo);
+      target->lo = lo;
+      return target;
 
 # ####
 
@@ -659,6 +705,12 @@
       type: const wide*
     - name: source
       type: const wide*
+    m68k-body: |
+      if (target->hi != source->hi)
+          return target->hi < source->hi ? -1 : 1;
+      if (target->lo != source->lo)
+          return target->lo < source->lo ? -1 : 1;
+      return 0;
 
 # ####
 
@@ -668,6 +720,10 @@
     args:
     - name: target
       type: wide*
+    m68k-body: |
+      target->lo = ~target->lo + 1;
+      target->hi = ~target->hi + (target->lo == 0);
+      return target;
 
 # ####
 
@@ -701,6 +757,11 @@
       type: int32_t
     - name: target
       type: wide*
+    m68k-body: |
+      long long p = (long long)multiplicand * multiplier;
+      target->hi = (SInt32)(p >> 32);
+      target->lo = (UInt32)p;
+      return target;
 
 # ####
 
@@ -714,6 +775,19 @@
       type: int32_t
     - name: remainder
       type: int32_t*
+    m68k-body: |
+      /* The quotient must fit in 32 bits; otherwise (or for a zero divisor)
+         the result is 0x80000000 and the remainder is left alone. */
+      long long n = (long long)(((unsigned long long)(UInt32)dividend->hi << 32) | dividend->lo);
+      long long q;
+      if (divisor == 0 || (divisor == -1 && dividend->hi == (SInt32)0x80000000 && dividend->lo == 0))
+          return (int32_t)0x80000000;
+      q = n / divisor;
+      if (q > 0x7FFFFFFFLL || q < -0x7FFFFFFFLL - 1)
+          return (int32_t)0x80000000;
+      if (remainder)
+          *remainder = (int32_t)(n - q * divisor);
+      return (int32_t)q;
 
 # ####
 
@@ -727,6 +801,22 @@
       type: int32_t
     - name: remainder
       type: int32_t*
+    m68k-body: |
+      /* The 64-bit quotient replaces the dividend; one that does not fit (or a
+         zero divisor) gives 0x80000000 00000000. */
+      long long n = (long long)(((unsigned long long)(UInt32)dividend->hi << 32) | dividend->lo);
+      long long q;
+      if (divisor == 0 || (divisor == -1 && dividend->hi == (SInt32)0x80000000 && dividend->lo == 0)) {
+          dividend->hi = (SInt32)0x80000000;
+          dividend->lo = 0;
+          return dividend;
+      }
+      q = n / divisor;
+      if (remainder)
+          *remainder = (int32_t)(n - q * divisor);
+      dividend->hi = (SInt32)(q >> 32);
+      dividend->lo = (UInt32)q;
+      return dividend;
 
 # ####
 
