@@ -368,9 +368,17 @@ pascal void TEActivate(TEHandle teh) M68K_INLINE(0xA9D8);
 enum { _TEDeactivate = 0xA9D9 };
 pascal void TEDeactivate(TEHandle teh) M68K_INLINE(0xA9D9);
 
+#if TARGET_CPU_68K
+static __inline__ void TESetWordBreak(ProcPtr wb, TEHandle teh);
+#else
 pascal void TESetWordBreak(ProcPtr wb, TEHandle teh);
+#endif
 
+#if TARGET_CPU_68K
+static __inline__ void TESetClickLoop(ProcPtr cp, TEHandle teh);
+#else
 pascal void TESetClickLoop(ProcPtr cp, TEHandle teh);
+#endif
 
 enum { _TECalText = 0xA9D0 };
 pascal void TECalText(TEHandle teh) M68K_INLINE(0xA9D0);
@@ -408,6 +416,60 @@ pascal void TESetScrapLength(LONGINT ln);
 MAC_SINCE(0x0200, "2.0") pascal int16_t TEFeatureFlag(int16_t feature, int16_t action, TEHandle te) M68K_INLINE(0x3F3C, 0x000E, 0xA83D);
 
 #if TARGET_CPU_68K
+static __inline__ void TESetWordBreak(ProcPtr wb, TEHandle teh) {
+    /* TextEdit calls the word-break routine with the text in A0 and the
+       character position in D0, and takes a break when it returns with the
+       Z flag clear. As MPW's glue did, this installs a trampoline that calls
+       wb as pascal Boolean (*)(Ptr text, short charPos) instead. Each call
+       site has its own trampoline and its own copy of wb. */
+    ProcPtr tramp, *slot;
+    __asm__ __volatile__(
+        ".pushsection .text.__mv_glue,\"ax\",@progbits\n"
+        "1:\tmovem.l %%d1/%%a0-%%a1, -(%%sp)\n\t"
+        "clr.w -(%%sp)\n\t"
+        "move.l %%a0, -(%%sp)\n\t"
+        "move.w %%d0, -(%%sp)\n\t"
+        "move.l (2f,%%pc), %%a1\n\t"
+        "jsr (%%a1)\n\t"
+        "move.b (%%sp)+, %%d0\n\t"
+        "movem.l (%%sp)+, %%d1/%%a0-%%a1\n\t"
+        ".short 0x4A00\n\t"                  /* tst.b %d0 */
+        "rts\n"
+        "2:\t.long 0\n\t"
+        ".popsection\n\t"
+        "lea (1b,%%pc), %0\n\t"
+        "lea (2b,%%pc), %1"
+        : "=a"(tramp), "=a"(slot));
+    *slot = wb;
+    (**teh).wordBreak = tramp;
+}
+
+static __inline__ void TESetClickLoop(ProcPtr cp, TEHandle teh) {
+    /* TextEdit calls the click-loop routine with no arguments it can rely on
+       and goes on tracking the mouse while it returns with D0 set (and the Z
+       flag clear). As MPW's glue did, this installs a trampoline that calls cp
+       as pascal Boolean (*)(void) instead. Each call site has its own
+       trampoline and its own copy of cp. */
+    ProcPtr tramp, *slot;
+    __asm__ __volatile__(
+        ".pushsection .text.__mv_glue,\"ax\",@progbits\n"
+        "1:\tmovem.l %%d1/%%a0-%%a1, -(%%sp)\n\t"
+        "clr.w -(%%sp)\n\t"
+        "move.l (2f,%%pc), %%a1\n\t"
+        "jsr (%%a1)\n\t"
+        "move.b (%%sp)+, %%d0\n\t"
+        "movem.l (%%sp)+, %%d1/%%a0-%%a1\n\t"
+        ".short 0x4A00\n\t"                  /* tst.b %d0 */
+        "rts\n"
+        "2:\t.long 0\n\t"
+        ".popsection\n\t"
+        "lea (1b,%%pc), %0\n\t"
+        "lea (2b,%%pc), %1"
+        : "=a"(tramp), "=a"(slot));
+    *slot = cp;
+    (**teh).clikLoop = tramp;
+}
+
 static __inline__ OSErr TEFromScrap(void) {
     LONGINT offset;
     LONGINT len = GetScrap(*(Handle *)0xAB4, 0x54455854, &offset);    /* 'TEXT' */

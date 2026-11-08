@@ -237,7 +237,10 @@ from SP; they nest, also from interrupts, up to 32 deep. The Power
 Manager extras (`BatteryStatus`, `ModemStatus` and the wakeup timer)
 send the same `_PMgrOp` commands as MPW's glue (from the 1992
 `Interface.o`), and `SetSoundVol` makes the same control call to the
-Sound Driver.
+Sound Driver. `TESetWordBreak` and `TESetClickLoop` take a
+`pascal Boolean` function, as MPW's did, and install a trampoline that
+TextEdit calls with its arguments in registers and its answer in the Z
+flag; each call site has its own trampoline and remembers one function.
 `include/needs-glue.txt` lists what is left: mostly
 calls that never ran on 68k (Navigation Services, Driver Services, the
 Name Registry).
@@ -405,8 +408,7 @@ and also fails when `include/` or `docs/coverage.md` differ from what
 - Coverage: the headers declare all but 3 undocumented symbols of what
   the ROM's InterfaceLib exports (see docs/coverage.md).
 - 68k glue for the rest of `needs-glue.txt` that did run on 68k:
-  `TESetWordBreak` and `TESetClickLoop` (which need a register
-  trampoline), the Sound Driver's `StartSound`, `StopSound` and
+  the Sound Driver's `StartSound`, `StopSound` and
   `SoundDone` (MPW's glue keeps its own queue of requests), and the
   Component Manager 3 calls (QuickTime 2.5 and later).
 - Running the C library on a real System (so far it has run only in

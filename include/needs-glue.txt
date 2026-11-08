@@ -33,8 +33,6 @@ ATPreFlightEvent
 GetDefaultUser
 StartSecureSession
 KillProcess
-TESetWordBreak
-TESetClickLoop
 geteventelem
 MakeDataExecutable
 InstallExceptionHandler
