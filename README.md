@@ -231,6 +231,9 @@ given no remainder, a `WideDivide` quotient that does not fit is pinned
 to 0x7FFFFFFF or 0x80000000, `WideShift` rounds a right shift and
 `WideBitShift` does not, and `WideSquareRoot` takes an unsigned value
 (its root is rounded to nearest, which the documentation does not say).
+`SetUpA5` and `RestoreA5` keep the saved A5 in a common block of 32
+slots rather than on the stack as MPW's do, since clang addresses locals
+from SP; they nest, also from interrupts, up to 32 deep.
 `include/needs-glue.txt` lists what is left: mostly
 calls that never ran on 68k (Navigation Services, Driver Services, the
 Name Registry).
@@ -397,11 +400,10 @@ and also fails when `include/` or `docs/coverage.md` differ from what
 - Coverage: the headers declare all but 3 undocumented symbols of what
   the ROM's InterfaceLib exports (see docs/coverage.md).
 - 68k glue for the rest of `needs-glue.txt` that did run on 68k:
-  `TESetWordBreak`
-  and `TESetClickLoop` (which need a register trampoline), the Sound
-  Driver calls (`StartSound`, ...), the Power Manager extras
-  (`BatteryStatus`, the wake-up time), `SetUpA5` and `RestoreA5`, and
-  the Component Manager 3 calls.
+  `TESetWordBreak` and `TESetClickLoop` (which need a register
+  trampoline), the Sound Driver calls (`StartSound`, ...), the Power
+  Manager extras (`BatteryStatus`, the wake-up time), and the Component
+  Manager 3 calls.
 - Running the C library on a real System (so far it has run only in
   `tools/sim68k.py`; the PowerPC build is only linked).
 - Static constructors on PowerPC and shared libraries in the linkers,
