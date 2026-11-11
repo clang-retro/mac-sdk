@@ -845,6 +845,10 @@
     args:
     - name: tempResLoad
       type: Boolean
+    m68k-body: |
+      /* As Apple's inline code does: RomMapInsert ($B9E) to 0xFF, and
+         TmpResLoad ($B9F) to 0xFF if tempResLoad, else 0. */
+      *(INTEGER *)0xB9E = tempResLoad ? (INTEGER)0xFFFF : (INTEGER)0xFF00;
 
 # ####
 

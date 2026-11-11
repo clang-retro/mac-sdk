@@ -176,9 +176,9 @@ MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal OSErr GetComponen
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal long GetComponentListModSeed(void) M68K_INLINE(0x7006, 0xA82A);
 
-pascal long GetComponentTypeModSeed(OSType componentType);
+pascal long GetComponentTypeModSeed(OSType componentType) M68K_INLINE(0x702C, 0xA82A);
 
-pascal OSErr OpenAComponent(Component aComponent, ComponentInstance *ci);
+pascal OSErr OpenAComponent(Component aComponent, ComponentInstance *ci) M68K_INLINE(0x702D, 0xA82A);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal ComponentInstance OpenComponent(Component aComponent) M68K_INLINE(0x7007, 0xA82A);
 
@@ -186,13 +186,13 @@ MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal OSErr CloseCompon
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal OSErr GetComponentInstanceError(ComponentInstance aComponentInstance) M68K_INLINE(0x700A, 0xA82A);
 
-pascal Component ResolveComponentAlias(Component aComponent);
+pascal Component ResolveComponentAlias(Component aComponent) M68K_INLINE(0x7020, 0xA82A);
 
-pascal OSErr GetComponentPublicResource(Component aComponent, OSType resourceType, INTEGER resourceID, Handle *theResource);
+pascal OSErr GetComponentPublicResource(Component aComponent, OSType resourceType, INTEGER resourceID, Handle *theResource) M68K_INLINE(0x7038, 0xA82A);
 
-pascal OSErr GetComponentPublicResourceList(OSType resourceType, INTEGER resourceID, long flags, ComponentDescription *cd, GetMissingComponentResourceUPP missingProc, void *refCon, void *atomContainerPtr);
+pascal OSErr GetComponentPublicResourceList(OSType resourceType, INTEGER resourceID, long flags, ComponentDescription *cd, GetMissingComponentResourceUPP missingProc, void *refCon, void *atomContainerPtr) M68K_INLINE(0x7039, 0xA82A);
 
-pascal OSErr GetComponentPublicIndString(Component aComponent, Str255 theString, INTEGER strListID, INTEGER index);
+pascal OSErr GetComponentPublicIndString(Component aComponent, Str255 theString, INTEGER strListID, INTEGER index) M68K_INLINE(0x703A, 0xA82A);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal void SetComponentInstanceError(ComponentInstance aComponentInstance, OSErr theError) M68K_INLINE(0x700B, 0xA82A);
 
@@ -202,13 +202,13 @@ MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal void SetComponent
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal INTEGER OpenComponentResFile(Component aComponent) M68K_INLINE(0x7015, 0xA82A);
 
-pascal OSErr OpenAComponentResFile(Component aComponent, INTEGER *resRef);
+pascal OSErr OpenAComponentResFile(Component aComponent, INTEGER *resRef) M68K_INLINE(0x702F, 0xA82A);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal OSErr CloseComponentResFile(INTEGER refnum) M68K_INLINE(0x7018, 0xA82A);
 
-pascal OSErr GetComponentResource(Component aComponent, OSType resType, INTEGER resID, Handle *theResource);
+pascal OSErr GetComponentResource(Component aComponent, OSType resType, INTEGER resID, Handle *theResource) M68K_INLINE(0x7035, 0xA82A);
 
-pascal OSErr GetComponentIndString(Component aComponent, Str255 theString, INTEGER strListID, INTEGER index);
+pascal OSErr GetComponentIndString(Component aComponent, Str255 theString, INTEGER strListID, INTEGER index) M68K_INLINE(0x7036, 0xA82A);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal Handle GetComponentInstanceStorage(ComponentInstance aComponentInstance) M68K_INLINE(0x700C, 0xA82A);
 
@@ -224,7 +224,11 @@ MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal long CallComponen
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal long CallComponentFunctionWithStorage(Handle storage, ComponentParameters *params, ComponentFunctionUPP func) M68K_INLINE(0x203C, 0xFFFF, 0xFFFF, 0xA82A);
 
+#if TARGET_CPU_68K
+static __inline__ long CallComponentFunctionWithStorageProcInfo(Handle storage, ComponentParameters *params, ProcPtr func, long funcProcInfo);
+#else
 pascal long CallComponentFunctionWithStorageProcInfo(Handle storage, ComponentParameters *params, ProcPtr func, long funcProcInfo);
+#endif
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal long DelegateComponentCall(ComponentParameters *originalParams, ComponentInstance ci) M68K_INLINE(0x7024, 0xA82A);
 
@@ -232,7 +236,7 @@ MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal OSErr SetDefaultC
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal ComponentInstance OpenDefaultComponent(OSType componentType, OSType componentSubType) M68K_INLINE(0x7021, 0xA82A);
 
-pascal OSErr OpenADefaultComponent(OSType componentType, OSType componentSubType, ComponentInstance *ci);
+pascal OSErr OpenADefaultComponent(OSType componentType, OSType componentSubType, ComponentInstance *ci) M68K_INLINE(0x702E, 0xA82A);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal Component CaptureComponent(Component capturedComponent, Component capturingComponent) M68K_INLINE(0x701C, 0xA82A);
 
@@ -284,6 +288,16 @@ enum {
     badComponentInstance = 2147516417,
     badComponentSelector = 2147516418,
 };
+
+#if TARGET_CPU_68K
+static __inline__ long CallComponentFunctionWithStorageProcInfo(Handle storage, ComponentParameters *params, ProcPtr func, long funcProcInfo) {
+    /* On 68k there is no Mixed Mode, so the procedure information is not
+       needed, as in Apple's interfaces. */
+    (void)funcProcInfo;
+    return CallComponentFunctionWithStorage(storage, params, (ComponentFunctionUPP)func);
+}
+
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

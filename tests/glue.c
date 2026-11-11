@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only */
 #include <OSUtils.h>
 #include <Quickdraw.h>
+#include <Resources.h>
 #include <Power.h>
 #include <Sound.h>
 #include <TextEdit.h>
@@ -101,12 +102,42 @@ static void checkPower(void) {
   GetSoundVol(&vol);
   report("SetSoundVol", vol == 5);
 }
+
+static int sounds;
+
+static pascal void soundEnded(void) {
+  sounds++;
+}
+
+/* tools/sim68k.py --os ends an asynchronous write to the Sound Driver at
+   the next trap (here DrawString, in report), and its KillIO cancels the
+   writes without calling their completion routines. */
+static void checkSound(void) {
+  static char wave[16];
+  int quiet, busy;
+  StartSound(wave, sizeof wave, NULL);
+  quiet = SoundDone();
+  StartSound(wave, sizeof wave, (ProcPtr)soundEnded);
+  StartSound(wave, sizeof wave, (ProcPtr)soundEnded);
+  busy = !SoundDone();
+  StopSound();
+  report("StopSound", quiet && busy && sounds == 2 && SoundDone());
+  StartSound(wave, sizeof wave, (ProcPtr)soundEnded);
+  StartSound(wave, sizeof wave, (ProcPtr)-1);
+  report("StartSound", !SoundDone() && sounds == 2);
+  report("SoundDone", SoundDone() && sounds == 3);
+}
 #endif
 
 int main(void) {
 #if TARGET_CPU_68K
   checkTextEdit();
   checkPower();
+  checkSound();
+  TempInsertROMMap(true);
+  report("TempInsertROMMap", *(unsigned short *)0xB9E == 0xFFFF &&
+                                 (TempInsertROMMap(false), *(unsigned short *)0xB9E == 0xFF00));
+  *(unsigned short *)0xB9E = 0;
   long app = a5(), cur = *(long *)0x904, inner, outer;
   *(long *)0x904 = 0x1234;
   SetA5(0x5678);

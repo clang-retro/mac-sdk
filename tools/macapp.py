@@ -3,7 +3,7 @@
 
     python3 tools/macapp.py -o Hello.bin [--cpu fat|68k|ppc] [--name Hello]
         [--creator ????] [--size KB] [--carbon] [--no-runtime] [--no-libc]
-        [--lib DIR]
+        [--lib DIR] [--large]
         [-- clang flags] hello.c ...
 
 It compiles each source with clang (the CLANG environment variable, or
@@ -19,6 +19,12 @@ library (lib/include, lib/*/libc.a and libmacos.a), sources compile
 against its headers and link with it, and the program starts at its
 __crt_main, which calls exit(main(argc, argv)). The output is MacBinary
 II, for hfsutils' "hcopy -m".
+
+68k code reaches its data PC-relative, within 32 KB, unless compiled
+with -mcmodel=large, which uses 32-bit addresses (start.S relocates
+them at launch). When the 68k link fails because a reference is out of
+that reach, macapp.py compiles the sources again with -mcmodel=large;
+--large does so from the start. The libraries are built that way.
 """
 import argparse
 import os
@@ -39,7 +45,18 @@ def run(cmd):
         sys.exit(r.returncode)
 
 
-def build(cpu, a, clang, tmp):
+def link_68k(cmd):
+    """Run codelink.py; False when a reference was out of 16-bit reach."""
+    r = subprocess.run(cmd, stderr=subprocess.PIPE, text=True)
+    if r.returncode and "16-bit PC-relative" in r.stderr:
+        return False
+    sys.stderr.write(r.stderr)
+    if r.returncode:
+        sys.exit(r.returncode)
+    return True
+
+
+def build(cpu, a, clang, tmp, large=False):
     target = TARGETS[cpu]
     libdir = os.path.join(a.lib, {"68k": "m68k"}.get(cpu, cpu))
     # The C library, when runtime/build-libc.sh has made it.
@@ -59,7 +76,8 @@ def build(cpu, a, clang, tmp):
             objs.append(src)
             continue
         obj = os.path.join(tmp, f"{cpu}-{i}-{os.path.basename(src)}.o")
-        run(clang + [f"--target={target}", "-O2"] + inc + a.cflags +
+        model = ["-mcmodel=large"] if large else []
+        run(clang + [f"--target={target}", "-O2"] + model + inc + a.cflags +
             ["-c", src, "-o", obj])
         objs.append(obj)
     libs = ["libmacos.a", "libc.a"] if libc else []
@@ -70,8 +88,15 @@ def build(cpu, a, clang, tmp):
     out = os.path.join(tmp, f"{cpu}.bin") if a.cpu == "fat" else a.output
     args = ["-o", out, "--name", a.name, "--size", str(a.size)]
     if cpu == "68k":
-        run([sys.executable, os.path.join(LINK, "codelink.py"),
-             "--creator", a.creator] + args + objs)
+        if not link_68k([sys.executable, os.path.join(LINK, "codelink.py"),
+                         "--creator", a.creator] + args + objs):
+            if large:
+                # Large already: what is out of reach is not ours to fix.
+                run([sys.executable, os.path.join(LINK, "codelink.py"),
+                     "--creator", a.creator] + args + objs)
+            print("macapp: 68k code is out of 16-bit reach; compiling "
+                  "again with -mcmodel=large", file=sys.stderr)
+            return build(cpu, a, clang, tmp, large=True)
     else:
         run([sys.executable, os.path.join(LINK, "peflink.py"),
              "--creator", a.creator] + (["--carbon"] if a.carbon else []) +
@@ -102,6 +127,8 @@ def main():
                     help="do not link the runtime library")
     ap.add_argument("--no-libc", dest="libc", action="store_false",
                     help="do not use the C library")
+    ap.add_argument("--large", action="store_true",
+                    help="68k: compile with -mcmodel=large from the start")
     ap.add_argument("--carbon", action="store_true",
                     help="PowerPC: import from CarbonLib first")
     a = ap.parse_args(argv)
@@ -112,9 +139,9 @@ def main():
     clang = shlex.split(os.environ.get("CLANG", "clang"))
     with tempfile.TemporaryDirectory() as tmp:
         if a.cpu != "fat":
-            build(a.cpu, a, clang, tmp)
+            build(a.cpu, a, clang, tmp, a.large)
             return
-        m68k = build("68k", a, clang, tmp)
+        m68k = build("68k", a, clang, tmp, a.large)
         ppc = build("ppc", a, clang, tmp)
         run([sys.executable, os.path.join(LINK, "fatlink.py"), "-o",
              a.output, "--name", a.name, m68k, ppc])

@@ -5,7 +5,8 @@ and AIX's big archive format (what it writes for XCOFF objects), and picks the m
 linker does: a member is linked when it defines a symbol that the
 objects linked so far reference and nothing defines, until no more
 members are needed. Archives are searched together, so members may
-refer to each other in any order.
+refer to each other in any order; a symbol that more than one defines
+comes from the first archive that does.
 """
 
 
@@ -110,5 +111,8 @@ def select(objs, archives, load, defines, references, extra=()):
             wanted |= references(obj)
             m[2] = False
             changed = True
-            need = wanted - defined
+            # Start again from the first archive, so that a symbol two
+            # archives define (memcpy in the C library and the runtime
+            # library) comes from the first one.
+            break
     return added

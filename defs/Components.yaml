@@ -342,6 +342,8 @@
     args:
     - name: componentType
       type: OSType
+    dispatcher: ComponentDispatch
+    selector: 44
 
 # ####
 
@@ -353,6 +355,8 @@
       type: Component
     - name: ci
       type: ComponentInstance*
+    dispatcher: ComponentDispatch
+    selector: 45
 
 # ####
 
@@ -395,6 +399,8 @@
     args:
     - name: aComponent
       type: Component
+    dispatcher: ComponentDispatch
+    selector: 32
 
 # ####
 
@@ -410,6 +416,8 @@
       type: INTEGER
     - name: theResource
       type: Handle*
+    dispatcher: ComponentDispatch
+    selector: 56
 
 # ####
 
@@ -431,6 +439,8 @@
       type: void*
     - name: atomContainerPtr
       type: void*
+    dispatcher: ComponentDispatch
+    selector: 57
 
 # ####
 
@@ -446,6 +456,8 @@
       type: INTEGER
     - name: index
       type: INTEGER
+    dispatcher: ComponentDispatch
+    selector: 58
 
 # ####
 
@@ -503,6 +515,8 @@
       type: Component
     - name: resRef
       type: INTEGER*
+    dispatcher: ComponentDispatch
+    selector: 47
 
 # ####
 
@@ -529,6 +543,8 @@
       type: INTEGER
     - name: theResource
       type: Handle*
+    dispatcher: ComponentDispatch
+    selector: 53
 
 # ####
 
@@ -544,6 +560,8 @@
       type: INTEGER
     - name: index
       type: INTEGER
+    dispatcher: ComponentDispatch
+    selector: 54
 
 # ####
 
@@ -644,6 +662,12 @@
       type: ProcPtr
     - name: funcProcInfo
       type: int32_t
+    m68k-needs: [CallComponentFunctionWithStorage]
+    m68k-body: |
+      /* On 68k there is no Mixed Mode, so the procedure information is not
+         needed, as in Apple's interfaces. */
+      (void)funcProcInfo;
+      return CallComponentFunctionWithStorage(storage, params, (ComponentFunctionUPP)func);
 
 # ####
 
@@ -696,6 +720,8 @@
       type: OSType
     - name: ci
       type: ComponentInstance*
+    dispatcher: ComponentDispatch
+    selector: 46
 
 # ####
 
