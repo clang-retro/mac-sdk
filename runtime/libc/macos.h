@@ -22,4 +22,7 @@ int __mac_path(const char *path, Str255 out);
 void __mac_console_write(const void *buf, size_t n);
 void __mac_console_close(void);
 
+/* Console input (stdin): up to n bytes, 0 at end of file, or -1. */
+long __mac_console_read(void *buf, size_t n);
+
 #endif

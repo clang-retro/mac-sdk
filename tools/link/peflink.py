@@ -134,8 +134,10 @@ class XcoffObject:
 
         # Give every relocation to the csect that holds its address.
         for sect in self.sections:
+            # An empty csect (the TOC anchor) shares its address with the
+            # one after it, which owns the relocation: try sized ones first.
             owners = sorted((c for c in self.csects if c.sect is sect),
-                            key=lambda c: c.addr)
+                            key=lambda c: (c.addr, c.size == 0))
             for r in sect["relocs"]:
                 for c in owners:
                     if c.addr <= r[0] < c.addr + max(c.size, 1):
@@ -231,13 +233,31 @@ def link(objs, imports, entry="main"):
                                     s.sclass)
 
     # The C library walks constructor and destructor tables between
-    # __init_array_start and __init_array_end (and so on). XCOFF objects
-    # from clang have no such tables, so those symbols mark an empty one.
-    tables = Csect(None, None, "__array_tables", 0, 0, XTY_SD, XMC_RW, 2,
-                   None)
-    for t in ("preinit", "init", "fini", "bothinit"):
-        for end in ("start", "end"):
-            globals_.setdefault(f"__{t}_array_{end}", (tables, 0, C_EXT))
+    # __init_array_start and __init_array_end (and so on). clang names
+    # each XCOFF object's constructors and destructors as AIX does, with
+    # a global function __sinitPPPPPPPP_... (or __sterm...), PPPPPPPP
+    # being the priority in hex, lowest first; the tables here hold
+    # pointers to their descriptors in that order. The C library runs
+    # the destructor table backwards.
+    def by_priority(prefix):
+        found = []
+        for name, (cs, off, _) in globals_.items():
+            if name.startswith(prefix) and cs.smclas == XMC_DS:
+                try:
+                    prio = int(name[len(prefix):len(prefix) + 8], 16)
+                except ValueError:
+                    continue
+                found.append((prio, len(found), cs, off))
+        return [(cs, off) for _, _, cs, off in sorted(found)]
+    inits, finis = by_priority("__sinit"), by_priority("__sterm")
+    tables = Csect(None, None, "__array_tables", 0,
+                   4 * (len(inits) + len(finis)), XTY_SD, XMC_RW, 2, None)
+    ni, nf = 4 * len(inits), 4 * (len(inits) + len(finis))
+    for name, off in (("preinit_array_start", 0), ("preinit_array_end", 0),
+                      ("init_array_start", 0), ("init_array_end", ni),
+                      ("bothinit_array_start", 0), ("bothinit_array_end", ni),
+                      ("fini_array_start", ni), ("fini_array_end", nf)):
+        globals_.setdefault(f"__{name}", (tables, off, C_EXT))
 
     code, data_head, toc, bss = [], [tables], [], []
     for o in objs:
@@ -320,6 +340,9 @@ def link(objs, imports, entry="main"):
         code_img[c.pos:c.pos + c.size] = c.data()
     for c in data_head + toc:
         data_img[c.pos:c.pos + c.size] = c.data()
+    for i, (cs, off) in enumerate(inits + finis):
+        at = tables.pos + 4 * i
+        struct.pack_into(">I", data_img, at, cs.pos + off)
 
     # Loader fixups for words in the data section:
     # data offset -> ('C' | 'D' | ('I', idx))
@@ -329,6 +352,8 @@ def link(objs, imports, entry="main"):
         kind = "C" if cs.out == "code" else "D"
         return kind, cs.pos + off
 
+    for i in range(len(inits) + len(finis)):
+        fixups[tables.pos + 4 * i] = ("D",)
     for idx, slot in glue_slot.items():
         fixups[slot] = ("I", idx)
         g = glue_of[idx]
@@ -365,8 +390,9 @@ def link(objs, imports, entry="main"):
                         else:
                             kind, target = sect_addr(cs, soff)
                         # The stored word is S + A with S the symbol's
-                        # address in the object; keep A.
-                        addend = old - (cs.addr + soff)
+                        # value in this object's symbol table (also for a
+                        # symbol it only refers to); keep A.
+                        addend = old - orig_sym.value
                         struct.pack_into(">I", img, at,
                                          (target + addend) & 0xFFFFFFFF)
                         fixups[at] = (kind,)

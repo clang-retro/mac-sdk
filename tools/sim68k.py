@@ -109,8 +109,24 @@ class FakeOS:
         self.next_ref = 100
         self.blocks = {}        # address -> size
         self.top = HEAP_AT
+        self.heap_end = HEAP_END
         self.wakeup = (bytes(4), 0)  # wakeup time, enabled
         self.sound = []         # asynchronous Sound Driver writes, oldest first
+        self.dirs = {"": 2}     # folder name -> directory ID
+
+    # The registers the calls use: A0 and D0 here; tools/simppc.py, which
+    # calls these for InterfaceLib's functions, keeps its own.
+    def a0(self):
+        return self.uc.reg_read(UC_M68K_REG_A0) & 0xFFFFFFFF
+
+    def d0(self):
+        return self.uc.reg_read(UC_M68K_REG_D0) & 0xFFFFFFFF
+
+    def set_a0(self, v):
+        self.uc.reg_write(UC_M68K_REG_A0, v & 0xFFFFFFFF)
+
+    def set_d0(self, v):
+        self.uc.reg_write(UC_M68K_REG_D0, v & 0xFFFFFFFF)
 
     def rd(self, a, n):
         return bytes(self.uc.mem_read(a, n))
@@ -134,21 +150,21 @@ class FakeOS:
     # Memory Manager: size in D0, pointer in A0, result in D0.
     def memory(self, word):
         uc = self.uc
-        d0 = uc.reg_read(UC_M68K_REG_D0) & 0xFFFFFFFF
-        a0 = uc.reg_read(UC_M68K_REG_A0) & 0xFFFFFFFF
+        d0 = self.d0()
+        a0 = self.a0()
         op = word & 0xF1FF
         err = 0
         if op == 0xA11E:                        # NewPtr
             size = (d0 + 3) & ~3
-            if self.top + size > HEAP_END:
-                uc.reg_write(UC_M68K_REG_A0, 0)
+            if self.top + size > self.heap_end:
+                self.set_a0(0)
                 err = -108
             else:
                 p = self.top
                 self.top += size or 4
                 self.blocks[p] = d0
                 uc.mem_write(p, bytes(d0))      # NewPtrClear or not
-                uc.reg_write(UC_M68K_REG_A0, p)
+                self.set_a0(p)
         elif op == 0xA01F:                      # DisposePtr
             if self.blocks.pop(a0, None) is None:
                 err = -111
@@ -164,12 +180,12 @@ class FakeOS:
                 err = -108                      # cannot grow in place
         elif op == 0xA021:                      # GetPtrSize
             if a0 in self.blocks:
-                uc.reg_write(UC_M68K_REG_D0, self.blocks[a0])
+                self.set_d0(self.blocks[a0])
                 return True
             err = -111
         else:
             return False
-        uc.reg_write(UC_M68K_REG_D0, err)
+        self.set_d0(err)
         return True
 
     # The Power Manager (_PMgrOp, a pmCommandRec in A0) with a battery,
@@ -180,7 +196,7 @@ class FakeOS:
     # routines, as the Device Manager of the time did.
     def device(self, word):
         uc = self.uc
-        pb = uc.reg_read(UC_M68K_REG_A0) & 0xFFFFFFFF
+        pb = self.a0()
         if word == 0xA085:
             cmd, n = self.r16(pb), self.r16(pb + 2)
             send, recv = self.r32(pb + 4), self.r32(pb + 8)
@@ -194,12 +210,12 @@ class FakeOS:
                 reply = self.wakeup[0] + bytes([self.wakeup[1]])
             if reply:
                 uc.mem_write(recv, reply)
-            uc.reg_write(UC_M68K_REG_D0, 0)
+            self.set_d0(0)
             return True
         if word & 0xF9FF == 0xA004 and self.r16(pb + 24) == -4:
             if self.r16(pb + 26) == 2:
                 uc.mem_write(0x260, bytes([self.r16(pb + 28) & 7]))
-            uc.reg_write(UC_M68K_REG_D0, 0)
+            self.set_d0(0)
             self.w16(pb + 16, 0)
             return True
         if word & 0xF9FF == 0xA003 and self.r16(pb + 24) == -4:
@@ -209,19 +225,19 @@ class FakeOS:
                 self.sound.append(pb)
             else:
                 self.w16(pb + 16, 0)
-            uc.reg_write(UC_M68K_REG_D0, 0)
+            self.set_d0(0)
             return True
         if word & 0xF9FF == 0xA006 and self.r16(pb + 24) == -4:
             for p in self.sound:
                 self.w16(p + 16, -27)           # abortErr
             self.sound.clear()
             self.w16(pb + 16, 0)
-            uc.reg_write(UC_M68K_REG_D0, 0)
+            self.set_d0(0)
             return True
-        if word == 0xA051 and uc.reg_read(UC_M68K_REG_D0) & 0xFFFFFFFF == 0x000C00E4:
+        if word == 0xA051 and self.d0() == 0x000C00E4:
             # ReadLocation: latitude, longitude, gmtDelta (24 bits).
             uc.mem_write(pb, bytes(8) + struct.pack(">I", GMT_DELTA & 0xFFFFFF))
-            uc.reg_write(UC_M68K_REG_D0, 0)
+            self.set_d0(0)
             return True
         return False
 
@@ -232,10 +248,59 @@ class FakeOS:
         self.w16(pb + 16, 0)
         return pb, self.r32(pb + 12) or None
 
+    # The HFS calls GetCatInfo and CatMove (_HFSDispatch 9 and 5). Folders
+    # are the "a:" prefixes of the names; the current folder is ID 2.
+    def hfs(self, word):
+        uc = self.uc
+        if word & 0xF9FF != 0xA060:
+            return False
+        pb = self.a0()
+        sel = self.d0() & 0xFFFF
+        if sel not in (5, 9):
+            return False
+        err = 0
+
+        def is_dir(n):
+            return n == "" or n in self.dirs or any(
+                f.startswith(n + ":") for f in self.files)
+
+        if sel == 9:                            # GetCatInfo
+            ptr, index = self.r32(pb + 18), self.r16(pb + 28)
+            n = "" if index < 0 or not ptr else self.name(ptr).rstrip(":")
+            if n in self.files:
+                uc.mem_write(pb + 30, b"\0")
+                self.w32(pb + 48, 0)
+            elif is_dir(n):
+                if n not in self.dirs:
+                    self.dirs[n] = 100 + len(self.dirs)
+                uc.mem_write(pb + 30, b"\x10")
+                self.w32(pb + 48, self.dirs[n])
+            else:
+                err = -43
+        else:                                   # CatMove
+            n = self.name(self.r32(pb + 18))
+            dest = {v: k for k, v in self.dirs.items()}.get(
+                self.r32(pb + 36))
+            if self.r32(pb + 28):
+                err = -50                       # ioNewName: not faked
+            elif n not in self.files:
+                err = -43
+            elif dest is None:
+                err = -120                      # dirNFErr
+            else:
+                new = (dest + ":" if dest else "") + n.rsplit(":", 1)[-1]
+                if new in self.files:
+                    err = -48
+                else:
+                    self.files[new] = self.files.pop(n)
+        self.w16(pb + 16, err)
+        self.set_d0(err)
+        return True
+
     # File Manager: parameter block in A0, result in D0 and ioResult.
     def file(self, word):
         uc = self.uc
-        pb = uc.reg_read(UC_M68K_REG_A0) & 0xFFFFFFFF
+        pb = self.a0()
         op = word & 0xF9FF                      # without async and HFS bits
         if op not in FILE_TRAPS:
             return False
@@ -335,7 +400,7 @@ class FakeOS:
                 self.uc.mem_write(pb + 32, bytes(48))
         # SetFileInfo and FlushVol do nothing.
         self.w16(pb + 16, err)
-        uc.reg_write(UC_M68K_REG_D0, err)
+        self.set_d0(err)
         return True
 
 
@@ -352,6 +417,9 @@ def main():
                     "_PMgrOp and the Sound Driver")
     ap.add_argument("--files", action="store_true",
                     help="with --os, print the files left at the end")
+    ap.add_argument("--input", metavar="TEXT",
+                    help="with --os, the file \"App Input\" holds TEXT, "
+                    "with \\n as the Mac's \\r (the C library's stdin)")
     ap.add_argument("--exit-anywhere", action="store_true",
                     help="do not check the stack at ExitToShell (exit() "
                          "calls it from inside the program)")
@@ -374,6 +442,10 @@ def main():
     # CurApName (0x910): the application's name, from the MacBinary header.
     mb = open(a.app, "rb").read(128)
     uc.mem_write(0x910, mb[1:2 + min(mb[1], 31)])
+    if fake and a.input is not None:
+        app = mb[2:2 + min(mb[1], 31)].decode("mac_roman")
+        fake.files[app[:25] + " Input"] = bytearray(
+            a.input.replace("\\n", "\r").encode("mac_roman"))
     # Time (0x20C): the clock, in local seconds since 1904.
     uc.mem_write(0x20C, struct.pack(">I", int(time.time()) + 2082844800 +
                                     (GMT_DELTA if a.os else 0)))
@@ -417,6 +489,7 @@ def main():
                 return
         if fake and word & 0x0800 == 0 and (fake.memory(word) or
                                             fake.device(word) or
+                                            fake.hfs(word) or
                                             fake.file(word)):
             uc.reg_write(UC_M68K_REG_PC, pc + 2)
             return

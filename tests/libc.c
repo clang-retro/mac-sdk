@@ -1,11 +1,11 @@
 /* Checks the C library (runtime/build-libc.sh): stdio to the console and
- * to files, seeking, rename and remove, malloc, realloc and the aligned
- * allocations, setjmp, qsort, strtod, printf's conversions and the time
- * zone. It is over 32 KB of 68k code, so tools/macapp.py builds it with
- * -mcmodel=large. tests/run.sh runs the 68k build
- * in tools/sim68k.py --os, which keeps the files in memory, and checks
- * the console output it leaves ("libc-68k Output"): one "ok" line per check,
- * then "all ok".
+ * to files, stdin, seeking, rename (also between folders) and remove,
+ * malloc, realloc and the aligned allocations, setjmp, qsort, strtod,
+ * printf's conversions, the time zone and static constructors. It is
+ * over 32 KB of 68k code, so tools/macapp.py builds it with
+ * -mcmodel=large. tests/run.sh runs the 68k build in tools/sim68k.py
+ * --os, which keeps the files in memory, and checks the console output
+ * it leaves ("libc-68k Output"): one "ok" line per check, then "all ok".
  *
  * Copyright (C) clang-retro contributors.
  * SPDX-License-Identifier: AGPL-3.0-only */
@@ -30,7 +30,7 @@ static int cmp(const void *a, const void *b) {
   return *(const int *)a - *(const int *)b;
 }
 
-static int constructed;
+static volatile int constructed;   /* volatile: clang may not fold the constructor away */
 __attribute__((constructor)) static void construct(void) { constructed = 42; }
 
 int main(int argc, char **argv) {
@@ -69,6 +69,23 @@ int main(int argc, char **argv) {
   check("rename", rename("data.txt", "moved.txt") == 0 && !fopen("data.txt", "r"));
   check("enoent", fopen("nothing", "r") == NULL && errno == ENOENT);
   check("remove", remove("moved.txt") == 0 && remove("moved.txt") != 0);
+  f = fopen("sub/a.txt", "w");
+  fputs("moved\n", f);
+  fclose(f);
+  fclose(fopen("sub/keep.txt", "w"));
+  check("rename out of a folder", rename("sub/a.txt", "b.txt") == 0 &&
+                                      !fopen("sub/a.txt", "r") && (f = fopen("b.txt", "r")) &&
+                                      fgets(buf, sizeof buf, f) && strcmp(buf, "moved\n") == 0);
+  fclose(f);
+  check("rename into a folder", rename("b.txt", "sub/c.txt") == 0 && !fopen("b.txt", "r") &&
+                                    (f = fopen("sub/c.txt", "r")) != NULL);
+  fclose(f);
+  remove("sub/c.txt");
+  remove("sub/keep.txt");
+  /* tests/run.sh gives the program the input "typed\nline\n". */
+  check("stdin", fgets(buf, sizeof buf, stdin) && strcmp(buf, "typed\n") == 0 &&
+                     fgets(buf, sizeof buf, stdin) && strcmp(buf, "line\n") == 0 &&
+                     !fgets(buf, sizeof buf, stdin));
 
   p = malloc(100);
   for (i = 0; i < 100; i++)

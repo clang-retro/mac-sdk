@@ -24,6 +24,7 @@ from macres import macbinary, resource_fork, size_res  # noqa: E402
 import archive  # noqa: E402
 
 SHT_PROGBITS, SHT_SYMTAB, SHT_NOBITS, SHT_RELA = 1, 2, 8, 4
+SHT_INIT_ARRAY, SHT_FINI_ARRAY, SHT_PREINIT_ARRAY = 14, 15, 16
 SHF_ALLOC = 2
 SHN_UNDEF, SHN_ABS, SHN_COMMON = 0, 0xFFF1, 0xFFF2
 STB_LOCAL = 0
@@ -73,8 +74,9 @@ class ElfObject:
             stype, flags, size, align = h[1], h[2], h[5], max(h[8], 1)
             if stype == SHT_SYMTAB:
                 symtab = (h, shdrs[h[6]])
-            if not flags & SHF_ALLOC or stype not in (SHT_PROGBITS,
-                                                      SHT_NOBITS):
+            if not flags & SHF_ALLOC or stype not in (
+                    SHT_PROGBITS, SHT_NOBITS, SHT_INIT_ARRAY,
+                    SHT_FINI_ARRAY, SHT_PREINIT_ARRAY):
                 continue
             if flags & 4:
                 kind = "text"

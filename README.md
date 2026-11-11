@@ -303,9 +303,12 @@ The linkers it runs are in `tools/link/` and can be used on their own:
 Both linkers take archives (`.a`) and link only the members a program
 needs. `codelink.py` lays out `.preinit_array`, `.init_array` and
 `.fini_array` and defines the `__init_array_start`-style symbols that
-the C library walks, so static constructors run on 68k. Not done yet in
-them: static constructors on PowerPC (`peflink.py` defines the tables
-empty), shared libraries (exports), and pattern-compressed PEF data.
+the C library walks, so static constructors run on 68k. On PowerPC,
+clang names each object's constructors and destructors as AIX does
+(`__sinit` and `__sterm` functions, with the priority in the name), and
+`peflink.py` puts them in the same tables, in priority order. Not done
+yet in them: shared libraries (exports), and pattern-compressed PEF
+data.
 
 ### The runtime library
 
@@ -351,14 +354,18 @@ links both archives before `libmacrt.a`, and starts the program at
 `--no-libc` leaves the C library out. The Mac layer gives picolibc:
 
 - files over the File Manager: `open`, `read`, `write`, `lseek`,
-  `close`, `unlink` and `rename`. Paths are POSIX (`a/b` is `:a:b`
+  `close`, `unlink` and `rename` (into another folder too, with
+  `PBCatMove`, on the same volume). Paths are POSIX (`a/b` is `:a:b`
   under the application's folder, `/Disk/a` is `Disk:a`, `..` is the
   parent); a name with no `/` is used as a Mac path as it is. New files
   are `TEXT`/`ttxt` (set the globals `_ftype` and `_fcreator` to
   change that). Data is not converted: write `\r` for Mac line ends.
 - `stdout` and `stderr` written to the file "*App* Output" in the
   application's folder, with `\n` turned into `\r`, so SimpleText opens
-  it. `stdin` is always at end of file.
+  it. `stdin` reads the file "*App* Input" there, with `\r` turned into
+  `\n`, and is at end of file when there is none. A program can define
+  `__mac_console_read` (and `__mac_console_write` and
+  `__mac_console_close`) itself to read and write elsewhere.
 - `malloc`, `calloc`, `realloc` and `free` over `NewPtr`, `SetPtrSize`
   and `DisposePtr`, and `aligned_alloc`, `posix_memalign` and
   `memalign`, which take a larger block when `NewPtr`'s is not aligned
@@ -371,15 +378,15 @@ links both archives before `libmacrt.a`, and starts the program at
 - `exit` and `_exit` through `ExitToShell`.
 - `errno` from File Manager and Memory Manager errors.
 
-Not done yet: `rename` between folders (it fails with `EXDEV`); console
-input; static constructors on PowerPC. picolibc is built without debug
-information, since clang crashes writing it for XCOFF. The C library is
+Not done yet: an interactive console (a window to type into). picolibc
+is built without debug information, since clang crashes writing it for XCOFF. The C library is
 large next to 32 KB: `tests/libc.c`, which uses stdio, `strtod`, `qsort`
 and `localtime`, links to about 54 KB of 68k code, so `tools/macapp.py`
 builds it with `-mcmodel=large`.
 
 `tests/libc.c` checks it; `tests/run.sh` runs its 68k build as a 68000
-and a 68020 in `tools/sim68k.py --os`, and links the PowerPC one.
+and a 68020 in `tools/sim68k.py --os`, and its PowerPC build in
+`tools/simppc.py`.
 
 ### Testing
 
@@ -391,8 +398,17 @@ and a 68020 in `tools/sim68k.py --os`, and links the PowerPC one.
   parameter-block calls with the files kept in memory, a PowerBook's
   `_PMgrOp`, the Sound Driver (an asynchronous write ends at the next
   trap, which first runs its completion routine as an interrupt would)
-  and `ReadLocation` (a Mac in UTC-8), and `--files` prints the files
-  the program left.
+  and `ReadLocation` (a Mac in UTC-8) and `PBGetCatInfo` and
+  `PBCatMove` (folders being the prefixes of the file names); `--files`
+  prints the files the program left, and `--input TEXT` gives the C
+  library's `stdin` that text.
+- `tools/simppc.py App.bin` runs a PowerPC application on a PowerPC CPU
+  emulator (`unicorn` too): it loads the PEF container, applies its
+  relocations, and gives each imported InterfaceLib function a fake
+  built on `sim68k.py`'s (the Memory Manager, the File Manager,
+  `ReadLocation`, `DrawString`, `ExitToShell`). A program that calls
+  any other import stops there. `tests/run.sh` runs the runtime, glue
+  and C library tests in it.
 - `tools/mame/` boots Apple's System disks in MAME (Systems 0.1 to 7.1)
   with an application in place of the Finder: `mkroms.py` makes ROM sets
   from dumps you own, `matrix.py App.bin OUTDIR` boots every System and
@@ -436,9 +452,8 @@ and also fails when `include/` or `docs/coverage.md` differ from what
   (the AppleTalk Transition Queue), `GetDefaultUser` and
   `StartSecureSession` (AppleShare), and `KillProcess`.
 - Running the C library on a real System (so far it has run only in
-  `tools/sim68k.py`; the PowerPC build is only linked).
-- Static constructors on PowerPC and shared libraries in the linkers.
-  Programs over 32 KB of 68k code have run only in `tools/sim68k.py`;
+  `tools/sim68k.py` and `tools/simppc.py`).
+- Shared libraries in the linkers. Programs over 32 KB of 68k code have run only in `tools/sim68k.py`;
   they are one CODE segment that large, which no real System has been
   tried with yet.
 
