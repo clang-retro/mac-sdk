@@ -434,7 +434,10 @@ both too, typing a line into it.
 - `tools/qemu/boot-q800.sh` boots System 7.6.1 or Mac OS 8.1 on QEMU's
   `q800` from a copy of the install CD with the application on it (you
   supply a Quadra 800 ROM image). `tools/qemu/boot.sh` boots Mac OS 9 on
-  QEMU's `mac99` with a transfer disk, and `tools/qemu/mon.py` takes
+  QEMU's `mac99` with a transfer disk. Mac OS 9.2.1 booted from its
+  install CD (`-boot d`) does not mount a disk that `hformat` made,
+  since it has no partition map; put that image in the second CD drive
+  instead, from the monitor: `change ide1-cd0 xfer.img raw`. And `tools/qemu/mon.py` takes
   screenshots and clicks through the QEMU monitor.
 - For PowerPC on Mac OS 8.1 and earlier, use SheepShaver with an
   OldWorld ROM image (such as the beige G3's), with the install CD
@@ -466,8 +469,10 @@ and also fails when `include/` or `docs/coverage.md` differ from what
   whose glue code is not known here: `ATEvent` and `ATPreFlightEvent`
   (the AppleTalk Transition Queue), `GetDefaultUser` and
   `StartSecureSession` (AppleShare), and `KillProcess`.
-- Running the C library on a real System (so far it has run only in
-  `tools/sim68k.py` and `tools/simppc.py`).
+- Running all of the C library on a real System: `tests/console.c`
+  with the console window has run on System 7.6.1 (QEMU `q800`) and
+  Mac OS 9.2.1 (QEMU `mac99`), but `tests/libc.c`, with its files, has
+  run only in `tools/sim68k.py` and `tools/simppc.py`.
 - Shared libraries in the linkers. Programs over 32 KB of 68k code have run only in `tools/sim68k.py`;
   they are one CODE segment that large, which no real System has been
   tried with yet.
