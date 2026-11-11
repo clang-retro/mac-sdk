@@ -7,10 +7,11 @@ relocations, the import glue and the TOC, and the C library's PowerPC
 build. It is not a Mac: only the functions in FUNCS are known, and a
 program that imports another one stops when it calls it.
 
-    python3 simppc.py App.bin [--files] [--input TEXT]
+    python3 simppc.py App.bin [--files] [--input TEXT] [--keys TEXT]
 
-It prints each DrawString, and with --files the files the program left.
---input fills "App Input" (the C library's stdin) as sim68k.py's does.
+It prints each DrawString and DrawText, and with --files the files the
+program left. --input fills "App Input" (the C library's stdin) and
+--keys says what GetNextEvent types, as sim68k.py's do.
 
 Needs the "unicorn" Python package.
 
@@ -28,7 +29,7 @@ from unicorn import Uc, UcError, UC_ARCH_PPC, UC_MODE_PPC32, \
 from unicorn import ppc_const
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from sim68k import FakeOS, GMT_DELTA  # noqa: E402
+from sim68k import FakeOS, GMT_DELTA, key_events  # noqa: E402
 
 MEM_SIZE = 32 << 20
 CODE_AT, DATA_AT = 0x00400000, 0x00800000
@@ -174,6 +175,9 @@ def main():
     ap.add_argument("app")
     ap.add_argument("--files", action="store_true",
                     help="print the files left at the end")
+    ap.add_argument("--keys", metavar="TEXT", default="",
+                    help="what GetNextEvent types (\\n is Return), then "
+                    "Command-period")
     ap.add_argument("--input", metavar="TEXT",
                     help="the file \"App Input\" holds TEXT, with \\n as "
                     "the Mac's \\r")
@@ -246,11 +250,46 @@ def main():
     def draw():
         print(f"DrawString({pstring(arg(0))!r})")
 
+    keys = key_events(a.keys)
+
+    def draw_text():
+        text = bytes(uc.mem_read(arg(0) + sarg(1), sarg(2)))
+        print(f"DrawText({text.decode('mac_roman')!r})")
+
+    def set_rect():
+        uc.mem_write(arg(0), struct.pack(">hhhh", sarg(2), sarg(1),
+                                         sarg(4), sarg(3)))
+
+    def next_event():
+        ch, mods = next(keys)
+        uc.mem_write(arg(1), struct.pack(">HIIIH", 3, ch, 0, 0, mods))
+        ret(1)
+
     def exit_to_shell():
         state["done"] = True
         uc.emu_stop()
 
-    funcs = {
+    # The Toolbox calls that the console window makes and that do nothing
+    # here.
+    nothing = ["InitGraf", "InitFonts", "FlushEvents", "InitWindows",
+               "InitMenus", "TEInit", "InitDialogs", "InitCursor", "SetPort",
+               "TextFont", "TextSize", "EraseRect", "MoveTo", "SizeWindow",
+               "MoveWindow", "ShowWindow", "DisposeWindow", "SystemTask",
+               "BeginUpdate", "EndUpdate", "DragWindow", "SelectWindow",
+               "SystemClick", "ScrollRect"]
+    funcs = {n: (lambda: ret(0)) for n in nothing}
+    funcs.update({
+        "DrawText": draw_text,
+        "SetRect": set_rect,
+        "GetFontInfo": lambda: uc.mem_write(
+            arg(0), struct.pack(">hhhh", 9, 2, 6, 0)),     # Monaco 9
+        "GetNextEvent": next_event,
+        "NewWindow": lambda: ret(0x30000),
+        "NewRgn": lambda: ret(0x40000),
+        "FindWindow": lambda: ret(0),
+        "TrackGoAway": lambda: ret(0),
+    })
+    funcs.update({
         "DrawString": draw,
         "ExitToShell": exit_to_shell,
         "NewPtr": lambda: ret(memory(0xA11E)[0]),
@@ -283,7 +322,7 @@ def main():
         "PBCatMoveSync": lambda: ret(os_.call("hfs", 0xA260, arg(0), 5)[1]),
         "ReadLocation": lambda: os_.call("device", 0xA051, arg(0),
                                          0x000C00E4),
-    }
+    })
 
     def on_code(uc, pc, size, _):
         if pc == RETURN:

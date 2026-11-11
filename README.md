@@ -269,7 +269,9 @@ hmount disk.img && hcopy -m Hello.bin :Hello && humount
 Flags after `--` go to clang. The output is MacBinary II, for
 hfsutils' `hcopy -m`. `--name`, `--creator` and `--size` (the memory
 partition in KB) set the Finder name, the creator code and the `SIZE`
-resource; `--carbon` imports from CarbonLib first on PowerPC.
+resource; `--carbon` imports from CarbonLib first on PowerPC;
+`--console window` puts the C library's `stdin`, `stdout` and `stderr`
+in a window instead of files (see The C library).
 When a 68k program's data is out of the 16-bit PC-relative reach (a
 program over about 32 KB), `tools/macapp.py` compiles it again with
 `-mcmodel=large`, and says so; `--large` does that from the start. The
@@ -346,7 +348,7 @@ CLANG=path/to/clang PICOLIBC_SRC=path/to/clang-retro/picolibc runtime/build-libc
 ```
 
 It needs meson and ninja, and writes `lib/include` (picolibc's
-headers) and `lib/m68k` and `lib/ppc` (`libc.a` and `libmacos.a`).
+headers) and `lib/m68k` and `lib/ppc` (`libc.a`, `libmacos.a` and `libmacconsole.a`).
 When they are there, `tools/macapp.py` compiles against those headers,
 links both archives before `libmacrt.a`, and starts the program at
 `__crt_main`, which runs the static constructors and calls
@@ -366,6 +368,16 @@ links both archives before `libmacrt.a`, and starts the program at
   `\n`, and is at end of file when there is none. A program can define
   `__mac_console_read` (and `__mac_console_write` and
   `__mac_console_close`) itself to read and write elsewhere.
+- with `tools/macapp.py --console window`, a console window instead:
+  `stdout` and `stderr` show in a window in Monaco 9 that opens on the
+  first output or input, wraps at its width and scrolls up when full,
+  and `stdin` reads the lines typed into it (Delete takes back a
+  character; Command-D, Command-period or the close box is the end of
+  input). Reading first flushes `stdout`, so a prompt with no newline
+  shows. The window initializes the Toolbox when it opens, unless the
+  program sets `_console_toolbox` to 0 first because it has done that
+  itself. When the program ends, the window stays until a key is
+  pressed or it is clicked.
 - `malloc`, `calloc`, `realloc` and `free` over `NewPtr`, `SetPtrSize`
   and `DisposePtr`, and `aligned_alloc`, `posix_memalign` and
   `memalign`, which take a larger block when `NewPtr`'s is not aligned
@@ -378,15 +390,15 @@ links both archives before `libmacrt.a`, and starts the program at
 - `exit` and `_exit` through `ExitToShell`.
 - `errno` from File Manager and Memory Manager errors.
 
-Not done yet: an interactive console (a window to type into). picolibc
-is built without debug information, since clang crashes writing it for XCOFF. The C library is
+picolibc is built without debug information, since clang crashes writing it for XCOFF. The C library is
 large next to 32 KB: `tests/libc.c`, which uses stdio, `strtod`, `qsort`
 and `localtime`, links to about 54 KB of 68k code, so `tools/macapp.py`
 builds it with `-mcmodel=large`.
 
 `tests/libc.c` checks it; `tests/run.sh` runs its 68k build as a 68000
 and a 68020 in `tools/sim68k.py --os`, and its PowerPC build in
-`tools/simppc.py`.
+`tools/simppc.py`; it runs `tests/console.c` with the console window in
+both too, typing a line into it.
 
 ### Testing
 
@@ -401,12 +413,15 @@ and a 68020 in `tools/sim68k.py --os`, and its PowerPC build in
   and `ReadLocation` (a Mac in UTC-8) and `PBGetCatInfo` and
   `PBCatMove` (folders being the prefixes of the file names); `--files`
   prints the files the program left, and `--input TEXT` gives the C
-  library's `stdin` that text.
+  library's `stdin` that text. `--keys TEXT` gives a console window
+  that text as key presses, then Command-period; the window's drawing
+  calls are faked and `DrawText` prints the text drawn.
 - `tools/simppc.py App.bin` runs a PowerPC application on a PowerPC CPU
   emulator (`unicorn` too): it loads the PEF container, applies its
   relocations, and gives each imported InterfaceLib function a fake
   built on `sim68k.py`'s (the Memory Manager, the File Manager,
-  `ReadLocation`, `DrawString`, `ExitToShell`). A program that calls
+  `ReadLocation`, `DrawString`, `ExitToShell`, the console window's
+  calls, with `--keys` too). A program that calls
   any other import stops there. `tests/run.sh` runs the runtime, glue
   and C library tests in it.
 - `tools/mame/` boots Apple's System disks in MAME (Systems 0.1 to 7.1)

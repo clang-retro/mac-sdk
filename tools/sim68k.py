@@ -86,7 +86,29 @@ TRAPS = {
     0xA0BD: ("FlushCodeCache", None, 0),
     0xA746: ("GetToolTrapAddress", None, 0),
     0xA346: ("GetOSTrapAddress", None, 0),
+    # What the C library's console window uses.
+    0xA8A7: ("SetRect", 12, 0), 0xA887: ("TextFont", 2, 0),
+    0xA88A: ("TextSize", 2, 0), 0xA88B: ("GetFontInfo", 4, 0),
+    0xA8A3: ("EraseRect", 4, 0), 0xA885: ("DrawText", 8, 0),
+    0xA91D: ("SizeWindow", 10, 0), 0xA91B: ("MoveWindow", 10, 0),
+    0xA915: ("ShowWindow", 4, 0), 0xA914: ("DisposeWindow", 4, 0),
+    0xA970: ("GetNextEvent", 6, 2), 0xA9B4: ("SystemTask", 0, 0),
+    0xA922: ("BeginUpdate", 4, 0), 0xA923: ("EndUpdate", 4, 0),
+    0xA92C: ("FindWindow", 8, 2), 0xA925: ("DragWindow", 12, 0),
+    0xA91E: ("TrackGoAway", 8, 2), 0xA91F: ("SelectWindow", 4, 0),
+    0xA9B3: ("SystemClick", 8, 0), 0xA8D8: ("NewRgn", 0, 4),
+    0xA8EF: ("ScrollRect", 12, 0),
 }
+QUIET = {"SystemTask", "EraseRect", "MoveTo"}   # not printed
+
+
+def key_events(text):
+    """--keys: keyDown events for TEXT (\\n is Return), then Command-period
+    for ever, which the console window reads as the end of input."""
+    for c in text.replace("\\n", "\r"):
+        yield ord(c) & 0xFF, 0
+    while True:
+        yield ord("."), 0x0100
 
 
 GMT_DELTA = -8 * 3600     # the Mac's time zone, seconds east of UTC
@@ -420,6 +442,9 @@ def main():
     ap.add_argument("--input", metavar="TEXT",
                     help="with --os, the file \"App Input\" holds TEXT, "
                     "with \\n as the Mac's \\r (the C library's stdin)")
+    ap.add_argument("--keys", metavar="TEXT", default="",
+                    help="what GetNextEvent types (\\n is Return), then "
+                    "Command-period")
     ap.add_argument("--exit-anywhere", action="store_true",
                     help="do not check the stack at ExitToShell (exit() "
                          "calls it from inside the program)")
@@ -437,7 +462,8 @@ def main():
     seg_start = CODE_AT + 4
     uc.reg_write(UC_M68K_REG_A5, A5_AT)
     uc.reg_write(UC_M68K_REG_A7, STACK_TOP)
-    state = {"clicks": a.clicks, "done": False, "log": [], "port": None}
+    state = {"clicks": a.clicks, "done": False, "log": [], "port": None,
+             "keys": key_events(a.keys)}
     fake = FakeOS(uc) if a.os else None
     # CurApName (0x910): the application's name, from the MacBinary header.
     mb = open(a.app, "rb").read(128)
@@ -531,13 +557,33 @@ def main():
             desc = f"{struct.unpack('>I', args)[0]:#x}"
         elif name == "FlushEvents":
             desc = f"d0={uc.reg_read(UC_M68K_REG_D0):#x}"
+        elif name == "DrawText":
+            count, first, buf = struct.unpack(">hhI", args)
+            desc = repr(rd(buf + first, count).decode("mac_roman"))
+        elif name == "SetRect":
+            b, r, t, l, rect = struct.unpack(">hhhhI", args)
+            uc.mem_write(rect, struct.pack(">hhhh", t, l, b, r))
+            desc = f"{l},{t},{r},{b}"
+        elif name == "GetFontInfo":                 # Monaco 9
+            uc.mem_write(struct.unpack(">I", args)[0],
+                         struct.pack(">hhhh", 9, 2, 6, 0))
         state["log"].append((name, desc))
-        print(f"{name}({desc})")
+        if name not in QUIET:
+            print(f"{name}({desc})")
         if nargs:
             sp += nargs
         if name == "NewWindow" or name == "NewCWindow":
             struct.pack_into(">I", buf := bytearray(4), 0, 0x30000)
             uc.mem_write(sp, bytes(buf))
+        elif name == "GetNextEvent":
+            ch, mods = next(state["keys"])
+            ev = struct.pack(">HIIIH", 3, ch, 0, 0, mods)   # keyDown
+            uc.mem_write(struct.unpack(">I", args[:4])[0], ev)
+            uc.mem_write(sp, b"\x01\x00")
+        elif name == "NewRgn":
+            uc.mem_write(sp, struct.pack(">I", 0x40000))
+        elif name in ("FindWindow", "TrackGoAway"):
+            uc.mem_write(sp, b"\x00\x00")
         elif name == "Button":
             state["clicks"] -= 1
             uc.mem_write(sp, bytes([1 if state["clicks"] < 0 else 0, 0]))

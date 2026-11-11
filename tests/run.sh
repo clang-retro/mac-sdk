@@ -83,12 +83,16 @@ fi
 # The C library, when PICOLIBC_SRC names a clang-retro/picolibc checkout
 # too: build it, link tests/libc.c for both CPUs, and run the 68k build in
 # tools/sim68k.py with its Memory and File Managers, and the PowerPC one
-# in tools/simppc.py, checking the console output file each leaves.
+# in tools/simppc.py, checking the console output file each leaves, and tests/console.c
+# with the console window, typing into it.
 if [ -n "$LLVM_SRC" ] && [ -n "$PICOLIBC_SRC" ]; then
   CLANG="$CLANG" PICOLIBC_SRC="$PICOLIBC_SRC" runtime/build-libc.sh "$APPS/lib"
   for cpu in 68k ppc; do
     CLANG="$CLANG" python3 tools/macapp.py --cpu $cpu --lib "$APPS/lib" \
       -o "$APPS/libc-$cpu.bin" -- -Wall -Werror tests/libc.c >/dev/null
+    CLANG="$CLANG" python3 tools/macapp.py --cpu $cpu --lib "$APPS/lib" \
+      --console window -o "$APPS/console-$cpu.bin" -- -Wall -Werror \
+      tests/console.c >/dev/null
   done
   if python3 -c "import unicorn" 2>/dev/null; then
     for c in 68000 68020; do
@@ -103,6 +107,17 @@ if [ -n "$LLVM_SRC" ] && [ -n "$PICOLIBC_SRC" ]; then
     if grep -q FAILED "$APPS/sim.txt" || ! grep -q "^all ok" "$APPS/sim.txt"; then
       echo "libc on PowerPC:"; cat "$APPS/sim.txt"; exit 1
     fi
+    # The console window: typed keys in, the text it draws out.
+    for c in 68000 68020; do
+      python3 tools/sim68k.py --cpu $c --os --exit-anywhere --keys "Ada\n" \
+        "$APPS/console-68k.bin" >"$APPS/sim.txt" 2>&1 || { cat "$APPS/sim.txt"; exit 1; }
+      grep -q "DrawText('console ok')" "$APPS/sim.txt" ||
+        { echo "console window on a $c:"; cat "$APPS/sim.txt"; exit 1; }
+    done
+    python3 tools/simppc.py --keys "Ada\n" "$APPS/console-ppc.bin" \
+      >"$APPS/sim.txt" 2>&1 || { cat "$APPS/sim.txt"; exit 1; }
+    grep -q "DrawText('console ok')" "$APPS/sim.txt" ||
+      { echo "console window on PowerPC:"; cat "$APPS/sim.txt"; exit 1; }
     echo "libc: ok"
   else
     echo "libc: linked (install unicorn to run it)"

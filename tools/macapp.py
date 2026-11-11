@@ -3,7 +3,7 @@
 
     python3 tools/macapp.py -o Hello.bin [--cpu fat|68k|ppc] [--name Hello]
         [--creator ????] [--size KB] [--carbon] [--no-runtime] [--no-libc]
-        [--lib DIR] [--large]
+        [--lib DIR] [--large] [--console file|window]
         [-- clang flags] hello.c ...
 
 It compiles each source with clang (the CLANG environment variable, or
@@ -17,7 +17,9 @@ runtime/build.sh makes (lib/m68k/libmacrt.a and lib/ppc/libmacrt.a) is
 linked last when it is there. When runtime/build-libc.sh has made the C
 library (lib/include, lib/*/libc.a and libmacos.a), sources compile
 against its headers and link with it, and the program starts at its
-__crt_main, which calls exit(main(argc, argv)). The output is MacBinary
+__crt_main, which calls exit(main(argc, argv)). The console (stdin,
+stdout and stderr) is a pair of files next to the program, or with
+--console window a window (libmacconsole.a). The output is MacBinary
 II, for hfsutils' "hcopy -m".
 
 68k code reaches its data PC-relative, within 32 KB, unless compiled
@@ -81,6 +83,8 @@ def build(cpu, a, clang, tmp, large=False):
             ["-c", src, "-o", obj])
         objs.append(obj)
     libs = ["libmacos.a", "libc.a"] if libc else []
+    if libc and a.console == "window":
+        libs.insert(0, "libmacconsole.a")
     if a.runtime:
         libs.append("libmacrt.a")
     objs += [os.path.join(libdir, n) for n in libs
@@ -127,6 +131,9 @@ def main():
                     help="do not link the runtime library")
     ap.add_argument("--no-libc", dest="libc", action="store_false",
                     help="do not use the C library")
+    ap.add_argument("--console", choices=["file", "window"], default="file",
+                    help="the C library's console: files next to the "
+                    "program, or a window")
     ap.add_argument("--large", action="store_true",
                     help="68k: compile with -mcmodel=large from the start")
     ap.add_argument("--carbon", action="store_true",
