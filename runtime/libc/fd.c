@@ -1,6 +1,7 @@
 /* File descriptors over the File Manager: open, close, read, write and
- * lseek. Descriptors 0, 1 and 2 are the console (stdin reads nothing;
- * stdout and stderr go to console.c); the others are open data forks.
+ * lseek. Descriptors 0, 1 and 2 are the console (stdin reads from
+ * input.c, stdout and stderr write to console.c); the others are open
+ * data forks.
  *
  * Copyright (C) clang-retro contributors.
  * SPDX-License-Identifier: AGPL-3.0-only */
@@ -95,8 +96,12 @@ int close(int fd) {
 ssize_t read(int fd, void *buf, size_t n) {
   long count = (long)n;
   OSErr err;
-  if (fd == 0)
-    return 0;                   /* no console input */
+  if (fd == 0) {
+    count = __mac_console_read(buf, n);
+    if (count < 0)
+      errno = EIO;
+    return count;
+  }
   if (bad(fd))
     return -1;
   if ((fds[fd].flags & O_ACCMODE) == O_WRONLY) {

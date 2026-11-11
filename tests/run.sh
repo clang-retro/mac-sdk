@@ -67,6 +67,14 @@ if [ -n "$LLVM_SRC" ]; then
           echo "$t on a $c:"; grep DrawString "$APPS/sim.txt" | grep -v "'ok'"; exit 1; }
       done
     done
+    # The PowerPC builds in tools/simppc.py (not fixmath: InterfaceLib
+    # has the FixMath calls there, and the simulator does not fake them).
+    for t in runtime glue; do
+      python3 tools/simppc.py "$APPS/$t-ppc.bin" >"$APPS/sim.txt" || {
+        cat "$APPS/sim.txt"; exit 1; }
+      grep -q "DrawString('all ok')" "$APPS/sim.txt" || {
+        echo "$t on PowerPC:"; grep DrawString "$APPS/sim.txt" | grep -v "'ok'"; exit 1; }
+    done
     echo "runtime: ok"
   else
     echo "runtime: linked (install unicorn to run it)"
@@ -74,8 +82,8 @@ if [ -n "$LLVM_SRC" ]; then
 fi
 # The C library, when PICOLIBC_SRC names a clang-retro/picolibc checkout
 # too: build it, link tests/libc.c for both CPUs, and run the 68k build in
-# tools/sim68k.py with its Memory and File Managers, checking the console
-# output file the program leaves.
+# tools/sim68k.py with its Memory and File Managers, and the PowerPC one
+# in tools/simppc.py, checking the console output file each leaves.
 if [ -n "$LLVM_SRC" ] && [ -n "$PICOLIBC_SRC" ]; then
   CLANG="$CLANG" PICOLIBC_SRC="$PICOLIBC_SRC" runtime/build-libc.sh "$APPS/lib"
   for cpu in 68k ppc; do
@@ -84,12 +92,17 @@ if [ -n "$LLVM_SRC" ] && [ -n "$PICOLIBC_SRC" ]; then
   done
   if python3 -c "import unicorn" 2>/dev/null; then
     for c in 68000 68020; do
-      python3 tools/sim68k.py --cpu $c --os --files --exit-anywhere \
+      python3 tools/sim68k.py --cpu $c --os --files --exit-anywhere --input "typed\nline\n" \
         "$APPS/libc-68k.bin" >"$APPS/sim.txt" || { cat "$APPS/sim.txt"; exit 1; }
       if grep -q FAILED "$APPS/sim.txt" || ! grep -q "^all ok" "$APPS/sim.txt"; then
         echo "libc on a $c:"; cat "$APPS/sim.txt"; exit 1
       fi
     done
+    python3 tools/simppc.py --files --input "typed\nline\n" \
+      "$APPS/libc-ppc.bin" >"$APPS/sim.txt" || { cat "$APPS/sim.txt"; exit 1; }
+    if grep -q FAILED "$APPS/sim.txt" || ! grep -q "^all ok" "$APPS/sim.txt"; then
+      echo "libc on PowerPC:"; cat "$APPS/sim.txt"; exit 1
+    fi
     echo "libc: ok"
   else
     echo "libc: linked (install unicorn to run it)"
