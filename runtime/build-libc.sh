@@ -77,5 +77,16 @@ EOF
   done
   rm -f "$out/$cpu/libmacos.a"
   "$bindir/llvm-ar" rcs "$out/$cpu/libmacos.a" "$work/macos-$cpu"/*.o
-  echo "$cpu: $out/$cpu/libc.a and libmacos.a"
+
+  # The console window, which tools/macapp.py --console window links
+  # before libmacos.a in place of its console file.
+  mkdir -p "$work/window-$cpu"
+  for f in "$here"/libc/window/*.c; do
+    "$CLANG" --target=$target $mflags -O2 -ffreestanding -Wall -Wextra -Werror \
+      -isystem "$out/include" -I "$sdk/include" \
+      -c "$f" -o "$work/window-$cpu/$(basename "$f" .c).o"
+  done
+  rm -f "$out/$cpu/libmacconsole.a"
+  "$bindir/llvm-ar" rcs "$out/$cpu/libmacconsole.a" "$work/window-$cpu"/*.o
+  echo "$cpu: $out/$cpu/libc.a, libmacos.a and libmacconsole.a"
 done
