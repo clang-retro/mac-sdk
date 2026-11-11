@@ -8,8 +8,11 @@ TRAPS are known, and they do nothing but log their arguments. With
 --os, the Memory Manager's pointer calls and the File Manager's basic
 calls (on files in memory, all in one folder) work too, enough for the C
 library, and so do a pretend PowerBook's Power Manager (_PMgrOp) and the
-Sound Driver's volume call; --files then prints the files the program
-left.
+Sound Driver's volume, write and KillIO calls, and ReadLocation, for a
+Mac in UTC-8 (its clock, Time, is local time); --files then prints the
+files the program left. An asynchronous write to the Sound Driver ends
+at the program's next trap, which first runs its completion routine as
+an interrupt would.
 
     python3 sim68k.py Hello68.bin [--clicks N] [--cpu 68020] [--system6]
         [--os] [--files] [--exit-anywhere]
@@ -26,8 +29,9 @@ import time
 
 from unicorn import Uc, UcError, UC_ARCH_M68K, UC_MODE_BIG_ENDIAN, \
     UC_HOOK_INTR, UC_HOOK_CODE
+from unicorn import m68k_const
 from unicorn.m68k_const import UC_M68K_REG_A5, UC_M68K_REG_A7, \
-    UC_M68K_REG_PC, UC_M68K_REG_D0, UC_M68K_REG_A0, \
+    UC_M68K_REG_PC, UC_M68K_REG_D0, UC_M68K_REG_A0, UC_M68K_REG_SR, \
     UC_CPU_M68K_M68000, UC_CPU_M68K_M68020, UC_CPU_M68K_M68030, \
     UC_CPU_M68K_M68040
 CPUS = {"68000": UC_CPU_M68K_M68000, "68020": UC_CPU_M68K_M68020,
@@ -38,6 +42,10 @@ MEM_BASE, MEM_SIZE = 0, 4 << 20
 CODE_AT = 0x20000          # where CODE 1 is "loaded"
 A5_AT = 0x10000            # application globals pointer
 STACK_TOP = MEM_SIZE - 0x100
+IRQ_RETURN = MEM_SIZE - 0x10  # where a completion routine returns to
+# SR first: writing it can switch stacks.
+REGS = [UC_M68K_REG_SR, UC_M68K_REG_PC] + [
+    getattr(m68k_const, f"UC_M68K_REG_{r}{i}") for r in "DA" for i in range(8)]
 
 
 def read_macbinary(path):
@@ -81,6 +89,7 @@ TRAPS = {
 }
 
 
+GMT_DELTA = -8 * 3600     # the Mac's time zone, seconds east of UTC
 HEAP_AT, HEAP_END = 0x200000, 0x3E0000
 # Open, Close, Read, Write, Create, Delete, Rename, GetFileInfo,
 # SetFileInfo, GetEOF, SetEOF, FlushVol, GetFPos, SetFPos.
@@ -101,6 +110,7 @@ class FakeOS:
         self.blocks = {}        # address -> size
         self.top = HEAP_AT
         self.wakeup = (bytes(4), 0)  # wakeup time, enabled
+        self.sound = []         # asynchronous Sound Driver writes, oldest first
 
     def rd(self, a, n):
         return bytes(self.uc.mem_read(a, n))
@@ -163,8 +173,11 @@ class FakeOS:
         return True
 
     # The Power Manager (_PMgrOp, a pmCommandRec in A0) with a battery,
-    # a modem and a wakeup timer, and the Sound Driver's volume control
-    # call (Control to refNum -4, csCode 2), which sets SdVolume.
+    # a modem and a wakeup timer, and the Sound Driver (refNum -4): its
+    # volume control call (csCode 2), which sets SdVolume, writes, which
+    # end at once or (asynchronous) at the next trap, and KillIO, which
+    # cancels the asynchronous writes without calling their completion
+    # routines, as the Device Manager of the time did.
     def device(self, word):
         uc = self.uc
         pb = uc.reg_read(UC_M68K_REG_A0) & 0xFFFFFFFF
@@ -189,7 +202,35 @@ class FakeOS:
             uc.reg_write(UC_M68K_REG_D0, 0)
             self.w16(pb + 16, 0)
             return True
+        if word & 0xF9FF == 0xA003 and self.r16(pb + 24) == -4:
+            self.w32(pb + 40, self.r32(pb + 36))    # ioActCount
+            if word & 0x0400:
+                self.w16(pb + 16, 1)
+                self.sound.append(pb)
+            else:
+                self.w16(pb + 16, 0)
+            uc.reg_write(UC_M68K_REG_D0, 0)
+            return True
+        if word & 0xF9FF == 0xA006 and self.r16(pb + 24) == -4:
+            for p in self.sound:
+                self.w16(p + 16, -27)           # abortErr
+            self.sound.clear()
+            self.w16(pb + 16, 0)
+            uc.reg_write(UC_M68K_REG_D0, 0)
+            return True
+        if word == 0xA051 and uc.reg_read(UC_M68K_REG_D0) & 0xFFFFFFFF == 0x000C00E4:
+            # ReadLocation: latitude, longitude, gmtDelta (24 bits).
+            uc.mem_write(pb, bytes(8) + struct.pack(">I", GMT_DELTA & 0xFFFFFF))
+            uc.reg_write(UC_M68K_REG_D0, 0)
+            return True
         return False
+
+    # The oldest asynchronous Sound Driver write ends: its ioResult, and
+    # its completion routine (or None).
+    def sound_done(self):
+        pb = self.sound.pop(0)
+        self.w16(pb + 16, 0)
+        return pb, self.r32(pb + 12) or None
 
     # File Manager: parameter block in A0, result in D0 and ioResult.
     def file(self, word):
@@ -308,7 +349,7 @@ def main():
                     help="no _FlushCodeCache, as on System 6 on a 68000")
     ap.add_argument("--os", action="store_true",
                     help="fake the Memory Manager, the File Manager, "
-                    "_PMgrOp and the Sound Driver's volume")
+                    "_PMgrOp and the Sound Driver")
     ap.add_argument("--files", action="store_true",
                     help="with --os, print the files left at the end")
     ap.add_argument("--exit-anywhere", action="store_true",
@@ -333,8 +374,9 @@ def main():
     # CurApName (0x910): the application's name, from the MacBinary header.
     mb = open(a.app, "rb").read(128)
     uc.mem_write(0x910, mb[1:2 + min(mb[1], 31)])
-    # Time (0x20C): the clock, in seconds since 1904.
-    uc.mem_write(0x20C, struct.pack(">I", int(time.time()) + 2082844800))
+    # Time (0x20C): the clock, in local seconds since 1904.
+    uc.mem_write(0x20C, struct.pack(">I", int(time.time()) + 2082844800 +
+                                    (GMT_DELTA if a.os else 0)))
 
     def rd(addr, n):
         return bytes(uc.mem_read(addr, n))
@@ -343,15 +385,39 @@ def main():
         n = rd(addr, 1)[0]
         return rd(addr + 1, n).decode("mac_roman")
 
+    saved = []                  # registers while a completion routine runs
+
     def on_code(uc, pc, size, _):
+        if pc == IRQ_RETURN and saved:
+            # The completion routine returned: go back to the trap it
+            # interrupted, with every register as it was.
+            for r, v in zip(REGS, saved.pop()):
+                uc.reg_write(r, v)
+            return
         # Toolbox traps are A-line words: catch them before the CPU runs
         # them, fake them, and continue after the word.
         word = struct.unpack(">H", rd(pc, 2))[0]
         if word & 0xF000 != 0xA000:
             return
+        if fake and fake.sound and not saved and not (
+                word & 0xF9F8 == 0xA000 and
+                struct.unpack(">h", rd(uc.reg_read(UC_M68K_REG_A0) + 24,
+                                       2))[0] == -4):
+            # A write ends before this trap, like an interrupt: the
+            # completion routine gets the block in A0 and the result in D0.
+            pb, done = fake.sound_done()
+            if done:
+                saved.append([uc.reg_read(r) for r in REGS])
+                sp = uc.reg_read(UC_M68K_REG_A7) - 4
+                uc.mem_write(sp, struct.pack(">I", IRQ_RETURN))
+                uc.reg_write(UC_M68K_REG_A7, sp)
+                uc.reg_write(UC_M68K_REG_A0, pb)
+                uc.reg_write(UC_M68K_REG_D0, 0)
+                uc.reg_write(UC_M68K_REG_PC, done)
+                return
         if fake and word & 0x0800 == 0 and (fake.memory(word) or
-                                            fake.file(word) or
-                                            fake.device(word)):
+                                            fake.device(word) or
+                                            fake.file(word)):
             uc.reg_write(UC_M68K_REG_PC, pc + 2)
             return
         if word not in TRAPS:

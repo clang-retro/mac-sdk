@@ -1,6 +1,8 @@
 /* Checks the C library (runtime/build-libc.sh): stdio to the console and
- * to files, seeking, rename and remove, malloc and realloc, setjmp,
- * qsort, strtod and printf's conversions. tests/run.sh runs the 68k build
+ * to files, seeking, rename and remove, malloc, realloc and the aligned
+ * allocations, setjmp, qsort, strtod, printf's conversions and the time
+ * zone. It is over 32 KB of 68k code, so tools/macapp.py builds it with
+ * -mcmodel=large. tests/run.sh runs the 68k build
  * in tools/sim68k.py --os, which keeps the files in memory, and checks
  * the console output it leaves ("libc-68k Output"): one "ok" line per check,
  * then "all ok".
@@ -8,11 +10,13 @@
  * Copyright (C) clang-retro contributors.
  * SPDX-License-Identifier: AGPL-3.0-only */
 #include <errno.h>
+#include <stdint.h>
 #include <setjmp.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <OSUtils.h>
 
 static int failures;
 
@@ -81,7 +85,30 @@ int main(int argc, char **argv) {
 
   qsort(v, 5, sizeof v[0], cmp);
   check("qsort", v[0] == 1 && v[4] == 5);
-  check("time", time(NULL) > 1700000000);   /* after 2023 */
+  {
+    void *q = NULL, *bad = NULL;
+    size_t three = 3;   /* not a constant, which clang would warn about */
+    char *r = aligned_alloc(256, 100);
+    check("aligned_alloc", r && !((uintptr_t)r & 255));
+    r[99] = 7;
+    r = realloc(r, 3000);
+    check("realloc aligned", r && r[99] == 7);
+    free(r);
+    check("posix_memalign", posix_memalign(&q, 64, 10) == 0 && !((uintptr_t)q & 63) &&
+                                posix_memalign(&bad, 6, 10) == EINVAL && !bad);
+    free(q);
+    check("aligned_alloc 3", aligned_alloc(three, 10) == NULL && errno == EINVAL);
+  }
+  {
+    /* tools/sim68k.py --os is a Mac in UTC-8, whose clock is local time. */
+    time_t t = time(NULL);
+    unsigned long mac;
+    struct tm g = *gmtime(&t), l = *localtime(&t);
+    GetDateTime(&mac);
+    check("time", t > 1700000000);   /* after 2023 */
+    check("time zone", (long)(mac - 2082844800UL - (unsigned long)t) / 60 == -480 &&
+                           (g.tm_hour - l.tm_hour + 24) % 24 == 8);
+  }
   fprintf(stderr, "stderr too\n");
   printf(failures ? "FAILED\n" : "all ok\n");
   return 0;

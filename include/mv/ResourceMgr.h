@@ -261,12 +261,25 @@ pascal OSErr FSCreateResourceFile(const FSRef *parentRef, UniCharCount nameLengt
 
 pascal OSErr FSOpenResourceFile(const FSRef *ref, UniCharCount forkNameLength, const UniChar *forkName, SInt8 permissions, SInt16 *refNum);
 
+#if TARGET_CPU_68K
+static __inline__ void TempInsertROMMap(Boolean tempResLoad);
+#else
 pascal void TempInsertROMMap(Boolean tempResLoad);
+#endif
 
 // Is a resource file already open? (Mac OS 9)
 MAC_SINCE(0x0700, "7.0") pascal Boolean FSpResourceFileAlreadyOpen(const FSSpec *resourceFile, Boolean *inChain, SInt16 *refNum) M68K_INLINE(0x7010, 0xA822);
 
 MAC_SINCE(0x0700, "7.0") pascal Boolean FSResourceFileAlreadyOpen(const FSRef *resourceFileRef, Boolean *inChain, SInt16 *refNum) M68K_INLINE(0x7015, 0xA822);
+
+#if TARGET_CPU_68K
+static __inline__ void TempInsertROMMap(Boolean tempResLoad) {
+    /* As Apple's inline code does: RomMapInsert ($B9E) to 0xFF, and
+       TmpResLoad ($B9F) to 0xFF if tempResLoad, else 0. */
+    *(INTEGER *)0xB9E = tempResLoad ? (INTEGER)0xFFFF : (INTEGER)0xFF00;
+}
+
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

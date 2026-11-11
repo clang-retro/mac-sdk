@@ -241,6 +241,16 @@ Sound Driver. `TESetWordBreak` and `TESetClickLoop` take a
 `pascal Boolean` function, as MPW's did, and install a trampoline that
 TextEdit calls with its arguments in registers and its answer in the Z
 flag; each call site has its own trampoline and remembers one function.
+`StartSound` plays synchronously when given no completion routine, and
+otherwise writes to the Sound Driver asynchronously with one of 8
+parameter blocks shared by every call site (it waits when all 8 are in
+use); `StopSound` kills the requests and calls the completion routines
+that did not run, and `SoundDone` says whether any request is left. The
+Component Manager 3 calls (QuickTime 2.5 and later: `OpenAComponent`,
+`GetComponentResource`, ...) use the selectors of Apple's Universal
+Interfaces 3.x, and `TempInsertROMMap` sets the low-memory globals as
+their inline code does. Glue that keeps state, or a trampoline, reaches it
+with 32-bit addresses, so it works in programs of any size.
 `include/needs-glue.txt` lists what is left: mostly
 calls that never ran on 68k (Navigation Services, Driver Services, the
 Name Registry).
@@ -260,6 +270,11 @@ Flags after `--` go to clang. The output is MacBinary II, for
 hfsutils' `hcopy -m`. `--name`, `--creator` and `--size` (the memory
 partition in KB) set the Finder name, the creator code and the `SIZE`
 resource; `--carbon` imports from CarbonLib first on PowerPC.
+When a 68k program's data is out of the 16-bit PC-relative reach (a
+program over about 32 KB), `tools/macapp.py` compiles it again with
+`-mcmodel=large`, and says so; `--large` does that from the start. The
+runtime and C libraries are built that way, which costs about 1% in
+size.
 
 The linkers it runs are in `tools/link/` and can be used on their own:
 
@@ -269,8 +284,10 @@ The linkers it runs are in `tools/link/` and can be used on their own:
   CODE 0 is a one-entry jump table. At launch `start.S` adds the load
   address to each pointer, calls `_FlushCodeCache` where the trap exists
   (not on the 64K ROM, nor on System 6 on a Mac Plus or SE) and calls
-  `main`. Code reaches data PC-relative, so a 68k program must stay
-  within 32 KB until the compiler gets a large code model.
+  `main`. Code compiled as usual reaches its data PC-relative, within
+  32 KB; code compiled with `-mcmodel=large` uses 32-bit addresses,
+  which `start.S` relocates, and can be any size. Calls are 32-bit
+  either way.
 - `peflink.py` links the XCOFF objects that `powerpc-apple-macos9`
   makes into a PEF application (a `cfrg` 0 resource, the PEF container
   in the data fork). Each imported call gets a glue stub that restores
@@ -343,18 +360,23 @@ links both archives before `libmacrt.a`, and starts the program at
   application's folder, with `\n` turned into `\r`, so SimpleText opens
   it. `stdin` is always at end of file.
 - `malloc`, `calloc`, `realloc` and `free` over `NewPtr`, `SetPtrSize`
-  and `DisposePtr`.
-- `time` and `gettimeofday` from `GetDateTime`, and `exit` and `_exit`
-  through `ExitToShell`.
+  and `DisposePtr`, and `aligned_alloc`, `posix_memalign` and
+  `memalign`, which take a larger block when `NewPtr`'s is not aligned
+  enough.
+- `time` and `gettimeofday` from `GetDateTime`, in UTC: the first call
+  reads the time zone set in the Map control panel (`ReadLocation`)
+  and, unless the environment has been set, sets `TZ` to that offset,
+  so `localtime` gives the Mac's local time. The Mac knows no daylight
+  saving rules, so times in the other season are an hour off.
+- `exit` and `_exit` through `ExitToShell`.
 - `errno` from File Manager and Memory Manager errors.
 
-Not done yet: `aligned_alloc` and `posix_memalign`; `rename` between
-folders (it fails with `EXDEV`); time zones (local time is reported as
-UTC); console input; static constructors on PowerPC. picolibc is built
-without debug information, since clang crashes writing it for XCOFF.
-The C library is large next to the 68k 32 KB limit: `tests/libc.c`,
-which uses stdio, `strtod` and `qsort`, links to about 34 KB, which works only
-because no reference in it spans more than 32 KB.
+Not done yet: `rename` between folders (it fails with `EXDEV`); console
+input; static constructors on PowerPC. picolibc is built without debug
+information, since clang crashes writing it for XCOFF. The C library is
+large next to 32 KB: `tests/libc.c`, which uses stdio, `strtod`, `qsort`
+and `localtime`, links to about 54 KB of 68k code, so `tools/macapp.py`
+builds it with `-mcmodel=large`.
 
 `tests/libc.c` checks it; `tests/run.sh` runs its 68k build as a 68000
 and a 68020 in `tools/sim68k.py --os`, and links the PowerPC one.
@@ -367,8 +389,10 @@ and a 68020 in `tools/sim68k.py --os`, and links the PowerPC one.
   code generation, relocation and stack balance for small programs, not
   drawing. `--os` fakes the Memory Manager and the File Manager's
   parameter-block calls with the files kept in memory, a PowerBook's
-  `_PMgrOp` and the Sound Driver's volume call, and `--files` prints
-  the files the program left.
+  `_PMgrOp`, the Sound Driver (an asynchronous write ends at the next
+  trap, which first runs its completion routine as an interrupt would)
+  and `ReadLocation` (a Mac in UTC-8), and `--files` prints the files
+  the program left.
 - `tools/mame/` boots Apple's System disks in MAME (Systems 0.1 to 7.1)
   with an application in place of the Finder: `mkroms.py` makes ROM sets
   from dumps you own, `matrix.py App.bin OUTDIR` boots every System and
@@ -407,14 +431,16 @@ and also fails when `include/` or `docs/coverage.md` differ from what
 
 - Coverage: the headers declare all but 3 undocumented symbols of what
   the ROM's InterfaceLib exports (see docs/coverage.md).
-- 68k glue for the rest of `needs-glue.txt` that did run on 68k:
-  the Sound Driver's `StartSound`, `StopSound` and
-  `SoundDone` (MPW's glue keeps its own queue of requests), and the
-  Component Manager 3 calls (QuickTime 2.5 and later).
+- 68k glue for the rest of `needs-glue.txt` that may have run on 68k,
+  whose glue code is not known here: `ATEvent` and `ATPreFlightEvent`
+  (the AppleTalk Transition Queue), `GetDefaultUser` and
+  `StartSecureSession` (AppleShare), and `KillProcess`.
 - Running the C library on a real System (so far it has run only in
   `tools/sim68k.py`; the PowerPC build is only linked).
-- Static constructors on PowerPC and shared libraries in the linkers,
-  and a large code model for 68k programs over 32 KB.
+- Static constructors on PowerPC and shared libraries in the linkers.
+  Programs over 32 KB of 68k code have run only in `tools/sim68k.py`;
+  they are one CODE segment that large, which no real System has been
+  tried with yet.
 
 ## License
 

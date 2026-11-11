@@ -1093,7 +1093,7 @@ static __inline__ void SetUpA5(void) {
        between the two takes the next slot. */
     __asm__ __volatile__(
         ".comm __mv_a5_stack, 132, 4\n\t"
-        "lea (__mv_a5_stack,%%pc), %%a0\n\t"
+        "lea __mv_a5_stack, %%a0\n\t"
         "add.l #4, (%%a0)\n\t"
         "move.l (%%a0), %%d0\n\t"
         ".short 0x218D, 0x0800\n\t"          /* move.l %a5, (0,%a0,%d0.l) */
@@ -1105,7 +1105,7 @@ static __inline__ void RestoreA5(void) {
     /* Undoes the latest SetUpA5 (see there). */
     __asm__ __volatile__(
         ".comm __mv_a5_stack, 132, 4\n\t"
-        "lea (__mv_a5_stack,%%pc), %%a0\n\t"
+        "lea __mv_a5_stack, %%a0\n\t"
         "move.l (%%a0), %%d0\n\t"
         ".short 0x2A70, 0x0800\n\t"          /* movea.l (0,%a0,%d0.l), %a5 */
         "sub.l #4, (%%a0)"

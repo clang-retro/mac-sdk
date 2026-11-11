@@ -36,7 +36,7 @@ skip=" atomic crtbegin crtend emutls enable_execute_stack eprintf clear_cache
 
 for cpu in m68k ppc; do
   case $cpu in
-    m68k) target=m68k-apple-macos; flags="-mcpu=68000" ;;
+    m68k) target=m68k-apple-macos; flags="-mcpu=68000 -mcmodel=large" ;;
     # The PowerPC target makes XCOFF, as AIX does; compiler-rt knows how
     # to make aliases there only for AIX.
     ppc) target=powerpc-apple-macos9; flags="-D_AIX" ;;

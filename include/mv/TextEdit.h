@@ -437,8 +437,8 @@ static __inline__ void TESetWordBreak(ProcPtr wb, TEHandle teh) {
         "rts\n"
         "2:\t.long 0\n\t"
         ".popsection\n\t"
-        "lea (1b,%%pc), %0\n\t"
-        "lea (2b,%%pc), %1"
+        "lea 1b, %0\n\t"
+        "lea 2b, %1"
         : "=a"(tramp), "=a"(slot));
     *slot = wb;
     (**teh).wordBreak = tramp;
@@ -463,8 +463,8 @@ static __inline__ void TESetClickLoop(ProcPtr cp, TEHandle teh) {
         "rts\n"
         "2:\t.long 0\n\t"
         ".popsection\n\t"
-        "lea (1b,%%pc), %0\n\t"
-        "lea (2b,%%pc), %1"
+        "lea 1b, %0\n\t"
+        "lea 2b, %1"
         : "=a"(tramp), "=a"(slot));
     *slot = cp;
     (**teh).clikLoop = tramp;

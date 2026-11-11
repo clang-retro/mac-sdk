@@ -192,17 +192,95 @@
         type: LONGINT
       - name: comp
         type: ProcPtr
+    m68k-needs: [IOParam, ParmBlkPtr, PBWriteSync, PBWriteAsync]
+    m68k-body: |
+      /* As MPW's glue does: a NULL comp plays the sound synchronously,
+         (ProcPtr)-1 asynchronously with no completion routine, and any other
+         comp asynchronously, calling it (a procedure with no arguments) when
+         the sound ends. Asynchronous requests each take one of 8 blocks in the
+         common block __mv_sound, which StopSound and SoundDone read: an
+         IOParam (50 bytes), comp (4) and a busy flag (1), 56 bytes in all.
+         When all 8 are in use, StartSound waits for one. The completion
+         routine clears the flag with one bclr, so it and StopSound never both
+         call comp. */
+      char *slots, *p;
+      ProcPtr done;
+      IOParam *pb, sync;
+      __asm__ __volatile__(
+          ".comm __mv_sound, 448, 4\n\t"
+          ".pushsection .text.__mv_glue,\"ax\",@progbits\n"
+          "1:\tbclr #0, (54,%%a0)\n\t"
+          "beq 2f\n\t"
+          "move.l (50,%%a0), %%d0\n\t"
+          "beq 2f\n\t"
+          "move.l %%d0, %%a1\n\t"
+          "jsr (%%a1)\n"
+          "2:\trts\n\t"
+          ".popsection\n\t"
+          "lea __mv_sound, %0\n\t"
+          "lea 1b, %1"
+          : "=a"(slots), "=a"(done));
+      if (!comp) {
+        pb = &sync;
+        done = 0;
+      } else {
+        for (p = slots;; p = p + 56 < slots + 448 ? p + 56 : slots)
+          if (!*(volatile char *)(p + 54))
+            break;
+        *(ProcPtr *)(p + 50) = comp == (ProcPtr)-1 ? 0 : comp;
+        *(volatile char *)(p + 54) = 1;
+        pb = (IOParam *)p;
+      }
+      pb->ioCompletion = done;
+      pb->ioRefNum = -4;    /* .Sound */
+      pb->ioBuffer = srec;
+      pb->ioReqCount = nb;
+      pb->ioPosMode = 0;
+      pb->ioPosOffset = 0;
+      if (comp)
+        PBWriteAsync((ParmBlkPtr)pb);
+      else
+        PBWriteSync((ParmBlkPtr)pb);
 
 # ####
 
 - function:
     name: StopSound
+    m68k-needs: [IOParam, ParmBlkPtr, PBKillIOSync]
+    m68k-body: |
+      /* Stops the sound and cancels the asynchronous StartSound requests, then
+         calls the completion routine of each request whose own completion
+         routine did not run (see StartSound). */
+      char *slots, *p, was;
+      IOParam pb;
+      __asm__ __volatile__(
+          ".comm __mv_sound, 448, 4\n\t"
+          "lea __mv_sound, %0" : "=a"(slots));
+      pb.ioCompletion = 0;
+      pb.ioRefNum = -4;
+      PBKillIOSync((ParmBlkPtr)&pb);
+      for (p = slots; p < slots + 448; p += 56) {
+        __asm__ __volatile__("bclr #0, (%1)\n\tsne %0"
+                             : "=d"(was) : "a"(p + 54) : "cc", "memory");
+        if (was && *(ProcPtr *)(p + 50))
+          (*(void (*)(void)) * (ProcPtr *)(p + 50))();
+      }
 
 # ####
 
 - function:
     name: SoundDone
     return: Boolean
+    m68k-body: |
+      /* True when no asynchronous StartSound request is in progress. */
+      char *slots, *p;
+      __asm__ __volatile__(
+          ".comm __mv_sound, 448, 4\n\t"
+          "lea __mv_sound, %0" : "=a"(slots));
+      for (p = slots; p < slots + 448; p += 56)
+        if (*(volatile char *)(p + 54))
+          return 0;
+      return 1;
 
 # ####
 

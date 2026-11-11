@@ -30,8 +30,9 @@ trap 'rm -rf "$work"' EXIT
 
 for cpu in m68k ppc; do
   case $cpu in
-    m68k) target=m68k-apple-macos; family=m68k; cpuname=68000; flags="'-mcpu=68000', " ;;
-    ppc) target=powerpc-apple-macos9; family=powerpc; cpuname=ppc; flags="" ;;
+    m68k) target=m68k-apple-macos; family=m68k; cpuname=68000; flags="'-mcpu=68000', '-mcmodel=large', "
+      mflags="-mcmodel=large" ;;
+    ppc) target=powerpc-apple-macos9; family=powerpc; cpuname=ppc; flags=""; mflags="" ;;
   esac
   cat > "$work/cross-$cpu.txt" <<EOF
 [binaries]
@@ -70,7 +71,7 @@ EOF
   # The Mac layer, one archive member per file.
   mkdir -p "$work/macos-$cpu"
   for f in "$here"/libc/*.c; do
-    "$CLANG" --target=$target -O2 -ffreestanding -Wall -Wextra -Werror \
+    "$CLANG" --target=$target $mflags -O2 -ffreestanding -Wall -Wextra -Werror \
       -isystem "$out/include" -I "$sdk/include" \
       -c "$f" -o "$work/macos-$cpu/$(basename "$f" .c).o"
   done
