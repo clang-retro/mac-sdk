@@ -411,7 +411,7 @@ links both archives before `libmacrt.a`, and starts the program at
   and `DisposePtr`, and `aligned_alloc`, `posix_memalign` and
   `memalign`, which take a larger block when `NewPtr`'s is not aligned
   enough.
-- `time` and `gettimeofday` from `GetDateTime`, in UTC: the first call
+- `time`, `gettimeofday` and `ftime` from `GetDateTime`, in UTC: the first call
   reads the time zone set in the Map control panel (`ReadLocation`)
   and, unless the environment has been set, sets `TZ` to that offset,
   so `localtime` gives the Mac's local time. The Mac knows no daylight

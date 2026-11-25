@@ -32,6 +32,7 @@
 #include <sys/wait.h>
 #include <utime.h>
 #include <sys/stat.h>
+#include <sys/timeb.h>
 #include <OSUtils.h>
 
 int shm_open(const char *name, int flags, mode_t mode);
@@ -294,6 +295,9 @@ int main(int argc, char **argv) {
     check("time", t > 1700000000);   /* after 2023 */
     check("time zone", (long)(mac - 2082844800UL - (unsigned long)t) / 60 == -480 &&
                            (g.tm_hour - l.tm_hour + 24) % 24 == 8);
+    struct timeb tb;
+    check("ftime", ftime(&tb) == 0 && tb.time >= t && tb.time <= t + 2 &&
+                       tb.millitm < 1000 && tb.timezone == 480 && tb.dstflag == 0);
   }
   fprintf(stderr, "stderr too\n");
   printf(failures ? "FAILED\n" : "all ok\n");

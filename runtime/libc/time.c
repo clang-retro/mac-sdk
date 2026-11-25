@@ -12,6 +12,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <sys/time.h>
+#include <sys/timeb.h>
 #include <time.h>
 #include <OSUtils.h>
 #include <Events.h>
@@ -29,6 +30,8 @@ extern char **environ;
 /* Seconds east of UTC, once read. */
 static long gmt_delta;
 static int zone_read;
+/* 1 when the Map control panel says daylight saving time is on. */
+static int dst_on;
 
 /* Writes a number from 0 to 99 as two digits, and gives the next position. */
 static char *two(char *s, unsigned v) {
@@ -48,6 +51,7 @@ static void read_zone(void) {
   zone_read = 1;
   ReadLocation(&loc);
   gmt_delta = loc.u.gmtDelta & 0xFFFFFF;
+  dst_on = (loc.u.dlsDelta & 0x80) != 0;
   if (gmt_delta & 0x800000)
     gmt_delta -= 0x1000000;
   if (environ && environ[0])
@@ -127,5 +131,20 @@ int clock_gettime(clockid_t clock_id, struct timespec *tp) {
   gettimeofday(&tv, NULL);
   tp->tv_sec = tv.tv_sec;
   tp->tv_nsec = (long)tv.tv_usec * 1000;
+  return 0;
+}
+
+/* Gives the time in *tb: the seconds since 1970 (UTC) and the
+   milliseconds, the time zone of the Map control panel in minutes west
+   of UTC (standard time), and 1 in dstflag when daylight saving time is
+   on. gmt_delta includes the daylight saving hour, so it is taken out of
+   timezone. Gives 0. */
+int ftime(struct timeb *tb) {
+  struct timeval tv;
+  gettimeofday(&tv, NULL);
+  tb->time = tv.tv_sec;
+  tb->millitm = (unsigned short)(tv.tv_usec / 1000);
+  tb->timezone = (short)(-gmt_delta / 60 + (dst_on ? 60 : 0));
+  tb->dstflag = (short)dst_on;
   return 0;
 }
