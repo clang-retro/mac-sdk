@@ -55,12 +55,16 @@ LWZ_R2_20_R1 = 0x80410014
 
 
 class LinkError(Exception):
+    """An error in the input objects, which the linker reports and stops."""
     pass
 
 
 class Csect:
+    """One control section (csect) of an XCOFF object, as the linker places it."""
     def __init__(self, obj, sym, name, addr, size, smtyp, smclas, align,
                  sect):
+        """Keep the csect's symbol, name, address, size, type, class, alignment
+        and section."""
         self.obj, self.sym, self.name = obj, sym, name
         self.addr, self.size = addr, size
         self.smtyp, self.smclas, self.align = smtyp, smclas, align
@@ -71,6 +75,7 @@ class Csect:
         self.live = False
 
     def data(self):
+        """Give the contents of the csect (zeros for BSS and common symbols)."""
         if self.sect is None or self.sect["flags"] & STYP_BSS:
             return bytes(self.size)
         off = self.addr - self.sect["vaddr"]
@@ -79,15 +84,22 @@ class Csect:
 
 
 class Symbol:
+    """One symbol table entry of an XCOFF object."""
     def __init__(self, idx, name, value, scnum, sclass, csect=None,
                  smtyp=None, smclas=None):
+        """Keep the symbol's index, name, value, section, storage class and
+        csect."""
         self.idx, self.name, self.value = idx, name, value
         self.scnum, self.sclass = scnum, sclass
         self.csect, self.smtyp, self.smclas = csect, smtyp, smclas
 
 
 class XcoffObject:
+    """One XCOFF relocatable object: its sections, csects, symbols and
+    relocations."""
     def __init__(self, path, blob):
+        """Read the sections, csects, symbols and relocations of an XCOFF
+        object."""
         self.path = path
         magic, nscns, _, symptr, nsyms, opthdr, _ = struct.unpack_from(
             ">HHiiiHH", blob, 0)
@@ -110,6 +122,8 @@ class XcoffObject:
         strtab = blob[symptr + 18 * nsyms:]
 
         def symname(raw8):
+            """Read a symbol name: inline in its 8 bytes, or at an offset in
+            the string table."""
             if raw8[:4] == b"\0\0\0\0":
                 o = struct.unpack(">I", raw8[4:])[0]
                 e = strtab.index(b"\0", o)
@@ -160,12 +174,14 @@ class XcoffObject:
 
 
 def defined_names(o):
+    """Give the global names that object o defines."""
     return {s.name for s in o.symbols.values()
             if s.sclass in (C_EXT, C_WEAKEXT) and s.csect is not None
             and s.smtyp in (XTY_SD, XTY_LD, XTY_CM)}
 
 
 def referenced_names(o):
+    """Give the global names that object o uses and does not define."""
     return {s.name for s in o.symbols.values()
             if s.sclass in (C_EXT, C_WEAKEXT) and s.smtyp == XTY_ER}
 
@@ -187,7 +203,10 @@ def read_inputs(paths, entry="main"):
 # ---------------------------------------------------------------- imports
 
 class Imports:
+    """The shared library functions and data that programs can import."""
     def __init__(self, path, carbon):
+        """Read the shared library exports from path (with CarbonLib's when
+        carbon is true)."""
         libs = json.load(open(path, encoding="utf-8"))
         self.where = {}
         # InterfaceLib first so it wins names that other libraries repeat,
@@ -208,6 +227,8 @@ class Imports:
         self.order = []           # [(lib, name, kind, weak)]
 
     def get(self, name):
+        """Give the import entry for name, adding it to the used imports, or
+        None if no library exports it."""
         if name in self.used:
             return self.used[name]
         if name not in self.where:
@@ -221,6 +242,7 @@ class Imports:
 # ---------------------------------------------------------------- linking
 
 def align_up(x, a):
+    """Round x up to a multiple of a (a power of two)."""
     return (x + a - 1) & ~(a - 1)
 
 
@@ -238,6 +260,7 @@ def collect_garbage(objs, globals_, roots, gc):
     work = []
 
     def mark(cs):
+        """Mark csect cs live and queue it for the scan of its relocations."""
         if cs is not None and not cs.live:
             cs.live = True
             work.append(cs)
@@ -264,6 +287,8 @@ def collect_garbage(objs, globals_, roots, gc):
 
 
 def link(objs, imports, entry="main", gc=True):
+    """Place the live csects of objs in code and data, apply the relocations,
+    and give the image, its imports and its fixups."""
     # Global symbol table: name -> (csect, offset-in-csect, class). A
     # strong (C_EXT) definition replaces a weak (C_WEAKEXT) one; a common
     # symbol gives way to a definition.
@@ -407,6 +432,8 @@ def link(objs, imports, entry="main", gc=True):
     fixups = {}
 
     def sect_addr(cs, off):
+        """Give the section (C for code, D for data) and the address of offset
+        off in csect cs."""
         kind = "C" if cs.out == "code" else "D"
         return kind, cs.pos + off
 
@@ -578,12 +605,15 @@ def reloc_instrs(fixups):
 
 
 def build_pef(img, imports):
+    """Make the PEF container (code, data and loader sections) from the linked
+    image."""
     code, data = img["code"], img["data"]
 
     # Loader strings: libraries, then symbols.
     strings = bytearray()
 
     def add_str(s):
+        """Add s to the loader string table and give its offset."""
         o = len(strings)
         strings.extend(s.encode("mac_roman") + b"\0")
         return o
@@ -665,6 +695,7 @@ def build_pef(img, imports):
 # ---------------------------------------------------------------- main
 
 def main():
+    """Read the command line, link the objects and write the application."""
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("inputs", nargs="+")
     ap.add_argument("-o", dest="output", required=True,

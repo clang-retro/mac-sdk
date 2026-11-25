@@ -48,10 +48,12 @@ R_68K_PLT32, R_68K_PLT16, R_68K_PLT8 = 13, 14, 15
 
 
 class LinkError(Exception):
+    """An error in the input objects, which the linker reports and stops."""
     pass
 
 
 def align_up(x, a):
+    """Round x up to a multiple of a (a power of two)."""
     return (x + a - 1) & ~(a - 1)
 
 
@@ -59,6 +61,8 @@ class Section:
     """One allocated section of an object, as the linker places it."""
 
     def __init__(self, obj, idx, name, kind, size, align, data):
+        """Keep the section's place in its object, its kind, size, alignment
+        and contents."""
         self.obj, self.idx, self.name = obj, idx, name
         self.kind, self.size, self.align, self.data = kind, size, align, data
         self.addr = None
@@ -75,13 +79,19 @@ class EhRecord:
     """
 
     def __init__(self, off, size, cie):
+        """Keep the record's offset and size in .eh_frame, and whether it is a
+        CIE."""
         self.off, self.size, self.cie = off, size, cie
         self.relocs = []
         self.live = False
 
 
 class ElfObject:
+    """One ELF relocatable object: its sections, groups, symbols and
+    relocations."""
     def __init__(self, path, blob):
+        """Read the sections, COMDAT groups, symbols and relocations of an ELF
+        object."""
         self.path = path
         if blob[:4] != b"\x7fELF" or blob[4] != 1 or blob[5] != 2:
             raise LinkError(f"{path}: not a 32-bit big-endian ELF file")
@@ -94,6 +104,7 @@ class ElfObject:
         shstr = shdrs[shstrndx]
 
         def name_at(tab, off):
+            """Read the name at offset off of the string table tab."""
             base = tab[4] + off
             return blob[base:blob.index(b"\0", base)].decode()
 
@@ -178,11 +189,13 @@ def split_eh_frame(o, sec):
 
 
 def defined_names(o):
+    """Give the global names that object o defines."""
     return {s["name"] for s in o.symbols
             if s["bind"] != STB_LOCAL and s["name"] and s["shndx"] != SHN_UNDEF}
 
 
 def referenced_names(o):
+    """Give the global names that object o uses and does not define."""
     return {s["name"] for s in o.symbols
             if s["bind"] != STB_LOCAL and s["name"] and s["shndx"] == SHN_UNDEF}
 
@@ -219,6 +232,7 @@ def collect_garbage(objs, globals_, gc):
     work = []
 
     def mark(sec):
+        """Mark section sec live and queue it for the scan of its relocations."""
         if sec is not None and not sec.live:
             sec.live = True
             work.append(sec)
@@ -321,6 +335,8 @@ def symbol_table(objs):
 
 
 def link(objs, gc=True):
+    """Place the live sections of objs in one image, apply the relocations, and
+    give the image with its relocation table."""
     drop_duplicate_groups(objs)
     table = symbol_table(objs)
     collect_garbage(objs, {n: (None, None, d[3]) for n, d in table.items()},
@@ -339,12 +355,16 @@ def link(objs, gc=True):
     tables = {}
 
     def table_of(s):
+        """Give the constructor or destructor table that section s is part of,
+        or None."""
         for t in ("preinit_array", "init_array", "fini_array"):
             if s.name == "." + t or s.name.startswith("." + t + "."):
                 return t
         return None
 
     def priority(s):
+        """Give the priority of a constructor or destructor table section
+        (65536 when it has none)."""
         tail = s.name.rsplit(".", 1)[-1]
         return int(tail) if tail.isdigit() else 65536
 
@@ -499,6 +519,8 @@ def link(objs, gc=True):
 
 
 def code_resources(image):
+    """Make CODE 0 (the jump table) and CODE 1 (the image) from the linked
+    image."""
     # CODE 0: above-A5 size, below-A5 size, jump table size and offset,
     # then one entry: offset in segment, "move.w #1,-(sp)", _LoadSeg.
     jt = struct.pack(">HHHH", 0, 0x3F3C, 1, 0xA9F0)
@@ -509,6 +531,7 @@ def code_resources(image):
 
 
 def main():
+    """Read the command line, link the objects and write the application."""
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("inputs", nargs="+")
     ap.add_argument("-o", dest="output", required=True)

@@ -74,6 +74,7 @@ def cxx_include(lib, target):
 
 
 def run(cmd):
+    """Run cmd and stop with its exit status if it fails."""
     r = subprocess.run(cmd)
     if r.returncode:
         sys.exit(r.returncode)
@@ -91,6 +92,7 @@ def link_68k(cmd):
 
 
 def build(cpu, a, clang, tmp, large=False):
+    """Compile the sources for one CPU and link them; give the linked file."""
     target = TARGETS[cpu]
     libdir = os.path.join(a.lib, {"68k": "m68k"}.get(cpu, cpu))
     # The C library, when runtime/build-libc.sh has made it.
@@ -152,6 +154,7 @@ def build(cpu, a, clang, tmp, large=False):
 
 
 def main():
+    """Read the command line and build the application."""
     argv = sys.argv[1:]
     cflags = []
     if "--" in argv:
