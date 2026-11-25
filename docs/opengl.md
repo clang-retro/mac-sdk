@@ -84,7 +84,21 @@ functions of its extensions by name. `GL/glext.h` declares these:
   `GL_APPLE_transform_hint`
 
 `glGetString(GL_EXTENSIONS)` tells which ones the renderer has. Each
-extension also has its `PFN...PROC` type.
+extension also has its `PFN...PROC` type. To find a function by its
+name at run time, as `wglGetProcAddress` does on Windows, use the Code
+Fragment Manager:
+
+```c
+ConnectionID conn;
+Ptr entry, addr;
+SymClass cls;
+Str255 err;
+if (GetSharedLibrary("\pOpenGLLibrary", kPowerPCArch, kReferenceCFrag,
+                     &conn, &entry, err) == noErr &&
+    FindSymbol(conn, "\pglActiveTextureARB", &addr, &cls) == noErr) {
+  PFNGLACTIVETEXTUREARBPROC f = (PFNGLACTIVETEXTUREARBPROC)addr;
+}
+```
 
 ## How the files are made
 
@@ -101,8 +115,9 @@ extension also has its `PFN...PROC` type.
 ## Tests
 
 `tests/gl.c` makes an off-screen context, clears it, reads the pixels
-back and calls GLU. `tests/run.sh` runs it in `tools/simppc.py`. The
+back, calls GLU and finds a function with `FindSymbol`. `tests/run.sh` runs it in `tools/simppc.py`. The
 simulator's fake OpenGL (`tools/fakegl.py`) is not a renderer. It keeps
 the AGL objects, the current context, the viewport and the off-screen
 buffer, and writes the clear color on `glClear`. The other functions do
-nothing. It checks the imports and the calls, not the drawing.
+nothing. The simulator also fakes `GetSharedLibrary` and `FindSymbol`
+for the libraries that it fakes. It checks the imports and the calls, not the drawing.

@@ -41,6 +41,7 @@ CODE_AT, DATA_AT = 0x00400000, 0x00800000
 SCRATCH = 0x00100000                # parameter blocks for the fakes
 STUBS = 0x01E00000                  # one "blr" per import
 TVECS = 0x01F00000                  # one transition vector per import
+MAX_STUBS = 8192                    # imports and FindSymbol's functions
 STACK_TOP = 0x01D00000
 RETURN = STUBS - 4                  # where main returns to
 THREAD_END = STUBS - 8              # where a thread's entry function returns to
@@ -486,9 +487,57 @@ def main():
 
     # Apple OpenGL: each imported agl*, gl* and glu* function.
     gl = FakeGL(uc, arg, sarg, farg, ret, os_.alloc)
-    for name, *_ in imports:
+
+    def add_gl(name):
         if name.startswith(("agl", "gl")) and name not in funcs:
             funcs[name] = lambda n=name: gl.call(n)
+
+    for name, *_ in imports:
+        add_gl(name)
+
+    # The Code Fragment Manager: GetSharedLibrary connects to a library
+    # that the simulator fakes, and FindSymbol gives a function's
+    # transition vector, adding a stub for a name the program does not
+    # import.
+    libraries = ["InterfaceLib", "ThreadsLib", "MathLib", "OpenGLLibrary",
+                 "OpenGLUtility"]
+
+    def get_shared_library():
+        name = pstring(arg(0))
+        if name not in libraries:
+            ret(-2804)                          # cfragNoLibraryErr
+            return
+        if arg(3):
+            uc.mem_write(arg(3), struct.pack(">I", 0x00C00000 +
+                                             16 * libraries.index(name)))
+        if arg(4):
+            uc.mem_write(arg(4), struct.pack(">I", 0))
+        ret(0)
+
+    def find_symbol():
+        name = pstring(arg(1))
+        names = [n for n, _ in imports]
+        if name in names:
+            i = names.index(name)
+        elif name in funcs or name.startswith(("agl", "gl")):
+            i = len(imports)
+            if i >= MAX_STUBS:
+                ret(-2802)                      # cfragNoSymbolErr
+                return
+            imports.append((name, 2))
+            uc.mem_write(STUBS + 4 * i, struct.pack(">I", 0x4E800020))
+            uc.mem_write(TVECS + 8 * i, struct.pack(">II", STUBS + 4 * i, 0))
+            add_gl(name)
+        else:
+            ret(-2802)                          # cfragNoSymbolErr
+            return
+        uc.mem_write(arg(2), struct.pack(">I", TVECS + 8 * i))
+        if arg(3):
+            uc.mem_write(arg(3), bytes([2]))    # kTVectorCFragSymbol
+        ret(0)
+
+    funcs["GetSharedLibrary"] = get_shared_library
+    funcs["FindSymbol"] = find_symbol
 
     def on_code(uc, pc, size, _):
         if pc == THREAD_END:
@@ -514,7 +563,7 @@ def main():
         uc.emu_stop()
 
     uc.hook_add(UC_HOOK_CODE, on_code, begin=THREAD_END,
-                end=STUBS + 4 * len(imports))
+                end=STUBS + 4 * MAX_STUBS)
     uc.hook_add(UC_HOOK_INTR, on_intr)
     uc.mem_write(RETURN, struct.pack(">I", 0x4E800020))
     uc.mem_write(THREAD_END, struct.pack(">I", 0x4E800020))

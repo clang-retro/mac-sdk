@@ -1,7 +1,7 @@
 /* Checks the OpenGL headers and imports: AGL pixel formats and
  * contexts, an off-screen drawable, glClear and glReadPixels, the
- * strings, GLU, and that the functions are weak imports (not NULL when
- * OpenGL is there). PowerPC only. tests/run.sh runs it in
+ * strings, GLU, FindSymbol, and that the functions are weak imports
+ * (not NULL when OpenGL is there). PowerPC only. tests/run.sh runs it in
  * tools/simppc.py, whose fake OpenGL (tools/fakegl.py) keeps the
  * off-screen buffer, and checks the console output: one "ok" line per
  * check, then "all ok".
@@ -9,6 +9,7 @@
  * Copyright (C) clang-retro contributors.
  * SPDX-License-Identifier: AGPL-3.0-only */
 #include <AGL/agl.h>
+#include <CodeFragments.h>
 #include <GL/gl.h>
 #include <GL/glext.h>
 #include <GL/glu.h>
@@ -77,6 +78,20 @@ static void check_offscreen(void) {
   free(buf);
 }
 
+/* Finds a function of OpenGLLibrary by its name, as a program does for
+ * an extension, with the Code Fragment Manager. */
+static void check_find_symbol(void) {
+  ConnectionID conn = 0;
+  Ptr entry = 0, addr = 0;
+  SymClass cls = 0;
+  Str255 err;
+  OSErr e = GetSharedLibrary("\pOpenGLLibrary", kPowerPCArch, kReferenceCFrag, &conn, &entry, err);
+  check("GetSharedLibrary", e == noErr);
+  check("FindSymbol", e == noErr && FindSymbol(conn, "\pglFlush", &addr, &cls) == noErr && addr);
+  if (addr)
+    ((void (*)(void))addr)();
+}
+
 /* Runs the checks. */
 int main(void) {
   GLint major = 0, minor = 0;
@@ -91,6 +106,7 @@ int main(void) {
   check("gluErrorString", gluErrorString(GLU_INVALID_ENUM) != NULL);
   check("gluGetString", gluGetString(GLU_VERSION) != NULL);
   check_offscreen();
+  check_find_symbol();
   printf(failures ? "%d FAILED\n" : "all ok\n", failures);
   return failures != 0;
 }
