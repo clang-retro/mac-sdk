@@ -3,7 +3,9 @@
 # ROM-checked argument blocks, build the examples, and check that the
 # generated files (include/, docs/coverage.md) match their generators.
 # It also builds the runtime library from compiler-rt and the C library
-# from clang-retro/picolibc's main branch, and runs their tests.
+# from clang-retro/picolibc's main branch, and runs their tests, and builds
+# the C++ library (libunwind from the same clang-retro/llvm commit,
+# libstdc++ from the GCC 15.2.0 release) and runs its test.
 #
 # clang comes from clang-retro/llvm's llvm-prebuilt release, which holds the
 # LLVM tools built from recent commits of its main branch; the newest Linux
@@ -65,7 +67,9 @@ jobs:
           repository: clang-retro/llvm
           ref: ${{ env.LLVM_SHA }}
           path: llvm
-          sparse-checkout: compiler-rt/lib/builtins
+          sparse-checkout: |
+            compiler-rt/lib/builtins
+            libunwind
           persist-credentials: false
       - name: Get picolibc
         uses: actions/checkout@v4
@@ -73,5 +77,18 @@ jobs:
           repository: clang-retro/picolibc
           path: picolibc
           persist-credentials: false
+      - name: Cache GCC's source
+        uses: actions/cache@v4
+        with:
+          path: gcc-15.2.0.tar.xz
+          key: gcc-15.2.0
+      - name: Get GCC's source (for libstdc++)
+        run: |
+          [ -f gcc-15.2.0.tar.xz ] ||
+            curl -fsSL -o gcc-15.2.0.tar.xz https://ftp.gnu.org/gnu/gcc/gcc-15.2.0/gcc-15.2.0.tar.xz
+          echo "438fd996826b0c82485a29da03a72d71d6e3541a83ec702df4271f6fe025d24e  gcc-15.2.0.tar.xz" | sha256sum -c
+          mkdir -p "$RUNNER_TEMP/gcc"
+          tar -xJf gcc-15.2.0.tar.xz -C "$RUNNER_TEMP/gcc"
+          echo "GCC_SRC=$RUNNER_TEMP/gcc/gcc-15.2.0" >> "$GITHUB_ENV"
       - name: Tests
         run: LLVM_SRC=$PWD/llvm PICOLIBC_SRC=$PWD/picolibc tests/run.sh
