@@ -9,12 +9,20 @@
  *
  * Copyright (C) clang-retro contributors.
  * SPDX-License-Identifier: AGPL-3.0-only */
+#include <errno.h>
 #include <stdlib.h>
 #include <sys/time.h>
+#include <time.h>
 #include <OSUtils.h>
+#include <Events.h>
 
 /* Seconds from 1904-01-01 to 1970-01-01. */
 #define MAC_EPOCH 2082844800UL
+
+/* time.h gives CLOCK_MONOTONIC only with _GNU_SOURCE. */
+#ifndef CLOCK_MONOTONIC
+#define CLOCK_MONOTONIC 4
+#endif
 
 extern char **environ;
 
@@ -71,5 +79,35 @@ int gettimeofday(struct timeval *restrict tv, void *restrict tz) {
     tv->tv_sec = (time_t)(secs - MAC_EPOCH) - gmt_delta;
     tv->tv_usec = 0;
   }
+  return 0;
+}
+
+/* Seconds east of UTC of the Mac's clock (the Map control panel), for
+   the file dates of stat.c. */
+long __mac_gmt_delta(void) {
+  if (!zone_read)
+    read_zone();
+  return gmt_delta;
+}
+
+/* The time of a clock: CLOCK_REALTIME is the Mac's clock in UTC, to the
+   second; CLOCK_MONOTONIC counts from the start of the Mac in ticks (60
+   per second). */
+int clock_gettime(clockid_t clock_id, struct timespec *tp) {
+  struct timeval tv;
+  unsigned long ticks;
+  if (clock_id == CLOCK_MONOTONIC) {
+    ticks = TickCount();
+    tp->tv_sec = (time_t)(ticks / 60);
+    tp->tv_nsec = (long)(ticks % 60) * 16666667L;
+    return 0;
+  }
+  if (clock_id != CLOCK_REALTIME) {
+    errno = EINVAL;
+    return -1;
+  }
+  gettimeofday(&tv, NULL);
+  tp->tv_sec = tv.tv_sec;
+  tp->tv_nsec = (long)tv.tv_usec * 1000;
   return 0;
 }

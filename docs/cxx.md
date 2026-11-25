@@ -147,10 +147,12 @@ On 68k, programs with more than 32 KB of code use 32-bit addresses
 
 ## Limits
 
-- There are no threads. libstdc++ uses the thread model `single`.
-  `std::thread` and `std::mutex` are not available.
-- `std::filesystem` does not work. The C library has no directory
-  functions for the Mac.
+- libstdc++ uses the thread model `single`. `std::thread` and
+  `std::mutex` are not available. The C library has POSIX threads (see
+  docs/threads.md); use `pthread.h` directly.
+- `std::filesystem` is not available. The library is built without it
+  (`--disable-libstdcxx-filesystem-ts`). Use the C library's directory
+  functions (`opendir`, `readdir`, `stat`, `mkdir`) instead.
 - On 68k, the unwinder does not restore the floating-point registers.
   Thus do not compile C++ code that uses exceptions with `-m68881` or
   for the 68040's FPU. The SDK uses software floating point by default.

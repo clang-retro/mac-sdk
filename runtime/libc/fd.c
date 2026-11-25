@@ -184,6 +184,14 @@ off_t lseek(int fd, off_t offset, int whence) {
   return pos;
 }
 
+/* Gives the File Manager reference number of an open file descriptor,
+   or 0 for the console or a descriptor that is not open. */
+short __mac_fd_ref(int fd) {
+  if (fd < 3 || fd >= NFD || !fds[fd].flags)
+    return 0;
+  return fds[fd].ref;
+}
+
 int isatty(int fd) {
   if (fd >= 0 && fd < 3)
     return 1;
