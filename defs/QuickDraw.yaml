@@ -1289,9 +1289,9 @@
     name: CopyBits
     args:
       - name: src_bitmap
-        type: BitMap*
+        type: const BitMap*
       - name: dst_bitmap
-        type: BitMap*
+        type: const BitMap*
       - name: src_rect
         type: const Rect*
       - name: dst_rect
@@ -1605,11 +1605,11 @@
     name: CopyMask
     args:
       - name: srcbp
-        type: BitMap*
+        type: const BitMap*
       - name: mskbp
-        type: BitMap*
+        type: const BitMap*
       - name: dstbp
-        type: BitMap*
+        type: const BitMap*
       - name: srcrp
         type: const Rect*
       - name: mskrp
@@ -3176,11 +3176,11 @@
     name: CopyDeepMask
     args:
       - name: srcBits
-        type: BitMap*
+        type: const BitMap*
       - name: maskBits
-        type: BitMap*
+        type: const BitMap*
       - name: dstBits
-        type: BitMap*
+        type: const BitMap*
       - name: srcRect
         type: const Rect*
       - name: maskRect
@@ -3308,7 +3308,7 @@
     args:
       - name: p
         type: CGrafPtr
-    return: BitMap *
+    return: const BitMap *
     m68k-needs: [GrafPort]
     m68k-body: |
       return &((GrafPtr)p)->portBits;

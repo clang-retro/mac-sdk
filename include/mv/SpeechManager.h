@@ -13,6 +13,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct VoiceSpec VoiceSpec;
 struct VoiceSpec {
     OSType creator;
@@ -133,6 +138,10 @@ MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr GetSpeechInfo(SpeechCh
 MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr SpeakBuffer(SpeechChannel chan, const void *textBuf, ULONGINT textBytes, long controlFlags) M68K_INLINE(0x203C, 0x0828, 0x000C, 0xA800);
 
 MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr TextToPhonemes(SpeechChannel chan, const void *textBuf, ULONGINT textBytes, Handle phonemeBuf, LONGINT *phonemeBytes) M68K_INLINE(0x203C, 0x0A5C, 0x000C, 0xA800);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

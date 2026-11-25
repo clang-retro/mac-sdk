@@ -12,6 +12,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum { _SlotManager = 0xA06E };
 
 typedef struct SpBlock SpBlock;
@@ -718,6 +723,10 @@ static __inline__ OSErr OpenSlot(ParmBlkPtr paramBlock, Boolean async) {
     return async ? OpenSlotAsync(paramBlock) : OpenSlotSync(paramBlock);
 }
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

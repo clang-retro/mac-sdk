@@ -17,6 +17,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
     curFTVersion = 2,
 };
@@ -686,6 +691,10 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
 }
 #else
 MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTGetErrorString(FTHandle hFT, INTEGER id, Str255 errMsg);
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

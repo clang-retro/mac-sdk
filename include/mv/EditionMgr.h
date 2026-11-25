@@ -13,6 +13,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef long TimeStamp;
 
 typedef Handle EditionRefNum;
@@ -240,6 +245,10 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'edtn'") pascal OSErr SetEditionOpenerProc(E
 MAC_SINCE_GESTALT(0x0701, "7.0.1", "'edtn'") pascal OSErr CallEditionOpenerProc(EditionOpenerVerb selector, EditionOpenerParamBlock *param_block, EditionOpenerUPP opener) M68K_INLINE(0x303C, 0x052E, 0xA82D);
 
 MAC_SINCE_GESTALT(0x0701, "7.0.1", "'edtn'") pascal OSErr CallFormatIOProc(FormatIOVerb selector, FormatIOParamBlock *param_block, FormatIOUPP proc) M68K_INLINE(0x303C, 0x0530, 0xA82D);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

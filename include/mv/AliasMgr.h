@@ -13,6 +13,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef ProcPtr AliasFilterUPP;
 
 typedef Handle AliasHandle;
@@ -214,6 +219,14 @@ enum {
     kCreateFolder = 1,
     kDontCreateFolder = 0,
 };
+
+enum {
+    kResolveAliasFileNoUI = 1, /* ResolveAliasFileWithMountFlags: do not show a dialog to mount a volume */
+};
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

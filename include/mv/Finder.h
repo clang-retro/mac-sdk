@@ -11,6 +11,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct DTPBRec DTPBRec;
 struct DTPBRec {
     QElemPtr qLink;
@@ -435,6 +440,10 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
 }
 #else
 MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTDeleteAsync(DTPBPtr dtp);
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

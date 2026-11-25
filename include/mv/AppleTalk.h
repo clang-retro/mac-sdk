@@ -14,6 +14,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // AppleTalk IMII-305 (true-b);
 #define LMGetPortBUse() (*(Byte *)0x00000291)
 #define LMSetPortBUse(val) ((*(Byte *)0x00000291) = (val))
@@ -1361,6 +1366,10 @@ static __inline__ OSErr LAPRmvATQ(ATQEntryPtr theATQEntry) {
     return (OSErr)_d0;
 }
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

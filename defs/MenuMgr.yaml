@@ -1541,3 +1541,12 @@
     - name: inString
       type: ConstStr255Param
     m68k: none
+
+# ####
+
+- enum:
+    values:
+      - name: hierMenu
+        value: -1
+        comment: |
+          InsertMenu's beforeID for a submenu or a pop-up menu

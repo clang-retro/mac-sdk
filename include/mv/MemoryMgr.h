@@ -11,6 +11,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
     memFullErr = -108,
     memLockedErr = -117,
@@ -1417,6 +1422,10 @@ static __inline__ OSErr GetPhysical(LogicalToPhysicalTable *addresses, unsigned 
     return (OSErr)_d0;
 }
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

@@ -11,6 +11,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef UniversalProcPtr SleepQUPP;
 
 typedef struct SleepQRec SleepQRec;
@@ -951,6 +956,10 @@ static __inline__ OSErr DisableWUTime(void) {
     return err;
 }
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

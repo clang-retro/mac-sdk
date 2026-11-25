@@ -18,6 +18,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // Appearance Manager (Mac OS 8). Gestalt selectors.
 enum {
     gestaltAppearanceAttr = 'appr',
@@ -929,6 +934,10 @@ pascal OSStatus SetTheme(Collection ioCollection);
 // Window content painting (Mac OS 8.5, WindowsLib)
 #if !TARGET_CPU_68K
 pascal OSStatus InstallWindowContentPaintProc(WindowRef window, WindowPaintUPP paintProc, WindowPaintProcOptions options, void *refCon);
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

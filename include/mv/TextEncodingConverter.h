@@ -13,6 +13,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // Text Encoding Converter (Mac OS 8.5 and later; an extension for 7.6 and 8.1).
 typedef struct OpaqueTECObjectRef *TECObjectRef;
 
@@ -149,6 +154,10 @@ pascal OSStatus TECDisposeSniffer(TECSnifferObjectRef encodingSniffer);
 
 #if !TARGET_CPU_68K
 pascal OSStatus TECClearSnifferContextInfo(TECSnifferObjectRef encodingSniffer);
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

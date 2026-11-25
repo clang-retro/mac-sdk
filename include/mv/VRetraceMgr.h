@@ -11,6 +11,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
     qErr = -1,
     vTypErr = -2,
@@ -108,6 +113,10 @@ static __inline__ QHdrPtr GetVBLQHdr(void) {
     return (QHdrPtr)0x160;
 }
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

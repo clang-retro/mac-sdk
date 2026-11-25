@@ -13,6 +13,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
     swMode = -1,
     ftMode = 1,
@@ -225,6 +230,10 @@ static __inline__ void SetSoundVol(INTEGER vol) {
     PBControlImmed((ParmBlkPtr)&pb);
 }
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

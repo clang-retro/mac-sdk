@@ -90,5 +90,15 @@ jobs:
           mkdir -p "$RUNNER_TEMP/gcc"
           tar -xJf gcc-15.2.0.tar.xz -C "$RUNNER_TEMP/gcc"
           echo "GCC_SRC=$RUNNER_TEMP/gcc/gcc-15.2.0" >> "$GITHUB_ENV"
+      - name: Get Quesa (the last commit with the classic Mac OS build)
+        uses: actions/checkout@v4
+        with:
+          repository: jwwalker/Quesa
+          ref: 883c9a0d218bd18c17f2f62024c0e57f2d5d4a07
+          path: quesa
+          sparse-checkout: |
+            Development/Source
+            SDK/Includes
+          persist-credentials: false
       - name: Tests
-        run: LLVM_SRC=$PWD/llvm PICOLIBC_SRC=$PWD/picolibc tests/run.sh
+        run: LLVM_SRC=$PWD/llvm PICOLIBC_SRC=$PWD/picolibc QUESA_SRC=$PWD/quesa tests/run.sh

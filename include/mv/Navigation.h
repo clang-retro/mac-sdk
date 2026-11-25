@@ -15,6 +15,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef unsigned long NavActionState;
 
 typedef long NavCustomControlMessage;
@@ -260,6 +265,10 @@ pascal OSErr NavCompleteSave(NavReplyRecord *translateInfo, NavTranslationOption
 pascal OSErr NavCreatePreview(AEDesc *theObject, OSType previewDataType, const void *previewData, Size previewDataSize);
 
 pascal OSErr NavCustomControl(NavContext context, NavCustomControlMessage selector, void *parms);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

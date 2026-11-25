@@ -11,6 +11,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // Collection Manager: an ordered list of tagged items, used by the Window and Appearance Managers to store settings.
 typedef struct OpaqueCollection *Collection;
 
@@ -146,6 +151,10 @@ MAC_SINCE(0x0810, "8.1") pascal OSErr GetIndexedCollectionItemHdl(Collection aCo
 MAC_SINCE(0x0810, "8.1") pascal OSErr FlattenCollectionToHdl(Collection aCollection, Handle flattened) M68K_INLINE(0x7025, 0xABF6);
 
 MAC_SINCE(0x0810, "8.1") pascal OSErr UnflattenCollectionFromHdl(Collection aCollection, Handle flattened) M68K_INLINE(0x7026, 0xABF6);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

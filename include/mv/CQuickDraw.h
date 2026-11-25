@@ -13,6 +13,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
     minSeed = 1024,
 };
@@ -519,7 +524,7 @@ MAC_SINCE(0x0200, "2.0") pascal SmallFract Fix2SmallFract(Fixed arg0) M68K_INLIN
 
 MAC_SINCE(0x0200, "2.0") pascal Fixed SmallFract2Fix(SmallFract arg0) M68K_INLINE(0x3F3C, 0x0002, 0xA82E);
 
-MAC_SINCE(0x0200, "2.0") pascal Boolean GetColor(Point arg0, Str255 arg1, RGBColor *arg2, RGBColor *arg3) M68K_INLINE(0x3F3C, 0x0009, 0xA82E);
+MAC_SINCE(0x0200, "2.0") pascal Boolean GetColor(Point arg0, ConstStr255Param arg1, RGBColor *arg2, RGBColor *arg3) M68K_INLINE(0x3F3C, 0x0009, 0xA82E);
 
 enum { _GetCTable = 0xAA18 };
 MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal CTabHandle GetCTable(INTEGER arg0) M68K_INLINE(0xAA18);
@@ -709,6 +714,10 @@ static __inline__ void ScreenRes(INTEGER *arg0, INTEGER *arg1) {
     *arg1 = *(INTEGER *)0x102;    /* ScrVRes */
 }
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

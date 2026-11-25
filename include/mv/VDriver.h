@@ -12,6 +12,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct VDParamBlock VDParamBlock;
 struct VDParamBlock {
     QElemPtr qLink;
@@ -68,6 +73,10 @@ struct VDDefModeRec {
 };
 
 typedef VDDefModeRec *VDDefModePtr;
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

@@ -14,6 +14,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
     firstDskErr = -84,
     sectNFErr = -81,
@@ -104,6 +109,10 @@ static __inline__ OSErr DriveStatus(INTEGER dn, DrvSts *statp) {
     return err;
 }
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

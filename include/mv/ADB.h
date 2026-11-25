@@ -11,6 +11,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct ADBDataBlock ADBDataBlock;
 struct ADBDataBlock {
     SignedByte devType;
@@ -117,6 +122,10 @@ static __inline__ OSErr ADBOp(Ptr data, ProcPtr procp, Ptr buffer, INTEGER comma
     return (OSErr)d0;
 }
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

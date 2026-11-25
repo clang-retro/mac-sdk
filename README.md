@@ -380,6 +380,12 @@ links both archives before `libmacrt.a`, and starts the program at
 - OpenGL on PowerPC: `GL/gl.h` (OpenGL 1.2 and Apple's extensions),
   `GL/glu.h` and `AGL/agl.h`, imported weakly from Apple's
   `OpenGLLibrary` and `OpenGLUtility`. See docs/opengl.md.
+- QuickDraw 3D on PowerPC: `extras/quesa/build.sh` builds Quesa, the
+  open-source QuickDraw 3D over OpenGL, as a static library, with the
+  `QD3D*.h` header names. See docs/quesa.md.
+- `CarbonAccessors.h`: Carbon's accessor functions (`GetPortBounds`,
+  `GetWindowFromPort`, `GetMenuID` and others) as inline functions for
+  programs that are not Carbon programs, as Apple's CarbonAccessors.o.
 - POSIX threads (`pthread.h`) over the Thread Manager: cooperative
   threads, mutexes, condition variables, keys and `pthread_once`, and
   `sched_yield`, `nanosleep`, `usleep` and `clock_gettime`. The C++
@@ -454,10 +460,11 @@ the C library. `runtime/build-libstdcxx.sh` builds the library, and
   relocations, and gives each imported InterfaceLib function a fake
   built on `sim68k.py`'s (the Memory Manager, the File Manager,
   `ReadLocation`, `DrawString`, `ExitToShell`, the console window's
-  calls, with `--keys` too, ThreadsLib, and a fake OpenGL in
+  calls, with `--keys` too, ThreadsLib, the Code Fragment Manager's
+  `GetSharedLibrary` and `FindSymbol`, and a fake OpenGL in
   `tools/fakegl.py`). A program that calls
   any other import stops there. `tests/run.sh` runs the runtime, glue,
-  C library, thread, socket and OpenGL tests in it.
+  C library, thread, socket, OpenGL and Quesa tests in it.
 - `tools/mame/` boots Apple's System disks in MAME (Systems 0.1 to 7.1)
   with an application in place of the Finder: `mkroms.py` makes ROM sets
   from dumps you own, `matrix.py App.bin OUTDIR` boots every System and

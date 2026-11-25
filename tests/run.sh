@@ -202,3 +202,25 @@ if [ -n "$LLVM_SRC" ] && [ -n "$PICOLIBC_SRC" ] && [ -n "$GCC_SRC" ]; then
     echo "c++: linked (install unicorn to run it)"
   fi
 fi
+# Quesa (QuickDraw 3D over OpenGL), when QUESA_SRC names a checkout of
+# jwwalker/Quesa at the commit that extras/quesa/build.sh names, too:
+# build it for PowerPC, link tests/quesa.cpp, and run it in the PowerPC
+# simulator over the fake OpenGL.
+if [ -n "$LLVM_SRC" ] && [ -n "$PICOLIBC_SRC" ] && [ -n "$GCC_SRC" ] &&
+   [ -n "$QUESA_SRC" ]; then
+  CLANG="$CLANG" extras/quesa/build.sh "$QUESA_SRC" "$APPS/lib" >/dev/null
+  CLANG="$CLANG" python3 tools/macapp.py --cpu ppc --lib "$APPS/lib" \
+    -o "$APPS/quesa-ppc.bin" -- -Wall -Werror -Wno-pragma-pack \
+    -I"$APPS/lib/include/Quesa" tests/quesa.cpp "$APPS/lib/ppc/libquesa.a" \
+    >/dev/null
+  if python3 -c "import unicorn" 2>/dev/null; then
+    python3 tools/simppc.py --files "$APPS/quesa-ppc.bin" >"$APPS/sim.txt" || {
+      cat "$APPS/sim.txt"; exit 1; }
+    if grep -q FAILED "$APPS/sim.txt" || ! grep -q "^all ok" "$APPS/sim.txt"; then
+      echo "quesa on PowerPC:"; cat "$APPS/sim.txt"; exit 1
+    fi
+    echo "quesa: ok"
+  else
+    echo "quesa: linked (install unicorn to run it)"
+  fi
+fi

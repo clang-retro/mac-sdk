@@ -12,6 +12,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct MIDIPacket MIDIPacket;
 struct MIDIPacket {
     uint8_t flags;
@@ -178,6 +183,10 @@ MAC_SINCE(0x0608, "6.0.8") pascal void MIDISetTCFormat(INTEGER refnum, INTEGER f
 MAC_SINCE(0x0608, "6.0.8") pascal void MIDISetRunRate(INTEGER refnum, INTEGER rate, long period) M68K_INLINE(0x203C, 0x0098, 0x0004, 0xA800);
 
 MAC_SINCE(0x0608, "6.0.8") pascal Handle MIDIGetClientIcon(OSType clientID) M68K_INLINE(0x203C, 0x009C, 0x0004, 0xA800);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

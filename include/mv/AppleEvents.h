@@ -13,6 +13,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef long AEEventClass;
 
 typedef long AEEventID;
@@ -554,6 +559,10 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'evnt'") pascal OSErr AESetObjectCallbacks(P
 typedef IdleUPP AEIdleUPP;
 
 typedef EventFilterUPP AEFilterUPP;
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

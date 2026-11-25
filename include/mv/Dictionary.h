@@ -12,6 +12,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef INTEGER DictionaryDataInsertMode;
 
 enum {
@@ -61,6 +66,10 @@ struct DictionaryInformation {
 MAC_SINCE_GESTALT(0x0710, "7.1", "'dict'") MAC_COLOR_QD pascal OSErr InitializeDictionary(const FSSpec *theFsspecPtr, SInt16 maximumKeyLength, SInt8 keyAttributes, ScriptCode script) M68K_INLINE(0x303C, 0x0500, 0xAA53);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'dict'") MAC_COLOR_QD pascal OSErr GetDictionaryInformation(SInt32 dictionaryReference, DictionaryInformation *theDictionaryInformation) M68K_INLINE(0x303C, 0x0407, 0xAA53);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

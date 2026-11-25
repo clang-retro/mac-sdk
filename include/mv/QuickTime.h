@@ -23,6 +23,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct MovieRecord MovieRecord;
 struct MovieRecord {
     LONGINT data[1];
@@ -31,6 +36,14 @@ struct MovieRecord {
 typedef MovieRecord *Movie;
 
 typedef LONGINT TimeValue;
+
+typedef LONGINT QTAtom;
+
+typedef LONGINT QTAtomType;
+
+typedef LONGINT QTAtomID;
+
+typedef Handle QTAtomContainer;
 
 enum { _QuickTime = 0xAAAA };
 
@@ -3842,6 +3855,10 @@ enum {
     codecInfoResourceType = 'cdci',
     codecInterfaceVersion = 1,
 };
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

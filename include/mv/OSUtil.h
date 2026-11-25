@@ -16,6 +16,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
     macXLMachine = 0,
     macMachine = 1,
@@ -1161,6 +1166,10 @@ static __inline__ UniversalProcPtr* GetTrapVector(uint16_t trapNumber) {
     return (UniversalProcPtr *)(0x400 + ((trapNumber & 0xFF) << 2));
 }
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

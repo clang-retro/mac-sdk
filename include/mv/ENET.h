@@ -14,6 +14,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
     ENetSetGeneral = 253,
     ENetGetInfo = 252,
@@ -172,6 +177,10 @@ static __inline__ OSErr EDelMulti(EParamBlkPtr thePBptr, Boolean async) {
                  : PBControlSync((ParmBlkPtr)thePBptr);
 }
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

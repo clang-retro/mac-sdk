@@ -14,6 +14,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
     noMark = 0,
 };
@@ -526,6 +531,10 @@ pascal OSStatus InsertMenuItemText(MenuRef menu, ConstStr255Param inString, UInt
 pascal OSStatus AppendMenuItemText(MenuRef menu, ConstStr255Param inString);
 #endif
 
+enum {
+    hierMenu = -1, /* InsertMenu's beforeID for a submenu or a pop-up menu */
+};
+
 #if TARGET_CPU_68K
 #if TARGET_API_MAC_CARBON
 static __inline__ void EnableMenuItem(MenuHandle mh, INTEGER item) {
@@ -539,6 +548,10 @@ static __inline__ void DisableMenuItem(MenuHandle mh, INTEGER item) {
 }
 #endif
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

@@ -12,6 +12,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // Text Encoding basics shared by the Text Encoding Converter and the Unicode Converter (TextCommon, Mac OS 8.5 and later).
 typedef SInt16 RegionCode;
 
@@ -206,6 +211,10 @@ pascal OSStatus NearestMacTextEncodings(TextEncoding generalEncoding, TextEncodi
 
 #if !TARGET_CPU_68K
 pascal OSStatus UCGetCharProperty(const UniChar *charPtr, UniCharCount textLength, UCCharPropertyType propType, UCCharPropertyValue *propValue);
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

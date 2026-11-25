@@ -11,6 +11,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // The record's fields are not declared here yet.
 typedef struct CursorDevice *CursorDevicePtr;
 
@@ -83,6 +88,10 @@ MAC_SINCE(0x0710, "7.1") pascal OSErr CursorDeviceNextDevice(CursorDevicePtr *ou
 MAC_SINCE(0x0710, "7.1") pascal OSErr CursorDeviceNewDevice(CursorDevicePtr *ourDevice) M68K_INLINE(0x700C, 0xAADB);
 
 MAC_SINCE(0x0710, "7.1") pascal OSErr CursorDeviceDisposeDevice(CursorDevicePtr ourDevice) M68K_INLINE(0x700D, 0xAADB);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

@@ -11,6 +11,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef OSType DBType;
 
 typedef struct DBAsyncParamBlockRec DBAsyncParamBlockRec;
@@ -106,6 +111,10 @@ MAC_SINCE(0x0701, "7.0.1") pascal OSErr DBInstallResultHandler(DBType dataType, 
 MAC_SINCE(0x0701, "7.0.1") pascal OSErr DBRemoveResultHandler(DBType dataType) M68K_INLINE(0x303C, 0x0215, 0xA82F);
 
 MAC_SINCE(0x0701, "7.0.1") pascal OSErr DBGetResultHandler(DBType dataType, DBResultHandlerUPP *theHandler, Boolean getSysHandler) M68K_INLINE(0x303C, 0x0516, 0xA82F);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

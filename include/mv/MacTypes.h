@@ -10,6 +10,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef int16_t INTEGER;
 
 typedef long LONGINT;
@@ -180,6 +185,10 @@ typedef ConstStringPtr ConstStr27Param;
 typedef ConstStringPtr ConstStr15Param;
 
 typedef Byte Str27[28];
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

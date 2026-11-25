@@ -14,6 +14,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // new justification defines, accepted by `TESetAlignment ()' and
 //    `TETextBox ()'
 enum {
@@ -501,6 +506,10 @@ static __inline__ void TESetScrapLength(LONGINT ln) {
     *(INTEGER *)0xAB0 = (INTEGER)ln;
 }
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

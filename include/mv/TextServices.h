@@ -16,6 +16,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef void *TSMDocumentID;
 
 typedef OSType InterfaceTypeList[1];
@@ -189,6 +194,10 @@ MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal ComponentResult S
 MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal ComponentResult HidePaletteWindows(ComponentInstance ts) M68K_INLINE(0x2F3C, 0x0000, 0x000B, 0x7000, 0xA82A);
 
 pascal OSErr GetScriptLanguageSupport(ScriptLanguageSupportHandle *scriptHdl);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

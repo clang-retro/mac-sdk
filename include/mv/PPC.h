@@ -12,6 +12,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef int16_t PPCPortKinds;
 
 typedef int16_t PPCLocationKind;
@@ -629,6 +634,10 @@ MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") static __inline__ __attribute__((__al
 }
 #else
 MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCKillAsync(void *pb);
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

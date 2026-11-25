@@ -11,6 +11,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
     noScrapErr = -100,
     noTypeErr = -102,
@@ -64,6 +69,10 @@ pascal LONGINT PutScrap(LONGINT len, ResType rest, Ptr p) M68K_INLINE(0xA9FE);
 
 enum { _GetScrap = 0xA9FD };
 pascal LONGINT GetScrap(Handle h, ResType rest, LONGINT *off) M68K_INLINE(0xA9FD);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

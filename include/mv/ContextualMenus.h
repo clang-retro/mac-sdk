@@ -16,6 +16,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // Contextual Menu Manager: what ContextualMenuSelect returns, and help types.
 enum {
     gestaltContextualMenuAttr = 'cmnu',
@@ -39,6 +44,10 @@ MAC_SINCE_GESTALT(0x0921, "9.2.1", "'cmnu'") pascal Boolean IsShowContextualMenu
 MAC_SINCE_GESTALT(0x0921, "9.2.1", "'cmnu'") pascal OSStatus ContextualMenuSelect(MenuHandle inMenu, Point inGlobalLocation, Boolean inReserved, UInt32 inHelpType, ConstStr255Param inHelpItemString, const AEDesc *inSelection, UInt32 *outUserSelectionType, SInt16 *outMenuID, UInt16 *outMenuItem) M68K_INLINE(0x7003, 0xAA72);
 
 MAC_SINCE_GESTALT(0x0921, "9.2.1", "'cmnu'") pascal OSStatus ProcessIsContextualMenuClient(ProcessSerialNumber *inPSN, Boolean *outIsClient) M68K_INLINE(0x7004, 0xAA72);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

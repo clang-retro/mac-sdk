@@ -11,6 +11,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
     dskInit = 2,
     stdFile = 3,
@@ -29,6 +34,10 @@ pascal void InitPack(INTEGER packid) M68K_INLINE(0xA9E5);
 
 enum { _InitAllPacks = 0xA9E6 };
 pascal void InitAllPacks(void) M68K_INLINE(0xA9E6);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

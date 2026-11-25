@@ -18,6 +18,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
     pushButProc = 0,
     checkBoxProc = 1,
@@ -1150,6 +1155,10 @@ static __inline__ OSErr SetDisclosureTriangleLastValue(ControlRef inTabControl, 
     return SetControlData(inTabControl, 0, kControlTriangleLastValueTag, sizeof(SInt16), (Ptr)&inValue);
 }
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

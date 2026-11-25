@@ -13,6 +13,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
     bDraftLoop = 0,
     bSpoolLoop = 1,
@@ -229,6 +234,10 @@ MAC_SINCE(0x0200, "2.0") pascal void PrJobMerge(THPrint hPrintSrc, THPrint hPrin
 MAC_SINCE(0x0200, "2.0") pascal void PrPurge(void) M68K_INLINE(0x2F3C, 0xA800, 0x0000, 0xA8FD);
 
 MAC_SINCE(0x0200, "2.0") pascal void PrNoPurge(void) M68K_INLINE(0x2F3C, 0xB000, 0x0000, 0xA8FD);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

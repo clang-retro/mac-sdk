@@ -11,6 +11,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct ComponentRecord ComponentRecord;
 struct ComponentRecord {
     LONGINT data[1];
@@ -297,6 +302,10 @@ static __inline__ long CallComponentFunctionWithStorageProcInfo(Handle storage, 
     return CallComponentFunctionWithStorage(storage, params, (ComponentFunctionUPP)func);
 }
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

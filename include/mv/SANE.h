@@ -11,6 +11,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // Big-endian 64 bit "comp" data type.  Note that this has a NaN value!
 // typedef union {
 //     struct
@@ -154,6 +159,10 @@ enum { _Pack7 = 0xA9EE };
 
 
 
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

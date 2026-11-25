@@ -12,6 +12,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
     currSymLead = 16,
     currNegSym = 32,
@@ -208,6 +213,10 @@ static __inline__ INTEGER IUEqualString(ConstStringPtr str1, ConstStringPtr str2
     return IUMagIDString((Ptr)str1 + 1, (Ptr)str2 + 1, str1[0], str2[0]);
 }
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

@@ -11,6 +11,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef uint8_t ISAType;
 
 typedef uint16_t CallingConventionType;
@@ -144,6 +149,10 @@ MAC_SINCE(0x0761, "7.6.1") pascal OSErr RestoreMixedModeState(void *statep, unsi
 LONGINT CallUniversalProc(UniversalProcPtr theProcPtr, ProcInfoType procInfo, ...);
 
 long CallOSTrapUniversalProc(UniversalProcPtr theProc, ProcInfoType procInfo, ...);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

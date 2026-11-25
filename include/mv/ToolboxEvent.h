@@ -13,6 +13,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // ToolboxEvent IMI-246 (true);
 #define LMGetKeyThresh() (*(INTEGER *)0x0000018E)
 #define LMSetKeyThresh(val) ((*(INTEGER *)0x0000018E) = (val))
@@ -95,6 +100,10 @@ static __inline__ LONGINT GetCaretTime(void) {
     return *(LONGINT *)0x2F4;
 }
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

@@ -11,6 +11,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #if TARGET_CPU_68K
 static __inline__ __attribute__((__always_inline__)) void NumToString(LONGINT l, StringPtr s) {
     register LONGINT _l __asm__("d0") = l;
@@ -36,6 +41,10 @@ static __inline__ __attribute__((__always_inline__)) void StringToNum(ConstStrin
 }
 #else
 pascal void StringToNum(ConstStringPtr s, LONGINT *lp);
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop
