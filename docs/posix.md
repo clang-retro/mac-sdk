@@ -20,8 +20,10 @@ have the function. A program can find the failure and continue.
 | `readlink` | There are no symbolic links: it fails with `EINVAL`. |
 | `mmap`, `munmap`, `msync`, `mprotect` | See [Memory mappings](#memory-mappings). |
 | `shm_open`, `shm_unlink` | A shared memory object is a file in the Temporary Items folder (in the current folder before System 7). |
-| `poll` | Files and the console are always ready. When no descriptor is ready, it waits for the time-out, and other threads run. |
-| `ioctl` | `FIONREAD` gives the number of bytes after the mark of a file. Other requests fail with `ENOTTY`. |
+| `poll`, `select` | Files and the console are always ready. Pipes and sockets are ready when they have data or space. When no descriptor is ready, it waits for the time-out. Other threads and other programs run while it waits. |
+| `pipe`, `pipe2` | A pipe in one program, with a buffer of 4096 bytes. See [Networking and pipes](network.md). |
+| `readv`, `writev` | They read and write each buffer in sequence. |
+| `ioctl` | `FIONREAD` gives the number of bytes after the mark of a file, or the bytes that a pipe or socket can read now. `FIONBIO` sets `O_NONBLOCK`. `SIOCATMARK` gives 0. Other requests fail with `ENOTTY`. |
 | `uname`, `gethostname` | `MacOS`, `Macintosh`, the System version from Gestalt, and `m68k` or `powerpc`. |
 | `getuid`, `geteuid`, `getgid`, `getegid` | 0. |
 | `chown`, `fchown` | They succeed when the item exists: there is one user. |
@@ -40,7 +42,6 @@ have the function. A program can find the failure and continue.
 
 | Functions | Error |
 | --- | --- |
-| `pipe` | `ENOSYS` |
 | `fork`, `execve` and the other `exec` functions | `ENOSYS` |
 | `waitpid` | `ECHILD` |
 | `posix_spawn`, `posix_spawnp` | `ENOSYS` (the file action functions succeed and keep nothing) |
@@ -69,7 +70,9 @@ mapping is a block in the heap of the application:
 
 ## Headers
 
-The C library adds `dlfcn.h` and `sys/utsname.h`. picolibc does not
+The C library adds `dlfcn.h`, `sys/utsname.h`, `sys/uio.h` and the
+socket headers (`sys/socket.h`, `sys/un.h`, `netinet/in.h`,
+`netinet/tcp.h`, `arpa/inet.h` and `netdb.h`). picolibc does not
 declare `shm_open`, `shm_unlink`, `cfmakeraw`, `FIONREAD` or
 `_SC_NPROCESSORS_ONLN`. Declare them in the program:
 

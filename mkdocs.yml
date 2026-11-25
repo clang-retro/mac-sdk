@@ -29,6 +29,7 @@ nav:
   - "C++": cxx.md
   - "Threads": threads.md
   - "POSIX functions": posix.md
+  - "Networking and pipes": network.md
   - "Coverage": coverage.md
   - "Tests": tests.md
   - "Not done yet": status.md

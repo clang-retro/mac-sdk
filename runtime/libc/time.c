@@ -30,12 +30,14 @@ extern char **environ;
 static long gmt_delta;
 static int zone_read;
 
+/* Writes a number from 0 to 99 as two digits, and gives the next position. */
 static char *two(char *s, unsigned v) {
   s[0] = (char)('0' + v / 10);
   s[1] = (char)('0' + v % 10);
   return s + 2;
 }
 
+/* Reads the time zone from the location in parameter RAM, one time. */
 static void read_zone(void) {
   /* "TZ=<+hhmm>-hh:mm:ss": POSIX counts the offset west of UTC. */
   static char tz[24] = "TZ=UTC0";
@@ -69,15 +71,31 @@ static void read_zone(void) {
   environ = env;
 }
 
+/* The Mac's clock counts whole seconds. gettimeofday adds the ticks
+   (1/60 second) since the clock was last read as the base, so that the
+   time moves in steps of a tick, as timed waits need. The base moves
+   forward when the clock is more than a second ahead of the sum; the
+   time never goes back. */
+static unsigned long base_secs, base_ticks;
+static int have_base;
+
+/* Gives the time, with ticks for the fractions of a second. */
 int gettimeofday(struct timeval *restrict tv, void *restrict tz) {
-  unsigned long secs;
+  unsigned long secs, ticks, elapsed;
   (void)tz;
   if (!zone_read)
     read_zone();
   GetDateTime(&secs);
+  ticks = TickCount();
+  if (!have_base || secs > base_secs + (ticks - base_ticks) / 60 + 1) {
+    base_secs = secs;
+    base_ticks = ticks;
+    have_base = 1;
+  }
+  elapsed = ticks - base_ticks;
   if (tv) {
-    tv->tv_sec = (time_t)(secs - MAC_EPOCH) - gmt_delta;
-    tv->tv_usec = 0;
+    tv->tv_sec = (time_t)(base_secs + elapsed / 60 - MAC_EPOCH) - gmt_delta;
+    tv->tv_usec = (suseconds_t)((elapsed % 60) * 1000000UL / 60);
   }
   return 0;
 }

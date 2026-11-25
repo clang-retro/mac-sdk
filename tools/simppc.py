@@ -31,7 +31,7 @@ from unicorn import Uc, UcError, UC_ARCH_PPC, UC_MODE_PPC32, \
 from unicorn import ppc_const
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from sim68k import FakeOS, FakeScreen, FakeThreads, GMT_DELTA, GESTALT, \
+from sim68k import FakeNet, FakeOS, FakeScreen, FakeThreads, GMT_DELTA, GESTALT, \
     THREAD_STACK, key_events  # noqa: E402
 
 MEM_SIZE = 32 << 20
@@ -200,6 +200,7 @@ def main():
     os_ = PpcOS(uc)
     imports, entry, toc = load(uc, pef_of(a.app))
     screen = FakeScreen(os_)
+    net = FakeNet(os_)
     GESTALT[b"qd  "] = 0x0230               # 32-bit Color QuickDraw 1.3
 
     blob = open(a.app, "rb").read(128)
@@ -260,6 +261,13 @@ def main():
         err = file_call(0xA000, [(18, ">I", arg(0)), (22, ">h", sarg(1))])
         uc.mem_write(arg(2), bytes(uc.mem_read(SCRATCH + 24, 2)))
         return err
+
+    def create():
+        # Create(name, vRefNum, creator, type): the file and its type.
+        err = file_call(0xA008, [(18, ">I", arg(0)), (22, ">h", sarg(1))])
+        if err == 0:
+            os_.types[os_.name(arg(0))] = struct.pack(">II", arg(3), arg(2))
+        ret(err)
 
     def draw():
         print(f"DrawString({pstring(arg(0))!r})")
@@ -367,8 +375,7 @@ def main():
         "DisposePtr": lambda: memory(0xA01F),
         "SetPtrSize": lambda: memory(0xA020),
         "GetPtrSize": lambda: ret(memory(0xA021)[1]),
-        "Create": lambda: ret(file_call(0xA008, [(18, ">I", arg(0)),
-                                                 (22, ">h", sarg(1))])),
+        "Create": create,
         "FSOpen": lambda: ret(fs_open()),
         "FSClose": lambda: ret(file_call(0xA001, [(24, ">h", sarg(0))])),
         "FSRead": lambda: ret(io(0xA002)),
@@ -431,6 +438,32 @@ def main():
         "NewHandleClear": lambda: ret(memory(0xA322)[0]),
         "DisposeHandle": lambda: memory(0xA023),
     })
+    def open_driver():
+        if pstring(arg(0)) != ".IPP":
+            ret(-35)                            # nsvErr
+            return
+        uc.mem_write(arg(1), struct.pack(">h", FakeNet.IPP))
+        ret(0)
+
+    def control(is_async):
+        pb = arg(0)
+        if os_.r16(pb + 24) != FakeNet.IPP:
+            ret(-28)                            # notOpenErr
+            return
+        ret(net.control(pb, is_async))
+
+    funcs.update({
+        "OpenDriver": open_driver,
+        "PBControlSync": lambda: control(False),
+        "PBControlAsync": lambda: control(True),
+        "EventAvail": lambda: (uc.mem_write(arg(1), bytes(16)), ret(0)),
+        "PPCInit": lambda: ret(0),
+    })
+    for i, n in enumerate(("Open", "Start", "Inform", "Accept", "Reject",
+                           "Write", "Read", "End", "Close")):
+        for kind in ("Sync", "Async"):
+            funcs[f"PPC{n}{kind}"] = (
+                lambda sel=i + 1: ret(net.ppc(sel, arg(0))))
     funcs.update({
         "TickCount": tick_count,
         "Gestalt": gestalt,
@@ -452,6 +485,7 @@ def main():
             state["done"] = True
             uc.emu_stop()
             return
+        net.pump()
         i = (pc - STUBS) // 4
         name = imports[i][0]
         f = funcs.get(name)
@@ -483,13 +517,16 @@ def main():
                  f"{uc.reg_read(PC) - CODE_AT:#x}")
     if uc.reg_read(PC) == RETURN:
         state["done"] = True            # main returned
-    if not state["done"]:
-        sys.exit("simppc: the program did not finish")
+    # The files, also when the program did not finish: they tell how
+    # far it went.
     if a.files:
         for n, data in sorted(os_.files.items()):
             text = bytes(data).replace(b"\r", b"\n").decode("mac_roman")
             print(f"file {n!r}:\n{text}",
                   end="" if text.endswith("\n") else "\n")
+    if not state["done"]:
+        screen.summary()
+        sys.exit("simppc: the program did not finish")
     if not screen.summary():
         sys.exit(1)
     print("simppc: the program ended")

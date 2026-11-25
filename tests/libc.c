@@ -140,7 +140,7 @@ static void check_posix(void) {
     sa.sa_handler = SIG_IGN;
     check("sigaction", sigaction(SIGPIPE, &sa, &old) == 0 && old.sa_handler == SIG_DFL &&
                            sigaction(SIGPIPE, NULL, &old) == 0 && old.sa_handler == SIG_IGN);
-    check("pipe fails", pipe(fds) != 0 && errno == ENOSYS);
+    check("pipe", pipe(fds) == 0 && close(fds[0]) == 0 && close(fds[1]) == 0);
     check("fork fails", fork() < 0 && errno == ENOSYS && getgroups(0, NULL) == 0);
     check("waitpid fails", waitpid(1, NULL, 0) < 0 && errno == ECHILD);
   }

@@ -19,6 +19,7 @@
 #include <Gestalt.h>
 #include <Threads.h>
 #include <Events.h>
+#include "macos.h"
 
 /* The Thread Manager calls are newer than the oldest Systems; this file
    checks with Gestalt before it uses them. */
@@ -523,4 +524,26 @@ int usleep(useconds_t usec) {
   t.tv_sec = (time_t)(usec / 1000000);
   t.tv_nsec = (long)(usec % 1000000) * 1000;
   return nanosleep(&t, NULL);
+}
+
+/* Lets the other threads run, and about once a tick the other programs
+   too: a cooperative Mac switches programs only in the Event Manager's
+   calls. EventAvail with an empty mask takes no event from the program.
+   It is called only when the program has started QuickDraw (CurrentA5
+   points to a port), because the Event Manager needs it. */
+void __mac_wait(void) {
+  static unsigned long last;
+  unsigned long now;
+  yield();
+  now = TickCount();
+  if (now != last) {
+    long *a5 = *(long **)0x904;
+    last = now;
+    if (a5 && *a5) {
+      EventRecord ev;
+      int saved = errno;
+      EventAvail(0, &ev);
+      errno = saved;
+    }
+  }
 }
