@@ -610,6 +610,7 @@ class FakeOS:
 
 
 def main():
+    global MEM_SIZE, STACK_TOP, IRQ_RETURN, THREAD_END, HEAP_AT, HEAP_END
     ap = argparse.ArgumentParser()
     ap.add_argument("app")
     ap.add_argument("--clicks", type=int, default=3,
@@ -631,10 +632,24 @@ def main():
     ap.add_argument("--exit-anywhere", action="store_true",
                     help="do not check the stack at ExitToShell (exit() "
                          "calls it from inside the program)")
+    ap.add_argument("--mem", type=int, default=4, metavar="MB",
+                    help="the Mac's memory (default 4 MB); the heap is "
+                    "what the code and the stack leave")
+    ap.add_argument("--steps", type=int, default=2_000_000,
+                    help="the most instructions to run (default 2000000)")
     a = ap.parse_args()
 
     code = resources(read_macbinary(a.app), b"CODE")
     code0, code1 = code[0], code[1]
+    # A larger Mac: the stack and the return addresses move to the top,
+    # and the heap starts after the code.
+    if a.mem != 4:
+        MEM_SIZE = a.mem << 20
+        STACK_TOP = MEM_SIZE - 0x100
+        IRQ_RETURN = MEM_SIZE - 0x10
+        THREAD_END = MEM_SIZE - 0x20
+        HEAP_AT = max(0x200000, (CODE_AT + len(code1) + 0xFFFF) & ~0xFFFF)
+        HEAP_END = MEM_SIZE - 0x20000
     above, below, jtsize, jtoff = struct.unpack_from(">IIII", code0, 0)
     entry = struct.unpack_from(">H", code0, 16)[0]
 
@@ -865,7 +880,7 @@ def main():
     uc.hook_add(UC_HOOK_CODE, on_code)
     uc.hook_add(UC_HOOK_INTR, on_intr)
     try:
-        uc.emu_start(seg_start + entry, MEM_SIZE, count=2_000_000)
+        uc.emu_start(seg_start + entry, MEM_SIZE, count=a.steps)
     except UcError as e:
         pc = uc.reg_read(UC_M68K_REG_PC)
         sys.exit(f"sim68k: {e} at {pc:#x} (segment offset "
