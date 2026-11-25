@@ -16,6 +16,11 @@ import os
 import subprocess
 import sys
 
+# Libraries that not every System has, imported weakly although their
+# import libraries do not say so. A program examines Gestalt before it
+# calls them. ThreadsLib: the Thread Manager, built in from System 7.5.
+ALSO_WEAK = {"ThreadsLib"}
+
 nm, src, out = sys.argv[1:4]
 libs = {}
 for fn in sorted(os.listdir(src)):
@@ -42,7 +47,7 @@ for fn in sorted(os.listdir(src)):
     if weak:
         name = name[:-6]
     libs[name] = {"func": sorted(funcs), "data": sorted(data - funcs),
-                  "weak": weak}
+                  "weak": weak or name in ALSO_WEAK}
 
 with open(out, "w", encoding="utf-8") as f:
     json.dump(libs, f, separators=(",", ":"), sort_keys=True)

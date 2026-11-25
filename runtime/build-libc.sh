@@ -66,6 +66,8 @@ EOF
   if [ $cpu = m68k ]; then
     rm -rf "$out/include"
     cp -R "$work/install-$cpu/include" "$out/include"
+    # The Mac layer's own headers (pthread.h).
+    cp "$here"/libc/include/*.h "$out/include/"
   fi
 
   # The Mac layer, one archive member per file.

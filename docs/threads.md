@@ -1,0 +1,93 @@
+# Threads
+
+The C library has POSIX threads (`pthread.h`) for 68k and PowerPC. They
+use the Thread Manager. `runtime/libc/thread.c` has the code.
+
+## Requirements
+
+- The Thread Manager. It is part of System 7.5 and later. For System 7.0
+  to 7.1, install the Thread Manager extension.
+- The library examines `Gestalt('thds')` before it uses the Thread
+  Manager. Without the Thread Manager, `pthread_create` gives `EAGAIN`.
+  The other functions operate as if only the main thread exists.
+- On PowerPC, the application imports the Thread Manager calls from
+  ThreadsLib. The import is weak, thus the application also starts on a
+  System without ThreadsLib. The library uses the Gestalt bit
+  `gestaltThreadsLibraryPresent` on PowerPC.
+
+## How the threads run
+
+The threads are cooperative (`kCooperativeThread`). One thread runs at
+a time. The running thread continues until it calls a function that
+waits. Then the Thread Manager runs the next ready thread.
+
+These functions can let other threads run:
+
+| Function | When it lets other threads run |
+| --- | --- |
+| `pthread_join` | Until the thread ends |
+| `pthread_mutex_lock`, `pthread_mutex_timedlock` | While another thread has the mutex |
+| `pthread_cond_wait`, `pthread_cond_timedwait` | Until a signal |
+| `pthread_exit` in the main thread | Until all other threads end |
+| `pthread_once` | While another thread runs the function |
+| `sched_yield` | One time |
+| `nanosleep`, `usleep`, `sleep` | Until the time passes |
+
+A thread that does not call these functions stops all other threads.
+In a long loop, call `sched_yield`. The main thread is the application.
+It must also call one of these functions, for example in its event loop,
+to let the other threads run.
+
+A new thread does not start immediately. It starts when the thread that
+made it waits.
+
+## Functions
+
+- Threads: `pthread_create`, `pthread_join`, `pthread_detach`,
+  `pthread_exit`, `pthread_self`, `pthread_equal`.
+- Thread attributes: `pthread_attr_init`, `pthread_attr_destroy`,
+  `pthread_attr_setdetachstate`, `pthread_attr_getdetachstate`,
+  `pthread_attr_setstacksize`, `pthread_attr_getstacksize`.
+- Mutexes: `pthread_mutex_init`, `pthread_mutex_destroy`,
+  `pthread_mutex_lock`, `pthread_mutex_trylock`,
+  `pthread_mutex_timedlock`, `pthread_mutex_unlock`, and the attributes
+  `pthread_mutexattr_init`, `pthread_mutexattr_destroy`,
+  `pthread_mutexattr_settype`, `pthread_mutexattr_gettype`. The types
+  are `PTHREAD_MUTEX_NORMAL`, `PTHREAD_MUTEX_RECURSIVE` and
+  `PTHREAD_MUTEX_ERRORCHECK`.
+- Condition variables: `pthread_cond_init`, `pthread_cond_destroy`,
+  `pthread_cond_wait`, `pthread_cond_timedwait`, `pthread_cond_signal`,
+  `pthread_cond_broadcast`, `pthread_condattr_init`,
+  `pthread_condattr_destroy`.
+- Values for each thread: `pthread_key_create`, `pthread_key_delete`,
+  `pthread_getspecific`, `pthread_setspecific`. There are 64 keys
+  (`PTHREAD_KEYS_MAX`). The destructors run when a thread ends.
+- `pthread_once`.
+- `sched_yield`, `nanosleep`, `usleep` and `clock_gettime`.
+
+## Limits
+
+- A thread that locks a normal mutex again gets `EDEADLK`. It does not
+  wait for ever.
+- `pthread_cond_signal` wakes all threads that wait on the condition
+  variable, the same as `pthread_cond_broadcast`. POSIX permits this.
+  Always examine the condition again after the wait.
+- The default stack of a new thread is 32 KB. Use
+  `pthread_attr_setstacksize` for a larger or smaller stack.
+- `errno` is one variable for all threads. The functions that wait keep
+  its value across a switch to another thread.
+- `CLOCK_REALTIME` has a resolution of one second. Thus a timed wait can
+  continue for up to one second after its time. `CLOCK_MONOTONIC` and
+  the sleep functions use the tick count, 60 ticks each second.
+- There are no preemptive threads, no thread priorities, no
+  cancellation (`pthread_cancel`) and no read-write locks.
+- The C++ library does not use these threads. `std::thread` and
+  `std::mutex` are not available.
+
+## Tests
+
+`tests/thread.c` checks the functions. `tests/run.sh` runs it in
+`tools/sim68k.py --os` (as a 68000 and a 68020) and in
+`tools/simppc.py`. The two simulators have a fake Thread Manager. It
+keeps the registers of each thread that does not run, and runs the
+ready threads in turn.

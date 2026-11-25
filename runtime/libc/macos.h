@@ -18,6 +18,22 @@ int __mac_errno(OSErr err);
  * 0, or -1 with errno set when the path is too long. */
 int __mac_path(const char *path, Str255 out);
 
+/* The File Manager reference number of file descriptor fd, or 0 when fd
+   is not an open file (the console, or a closed descriptor). */
+short __mac_fd_ref(int fd);
+
+/* Seconds east of UTC of the Mac's clock. */
+long __mac_gmt_delta(void);
+
+/* The catalog information of path (a POSIX or Mac path; "" and "." are
+   the current folder). The name buffer must stay valid while pb is used.
+   Returns noErr or the File Manager's error. */
+OSErr __mac_cat_info(const char *path, CInfoPBRec *pb, Str255 name);
+
+/* The Mac's file date (local seconds since 1904) as a time_t, and back. */
+long long __mac_date_to_time(unsigned long date);
+unsigned long __mac_time_to_date(long long t);
+
 /* Console output (stdout and stderr). */
 void __mac_console_write(const void *buf, size_t n);
 void __mac_console_close(void);

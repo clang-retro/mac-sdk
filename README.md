@@ -362,6 +362,16 @@ links both archives before `libmacrt.a`, and starts the program at
   parent); a name with no `/` is used as a Mac path as it is. New files
   are `TEXT`/`ttxt` (set the globals `_ftype` and `_fcreator` to
   change that). Data is not converted: write `\r` for Mac line ends.
+- file information and folders over the catalog calls: `stat`,
+  `lstat` (the same as `stat`), `fstat`, `ftruncate`, `utime`, `mkdir`,
+  `rmdir`, `opendir`, `readdir`, `rewinddir`, `closedir` and `getcwd`.
+  A folder is `S_IFDIR` and a file is `S_IFREG`, with the size of its
+  data fork. A locked file has no write permission. The times are UTC.
+  `getcwd` gives `/Volume/folder`.
+- POSIX threads (`pthread.h`) over the Thread Manager: cooperative
+  threads, mutexes, condition variables, keys and `pthread_once`, and
+  `sched_yield`, `nanosleep`, `usleep` and `clock_gettime`. See
+  docs/threads.md.
 - `stdout` and `stderr` written to the file "*App* Output" in the
   application's folder, with `\n` turned into `\r`, so SimpleText opens
   it. `stdin` reads the file "*App* Input" there, with `\r` turned into
@@ -418,8 +428,10 @@ the C library. `runtime/build-libstdcxx.sh` builds the library, and
   parameter-block calls with the files kept in memory, a PowerBook's
   `_PMgrOp`, the Sound Driver (an asynchronous write ends at the next
   trap, which first runs its completion routine as an interrupt would)
-  and `ReadLocation` (a Mac in UTC-8) and `PBGetCatInfo` and
-  `PBCatMove` (folders being the prefixes of the file names); `--files`
+  and `ReadLocation` (a Mac in UTC-8), the HFS catalog calls
+  (`PBGetCatInfo`, `PBSetCatInfo`, `PBDirCreate`, `PBGetFCBInfo` and
+  `PBCatMove`, folders being the prefixes of the file names), and the
+  Thread Manager's cooperative threads; `--files`
   prints the files the program left, and `--input TEXT` gives the C
   library's `stdin` that text. `--keys TEXT` gives a console window
   that text as key presses, then Command-period; the window's drawing
@@ -429,9 +441,9 @@ the C library. `runtime/build-libstdcxx.sh` builds the library, and
   relocations, and gives each imported InterfaceLib function a fake
   built on `sim68k.py`'s (the Memory Manager, the File Manager,
   `ReadLocation`, `DrawString`, `ExitToShell`, the console window's
-  calls, with `--keys` too). A program that calls
-  any other import stops there. `tests/run.sh` runs the runtime, glue
-  and C library tests in it.
+  calls, with `--keys` too, and ThreadsLib). A program that calls
+  any other import stops there. `tests/run.sh` runs the runtime, glue,
+  C library and thread tests in it.
 - `tools/mame/` boots Apple's System disks in MAME (Systems 0.1 to 7.1)
   with an application in place of the Finder: `mkroms.py` makes ROM sets
   from dumps you own, `matrix.py App.bin OUTDIR` boots every System and
@@ -462,7 +474,8 @@ for every 68k inline function, checks the size of every record whose
 definition gives one, checks the argument-block calls against the ROM,
 and links every example into a fat application. With `LLVM_SRC` set it
 also builds the runtime library and runs its test, and with
-`PICOLIBC_SRC` set as well it builds the C library and runs its test.
+`PICOLIBC_SRC` set as well it builds the C library and runs its tests
+(`tests/libc.c`, `tests/console.c` and `tests/thread.c`).
 With `GCC_SRC` set too, it builds the C++ library and runs
 `tests/cxx.cpp`.
 
@@ -483,6 +496,8 @@ and also fails when `include/` or `docs/coverage.md` differ from what
   with the console window has run on System 7.6.1 (QEMU `q800`) and
   Mac OS 9.2.1 (QEMU `mac99`), but `tests/libc.c`, with its files, has
   run only in `tools/sim68k.py` and `tools/simppc.py`.
+- Threads on a real Thread Manager: `tests/thread.c` has run only on
+  the simulators' fake Thread Manager.
 - Shared libraries in the linkers.
 - Programs over 32 KB of 68k code are one CODE segment that large.
   `tests/cxx.cpp` (415 KB of 68k code) has run on System 7.6.1, but no

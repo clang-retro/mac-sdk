@@ -85,7 +85,8 @@ fi
 # too: build it, link tests/libc.c for both CPUs, and run the 68k build in
 # tools/sim68k.py with its Memory and File Managers, and the PowerPC one
 # in tools/simppc.py, checking the console output file each leaves, and tests/console.c
-# with the console window, typing into it.
+# with the console window, typing into it, and tests/thread.c with the
+# simulators' fake Thread Manager.
 if [ -n "$LLVM_SRC" ] && [ -n "$PICOLIBC_SRC" ]; then
   CLANG="$CLANG" PICOLIBC_SRC="$PICOLIBC_SRC" runtime/build-libc.sh "$APPS/lib"
   for cpu in 68k ppc; do
@@ -94,6 +95,8 @@ if [ -n "$LLVM_SRC" ] && [ -n "$PICOLIBC_SRC" ]; then
     CLANG="$CLANG" python3 tools/macapp.py --cpu $cpu --lib "$APPS/lib" \
       --console window -o "$APPS/console-$cpu.bin" -- -Wall -Werror \
       tests/console.c >/dev/null
+    CLANG="$CLANG" python3 tools/macapp.py --cpu $cpu --lib "$APPS/lib" \
+      -o "$APPS/thread-$cpu.bin" -- -Wall -Werror tests/thread.c >/dev/null
   done
   if python3 -c "import unicorn" 2>/dev/null; then
     for c in 68000 68020; do
@@ -107,6 +110,19 @@ if [ -n "$LLVM_SRC" ] && [ -n "$PICOLIBC_SRC" ]; then
       "$APPS/libc-ppc.bin" >"$APPS/sim.txt" || { cat "$APPS/sim.txt"; exit 1; }
     if grep -q FAILED "$APPS/sim.txt" || ! grep -q "^all ok" "$APPS/sim.txt"; then
       echo "libc on PowerPC:"; cat "$APPS/sim.txt"; exit 1
+    fi
+    # The threads, over the simulators' fake Thread Manager.
+    for c in 68000 68020; do
+      python3 tools/sim68k.py --cpu $c --os --files --exit-anywhere \
+        "$APPS/thread-68k.bin" >"$APPS/sim.txt" || { cat "$APPS/sim.txt"; exit 1; }
+      if grep -q FAILED "$APPS/sim.txt" || ! grep -q "^all ok" "$APPS/sim.txt"; then
+        echo "threads on a $c:"; cat "$APPS/sim.txt"; exit 1
+      fi
+    done
+    python3 tools/simppc.py --files "$APPS/thread-ppc.bin" >"$APPS/sim.txt" ||
+      { cat "$APPS/sim.txt"; exit 1; }
+    if grep -q FAILED "$APPS/sim.txt" || ! grep -q "^all ok" "$APPS/sim.txt"; then
+      echo "threads on PowerPC:"; cat "$APPS/sim.txt"; exit 1
     fi
     # The console window: typed keys in, the text it draws out.
     for c in 68000 68020; do

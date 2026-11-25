@@ -27,6 +27,7 @@ nav:
   - "Systems and availability": systems.md
   - "Building applications": building.md
   - "C++": cxx.md
+  - "Threads": threads.md
   - "Coverage": coverage.md
   - "Tests": tests.md
   - "Not done yet": status.md

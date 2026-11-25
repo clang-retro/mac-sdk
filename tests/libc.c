@@ -1,5 +1,6 @@
 /* Checks the C library (runtime/build-libc.sh): stdio to the console and
  * to files, stdin, seeking, rename (also between folders) and remove,
+ * stat, fstat, ftruncate, utime, mkdir, rmdir, opendir, getcwd,
  * malloc, realloc and the aligned allocations, setjmp, qsort, strtod,
  * printf's conversions, the time zone and static constructors. It is
  * over 32 KB of 68k code, so tools/macapp.py builds it with
@@ -9,6 +10,7 @@
  *
  * Copyright (C) clang-retro contributors.
  * SPDX-License-Identifier: AGPL-3.0-only */
+#include <dirent.h>
 #include <errno.h>
 #include <stdint.h>
 #include <setjmp.h>
@@ -16,6 +18,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <unistd.h>
+#include <utime.h>
+#include <sys/stat.h>
 #include <OSUtils.h>
 
 static int failures;
@@ -82,6 +87,42 @@ int main(int argc, char **argv) {
   fclose(f);
   remove("sub/c.txt");
   remove("sub/keep.txt");
+  {
+    struct stat st;
+    struct utimbuf ut = {1000000000, 1000000000};   /* September 2001 */
+    struct dirent *e;
+    DIR *d;
+    int seen = 0, fd;
+    check("mkdir", mkdir("dir", 0755) == 0 && mkdir("dir", 0755) != 0 && errno == EEXIST);
+    check("stat folder", stat("dir", &st) == 0 && S_ISDIR(st.st_mode));
+    f = fopen("dir/one.txt", "w");
+    fputs("12345", f);
+    fclose(f);
+    fclose(fopen("dir/two.txt", "w"));
+    check("stat file", stat("dir/one.txt", &st) == 0 && S_ISREG(st.st_mode) &&
+                           st.st_size == 5 && st.st_mtime > 1700000000);
+    check("stat enoent", stat("dir/none", &st) != 0 && errno == ENOENT);
+    check("utime", utime("dir/one.txt", &ut) == 0 && stat("dir/one.txt", &st) == 0 &&
+                       st.st_mtime == 1000000000);
+    f = fopen("dir/one.txt", "r+");
+    fd = fileno(f);
+    check("fstat", fstat(fd, &st) == 0 && S_ISREG(st.st_mode) && st.st_size == 5);
+    check("ftruncate", ftruncate(fd, 2) == 0 && fstat(fd, &st) == 0 && st.st_size == 2);
+    fclose(f);
+    d = opendir("dir");
+    check("opendir", d != NULL);
+    while (d && (e = readdir(d)) != NULL)
+      seen |= strcmp(e->d_name, "one.txt") == 0 ? 1 : strcmp(e->d_name, "two.txt") == 0 ? 2 : 4;
+    check("readdir", seen == 3);
+    if (d)
+      closedir(d);
+    check("rmdir not empty", rmdir("dir") != 0 && errno == ENOTEMPTY);
+    remove("dir/one.txt");
+    remove("dir/two.txt");
+    check("rmdir", rmdir("dir") == 0 && stat("dir", &st) != 0);
+    check("getcwd", getcwd(buf, sizeof buf) != NULL && buf[0] == '/');
+    printf("cwd %s\n", buf);
+  }
   /* tests/run.sh gives the program the input "typed\nline\n". */
   check("stdin", fgets(buf, sizeof buf, stdin) && strcmp(buf, "typed\n") == 0 &&
                      fgets(buf, sizeof buf, stdin) && strcmp(buf, "line\n") == 0 &&

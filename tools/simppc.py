@@ -1,6 +1,7 @@
 """Run a PowerPC Mac application from peflink.py (or fatlink.py) on a
 PowerPC CPU emulator, with the InterfaceLib functions it imports faked
-by tools/sim68k.py's fake Memory Manager, File Manager and devices.
+by tools/sim68k.py's fake Memory Manager, File Manager and devices, and
+ThreadsLib's cooperative threads by its FakeThreads.
 
 This checks what the 68k simulator cannot: the PEF container and its
 relocations, the import glue and the TOC, and the C library's PowerPC
@@ -29,7 +30,8 @@ from unicorn import Uc, UcError, UC_ARCH_PPC, UC_MODE_PPC32, \
 from unicorn import ppc_const
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from sim68k import FakeOS, GMT_DELTA, key_events  # noqa: E402
+from sim68k import FakeOS, FakeThreads, GMT_DELTA, GESTALT, THREAD_STACK, \
+    key_events  # noqa: E402
 
 MEM_SIZE = 32 << 20
 CODE_AT, DATA_AT = 0x00400000, 0x00800000
@@ -38,6 +40,7 @@ STUBS = 0x01E00000                  # one "blr" per import
 TVECS = 0x01F00000                  # one transition vector per import
 STACK_TOP = 0x01D00000
 RETURN = STUBS - 4                  # where main returns to
+THREAD_END = STUBS - 8              # where a thread's entry function returns to
 BOOT = STUBS - 64                   # turns the FPU on and jumps to r12
 BOOT_CODE = [0x7D6000A6,            # mfmsr r11
              0x616B2000,            # ori r11, r11, 0x2000 (MSR[FP])
@@ -48,6 +51,12 @@ BOOT_CODE = [0x7D6000A6,            # mfmsr r11
 
 R = {f"r{i}": getattr(ppc_const, f"UC_PPC_REG_{i}") for i in range(32)}
 PC, LR = ppc_const.UC_PPC_REG_PC, ppc_const.UC_PPC_REG_LR
+# What a thread switch keeps: the integer and floating-point registers
+# and the special registers that the code uses.
+CONTEXT = list(R.values()) + [
+    getattr(ppc_const, f"UC_PPC_REG_FPR{i}") for i in range(32)] + [
+    ppc_const.UC_PPC_REG_CR, ppc_const.UC_PPC_REG_CTR, ppc_const.UC_PPC_REG_XER,
+    ppc_const.UC_PPC_REG_FPSCR, LR, PC]
 
 
 class PpcOS(FakeOS):
@@ -269,6 +278,62 @@ def main():
         state["done"] = True
         uc.emu_stop()
 
+    def save_regs():
+        return [uc.reg_read(r) for r in CONTEXT]
+
+    def load_regs(regs):
+        for r, v in zip(CONTEXT, regs):
+            uc.reg_write(r, v)
+
+    threads = FakeThreads(save_regs, load_regs)
+    state["ticks"] = 1000
+
+    def tick_count():
+        state["ticks"] += 1
+        ret(state["ticks"])
+
+    def gestalt():
+        sel = struct.pack(">I", arg(0))
+        if arg(1):
+            uc.mem_write(arg(1), struct.pack(">I", GESTALT.get(sel, 0)))
+        ret(0 if sel in GESTALT else -5551)
+
+    def new_thread():
+        # NewThread(style, entry, param, stackSize, options, &result, &id):
+        # entry is a transition vector (code, TOC).
+        code, toc = struct.unpack(">II", bytes(uc.mem_read(arg(1), 8)))
+        stack = arg(3) or THREAD_STACK
+        base = os_.alloc(stack)
+        if not base:
+            ret(-108)
+            return
+        top = (base + stack - 64) & ~15
+        uc.mem_write(top, bytes(64))            # the back chain ends here
+        regs = save_regs()
+        for reg, v in ((R["r1"], top), (R["r2"], toc), (R["r3"], arg(2)),
+                       (LR, THREAD_END), (PC, code)):
+            regs[CONTEXT.index(reg)] = v
+        if arg(6):
+            uc.mem_write(arg(6), struct.pack(">I", threads.new(regs)))
+        ret(0)
+
+    def yield_to(want):
+        # The call returns noErr to its caller (LR) in this thread, later.
+        ret(0)
+        uc.reg_write(PC, uc.reg_read(LR))
+        threads.switch(want)
+
+    def dispose_thread():
+        if arg(0) == threads.cur:
+            thread_end()
+        else:
+            ret(0 if threads.dispose(arg(0)) else -618)
+
+    def thread_end():
+        if not threads.end():
+            print("simppc: the last thread ended")
+            uc.emu_stop()
+
     # The Toolbox calls that the console window makes and that do nothing
     # here.
     nothing = ["InitGraf", "InitFonts", "FlushEvents", "InitWindows",
@@ -320,11 +385,32 @@ def main():
         "PBGetCatInfoSync": lambda: ret(os_.call("hfs", 0xA260, arg(0),
                                                  9)[1]),
         "PBCatMoveSync": lambda: ret(os_.call("hfs", 0xA260, arg(0), 5)[1]),
+        "PBDirCreateSync": lambda: ret(os_.call("hfs", 0xA260, arg(0),
+                                                6)[1]),
+        "PBGetFCBInfoSync": lambda: ret(os_.call("hfs", 0xA260, arg(0),
+                                                 8)[1]),
+        "PBSetCatInfoSync": lambda: ret(os_.call("hfs", 0xA260, arg(0),
+                                                 10)[1]),
         "ReadLocation": lambda: os_.call("device", 0xA051, arg(0),
                                          0x000C00E4),
     })
+    funcs.update({
+        "TickCount": tick_count,
+        "Gestalt": gestalt,
+        "NewThread": new_thread,
+        "YieldToAnyThread": lambda: yield_to(0),
+        "YieldToThread": lambda: yield_to(arg(0)),
+        "GetCurrentThread": lambda: (
+            uc.mem_write(arg(0), struct.pack(">I", threads.cur)), ret(0)),
+        "DisposeThread": dispose_thread,
+        "ThreadBeginCritical": lambda: ret(0),
+        "ThreadEndCritical": lambda: ret(0),
+    })
 
     def on_code(uc, pc, size, _):
+        if pc == THREAD_END:
+            thread_end()
+            return
         if pc == RETURN:
             state["done"] = True
             uc.emu_stop()
@@ -343,10 +429,11 @@ def main():
               f"{uc.reg_read(PC) - CODE_AT:#x} in code")
         uc.emu_stop()
 
-    uc.hook_add(UC_HOOK_CODE, on_code, begin=RETURN,
+    uc.hook_add(UC_HOOK_CODE, on_code, begin=THREAD_END,
                 end=STUBS + 4 * len(imports))
     uc.hook_add(UC_HOOK_INTR, on_intr)
     uc.mem_write(RETURN, struct.pack(">I", 0x4E800020))
+    uc.mem_write(THREAD_END, struct.pack(">I", 0x4E800020))
     uc.mem_write(BOOT, struct.pack(f">{len(BOOT_CODE)}I", *BOOT_CODE))
     uc.reg_write(R["r12"], entry)
     uc.reg_write(R["r1"], STACK_TOP - 64)

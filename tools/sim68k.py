@@ -9,8 +9,10 @@ TRAPS are known, and they do nothing but log their arguments. With
 calls (on files in memory, all in one folder) work too, enough for the C
 library, and so do a pretend PowerBook's Power Manager (_PMgrOp) and the
 Sound Driver's volume, write and KillIO calls, and ReadLocation, for a
-Mac in UTC-8 (its clock, Time, is local time); --files then prints the
-files the program left. An asynchronous write to the Sound Driver ends
+Mac in UTC-8 (its clock, Time, is local time), the catalog calls of
+HFS (folders, catalog information), Gestalt for the Thread Manager, and
+the Thread Manager's cooperative threads (FakeThreads); --files then
+prints the files the program left. An asynchronous write to the Sound Driver ends
 at the program's next trap, which first runs its completion routine as
 an interrupt would.
 
@@ -43,6 +45,9 @@ CODE_AT = 0x20000          # where CODE 1 is "loaded"
 A5_AT = 0x10000            # application globals pointer
 STACK_TOP = MEM_SIZE - 0x100
 IRQ_RETURN = MEM_SIZE - 0x10  # where a completion routine returns to
+THREAD_END = MEM_SIZE - 0x20  # where a thread's entry function returns to
+THREAD_STACK = 24 * 1024      # the Thread Manager's default stack size
+GESTALT = {b"thds": 0x7}      # Thread Manager, specific match, ThreadsLib
 # SR first: writing it can switch stacks.
 REGS = [UC_M68K_REG_SR, UC_M68K_REG_PC] + [
     getattr(m68k_const, f"UC_M68K_REG_{r}{i}") for r in "DA" for i in range(8)]
@@ -97,9 +102,9 @@ TRAPS = {
     0xA92C: ("FindWindow", 8, 2), 0xA925: ("DragWindow", 12, 0),
     0xA91E: ("TrackGoAway", 8, 2), 0xA91F: ("SelectWindow", 4, 0),
     0xA9B3: ("SystemClick", 8, 0), 0xA8D8: ("NewRgn", 0, 4),
-    0xA8EF: ("ScrollRect", 12, 0),
+    0xA8EF: ("ScrollRect", 12, 0), 0xA975: ("TickCount", 0, 4),
 }
-QUIET = {"SystemTask", "EraseRect", "MoveTo"}   # not printed
+QUIET = {"SystemTask", "EraseRect", "MoveTo", "TickCount"}   # not printed
 
 
 def key_events(text):
@@ -117,6 +122,60 @@ HEAP_AT, HEAP_END = 0x200000, 0x3E0000
 # SetFileInfo, GetEOF, SetEOF, FlushVol, GetFPos, SetFPos.
 FILE_TRAPS = {0xA000, 0xA001, 0xA002, 0xA003, 0xA008, 0xA009, 0xA00B,
               0xA00C, 0xA00D, 0xA011, 0xA012, 0xA013, 0xA018, 0xA044}
+
+
+class FakeThreads:
+    """The Thread Manager's cooperative threads. A thread that does not run
+    is a saved set of registers. save() gives the registers of the CPU, and
+    load() puts a set back. The application is thread 1."""
+
+    def __init__(self, save, load):
+        self.save, self.load = save, load
+        self.cur = 1
+        self.ready = {}         # thread ID -> registers, of threads not running
+        self.next_id = 2
+
+    def new(self, regs):
+        """Adds a ready thread that starts with the registers regs, and
+        gives its ID."""
+        i = self.next_id
+        self.next_id += 1
+        self.ready[i] = regs
+        return i
+
+    def pick(self, want=0):
+        """Gives the ID of the next thread to run: want if it is ready,
+        otherwise the next ready ID after the current one, in a circle."""
+        if want in self.ready:
+            return want
+        ids = sorted(self.ready)
+        return next((i for i in ids if i > self.cur), ids[0])
+
+    def switch(self, want=0):
+        """Keeps the running thread's registers and runs another thread
+        (YieldToThread). With no other thread ready, nothing changes."""
+        if not self.ready:
+            return
+        nxt = self.pick(want)
+        self.ready[self.cur] = self.save()
+        self.cur = nxt
+        self.load(self.ready.pop(nxt))
+
+    def end(self):
+        """The running thread ended (it returned, or DisposeThread of
+        itself): runs the next ready thread. Gives False if none is
+        left."""
+        if not self.ready:
+            return False
+        nxt = self.pick()
+        self.cur = nxt
+        self.load(self.ready.pop(nxt))
+        return True
+
+    def dispose(self, i):
+        """Deletes a thread that does not run. Gives False if there is no
+        such thread."""
+        return self.ready.pop(i, None) is not None
 
 
 class FakeOS:
@@ -168,6 +227,17 @@ class FakeOS:
     def name(self, ptr):
         n = self.rd(ptr, 1)[0]
         return self.rd(ptr + 1, n).decode("mac_roman").lstrip(":")
+
+    def alloc(self, size):
+        """Takes size bytes from the heap, as NewPtr does, for a thread's
+        stack. Gives the address, or 0 when the heap is full."""
+        size = (size + 3) & ~3
+        if self.top + size > self.heap_end:
+            return 0
+        p = self.top
+        self.top += size
+        self.blocks[p] = size
+        return p
 
     # Memory Manager: size in D0, pointer in A0, result in D0.
     def memory(self, word):
@@ -270,39 +340,135 @@ class FakeOS:
         self.w16(pb + 16, 0)
         return pb, self.r32(pb + 12) or None
 
-    # The HFS calls GetCatInfo and CatMove (_HFSDispatch 9 and 5). Folders
-    # are the "a:" prefixes of the names; the current folder is ID 2.
+    # The HFS calls (_HFSDispatch): CatMove (5), DirCreate (6),
+    # GetFCBInfo (8), GetCatInfo (9), by name, by index in a folder or the
+    # folder itself, and SetCatInfo (10), which sets the modification
+    # date. Folders are the "a:" prefixes of the names; the current folder
+    # is the volume's root, ID 2, on the volume "Sim".
+    def folder_of(self, n):
+        """Gives the folder name that holds the item n ("" for the root)."""
+        return n.rsplit(":", 1)[0] if ":" in n else ""
+
+    def is_dir(self, n):
+        """Tells if n is a folder: the root, a made folder or a name prefix."""
+        return n == "" or n in self.dirs or any(
+            f.startswith(n + ":") for f in self.files)
+
+    def dir_id(self, n):
+        """Gives the folder ID of n, and assigns a new ID on first use."""
+        if n not in self.dirs:
+            self.dirs[n] = 100 + len(self.dirs)
+        return self.dirs[n]
+
+    def file_id(self, n):
+        """Gives the file ID of n, and assigns a new ID on first use."""
+        ids = self.__dict__.setdefault("file_ids", {})
+        if n not in ids:
+            ids[n] = 1000 + len(ids)
+        return ids[n]
+
+    def children(self, folder):
+        """Gives the sorted names of the items directly in a folder."""
+        items = set()
+        pre = folder + ":" if folder else ""
+        for n in list(self.files) + [d for d in self.dirs if d]:
+            if n.startswith(pre) and n != folder:
+                items.add(pre + n[len(pre):].split(":", 1)[0])
+        return sorted(items, key=str.lower)
+
+    def by_id(self, i):
+        """Gives the folder name for a folder ID, or None if unknown."""
+        if i in (0, 2):
+            return ""
+        return {v: k for k, v in self.dirs.items()}.get(i)
+
     def hfs(self, word):
         uc = self.uc
         if word & 0xF9FF != 0xA060:
             return False
         pb = self.a0()
         sel = self.d0() & 0xFFFF
-        if sel not in (5, 9):
+        if sel not in (5, 6, 8, 9, 10):
             return False
         err = 0
+        dates = self.__dict__.setdefault("dates", {})
 
-        def is_dir(n):
-            return n == "" or n in self.dirs or any(
-                f.startswith(n + ":") for f in self.files)
+        def named(dir_off):
+            # The item a call names: its name, relative to the folder whose
+            # ID is at dir_off (0: the current folder).
+            ptr = self.r32(pb + 18)
+            n = self.name(ptr).rstrip(":") if ptr else ""
+            base = self.by_id(self.r32(pb + dir_off))
+            if base is None:
+                return None
+            return (base + ":" + n if base and n else base or n)
 
         if sel == 9:                            # GetCatInfo
             ptr, index = self.r32(pb + 18), self.r16(pb + 28)
-            n = "" if index < 0 or not ptr else self.name(ptr).rstrip(":")
-            if n in self.files:
-                uc.mem_write(pb + 30, b"\0")
-                self.w32(pb + 48, 0)
-            elif is_dir(n):
-                if n not in self.dirs:
-                    self.dirs[n] = 100 + len(self.dirs)
-                uc.mem_write(pb + 30, b"\x10")
-                self.w32(pb + 48, self.dirs[n])
+            if index < 0:
+                n = self.by_id(self.r32(pb + 48))
+            elif index > 0:
+                folder = self.by_id(self.r32(pb + 48))
+                kids = self.children(folder) if folder is not None else []
+                n = kids[index - 1] if index <= len(kids) else None
             else:
+                n = named(48)
+            if n is None or (n not in self.files and not self.is_dir(n)):
+                err = -43 if n is not None or index > 0 else -120
+            else:
+                leaf = n.rsplit(":", 1)[-1] if n else "Sim"
+                if ptr and index != 0:
+                    raw = leaf.encode("mac_roman")
+                    uc.mem_write(ptr, bytes([len(raw)]) + raw)
+                parent = self.folder_of(n)
+                uc.mem_write(pb + 32, bytes(76))
+                date = dates.get(n) or self.r32(0x20C) or 0xB0000000
+                self.w32(pb + 72, date)
+                self.w32(pb + 76, date)
+                self.w16(pb + 22, -1)
+                if n in self.files:
+                    uc.mem_write(pb + 30, b"\0")
+                    self.w32(pb + 48, self.file_id(n))
+                    self.w32(pb + 54, len(self.files[n]))
+                    self.w32(pb + 58, (len(self.files[n]) + 511) & ~511)
+                    self.w32(pb + 100, self.dir_id(parent) if parent else 2)
+                else:
+                    uc.mem_write(pb + 30, b"\x10")
+                    self.w32(pb + 48, self.dir_id(n) if n else 2)
+                    self.w16(pb + 52, len(self.children(n)))
+                    self.w32(pb + 100, (self.dir_id(parent) if parent else 2)
+                             if n else 1)
+        elif sel == 6:                          # DirCreate
+            n = named(48)
+            if n is None:
+                err = -120
+            elif n in self.files or n in self.dirs:
+                err = -48
+            else:
+                self.w32(pb + 48, self.dir_id(n))
+        elif sel == 10:                         # SetCatInfo
+            n = named(48)
+            if n is None or (n not in self.files and not self.is_dir(n)):
                 err = -43
+            else:
+                dates[n] = self.r32(pb + 76)
+        elif sel == 8:                          # GetFCBInfo
+            f = self.open.get(self.r16(pb + 24))
+            if f is None:
+                err = -51
+            else:
+                ptr = self.r32(pb + 18)
+                if ptr:
+                    raw = f[0].rsplit(":", 1)[-1].encode("mac_roman")
+                    uc.mem_write(ptr, bytes([len(raw)]) + raw)
+                parent = self.folder_of(f[0])
+                self.w32(pb + 40, len(self.files[f[0]]))
+                self.w32(pb + 48, f[1])
+                self.w16(pb + 52, -1)
+                self.w32(pb + 58, self.dir_id(parent) if parent else 2)
         else:                                   # CatMove
             n = self.name(self.r32(pb + 18))
-            dest = {v: k for k, v in self.dirs.items()}.get(
-                self.r32(pb + 36))
+            dest = self.by_id(self.r32(pb + 36))
             if self.r32(pb + 28):
                 err = -50                       # ioNewName: not faked
             elif n not in self.files:
@@ -398,8 +564,13 @@ class FakeOS:
                 f[1] = base + off
             self.w32(pb + 46, f[1])
         elif op == 0xA009:                      # Delete
-            n = self.name(self.r32(pb + 18))
-            if n not in self.files:
+            n = self.name(self.r32(pb + 18)).rstrip(":")
+            if n not in self.files and n in self.dirs:
+                if self.children(n):
+                    err = -47                   # fBsyErr: not empty
+                else:
+                    del self.dirs[n]
+            elif n not in self.files:
                 err = -43
             elif any(o[0] == n for o in self.open.values()):
                 err = -47
@@ -484,8 +655,73 @@ def main():
         return rd(addr + 1, n).decode("mac_roman")
 
     saved = []                  # registers while a completion routine runs
+    state["ticks"] = 1000
+
+    def save():
+        return [uc.reg_read(r) for r in REGS]
+
+    def load(regs):
+        for r, v in zip(REGS, regs):
+            uc.reg_write(r, v)
+
+    threads = FakeThreads(save, load) if fake else None
+
+    def thread_call(pc):
+        """_ThreadDispatch: the Pascal arguments are on the stack, the
+        selector in D0 gives their size in words (high byte) and the
+        call (low byte). The OSErr result is above the arguments."""
+        d0 = uc.reg_read(UC_M68K_REG_D0)
+        call, size = d0 & 0xFF, 2 * ((d0 >> 8) & 0xFF)
+        sp = uc.reg_read(UC_M68K_REG_A7)
+        args = rd(sp, size)
+        err, switch, end = 0, None, False
+        if call == 3:                           # NewThread
+            made, _, _, stack, param, entry, _ = struct.unpack(">7I", args)
+            stack = stack or THREAD_STACK
+            base = fake.alloc(stack)
+            if not base:
+                err = -108
+            else:
+                top = base + stack - 12
+                uc.mem_write(top, struct.pack(">III", THREAD_END, param, 0))
+                regs = save()
+                regs[REGS.index(UC_M68K_REG_PC)] = entry
+                regs[REGS.index(UC_M68K_REG_A7)] = top
+                if made:
+                    uc.mem_write(made, struct.pack(">I", threads.new(regs)))
+        elif call == 4:                         # DisposeThread
+            tid = struct.unpack(">I", args[:4])[0]
+            if tid == threads.cur:
+                end = True
+            elif not threads.dispose(tid):
+                err = -618                      # threadNotFoundErr
+        elif call == 5:                         # YieldToThread
+            switch = struct.unpack(">I", args)[0]
+        elif call == 6:                         # GetCurrentThread
+            uc.mem_write(struct.unpack(">I", args)[0],
+                         struct.pack(">I", threads.cur))
+        elif call not in (0x0B, 0x0C):          # Begin/EndCritical
+            print(f"Thread Manager call {call:#x} is not faked")
+            uc.emu_stop()
+            return
+        sp += size
+        uc.mem_write(sp, struct.pack(">h", err))
+        uc.reg_write(UC_M68K_REG_A7, sp)
+        uc.reg_write(UC_M68K_REG_PC, pc + 2)
+        if end and not threads.end():
+            print("sim68k: the last thread ended")
+            uc.emu_stop()
+        elif switch is not None:
+            threads.switch(switch)
 
     def on_code(uc, pc, size, _):
+        if pc == THREAD_END and threads:
+            # A thread's entry function returned: the Thread Manager
+            # disposes of the thread.
+            if not threads.end():
+                print("sim68k: the last thread ended")
+                uc.emu_stop()
+            return
         if pc == IRQ_RETURN and saved:
             # The completion routine returned: go back to the trap it
             # interrupted, with every register as it was.
@@ -517,6 +753,16 @@ def main():
                                             fake.device(word) or
                                             fake.hfs(word) or
                                             fake.file(word)):
+            uc.reg_write(UC_M68K_REG_PC, pc + 2)
+            return
+        if word == 0xABF2 and threads:
+            thread_call(pc)
+            return
+        if word == 0xA1AD and fake:
+            # Gestalt: the selector in D0; the answer in A0, the result in D0.
+            sel = struct.pack(">I", uc.reg_read(UC_M68K_REG_D0) & 0xFFFFFFFF)
+            uc.reg_write(UC_M68K_REG_A0, GESTALT.get(sel, 0))
+            uc.reg_write(UC_M68K_REG_D0, 0 if sel in GESTALT else -5551)
             uc.reg_write(UC_M68K_REG_PC, pc + 2)
             return
         if word not in TRAPS:
@@ -582,6 +828,9 @@ def main():
             uc.mem_write(sp, b"\x01\x00")
         elif name == "NewRgn":
             uc.mem_write(sp, struct.pack(">I", 0x40000))
+        elif name == "TickCount":               # one tick per call
+            state["ticks"] += 1
+            uc.mem_write(sp, struct.pack(">I", state["ticks"]))
         elif name in ("FindWindow", "TrackGoAway"):
             uc.mem_write(sp, b"\x00\x00")
         elif name == "Button":
