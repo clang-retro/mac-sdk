@@ -370,7 +370,8 @@ links both archives before `libmacrt.a`, and starts the program at
   `getcwd` gives `/Volume/folder`.
 - POSIX threads (`pthread.h`) over the Thread Manager: cooperative
   threads, mutexes, condition variables, keys and `pthread_once`, and
-  `sched_yield`, `nanosleep`, `usleep` and `clock_gettime`. See
+  `sched_yield`, `nanosleep`, `usleep` and `clock_gettime`. The C++
+  library uses them for `std::thread` and `std::mutex`. See
   docs/threads.md.
 - `stdout` and `stderr` written to the file "*App* Output" in the
   application's folder, with `\n` turned into `\r`, so SimpleText opens

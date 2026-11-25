@@ -79,10 +79,15 @@ made it waits.
 - `CLOCK_REALTIME` has a resolution of one second. Thus a timed wait can
   continue for up to one second after its time. `CLOCK_MONOTONIC` and
   the sleep functions use the tick count, 60 ticks each second.
-- There are no preemptive threads, no thread priorities, no
-  cancellation (`pthread_cancel`) and no read-write locks.
-- The C++ library does not use these threads. `std::thread` and
-  `std::mutex` are not available.
+- There are no preemptive threads, no thread priorities and no read-write
+  locks. A thread cannot be cancelled: `pthread_cancel` gives `ENOTSUP`.
+- The C++ library uses these threads (thread model `posix`). Thus
+  every C++ program contains the thread functions; they call the
+  Thread Manager only when the program makes a thread.
+- The atomic operations that the CPU cannot do (all of them on the
+  68000, 8-byte ones on PowerPC) are functions in the runtime library
+  (`runtime/atomic.c`). They are atomic between threads, but not with
+  respect to interrupt code such as completion routines.
 
 ## Tests
 

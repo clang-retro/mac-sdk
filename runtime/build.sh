@@ -1,8 +1,8 @@
 #!/bin/sh
 # Build the runtime library, libmacrt.a, for 68k and PowerPC: compiler-rt's
 # builtins (32-bit multiply and divide for the 68000, 64-bit arithmetic,
-# soft float on 68k, conversions) and the memory and string functions in
-# string.c.
+# soft float on 68k, conversions), the memory and string functions in
+# string.c, and the atomic operations in atomic.c.
 #
 #   CLANG=... LLVM_SRC=... runtime/build.sh [OUT]
 #
@@ -65,6 +65,7 @@ for cpu in m68k ppc; do
     [ -f "$work/$cpu/$n.o" ] || { echo "$cpu: $n.c did not compile" >&2; exit 1; }
   done
   $cc -Wall -Wextra -Werror -c "$here/string.c" -o "$work/$cpu/string.o"
+  $cc -Wall -Wextra -Werror -c "$here/atomic.c" -o "$work/$cpu/atomic-mac.o"
   rm -f "$out/$cpu/libmacrt.a"
   "$AR" --format=gnu rcs "$out/$cpu/libmacrt.a" "$work/$cpu"/*.o
   echo "$cpu: $(ls "$work/$cpu" | wc -l) objects in $out/$cpu/libmacrt.a"
