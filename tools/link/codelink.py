@@ -13,6 +13,17 @@ to each listed pointer and calls main.
 
 The output is MacBinary II, for hfsutils' "hcopy -m". Put start.o first.
 From archives (.a), only the members the program needs are linked.
+
+For C++, the linker also:
+- keeps one copy of each COMDAT group (inline functions, templates, type
+  information) and lets a strong definition replace weak ones;
+- puts every .eh_frame together between __eh_frame_start and
+  __eh_frame_end, for the unwinder (libunwind), and removes the frame
+  descriptions of the functions it removed;
+- removes the sections that nothing reaches from __start, the
+  constructor and destructor tables or a kept frame description
+  (--no-gc-sections keeps them all). Compile with -ffunction-sections
+  and -fdata-sections to make this remove most.
 """
 import argparse
 import os
@@ -25,9 +36,11 @@ import archive  # noqa: E402
 
 SHT_PROGBITS, SHT_SYMTAB, SHT_NOBITS, SHT_RELA = 1, 2, 8, 4
 SHT_INIT_ARRAY, SHT_FINI_ARRAY, SHT_PREINIT_ARRAY = 14, 15, 16
+SHT_GROUP = 17
+GRP_COMDAT = 1
 SHF_ALLOC = 2
 SHN_UNDEF, SHN_ABS, SHN_COMMON = 0, 0xFFF1, 0xFFF2
-STB_LOCAL = 0
+STB_LOCAL, STB_GLOBAL, STB_WEAK = 0, 1, 2
 
 R_68K_NONE, R_68K_32, R_68K_16, R_68K_8 = 0, 1, 2, 3
 R_68K_PC32, R_68K_PC16, R_68K_PC8 = 4, 5, 6
@@ -43,11 +56,28 @@ def align_up(x, a):
 
 
 class Section:
+    """One allocated section of an object, as the linker places it."""
+
     def __init__(self, obj, idx, name, kind, size, align, data):
         self.obj, self.idx, self.name = obj, idx, name
         self.kind, self.size, self.align, self.data = kind, size, align, data
         self.addr = None
         self.relocs = []
+        self.live = False
+        self.fdes = []            # .eh_frame: its records (EhRecord)
+
+
+class EhRecord:
+    """One CIE or FDE of an .eh_frame section.
+
+    off and size give the bytes in the section; cie is the CIE of an FDE;
+    relocs are the section's relocations inside the record.
+    """
+
+    def __init__(self, off, size, cie):
+        self.off, self.size, self.cie = off, size, cie
+        self.relocs = []
+        self.live = False
 
 
 class ElfObject:
@@ -68,12 +98,18 @@ class ElfObject:
             return blob[base:blob.index(b"\0", base)].decode()
 
         self.sections = {}
+        self.groups = []          # (signature symbol index, [section indexes])
         symtab = None
         for i, h in enumerate(shdrs):
             name = name_at(shstr, h[0])
             stype, flags, size, align = h[1], h[2], h[5], max(h[8], 1)
             if stype == SHT_SYMTAB:
                 symtab = (h, shdrs[h[6]])
+            if stype == SHT_GROUP:
+                words = struct.unpack_from(f">{size // 4}I", blob, h[4])
+                if words and words[0] & GRP_COMDAT:
+                    self.groups.append((h[7], list(words[1:])))
+                continue
             if not flags & SHF_ALLOC or stype not in (
                     SHT_PROGBITS, SHT_NOBITS, SHT_INIT_ARRAY,
                     SHT_FINI_ARRAY, SHT_PREINIT_ARRAY):
@@ -107,6 +143,38 @@ class ElfObject:
                 off, info, addend = struct.unpack_from(">IIi", blob,
                                                        h[4] + 12 * k)
                 sec.relocs.append((off, info >> 8, info & 0xFF, addend))
+        for sec in self.sections.values():
+            sec.relocs.sort()
+            if sec.name == ".eh_frame":
+                split_eh_frame(self, sec)
+
+    def group_signature(self, symidx):
+        """Return the name of a group's signature symbol."""
+        return self.symbols[symidx]["name"]
+
+
+def split_eh_frame(o, sec):
+    """Divide an .eh_frame section into its CIE and FDE records."""
+    data, off, cies = sec.data, 0, {}
+    while off + 4 <= len(data):
+        length = struct.unpack_from(">I", data, off)[0]
+        if length == 0:
+            break                       # terminator
+        if length == 0xFFFFFFFF:
+            raise LinkError(f"{o.path}: 64-bit .eh_frame record")
+        cie_id = struct.unpack_from(">I", data, off + 4)[0]
+        cie = None
+        if cie_id:
+            cie = cies.get(off + 4 - cie_id)
+            if cie is None:
+                raise LinkError(f"{o.path}: .eh_frame FDE at {off:#x} has "
+                                f"no CIE")
+        rec = EhRecord(off, 4 + length, cie)
+        if not cie_id:
+            cies[off] = rec
+        rec.relocs = [r for r in sec.relocs if off <= r[0] < off + 4 + length]
+        sec.fdes.append(rec)
+        off += 4 + length
 
 
 def defined_names(o):
@@ -119,12 +187,152 @@ def referenced_names(o):
             if s["bind"] != STB_LOCAL and s["name"] and s["shndx"] == SHN_UNDEF}
 
 
-def link(objs):
+def drop_duplicate_groups(objs):
+    """Keep the first copy of each COMDAT group and remove the others."""
+    seen = set()
+    for o in objs:
+        for symidx, members in o.groups:
+            sig = o.group_signature(symidx)
+            if sig not in seen:
+                seen.add(sig)
+                continue
+            for i in members:
+                o.sections.pop(i, None)
+
+
+def target_section(o, symidx, globals_):
+    """Return the section a relocation's symbol is in, or None."""
+    sym = o.symbols[symidx]
+    if sym["bind"] != STB_LOCAL and sym["name"]:
+        d = globals_.get(sym["name"])
+        return d[2] if d else None
+    return o.sections.get(sym["shndx"])
+
+
+def collect_garbage(objs, globals_, gc):
+    """Mark the sections the program reaches; with gc, drop the others.
+
+    The roots are __start and the constructor and destructor tables. An
+    FDE is kept when its function is, and then keeps its LSDA and its
+    CIE (with the personality function).
+    """
+    work = []
+
+    def mark(sec):
+        if sec is not None and not sec.live:
+            sec.live = True
+            work.append(sec)
+
+    for o in objs:
+        for s in o.sections.values():
+            if not gc or s.name.startswith((".init_array", ".fini_array",
+                                            ".preinit_array")) or \
+                    s.name in (".text.__start",):
+                mark(s)
+    if "__start" in globals_:
+        mark(globals_["__start"][2])
+    while True:
+        while work:
+            sec = work.pop()
+            if sec.name == ".eh_frame":
+                continue                # its records are marked below
+            for (_, symidx, rtype, _) in sec.relocs:
+                if rtype != R_68K_NONE:
+                    mark(target_section(sec.obj, symidx, globals_))
+        # Keep each FDE whose function is kept, and what it refers to.
+        more = False
+        for o in objs:
+            for sec in o.sections.values():
+                for rec in sec.fdes:
+                    if rec.live or rec.cie is None or not rec.relocs:
+                        continue
+                    fn = target_section(o, rec.relocs[0][1], globals_)
+                    if fn is None or not fn.live:
+                        continue
+                    for r in (rec, rec.cie):
+                        if r.live:
+                            continue
+                        r.live = True
+                        more = True
+                        for (_, symidx, _, _) in r.relocs:
+                            t = target_section(o, symidx, globals_)
+                            if t is not sec:
+                                mark(t)
+                    sec.live = True
+        if not work and not more:
+            break
+    for o in objs:
+        for i, s in list(o.sections.items()):
+            if not s.live:
+                del o.sections[i]
+            elif s.fdes:
+                rebuild_eh_frame(s)
+
+
+def rebuild_eh_frame(sec):
+    """Keep only the live records of an .eh_frame section.
+
+    The CIE pointer of each FDE is a distance back to its CIE, so it is
+    computed again for the new layout, and the relocations move with
+    their records.
+    """
+    out, relocs, new_off = bytearray(), [], {}
+    for rec in sec.fdes:
+        if not rec.live:
+            continue
+        new_off[rec] = len(out)
+        body = bytearray(sec.data[rec.off:rec.off + rec.size])
+        if rec.cie is not None:
+            struct.pack_into(">I", body, 4, len(out) + 4 - new_off[rec.cie])
+        for (off, symidx, rtype, addend) in rec.relocs:
+            relocs.append((off - rec.off + len(out), symidx, rtype, addend))
+        out += body
+    sec.data, sec.size, sec.relocs = bytes(out), len(out), relocs
+
+
+def symbol_table(objs):
+    """Choose the definition of each global name.
+
+    Returns name -> (bind, object, symbol, section or None). A strong
+    definition replaces a weak one; two strong ones are an error. A
+    symbol in a section that was removed (a duplicate COMDAT group) is
+    left out, since the kept copy defines it too.
+    """
+    table = {}
+    for o in objs:
+        for sym in o.symbols:
+            if sym["bind"] == STB_LOCAL or not sym["name"] or \
+                    sym["shndx"] in (SHN_UNDEF, SHN_COMMON):
+                continue
+            sec = None
+            if sym["shndx"] != SHN_ABS:
+                sec = o.sections.get(sym["shndx"])
+                if sec is None:
+                    continue
+            old = table.get(sym["name"])
+            if old is not None:
+                if sym["bind"] == STB_WEAK or old[0] == STB_GLOBAL and \
+                        sym["bind"] == STB_WEAK:
+                    continue
+                if old[0] == STB_GLOBAL:
+                    raise LinkError(f"duplicate symbol {sym['name']}")
+            table[sym["name"]] = (sym["bind"], o, sym, sec)
+    return table
+
+
+def link(objs, gc=True):
+    drop_duplicate_groups(objs)
+    table = symbol_table(objs)
+    collect_garbage(objs, {n: (None, None, d[3]) for n, d in table.items()},
+                    gc)
+
     # Lay out the image: text, rodata, data, then bss.
     # The constructor and destructor tables (.preinit_array, .init_array,
     # .fini_array) go first in data, each in one piece, with the
     # __*_array_start and __*_array_end symbols that the C library's
-    # __libc_init_array and __libc_fini_array walk.
+    # __libc_init_array and __libc_fini_array walk. Every .eh_frame goes
+    # last in rodata, in one piece, between __eh_frame_start and
+    # __eh_frame_end, followed by a zero word.
     order = ["text", "rodata", "data", "bss"]
     pos = 0
     placed = []
@@ -155,11 +363,24 @@ def link(objs):
                 tables[t] = (start, pos)
         for o in objs:
             for s in o.sections.values():
-                if s.kind == kind and s.addr is None:
+                if s.kind == kind and s.addr is None and \
+                        s.name != ".eh_frame":
                     pos = align_up(pos, s.align)
                     s.addr = pos
                     pos += s.size
                     placed.append(s)
+        if kind == "rodata":
+            pos = align_up(pos, 4)
+            tables["eh_frame"] = [pos, None]
+            for o in objs:
+                for s in o.sections.values():
+                    if s.name == ".eh_frame" and s.addr is None:
+                        pos = align_up(pos, s.align)
+                        s.addr = pos
+                        pos += s.size
+                        placed.append(s)
+            tables["eh_frame"][1] = pos
+            pos += 4                       # the terminating zero word
         if kind == "data":
             pos = align_up(pos, 4)
             bss_start = pos
@@ -171,25 +392,24 @@ def link(objs):
         globals_[f"__{t}_end"] = ("rel", end)
     globals_["__bothinit_array_start"] = ("rel", tables["preinit_array"][0])
     globals_["__bothinit_array_end"] = ("rel", tables["init_array"][1])
+    # No .eh_frame_hdr: libunwind then searches .eh_frame itself.
+    globals_["__eh_frame_hdr_start"] = ("abs", 0)
+    globals_["__eh_frame_hdr_end"] = ("abs", 0)
+    for name, (_, o, sym, sec) in table.items():
+        if name in globals_:
+            raise LinkError(f"duplicate symbol {name}")
+        if sec is None:
+            globals_[name] = ("abs", sym["value"])
+        elif sec.addr is not None:
+            globals_[name] = ("rel", sec.addr + sym["value"])
     commons = {}
     for o in objs:
         for sym in o.symbols:
-            if sym["bind"] == STB_LOCAL or not sym["name"]:
-                continue
-            if sym["shndx"] == SHN_COMMON:
+            if sym["bind"] != STB_LOCAL and sym["name"] and \
+                    sym["shndx"] == SHN_COMMON:
                 c = commons.get(sym["name"], (0, 1))
                 commons[sym["name"]] = (max(c[0], sym["size"]),
                                         max(c[1], sym["value"]))
-            elif sym["shndx"] != SHN_UNDEF:
-                if sym["name"] in globals_:
-                    raise LinkError(f"duplicate symbol {sym['name']}")
-                if sym["shndx"] == SHN_ABS:
-                    globals_[sym["name"]] = ("abs", sym["value"])
-                else:
-                    s = o.sections.get(sym["shndx"])
-                    if s is None:
-                        continue
-                    globals_[sym["name"]] = ("rel", s.addr + sym["value"])
     for name, (size, al) in sorted(commons.items()):
         if name in globals_:
             continue
@@ -215,16 +435,20 @@ def link(objs):
                     continue
                 sym = o.symbols[symidx]
                 if sym["bind"] != STB_LOCAL and sym["name"]:
-                    if sym["name"] not in globals_:
+                    if sym["name"] in globals_:
+                        kind, value = globals_[sym["name"]]
+                    elif sym["bind"] == STB_WEAK:
+                        kind, value = "abs", 0     # undefined weak
+                    else:
                         raise LinkError(f"{o.path}: undefined symbol "
                                         f"{sym['name']}")
-                    kind, value = globals_[sym["name"]]
                 elif sym["shndx"] == SHN_ABS:
                     kind, value = "abs", sym["value"]
                 else:
                     tgt = o.sections.get(sym["shndx"])
                     if tgt is None:
-                        raise LinkError(f"{o.path}: relocation against "
+                        raise LinkError(f"{o.path}: relocation in {s.name} "
+                                        f"against a removed or "
                                         f"non-allocated section")
                     kind, value = "rel", tgt.addr + sym["value"]
                 at = s.addr + off
@@ -293,6 +517,8 @@ def main():
     ap.add_argument("--size", type=int, default=1024,
                     help="memory partition in KiB")
     ap.add_argument("--map", help="write symbol addresses here")
+    ap.add_argument("--no-gc-sections", dest="gc", action="store_false",
+                    help="keep the sections that nothing refers to")
     a = ap.parse_args()
     try:
         objs, libs = [], []
@@ -304,7 +530,7 @@ def main():
                 objs.append(ElfObject(p, blob))
         objs += archive.select(objs, libs, ElfObject, defined_names,
                                referenced_names)
-        image, syms, _ = link(objs)
+        image, syms, _ = link(objs, a.gc)
     except (LinkError, archive.ArchiveError) as e:
         sys.exit(f"codelink: error: {e}")
     code0, code1 = code_resources(image)

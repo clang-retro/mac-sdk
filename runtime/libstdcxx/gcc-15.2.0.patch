@@ -1,0 +1,236 @@
+Changes to GCC 15.2.0 for libstdc++ compiled by clang, for classic Mac
+OS (runtime/build-libstdcxx.sh). They are the clang changes of
+clang-retro/os2-sdk's libstdcxx/gcc-15.2.0.patch.
+
+- eh_globals.cc: clang wants an initializer for constant initialization.
+- tinfo.cc: clang does not accept the alias attribute on the declaration
+  of a member function; type_info::__equal is a definition.
+- assert_fail.cc: the same noreturn attribute as the first declaration.
+- random.cc: clang's name for the 32-bit rdseed built-in (x86 only).
+- string-inst.cc: the copy-on-write string's data() is not noexcept.
+- experimental/bits/fs_path.h: clang checks the non-dependent throw of
+  filesystem_error in a template before the class is complete.
+- src/c++11/Makefile: no -gno-as-loc-support, which is GCC's only.
+- text_encoding: the macro Macintosh, which compilers for the classic Mac
+  OS define, is not defined in the header, where it names an encoding.
+- config/cpu/m68k/atomicity.h: no lock for the classic Mac OS, which has
+  no threads; clang's assembler does not accept the jbne of the lock.
+--- a/libstdc++-v3/include/experimental/bits/fs_path.h
++++ b/libstdc++-v3/include/experimental/bits/fs_path.h
+@@ -597,6 +597,12 @@
+       return __is;
+     }
+ 
++  /// @cond undocumented
++  // Throws filesystem_error, which is not complete here. clang checks
++  // the non-dependent throw expressions of a template where it is defined.
++  [[noreturn]] inline void __throw_u8path_error();
++  /// @endcond
++
+   /// Create a path from a UTF-8-encoded sequence of char
+ #ifdef _GLIBCXX_FILESYSTEM_IS_WINDOWS
+   template<typename _InputIterator>
+@@ -610,9 +616,7 @@
+       const char* const __ptr = __u8str.data();
+       if (__str_codecvt_in_all(__ptr, __ptr + __u8str.size(), __tmp, __cvt))
+ 	return path{ __tmp };
+-      _GLIBCXX_THROW_OR_ABORT(filesystem_error(
+-	    "Cannot convert character sequence",
+-	    std::make_error_code(errc::illegal_byte_sequence)));
++      __throw_u8path_error();
+     }
+ 
+ #ifdef _GLIBCXX_USE_CHAR8_T
+@@ -720,6 +724,16 @@
+   };
+ 
+   /// @cond undocumented
++  inline void
++  __throw_u8path_error()
++  {
++    _GLIBCXX_THROW_OR_ABORT(filesystem_error(
++	    "Cannot convert character sequence",
++	    std::make_error_code(errc::illegal_byte_sequence)));
++  }
++  /// @endcond
++
++  /// @cond undocumented
+   struct path::_Cmpt : path
+   {
+     _Cmpt(string_type __s, _Type __t, size_t __pos)
+@@ -1073,9 +1087,7 @@
+ 	    return __wstr;
+         }
+ #endif
+-      _GLIBCXX_THROW_OR_ABORT(filesystem_error(
+-	    "Cannot convert character sequence",
+-	    std::make_error_code(errc::illegal_byte_sequence)));
++      __throw_u8path_error();
+     }
+ #pragma GCC diagnostic pop
+ 
+--- a/libstdc++-v3/libsupc++/eh_globals.cc
++++ b/libstdc++-v3/libsupc++/eh_globals.cc
+@@ -71,7 +71,7 @@
+ namespace
+ {
+   // Single-threaded fallback buffer.
+-  __constinit __cxa_eh_globals eh_globals;
++  __constinit __cxa_eh_globals eh_globals{}; // clang: an initializer
+ }
+ 
+ #if __GTHREADS
+--- a/libstdc++-v3/libsupc++/tinfo.cc
++++ b/libstdc++-v3/libsupc++/tinfo.cc
+@@ -51,9 +51,11 @@
+ #endif
+ }
+ 
++// clang does not accept the alias attribute on a member function
++// declaration, as GCC does; a definition does the same.
+ bool
+ std::type_info::__equal (const std::type_info& arg) const _GLIBCXX_NOEXCEPT
+-__attribute__((alias("_ZNKSt9type_infoeqERKS_")));
++{ return *this == arg; }
+ #endif
+ 
+ namespace std {
+--- a/libstdc++-v3/src/c++11/Makefile.am
++++ b/libstdc++-v3/src/c++11/Makefile.am
+@@ -173,12 +173,12 @@
+ rewrite_ios_failure_typeinfo = sed -e '/^_*_ZTISt13__ios_failure:/,/_ZTVN10__cxxabiv120__si_class_type_infoE/s/_ZTVN10__cxxabiv120__si_class_type_infoE/_ZTVSt19__iosfail_type_info/'
+ 
+ cxx11-ios_failure-lt.s: cxx11-ios_failure.cc
+-	$(LTCXXCOMPILE) -gno-as-loc-support -S $< -o tmp-cxx11-ios_failure-lt.s
++	$(LTCXXCOMPILE) -S $< -o tmp-cxx11-ios_failure-lt.s
+ 	-test -f tmp-cxx11-ios_failure-lt.o && mv -f tmp-cxx11-ios_failure-lt.o tmp-cxx11-ios_failure-lt.s
+ 	$(rewrite_ios_failure_typeinfo) tmp-$@ > $@
+ 	-rm -f tmp-$@
+ cxx11-ios_failure.s: cxx11-ios_failure.cc
+-	$(CXXCOMPILE) -gno-as-loc-support -S $< -o tmp-$@
++	$(CXXCOMPILE) -S $< -o tmp-$@
+ 	$(rewrite_ios_failure_typeinfo) tmp-$@ > $@
+ 	-rm -f tmp-$@
+ 
+--- a/libstdc++-v3/src/c++11/Makefile.in
++++ b/libstdc++-v3/src/c++11/Makefile.in
+@@ -897,12 +897,12 @@
+ 	$(CXXCOMPILE) -fchar8_t -c $<
+ 
+ @ENABLE_DUAL_ABI_TRUE@cxx11-ios_failure-lt.s: cxx11-ios_failure.cc
+-@ENABLE_DUAL_ABI_TRUE@	$(LTCXXCOMPILE) -gno-as-loc-support -S $< -o tmp-cxx11-ios_failure-lt.s
++@ENABLE_DUAL_ABI_TRUE@	$(LTCXXCOMPILE) -S $< -o tmp-cxx11-ios_failure-lt.s
+ @ENABLE_DUAL_ABI_TRUE@	-test -f tmp-cxx11-ios_failure-lt.o && mv -f tmp-cxx11-ios_failure-lt.o tmp-cxx11-ios_failure-lt.s
+ @ENABLE_DUAL_ABI_TRUE@	$(rewrite_ios_failure_typeinfo) tmp-$@ > $@
+ @ENABLE_DUAL_ABI_TRUE@	-rm -f tmp-$@
+ @ENABLE_DUAL_ABI_TRUE@cxx11-ios_failure.s: cxx11-ios_failure.cc
+-@ENABLE_DUAL_ABI_TRUE@	$(CXXCOMPILE) -gno-as-loc-support -S $< -o tmp-$@
++@ENABLE_DUAL_ABI_TRUE@	$(CXXCOMPILE) -S $< -o tmp-$@
+ @ENABLE_DUAL_ABI_TRUE@	$(rewrite_ios_failure_typeinfo) tmp-$@ > $@
+ @ENABLE_DUAL_ABI_TRUE@	-rm -f tmp-$@
+ 
+--- a/libstdc++-v3/src/c++11/assert_fail.cc
++++ b/libstdc++-v3/src/c++11/assert_fail.cc
+@@ -28,7 +28,7 @@
+ #include <cstdio>	// for std::fprintf, stderr
+ namespace std
+ {
+-  [[__noreturn__]]
++  _GLIBCXX_NORETURN // as the declaration in <bits/c++config.h>
+   void
+   __glibcxx_assert_fail(const char* file, int line,
+ 			const char* function, const char* condition) noexcept
+--- a/libstdc++-v3/src/c++11/random.cc
++++ b/libstdc++-v3/src/c++11/random.cc
+@@ -115,6 +115,14 @@
+ #endif
+ 
+ #if USE_RDSEED
++// clang has the 32-bit rdseed builtin under its Intel name.
++# ifdef __clang__
++#  define _GLIBCXX_RDSEED32_STEP __builtin_ia32_rdseed32_step
++# else
++#  define _GLIBCXX_RDSEED32_STEP __builtin_ia32_rdseed_si_step
++# endif
++#endif
++#if USE_RDSEED
+     unsigned int
+     __attribute__ ((target("rdseed")))
+     __x86_rdseed(void* fallback)
+@@ -122,7 +130,7 @@
+       unsigned int retries = 100;
+       unsigned int val;
+ 
+-      while (__builtin_ia32_rdseed_si_step(&val) == 0) [[__unlikely__]]
++      while (_GLIBCXX_RDSEED32_STEP(&val) == 0) [[__unlikely__]]
+ 	{
+ 	  if (--retries == 0)
+ 	    {
+--- a/libstdc++-v3/src/c++17/string-inst.cc
++++ b/libstdc++-v3/src/c++17/string-inst.cc
+@@ -42,14 +42,22 @@
+ template basic_string<char>::__sv_wrapper::__sv_wrapper(string_view);
+ template string_view basic_string<char>::_S_to_string_view(string_view);
+ template basic_string<char>::operator string_view() const noexcept;
++#if _GLIBCXX_USE_CXX11_ABI
+ template char* basic_string<char>::data() noexcept;
++#else // the copy-on-write string's data() can throw
++template char* basic_string<char>::data();
++#endif
+ 
+ #ifdef _GLIBCXX_USE_WCHAR_T
+ template basic_string<wchar_t>::basic_string(__sv_wrapper, const allocator_type&);
+ template basic_string<wchar_t>::__sv_wrapper::__sv_wrapper(wstring_view);
+ template wstring_view basic_string<wchar_t>::_S_to_string_view(wstring_view);
+ template basic_string<wchar_t>::operator wstring_view() const noexcept;
++#if _GLIBCXX_USE_CXX11_ABI
+ template wchar_t* basic_string<wchar_t>::data() noexcept;
++#else // the copy-on-write string's data() can throw
++template wchar_t* basic_string<wchar_t>::data();
++#endif
+ #endif
+ 
+ _GLIBCXX_END_NAMESPACE_VERSION
+--- a/libstdc++-v3/include/std/text_encoding
++++ b/libstdc++-v3/include/std/text_encoding
+@@ -46,6 +46,11 @@
+ #include <bits/unicode.h>         // __charset_alias_match
+ #include <ext/numeric_traits.h>   // __int_traits
+ 
++// Compilers for the classic Mac OS define the macro Macintosh, which is
++// also the name of an encoding here.
++#pragma push_macro("Macintosh")
++#undef Macintosh
++
+ namespace std _GLIBCXX_VISIBILITY(default)
+ {
+ _GLIBCXX_BEGIN_NAMESPACE_VERSION
+@@ -676,5 +681,7 @@
+ _GLIBCXX_END_NAMESPACE_VERSION
+ } // namespace std
+ 
++#pragma pop_macro("Macintosh")
++
+ #endif // __cpp_lib_text_encoding
+ #endif // _GLIBCXX_TEXT_ENCODING
+--- a/libstdc++-v3/config/cpu/m68k/atomicity.h
++++ b/libstdc++-v3/config/cpu/m68k/atomicity.h
+@@ -47,6 +47,18 @@
+     return __result;
+   }
+ 
++#elif defined(Macintosh)
++  // The classic Mac OS has no threads (the thread model is "single"), and
++  // clang's assembler does not accept the jbne of the code below.
++  _Atomic_word
++  __attribute__ ((__unused__))
++  __exchange_and_add(volatile _Atomic_word* __mem, int __val) throw ()
++  {
++    _Atomic_word __result = *__mem;
++    *__mem = __result + __val;
++    return __result;
++  }
++
+ #elif defined(__rtems__)
+   // This code is only provided for reference.  RTEMS uses now the atomic
+   // builtins and libatomic.  See configure.host.

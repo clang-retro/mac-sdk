@@ -15,6 +15,16 @@ for hfsutils' "hcopy -m".
         [--creator ????] [--size KB] [--pef out.pef] [--entry main]
 
 imports.json comes from gen-imports.py.
+
+For C++, a strong definition replaces weak ones (inline functions,
+templates and type information are weak in XCOFF), and the linker
+removes the csects that nothing reaches from the entry point and the
+constructor and destructor tables (--no-gc-sections keeps them all), so
+of the copies of a weak function only the one in use stays. Compile with
+-ffunction-sections and -fdata-sections to make this remove most. A word
+that is the difference of two symbols (R_POS and R_NEG at the same
+address, as in the traceback tables and the exception tables) is
+computed here, since it needs no loader fixup.
 """
 import argparse
 import json
@@ -33,12 +43,12 @@ C_EXT, C_HIDEXT, C_WEAKEXT = 2, 107, 111
 XTY_ER, XTY_SD, XTY_LD, XTY_CM = 0, 1, 2, 3
 XMC_PR, XMC_RO, XMC_DB, XMC_TC, XMC_UA, XMC_RW, XMC_GL = 0, 1, 2, 3, 4, 5, 6
 XMC_XO, XMC_SV, XMC_BS, XMC_DS, XMC_UC = 7, 8, 9, 10, 11
-XMC_TC0, XMC_TD = 15, 16
+XMC_TC0, XMC_TD, XMC_TE = 15, 16, 22
 R_POS, R_NEG, R_REL, R_TOC, R_TRL, R_TRLA = 0x00, 0x01, 0x02, 0x03, 0x12, 0x13
 R_BA, R_BR, R_RBA, R_RBR = 0x08, 0x0A, 0x18, 0x1A
 
 CODE_CLASSES = {XMC_PR, XMC_RO, XMC_DB, XMC_GL, XMC_XO, XMC_SV}
-TOC_CLASSES = {XMC_TC, XMC_TD, XMC_TC0}
+TOC_CLASSES = {XMC_TC, XMC_TD, XMC_TC0, XMC_TE}
 
 NOP = 0x60000000
 LWZ_R2_20_R1 = 0x80410014
@@ -58,6 +68,7 @@ class Csect:
         self.relocs = []          # (vaddr, symndx, rsize, rtype)
         self.out = None           # 'code' | 'data' | 'bss'
         self.pos = None           # offset in that PEF section
+        self.live = False
 
     def data(self):
         if self.sect is None or self.sect["flags"] & STYP_BSS:
@@ -217,18 +228,56 @@ GLUE = [0x81820000, 0x90410014, 0x800C0000, 0x804C0004, 0x7C0903A6,
         0x4E800420]
 
 
-def link(objs, imports, entry="main"):
-    # Global symbol table: name -> (csect, offset-in-csect)
+def collect_garbage(objs, globals_, roots, gc):
+    """Mark the csects the program reaches; with gc, drop the others.
+
+    Each object's csects are kept in its csect list only when live.
+    References by name go to the definition in globals_, so of the
+    copies of a weak csect only the chosen one is reached.
+    """
+    work = []
+
+    def mark(cs):
+        if cs is not None and not cs.live:
+            cs.live = True
+            work.append(cs)
+
+    for o in objs:
+        for c in o.csects:
+            # Without gc, and for the TOC anchor, keep everything.
+            if not gc or c.smclas == XMC_TC0:
+                mark(c)
+    for cs in roots:
+        mark(cs)
+    while work:
+        c = work.pop()
+        for (_, symndx, _, _) in c.relocs:
+            s = c.obj.symbols[symndx]
+            if s.csect is not None and s.sclass == C_HIDEXT:
+                mark(s.csect)
+            elif s.name in globals_:
+                mark(globals_[s.name][0])
+            elif s.csect is not None:
+                mark(s.csect)
+    for o in objs:
+        o.csects = [c for c in o.csects if c.live]
+
+
+def link(objs, imports, entry="main", gc=True):
+    # Global symbol table: name -> (csect, offset-in-csect, class). A
+    # strong (C_EXT) definition replaces a weak (C_WEAKEXT) one; a common
+    # symbol gives way to a definition.
     globals_ = {}
     for o in objs:
         for s in o.symbols.values():
             if s.sclass in (C_EXT, C_WEAKEXT) and s.csect is not None \
                     and s.smtyp in (XTY_SD, XTY_LD, XTY_CM):
-                if s.name in globals_ and s.sclass == C_EXT and \
-                        globals_[s.name][2] == C_EXT:
-                    if s.smtyp == XTY_CM:
+                old = globals_.get(s.name)
+                if old is not None:
+                    if s.sclass == C_WEAKEXT or s.smtyp == XTY_CM:
                         continue
-                    raise LinkError(f"duplicate symbol {s.name}")
+                    if old[2] == C_EXT and old[0].smtyp != XTY_CM:
+                        raise LinkError(f"duplicate symbol {s.name}")
                 globals_[s.name] = (s.csect, s.value - s.csect.addr,
                                     s.sclass)
 
@@ -250,6 +299,10 @@ def link(objs, imports, entry="main"):
                 found.append((prio, len(found), cs, off))
         return [(cs, off) for _, _, cs, off in sorted(found)]
     inits, finis = by_priority("__sinit"), by_priority("__sterm")
+    roots = [cs for cs, _ in inits + finis]
+    if entry in globals_:
+        roots.append(globals_[entry][0])
+    collect_garbage(objs, globals_, roots, gc)
     tables = Csect(None, None, "__array_tables", 0,
                    4 * (len(inits) + len(finis)), XTY_SD, XMC_RW, 2, None)
     ni, nf = 4 * len(inits), 4 * (len(inits) + len(finis))
@@ -295,7 +348,10 @@ def link(objs, imports, entry="main"):
     # Work out imports: which functions need glue, which TOC slots.
     def resolve(o, symndx):
         s = o.symbols[symndx]
-        if s.csect is not None:
+        # A global name goes to the chosen definition, which may be
+        # another object's copy of a weak csect.
+        if s.csect is not None and (s.sclass == C_HIDEXT or
+                                    s.name not in globals_):
             return ("csect", s.csect, s.value - s.csect.addr)
         name = s.name
         if name in globals_:
@@ -306,6 +362,8 @@ def link(objs, imports, entry="main"):
         bare = name[1:] if name.startswith(".") else name
         idx = imports.get(bare)
         if idx is None:
+            if s.sclass == C_WEAKEXT:
+                return ("null",)
             raise LinkError(f"{o.path}: undefined symbol {name}")
         return ("import", idx, name.startswith("."))
 
@@ -361,17 +419,51 @@ def link(objs, imports, entry="main"):
         words[0] |= (slot - toc_base) & 0xFFFF
         struct.pack_into(">6I", code_img, g, *words)
 
+    def address(r):
+        """Return (kind, offset) of a resolved symbol: 'C' or 'D'."""
+        cs, soff = r[1], r[2]
+        if cs.out == "bss":
+            return "D", cs.pos + soff
+        return sect_addr(cs, soff)
+
     for o in objs:
         for c in o.csects:
             if c.out not in ("code", "data"):
                 continue
             img = code_img if c.out == "code" else data_img
+            # Words that are a difference of two symbols: an R_POS and
+            # an R_NEG at the same address.
+            negs = {vaddr: symndx for (vaddr, symndx, rsize, rtype)
+                    in c.relocs if rtype == R_NEG}
             for (vaddr, symndx, rsize, rtype) in c.relocs:
                 off = vaddr - c.addr
                 at = c.pos + off
                 length = (rsize & 0x3F) + 1
                 r = resolve(o, symndx)
                 orig_sym = o.symbols[symndx]
+                if rtype == R_NEG and length == 32:
+                    continue                # with its R_POS
+                if rtype == R_POS and length == 32 and vaddr in negs:
+                    n = resolve(o, negs[vaddr])
+                    nsym = o.symbols[negs[vaddr]]
+                    if r[0] != "csect" or n[0] != "csect":
+                        raise LinkError(f"{o.path}: difference of an "
+                                        f"import in {c.name}+{off:#x}")
+                    (pk, pa), (nk, na) = address(r), address(n)
+                    if pk != nk:
+                        raise LinkError(f"{o.path}: difference of symbols "
+                                        f"in two sections in {c.name}")
+                    old = struct.unpack_from(">I", img, at)[0]
+                    addend = old - (orig_sym.value - nsym.value)
+                    struct.pack_into(">I", img, at,
+                                     (pa - na + addend) & 0xFFFFFFFF)
+                    continue
+                if r[0] == "null":
+                    if rtype == R_POS and length == 32 and c.out == "data":
+                        struct.pack_into(">I", img, at, 0)
+                        continue
+                    raise LinkError(f"{o.path}: undefined weak symbol "
+                                    f"{orig_sym.name} used in {c.name}")
                 if rtype == R_POS and length == 32:
                     if c.out != "data":
                         raise LinkError(f"{o.path}: absolute pointer in "
@@ -588,12 +680,14 @@ def main():
     ap.add_argument("--pef", help="also write the bare PEF container")
     ap.add_argument("--entry", default="main",
                     help="the function the Code Fragment Manager calls")
+    ap.add_argument("--no-gc-sections", dest="gc", action="store_false",
+                    help="keep the csects that nothing refers to")
     a = ap.parse_args()
 
     try:
         objs = read_inputs(a.inputs, a.entry)
         imports = Imports(a.imports, a.carbon)
-        img = link(objs, imports, a.entry)
+        img = link(objs, imports, a.entry, a.gc)
         pef = build_pef(img, imports)
     except (LinkError, archive.ArchiveError) as e:
         sys.exit(f"peflink: error: {e}")

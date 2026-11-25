@@ -400,6 +400,14 @@ and a 68020 in `tools/sim68k.py --os`, and its PowerPC build in
 `tools/simppc.py`; it runs `tests/console.c` with the console window in
 both too, typing a line into it.
 
+### C++
+
+The SDK compiles and links C++ for 68k and PowerPC: exceptions, RTTI,
+static constructors and destructors, and GCC's libstdc++ 15.2 built on
+the C library. `runtime/build-libstdcxx.sh` builds the library, and
+`tools/macapp.py` links it when a source is C++. See
+[docs/cxx.md](docs/cxx.md).
+
 ### Testing
 
 - `tools/sim68k.py App.bin` runs a 68k application on a 68k CPU
@@ -455,6 +463,8 @@ definition gives one, checks the argument-block calls against the ROM,
 and links every example into a fat application. With `LLVM_SRC` set it
 also builds the runtime library and runs its test, and with
 `PICOLIBC_SRC` set as well it builds the C library and runs its test.
+With `GCC_SRC` set too, it builds the C++ library and runs
+`tests/cxx.cpp`.
 
 `.github/workflows/check.yml` runs it for every pull request and push,
 with the newest clang from clang-retro/llvm's `llvm-prebuilt` release,

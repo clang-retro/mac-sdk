@@ -6,6 +6,12 @@
         [--lib DIR] [--large] [--console file|window]
         [-- clang flags] hello.c ...
 
+C++ sources (.cpp, .cc, .cxx) compile against GCC's C++ library when
+runtime/build-libstdcxx.sh has made it (lib/include/c++ and
+lib/*/libstdc++.a), and the program links with it and with libunwind.a,
+which throws exceptions. Every source is compiled with -ffunction-sections
+and -fdata-sections, so that the linkers leave out what is not used.
+
 It compiles each source with clang (the CLANG environment variable, or
 clang on the PATH) for m68k-apple-macos and powerpc-apple-macos9 with
 this SDK's headers, links the 68k objects with tools/link/start.S by
@@ -39,6 +45,32 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SDK = os.path.dirname(HERE)
 LINK = os.path.join(HERE, "link")
 TARGETS = {"68k": "m68k-apple-macos", "ppc": "powerpc-apple-macos9"}
+CXX_SUFFIXES = (".cpp", ".cc", ".cxx", ".c++", ".C")
+
+
+def is_cxx(src):
+    """Tell if a source file is C++ (by its suffix)."""
+    return src.endswith(CXX_SUFFIXES)
+
+
+def cxx_include(lib, target):
+    """Return the include flags of GCC's C++ library for a target, or None.
+
+    The headers are in lib/include/c++/VERSION, with the target's own in
+    a directory named after the target; the newest version is used.
+    """
+    base = os.path.join(lib, "include", "c++")
+    if not os.path.isdir(base):
+        return None
+    versions = sorted((v for v in os.listdir(base)
+                       if os.path.isdir(os.path.join(base, v, target))),
+                      key=lambda v: [int(x) if x.isdigit() else 0
+                                     for x in v.split(".")])
+    if not versions:
+        return None
+    top = os.path.join(base, versions[-1])
+    return ["-nostdinc++", "-isystem", os.path.join(top, target),
+            "-isystem", top]
 
 
 def run(cmd):
@@ -66,6 +98,13 @@ def build(cpu, a, clang, tmp, large=False):
     inc = ["-I", os.path.join(SDK, "include")]
     if libc:
         inc = ["-isystem", os.path.join(a.lib, "include")] + inc
+    # C++: the C++ library's headers come before the C library's, since
+    # they include them with #include_next.
+    cxx = any(is_cxx(src) for src in a.sources)
+    cxxinc = cxx_include(a.lib, target) if cxx and libc else None
+    if cxx and libc and cxxinc is None:
+        sys.exit("macapp: no C++ library in " + a.lib + "; run "
+                 "runtime/build-libstdcxx.sh")
     objs = []
     if cpu == "68k":
         start = os.path.join(tmp, "start.o")
@@ -79,10 +118,14 @@ def build(cpu, a, clang, tmp, large=False):
             continue
         obj = os.path.join(tmp, f"{cpu}-{i}-{os.path.basename(src)}.o")
         model = ["-mcmodel=large"] if large else []
-        run(clang + [f"--target={target}", "-O2"] + model + inc + a.cflags +
+        lang = (cxxinc or []) if is_cxx(src) else []
+        run(clang + [f"--target={target}", "-O2", "-ffunction-sections",
+                     "-fdata-sections"] + model + lang + inc + a.cflags +
             ["-c", src, "-o", obj])
         objs.append(obj)
     libs = ["libmacos.a", "libc.a"] if libc else []
+    if cxxinc:
+        libs = ["libstdc++.a", "libunwind.a"] + libs
     if libc and a.console == "window":
         libs.insert(0, "libmacconsole.a")
     if a.runtime:

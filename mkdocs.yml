@@ -26,6 +26,7 @@ nav:
   - "Which System has which call": availability.md
   - "Systems and availability": systems.md
   - "Building applications": building.md
+  - "C++": cxx.md
   - "Coverage": coverage.md
   - "Tests": tests.md
   - "Not done yet": status.md
