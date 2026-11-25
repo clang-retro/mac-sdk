@@ -1,7 +1,8 @@
 /* POSIX functions that a program ported from Unix calls, for the classic
  * Mac OS: chdir, realpath, readlink, uname, gethostname, the user IDs,
- * sysconf, flock, poll, ioctl, sigaction, the terminal functions, the
- * process functions and the dynamic loader functions.
+ * sysconf, chown, fchown, fchmod, getgroups, flock, poll, ioctl,
+ * sigaction, the terminal functions, the process functions (fork,
+ * waitpid, posix_spawn, pause) and the dynamic loader functions.
  *
  * The Mac has one user, no processes for a program to start, no
  * terminals, no pipes and no dynamic loader for these programs. The
@@ -344,6 +345,78 @@ void cfmakeraw(struct termios *t) {
   t->c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
   t->c_cflag &= ~(CSIZE | PARENB);
   t->c_cflag |= CS8;
+}
+
+/* Gives the owner of the item at path to the one user: it succeeds when
+   the item exists. */
+int chown(const char *path, uid_t owner, gid_t group) {
+  struct stat st;
+  (void)owner;
+  (void)group;
+  return stat(path, &st);
+}
+
+/* Gives the owner of an open file to the one user: it succeeds when fd
+   is open. */
+int fchown(int fd, uid_t owner, gid_t group) {
+  struct stat st;
+  (void)owner;
+  (void)group;
+  return fstat(fd, &st);
+}
+
+/* Locks an open file when mode has no write permission, and unlocks it
+   otherwise (as chmod). */
+int fchmod(int fd, mode_t mode) {
+  FCBPBRec fcb;
+  HParamBlockRec hp;
+  Str255 name;
+  OSErr err;
+  memset(&fcb, 0, sizeof fcb);
+  fcb.ioNamePtr = name;
+  fcb.ioRefNum = __mac_fd_ref(fd);
+  if (!fcb.ioRefNum) {
+    if (fd >= 0 && fd < 3)
+      return 0;
+    errno = EBADF;
+    return -1;
+  }
+  err = PBGetFCBInfoSync(&fcb);
+  if (err != noErr)
+    return fail(err);
+  memset(&hp, 0, sizeof hp);
+  hp.fileParam.ioNamePtr = name;
+  hp.fileParam.ioVRefNum = fcb.ioFCBVRefNum;
+  hp.fileParam.ioDirID = fcb.ioFCBParID;
+  err = (mode & 0222) ? PBHRstFLockSync(&hp) : PBHSetFLockSync(&hp);
+  return err == noErr ? 0 : fail(err);
+}
+
+/* The one user is in no other group. */
+int getgroups(int size, gid_t list[]) {
+  (void)size;
+  (void)list;
+  return 0;
+}
+
+/* The program is the only process of its session. */
+pid_t getsid(pid_t pid) {
+  (void)pid;
+  return getpid();
+}
+
+/* Waits for a signal. No signal comes from outside the program, so pause
+   waits for ever; other threads continue to run. */
+int pause(void) {
+  struct timespec ts = {1, 0};
+  for (;;)
+    nanosleep(&ts, NULL);
+}
+
+/* A program cannot make another process: fails with ENOSYS. */
+pid_t fork(void) {
+  errno = ENOSYS;
+  return -1;
 }
 
 /* There are no pipes between programs: fails with ENOSYS. */

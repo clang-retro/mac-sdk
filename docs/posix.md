@@ -24,6 +24,11 @@ have the function. A program can find the failure and continue.
 | `ioctl` | `FIONREAD` gives the number of bytes after the mark of a file. Other requests fail with `ENOTTY`. |
 | `uname`, `gethostname` | `MacOS`, `Macintosh`, the System version from Gestalt, and `m68k` or `powerpc`. |
 | `getuid`, `geteuid`, `getgid`, `getegid` | 0. |
+| `chown`, `fchown` | They succeed when the item exists: there is one user. |
+| `fchmod` | The same as `chmod`, for an open file. |
+| `getgroups` | No other groups (0). |
+| `getsid` | The program is the only process of its session. |
+| `pause` | No signal comes from outside the program, so it waits for ever. Other threads continue to run. |
 | `sysconf` | One processor (`_SC_NPROCESSORS_ONLN` is 84, as on Linux). |
 | `flock` | It always succeeds: no other program uses the lock. |
 | `sigaction` | It uses `signal`. Only `sa_handler` is used. |
@@ -35,6 +40,7 @@ have the function. A program can find the failure and continue.
 | Functions | Error |
 | --- | --- |
 | `pipe` | `ENOSYS` |
+| `fork` | `ENOSYS` |
 | `waitpid` | `ECHILD` |
 | `posix_spawn`, `posix_spawnp` | `ENOSYS` (the file action functions succeed and keep nothing) |
 | `tcgetattr`, `tcsetattr`, `tcdrain`, `tcflow`, `tcflush` | `ENOTTY` |

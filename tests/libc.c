@@ -76,6 +76,10 @@ static void check_posix(void) {
   check("fcntl dupfd", (n = fcntl(fd, F_DUPFD, 20)) >= 20 && close(n) == 0);
   check("close a copy", close(fd2) == 0 && pread(fd, buf, 1, 7) == 1 && buf[0] == 'h');
   check("fsync", fsync(fd) == 0);
+  check("fchmod", fchmod(fd, 0444) == 0 && access("px.txt", W_OK) != 0 &&
+                      fchmod(fd, 0644) == 0 && access("px.txt", W_OK) == 0);
+  check("chown", chown("px.txt", 0, 0) == 0 && fchown(fd, 0, 0) == 0 &&
+                     chown("none", 0, 0) != 0);
   check("ioctl fionread", lseek(fd, 5, SEEK_SET) == 5 && ioctl(fd, FIONREAD, &n) == 0 &&
                               n == 3);
   check("futimens", futimens(fd, NULL) == 0);
@@ -137,6 +141,7 @@ static void check_posix(void) {
     check("sigaction", sigaction(SIGPIPE, &sa, &old) == 0 && old.sa_handler == SIG_DFL &&
                            sigaction(SIGPIPE, NULL, &old) == 0 && old.sa_handler == SIG_IGN);
     check("pipe fails", pipe(fds) != 0 && errno == ENOSYS);
+    check("fork fails", fork() < 0 && errno == ENOSYS && getgroups(0, NULL) == 0);
     check("waitpid fails", waitpid(1, NULL, 0) < 0 && errno == ECHILD);
   }
   {
