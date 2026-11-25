@@ -27,7 +27,14 @@
 #ifndef _AGL_H
 #define _AGL_H
 
+/* The Toolbox headers have no C++ linkage of their own. */
+#ifdef __cplusplus
+extern "C" {
+#endif
 #include <Quickdraw.h>
+#ifdef __cplusplus
+}
+#endif
 #include <GL/gl.h>
 
 #ifdef __cplusplus
