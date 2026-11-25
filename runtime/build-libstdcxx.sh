@@ -117,8 +117,8 @@ for cpu in $CPUS; do
   "$bindir/llvm-ar" rcs "$out/$cpu/libunwind.a" "$uw"/*.o
 
   # The compiler commands. libstdc++'s configure reads the thread model
-  # from "$CXX -v"; the wrapper says single, since the Mac has no threads
-  # here.
+  # from "$CXX -v"; the wrapper says posix: the C library's pthread.h
+  # gives the Thread Manager's threads (runtime/libc/thread.c).
   mkdir -p "$WORK/bin-$cpu"
   for tool in cc cxx; do
     case $tool in
@@ -129,7 +129,7 @@ for cpu in $CPUS; do
 #!/bin/sh
 if [ "\$*" = -v ]; then
   "$bindir/$drv" --target=$target -v 2>&1 |
-    sed 's/^Thread model: .*/Thread model: single/' >&2
+    sed 's/^Thread model: .*/Thread model: posix/' >&2
   exit 0
 fi
 exec "$bindir/$drv" --target=$target $flags -isystem "$out/include" $extra "\$@"
@@ -145,12 +145,17 @@ EOF
   build=$WORK/build-$cpu
   rm -rf "$build"
   mkdir -p "$build"
+  # libgcc's configure would make gthr-default.h, the thread model's
+  # header, beside the build directories; libstdc++'s configure reads it
+  # from there to find the gthreads.
+  mkdir -p "$WORK/libgcc"
+  cp "$WORK/gcc/libgcc/gthr-posix.h" "$WORK/libgcc/gthr-default.h"
   (cd "$build" &&
     "$src/libstdc++-v3/configure" \
       --build="$("$src/config.guess")" --host=$host --with-newlib \
       --prefix=/usr --with-gxx-include-dir=/include/c++/$VERSION \
       --disable-shared --enable-static --disable-multilib --disable-nls \
-      --disable-libstdcxx-pch --disable-tls --disable-threads \
+      --disable-libstdcxx-pch --disable-tls --enable-threads=posix \
       --disable-libstdcxx-verbose --disable-libstdcxx-filesystem-ts \
       --disable-libstdcxx-backtrace --disable-libstdcxx-dual-abi \
       CC="$WORK/bin-$cpu/cc" CXX="$WORK/bin-$cpu/cxx" \
@@ -161,6 +166,15 @@ EOF
     tail -n 40 "$build/config.log" >&2
     exit 1
   }
+  # The C library has clock_gettime, nanosleep and sched_yield
+  # (runtime/libc), but configure finds them only with link tests, which
+  # it cannot make. std::chrono::steady_clock and this_thread::sleep_for
+  # need them.
+  for m in USE_CLOCK_MONOTONIC USE_CLOCK_REALTIME USE_NANOSLEEP USE_SCHED_YIELD; do
+    sed -i.orig "s|^/\* #undef _GLIBCXX_$m \*/|#define _GLIBCXX_$m 1|" "$build/config.h"
+    grep -q "^#define _GLIBCXX_$m 1" "$build/config.h" ||
+      { echo "$cpu: config.h has no _GLIBCXX_$m" >&2; exit 1; }
+  done
   make -C "$build" -j"$jobs" >"$WORK/build-$cpu.log" 2>&1 || {
     grep -n -B2 -A8 'error' "$WORK/build-$cpu.log" | head -n 80 >&2
     exit 1

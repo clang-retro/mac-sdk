@@ -86,6 +86,8 @@ int pthread_join(pthread_t thread, void **result);
 int pthread_detach(pthread_t thread);
 void pthread_exit(void *result) __attribute__((__noreturn__));
 pthread_t pthread_self(void);
+/* Cancellation is not available: gives ENOTSUP. */
+int pthread_cancel(pthread_t thread);
 int pthread_equal(pthread_t a, pthread_t b);
 
 int pthread_mutexattr_init(pthread_mutexattr_t *attr);

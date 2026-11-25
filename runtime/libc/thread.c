@@ -251,6 +251,13 @@ void pthread_exit(void *result) {
   longjmp(self->exit, 1);
 }
 
+/* Cancels a thread. A cooperative thread cannot be stopped from outside,
+   thus cancellation is not available. */
+int pthread_cancel(pthread_t thread) {
+  (void)thread;
+  return ENOTSUP;
+}
+
 /* Gives the current thread. */
 pthread_t pthread_self(void) {
   ThreadID id;

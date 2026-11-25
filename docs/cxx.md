@@ -147,9 +147,12 @@ On 68k, programs with more than 32 KB of code use 32-bit addresses
 
 ## Limits
 
-- libstdc++ uses the thread model `single`. `std::thread` and
-  `std::mutex` are not available. The C library has POSIX threads (see
-  docs/threads.md); use `pthread.h` directly.
+- libstdc++ uses the thread model `posix`, over the C library's
+  cooperative threads (see docs/threads.md). `std::thread`,
+  `std::mutex`, `std::condition_variable`, `std::call_once`,
+  `std::async` and `std::this_thread::sleep_for` work. A thread runs
+  until it waits, locks a locked mutex, sleeps or calls
+  `std::this_thread::yield`. `thread_local` is not available.
 - `std::filesystem` is not available. The library is built without it
   (`--disable-libstdcxx-filesystem-ts`). Use the C library's directory
   functions (`opendir`, `readdir`, `stat`, `mkdir`) instead.
@@ -184,13 +187,15 @@ layer. picolibc comes from newlib.
 The compilers for the classic Mac OS define the macro `Macintosh`. The
 patch removes this macro in `<text_encoding>`, where `Macintosh` is the
 name of an encoding. The patch also removes the lock of the 68k atomic
-operations (`config/cpu/m68k/atomicity.h`): the library has no threads,
-and clang's assembler does not accept GCC's `jbne`.
+operations (`config/cpu/m68k/atomicity.h`): the threads are cooperative,
+so a plain read, change and write is atomic between them, and clang's
+assembler does not accept GCC's `jbne`.
 
 ## Tests
 
-`tests/cxx.cpp` tests the C++ runtime and library. With `GCC_SRC` set,
-`tests/run.sh` builds the C++ library and runs the test in
+`tests/cxx.cpp` tests the C++ runtime and library, and
+`tests/cxxthread.cpp` tests its threads. With `GCC_SRC` set,
+`tests/run.sh` builds the C++ library and runs the tests in
 `tools/sim68k.py` (as a 68000 and a 68020) and in `tools/simppc.py`.
 
 The test also passes on real Systems: the 68k build on System 7.6.1
