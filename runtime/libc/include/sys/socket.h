@@ -11,6 +11,7 @@
 
 #include <sys/types.h>
 #include <sys/uio.h>
+#include <sys/_timeval.h> /* struct timeval for SO_RCVTIMEO, as on Linux */
 
 #ifndef _SOCKLEN_T_DECLARED
 #define _SOCKLEN_T_DECLARED
