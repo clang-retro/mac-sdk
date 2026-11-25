@@ -358,14 +358,20 @@ class FakeNet:
             if lsock is None:
                 lsock = so.socket(so.AF_INET, so.SOCK_STREAM)
                 lsock.setsockopt(so.SOL_SOCKET, so.SO_REUSEADDR, 1)
-                lsock.bind(("127.0.0.1", port))
-                lsock.listen(8)
-                lsock.setblocking(False)
-                port = lsock.getsockname()[1]
-                self.listeners[port] = lsock
-            st["port"], st["listening"] = port, True
-            f.w16(pb + 46, port)
-            self.pending.append(("accept", pb, sp))
+                try:
+                    lsock.bind(("127.0.0.1", port))
+                except OSError:                 # a port of another program
+                    lsock.close()
+                    lsock, err = None, -23017   # duplicateSocket
+                if lsock:
+                    lsock.listen(8)
+                    lsock.setblocking(False)
+                    port = lsock.getsockname()[1]
+                    self.listeners[port] = lsock
+            if lsock:
+                st["port"], st["listening"] = port, True
+                f.w16(pb + 46, port)
+                self.pending.append(("accept", pb, sp))
         elif code == 32:                        # TCPActiveOpen
             host, port = f.r32(pb + 36), f.r16(pb + 40) & 0xFFFF
             c = so.socket(so.AF_INET, so.SOCK_STREAM)
@@ -423,7 +429,16 @@ class FakeNet:
                 f.w16(pb + 60, min(len(st["buf"]), 0xFFFF))
         elif code == 42:                        # TCPRelease
             self.abort(sp)
-            self.streams.pop(sp, None)
+            gone = self.streams.pop(sp, None)
+            # The last stream that waits on a port closes its listener, so
+            # that a connection to the port is then refused.
+            if gone and gone.get("listening"):
+                port = gone["port"]
+                if not any(o.get("listening") and o.get("port") == port
+                           for o in self.streams.values()):
+                    lsock = self.listeners.pop(port, None)
+                    if lsock:
+                        lsock.close()
         elif code == 21:                        # UDPRead
             self.pending.append(("udpread", pb, sp))
         elif code == 22:                        # UDPBfrReturn
