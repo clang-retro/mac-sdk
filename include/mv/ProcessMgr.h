@@ -13,6 +13,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef INTEGER LaunchFlags;
 
 typedef struct ProcessSerialNumber ProcessSerialNumber;
@@ -146,6 +151,10 @@ MAC_SINCE(0x0700, "7.0") pascal OSErr LaunchDeskAccessory(const FSSpec *pFileSpe
 MAC_SINCE(0x0700, "7.0") pascal OSErr GetFrontProcess(ProcessSerialNumber *PSN) M68K_INLINE(0x70FF, 0x2F00, 0x3F3C, 0x0039, 0xA88F);
 
 pascal OSErr KillProcess(const ProcessSerialNumber *inProcess);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

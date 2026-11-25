@@ -149,3 +149,50 @@
     name: EventMask
     type: UInt16
     comment: A set of event kinds, one bit each (everyEvent and friends).
+
+# ####
+
+- enum:
+    values:
+      - name: kNullCharCode
+        value: 0
+      - name: kHomeCharCode
+        value: 1
+      - name: kEnterCharCode
+        value: 3
+      - name: kEndCharCode
+        value: 4
+      - name: kHelpCharCode
+        value: 5
+      - name: kBellCharCode
+        value: 7
+      - name: kBackspaceCharCode
+        value: 8
+      - name: kTabCharCode
+        value: 9
+      - name: kLineFeedCharCode
+        value: 10
+      - name: kPageUpCharCode
+        value: 11
+      - name: kPageDownCharCode
+        value: 12
+      - name: kReturnCharCode
+        value: 13
+      - name: kFunctionKeyCharCode
+        value: 16
+      - name: kEscapeCharCode
+        value: 27
+      - name: kClearCharCode
+        value: 27
+      - name: kLeftArrowCharCode
+        value: 28
+      - name: kRightArrowCharCode
+        value: 29
+      - name: kUpArrowCharCode
+        value: 30
+      - name: kDownArrowCharCode
+        value: 31
+      - name: kSpaceCharCode
+        value: 32
+      - name: kDeleteCharCode
+        value: 127

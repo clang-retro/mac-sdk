@@ -13,6 +13,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
     fOnDesk = 1,
     fHasBundle = 8192,
@@ -5413,6 +5418,10 @@ static __inline__ OSErr FSGetResourceForkName(HFSUniStr255 *resourceForkName) {
     return noErr;
 }
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

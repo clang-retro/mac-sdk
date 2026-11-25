@@ -12,6 +12,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // The low 16 bits are an OSErr; the high 16 are its sign extension.
 typedef SInt32 OSStatus;
 
@@ -379,6 +384,10 @@ struct DriverDescription {
 #pragma options align=reset
 
 typedef DriverDescription *DriverDescriptionPtr;
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

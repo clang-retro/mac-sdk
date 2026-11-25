@@ -13,6 +13,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
     large1BitMask = 'ICN#',
     large4BitData = 'icl4',
@@ -417,6 +422,10 @@ MAC_SINCE(0x0810, "8.1") pascal OSErr WriteIconFile(IconFamilyHandle iconFamily,
 enum {
     kAlignNone = 0,
 };
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

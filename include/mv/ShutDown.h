@@ -10,6 +10,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
     sdOnPowerOff = 1,
     sdOnRestart = 2,
@@ -27,6 +32,10 @@ MAC_SINCE(0x0200, "2.0") pascal void ShutDwnStart(void) M68K_INLINE(0x3F3C, 0x00
 MAC_SINCE(0x0200, "2.0") pascal void ShutDwnInstall(ProcPtr shutdown_proc, int16_t flags) M68K_INLINE(0x3F3C, 0x0003, 0xA895);
 
 MAC_SINCE(0x0200, "2.0") pascal void ShutDwnRemove(ProcPtr shutdown_proc) M68K_INLINE(0x3F3C, 0x0004, 0xA895);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

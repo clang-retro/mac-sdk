@@ -13,6 +13,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
     systemFont = 0,
     applFont = 1,
@@ -354,6 +359,10 @@ pascal Boolean IsAntiAliasedTextEnabled(SInt16 *oMinFontSize) M68K_INLINE(0x7012
 pascal void QDTextBounds(INTEGER byteCount, const void *textAddr, Rect *bounds) M68K_INLINE(0x7013, 0xA854);
 
 pascal OSErr FetchFontInfo(SInt16 fontID, SInt16 fontSize, SInt16 fontStyle, FontInfo *info) M68K_INLINE(0x7014, 0xA854);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

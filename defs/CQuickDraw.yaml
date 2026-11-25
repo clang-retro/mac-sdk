@@ -1346,7 +1346,7 @@
     return: Boolean
     args:
       - type: Point
-      - type: Str255
+      - type: ConstStr255Param
       - type: RGBColor*
       - type: RGBColor*
     dispatcher: Pack12

@@ -14,6 +14,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef INTEGER String2DateStatus;
 
 enum {
@@ -775,6 +780,10 @@ static __inline__ INTEGER IUStringOrder(ConstStr255Param aStr, ConstStr255Param 
     return IUTextOrder((Ptr)aStr + 1, (Ptr)bStr + 1, aStr[0], bStr[0], aScript, bScript, aLang, bLang);
 }
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

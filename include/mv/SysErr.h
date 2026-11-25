@@ -10,6 +10,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef enum {
     EXIST_YES = 0,
     EXIST_NO = 255,
@@ -33,6 +38,10 @@ typedef enum {
 
 enum { _SysError = 0xA9C9 };
 pascal void SysError(int16_t errorcode) M68K_INLINE(0xA9C9);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

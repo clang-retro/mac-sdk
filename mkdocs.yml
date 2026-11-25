@@ -31,6 +31,7 @@ nav:
   - "POSIX functions": posix.md
   - "Networking and pipes": network.md
   - "OpenGL": opengl.md
+  - "QuickDraw 3D (Quesa)": quesa.md
   - "Coverage": coverage.md
   - "Tests": tests.md
   - "Not done yet": status.md

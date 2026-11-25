@@ -14,6 +14,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // URL Access Manager (Mac OS 9; an extension for 8.6): HTTP, HTTPS and FTP transfers.
 typedef struct OpaqueURLReference *URLReference;
 
@@ -211,6 +216,10 @@ pascal OSStatus URLIdle(void);
 
 #if !TARGET_CPU_68K
 pascal OSStatus URLGetFileInfo(StringPtr fName, OSType *fType, OSType *fCreator);
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

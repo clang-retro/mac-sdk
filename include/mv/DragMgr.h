@@ -16,6 +16,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // A drag.  Opaque: allocated by NewDrag, or handed to a handler by
 // the Drag Manager.
 typedef Ptr DragRef;
@@ -295,6 +300,10 @@ MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr GetDragHiliteColor(Win
 MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr SetDragImage(DragRef theDrag, PixMapHandle imagePixMap, RgnHandle imageRgn, Point imageOffsetPt, DragImageFlags theImageFlags) M68K_INLINE(0x7027, 0xABED);
 
 MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr ChangeDragBehaviors(DragRef theDrag, DragBehaviors inBehaviorsToSet, DragBehaviors inBehaviorsToClear) M68K_INLINE(0x7028, 0xABED);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

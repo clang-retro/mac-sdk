@@ -903,3 +903,13 @@
     - name: kDontCreateFolder
       value: 0
     comment: Folder Manager volume and creation arguments.
+
+# ####
+
+- enum:
+    values:
+      - name: kResolveAliasFileNoUI
+        value: 0x00000001
+        comment: |
+          ResolveAliasFileWithMountFlags: do not show a dialog to mount a
+          volume

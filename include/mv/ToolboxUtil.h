@@ -15,6 +15,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
     sysPatListID = 0,
 };
@@ -473,6 +478,10 @@ static __inline__ wide* WideBitShift(wide *src, long shift) {
     return src;
 }
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

@@ -1,0 +1,131 @@
+diff --git a/Development/Source/Core/Viewer/E3Viewer.c b/Development/Source/Core/Viewer/E3Viewer.c
+index 8ecd30ba..77a95771 100644
+--- a/Development/Source/Core/Viewer/E3Viewer.c
++++ b/Development/Source/Core/Viewer/E3Viewer.c
+@@ -51,7 +51,7 @@
+ 	#if QUESA_UH_IN_FRAMEWORKS
+ 		#include <Carbon/Carbon.h>
+ 	#else
+-		#include <QuickDraw.h>
++		#include <Quickdraw.h>
+ 		#include <Appearance.h>
+ 		#include <Resources.h>
+ 		#include <ColorPicker.h>
+diff --git a/Development/Source/Platform/Mac/E3MacDrawContext.c b/Development/Source/Platform/Mac/E3MacDrawContext.c
+index c7f87bfd..119b904a 100644
+--- a/Development/Source/Platform/Mac/E3MacDrawContext.c
++++ b/Development/Source/Platform/Mac/E3MacDrawContext.c
+@@ -49,7 +49,7 @@
+ #include "E3DrawContext.h"
+ 
+ #if !QUESA_UH_IN_FRAMEWORKS
+-	#include <QuickDraw.h>
++	#include <Quickdraw.h>
+ 	#include <MacWindows.h>
+ #endif
+ 
+diff --git a/Development/Source/Platform/Mac/E3MacQD3DViewer.h b/Development/Source/Platform/Mac/E3MacQD3DViewer.h
+index 9f096efc..9662874e 100644
+--- a/Development/Source/Platform/Mac/E3MacQD3DViewer.h
++++ b/Development/Source/Platform/Mac/E3MacQD3DViewer.h
+@@ -85,7 +85,7 @@
+ 	#include <Icons.h>
+ 	#include <InternetConfig.h>
+ 	#include <Menus.h>
+-	#include <QuickDraw.h>
++	#include <Quickdraw.h>
+ 	#include <Resources.h>
+ 	#include <Scrap.h>
+ 	#include <Sound.h>
+diff --git a/Development/Source/Platform/Mac/E3MacViewer.h b/Development/Source/Platform/Mac/E3MacViewer.h
+index 9f096efc..9662874e 100644
+--- a/Development/Source/Platform/Mac/E3MacViewer.h
++++ b/Development/Source/Platform/Mac/E3MacViewer.h
+@@ -85,7 +85,7 @@
+ 	#include <Icons.h>
+ 	#include <InternetConfig.h>
+ 	#include <Menus.h>
+-	#include <QuickDraw.h>
++	#include <Quickdraw.h>
+ 	#include <Resources.h>
+ 	#include <Scrap.h>
+ 	#include <Sound.h>
+diff --git a/Development/Source/Platform/Windows/E3WindowsViewer.h b/Development/Source/Platform/Windows/E3WindowsViewer.h
+index 9f096efc..9662874e 100644
+--- a/Development/Source/Platform/Windows/E3WindowsViewer.h
++++ b/Development/Source/Platform/Windows/E3WindowsViewer.h
+@@ -85,7 +85,7 @@
+ 	#include <Icons.h>
+ 	#include <InternetConfig.h>
+ 	#include <Menus.h>
+-	#include <QuickDraw.h>
++	#include <Quickdraw.h>
+ 	#include <Resources.h>
+ 	#include <Scrap.h>
+ 	#include <Sound.h>
+diff --git a/Development/Source/Renderers/Common/GLUtils.c b/Development/Source/Renderers/Common/GLUtils.c
+index 14fdf0d8..06657623 100644
+--- a/Development/Source/Renderers/Common/GLUtils.c
++++ b/Development/Source/Renderers/Common/GLUtils.c
+@@ -55,6 +55,10 @@
+ 
+ 	#include <wingdi.h>
+ 
++#elif QUESA_OS_MACINTOSH && !QUESA_UH_IN_FRAMEWORKS && !TARGET_API_MAC_CARBON
++
++	#include <CodeFragments.h>
++
+ #elif QUESA_OS_MACINTOSH && !QUESA_UH_IN_FRAMEWORKS
+ 	
+ 	#include <CFString.h>
+@@ -499,6 +503,36 @@ void*	GLGetProcAddress( const char* funcName )
+ 	return (void*)glXGetProcAddressARB( (const GLubyte*)funcName );
+ }
+ 
++#elif QUESA_OS_MACINTOSH && !QUESA_UH_IN_FRAMEWORKS && !TARGET_API_MAC_CARBON
++
++// Finds a function of OpenGLLibrary by name, through the Code Fragment
++// Manager. Gives NULL when the library or the function is not there.
++void*	GLGetProcAddress( const char* funcName )
++{
++	static CFragConnectionID	sConn = NULL;
++	static bool					sTried = false;
++	if (!sTried)
++	{
++		sTried = true;
++		Ptr		entry = NULL;
++		Str255	err;
++		if (GetSharedLibrary( "\pOpenGLLibrary", kPowerPCCFragArch, kReferenceCFrag,
++			&sConn, &entry, err ) != noErr)
++			sConn = NULL;
++	}
++	size_t	len = (funcName != NULL) ? strlen( funcName ) : 0;
++	if ((sConn == NULL) || (len == 0) || (len > 255))
++		return NULL;
++	Str255	pName;
++	pName[0] = (unsigned char) len;
++	memcpy( pName + 1, funcName, len );
++	Ptr			addr = NULL;
++	CFragSymbolClass	symClass = 0;
++	if (FindSymbol( sConn, pName, &addr, &symClass ) != noErr)
++		return NULL;
++	return addr;
++}
++
+ #elif QUESA_OS_MACINTOSH && !QUESA_UH_IN_FRAMEWORKS
+ 
+ 
+diff --git a/SDK/Includes/Quesa/Quesa.h b/SDK/Includes/Quesa/Quesa.h
+index 6beb75ed..a659a39f 100644
+--- a/SDK/Includes/Quesa/Quesa.h
++++ b/SDK/Includes/Quesa/Quesa.h
+@@ -57,7 +57,8 @@
+     !defined(QUESA_OS_COCOA)
+ 
+ 	// Mac OS
+-	#if ((defined(__MWERKS__) && __dest_os == __mac_os) || defined(MPW_CPLUS) || defined(MPW_C))
++	#if ((defined(__MWERKS__) && __dest_os == __mac_os) || defined(MPW_CPLUS) || defined(MPW_C) || \
++	     (defined(macintosh) && !defined(__MACH__)))
+ 	    #ifndef QUESA_OS_MACINTOSH
+ 	        #define QUESA_OS_MACINTOSH              		1
+ 	    #endif

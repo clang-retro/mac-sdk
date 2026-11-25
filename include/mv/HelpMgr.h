@@ -15,6 +15,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct HMStringResType HMStringResType;
 struct HMStringResType {
     INTEGER hmmResID;
@@ -94,6 +99,10 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'help'") pascal OSErr HMGetBalloonWindow(Win
 MAC_SINCE_GESTALT(0x0701, "7.0.1", "'help'") pascal OSErr HMExtractHelpMsg(ResType type, INTEGER resid, INTEGER msg, INTEGER state, HMMessageRecord *helpmsgp) M68K_INLINE(0x303C, 0x0711, 0xA830);
 
 MAC_SINCE_GESTALT(0x0701, "7.0.1", "'help'") pascal OSErr HMGetIndHelpMsg(ResType type, INTEGER resid, INTEGER msg, INTEGER state, LONGINT *options, Point tip, Rect *altrectp, INTEGER *theprocp, INTEGER *variantp, HMMessageRecord *helpmsgp, INTEGER *count) M68K_INLINE(0x303C, 0x1306, 0xA830);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

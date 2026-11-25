@@ -14,6 +14,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct DCtlEntry DCtlEntry;
 
 typedef DCtlEntry *DCtlPtr;
@@ -415,6 +420,10 @@ static __inline__ void AddDrive(INTEGER drvrRefNum, INTEGER drvNum, DrvQElPtr qE
         : "+r"(_d0), "+r"(_a0) : : "d1", "d2", "a1", "cc", "memory");
 }
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

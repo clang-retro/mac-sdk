@@ -11,6 +11,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // Thread Manager (System 7 with the Thread Manager extension, built in from System 7.5).
 typedef UInt16 ThreadState;
 
@@ -184,6 +189,10 @@ static __inline__ OSErr YieldToAnyThread(void) {
     return YieldToThread(kNoThreadID);
 }
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

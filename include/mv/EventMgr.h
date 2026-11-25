@@ -11,6 +11,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
     nullEvent = 0,
     mouseDown = 1,
@@ -90,6 +95,34 @@ struct EventRecord {
 
 // A set of event kinds, one bit each (everyEvent and friends).
 typedef UInt16 EventMask;
+
+enum {
+    kNullCharCode = 0,
+    kHomeCharCode = 1,
+    kEnterCharCode = 3,
+    kEndCharCode = 4,
+    kHelpCharCode = 5,
+    kBellCharCode = 7,
+    kBackspaceCharCode = 8,
+    kTabCharCode = 9,
+    kLineFeedCharCode = 10,
+    kPageUpCharCode = 11,
+    kPageDownCharCode = 12,
+    kReturnCharCode = 13,
+    kFunctionKeyCharCode = 16,
+    kEscapeCharCode = 27,
+    kClearCharCode = 27,
+    kLeftArrowCharCode = 28,
+    kRightArrowCharCode = 29,
+    kUpArrowCharCode = 30,
+    kDownArrowCharCode = 31,
+    kSpaceCharCode = 32,
+    kDeleteCharCode = 127,
+};
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

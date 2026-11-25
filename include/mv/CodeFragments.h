@@ -12,6 +12,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct cfrg_resource_t cfrg_resource_t;
 struct cfrg_resource_t {
     unsigned long reserved0;
@@ -72,6 +77,10 @@ enum {
     kLoadNewCopy = 5,
 };
 
+enum {
+    kUnresolvedCFragSymbolAddress = 0, /* the address of a weak import that the Code Fragment Manager did not find */
+};
+
 typedef unsigned long LoadFlags;
 
 typedef struct MemFragment MemFragment;
@@ -126,9 +135,74 @@ typedef struct CFragClosure CFragClosure;
 
 typedef CFragClosure *CFragClosureID;
 
+/* The Code Fragment Manager's newer names (CodeFragments.h of
+   Universal Interfaces 3), and the block that a fragment's
+   initialization function gets. */
+typedef ConnectionID CFragConnectionID;
+typedef uint8_t CFragSymbolClass;
+typedef OSType CFragArchitecture;
+typedef uint32_t CFragLoadOptions;
+enum {
+    kPowerPCCFragArch = 'pwpc',
+    kMotorola68KCFragArch = 'm68k',
+    kAnyCFragArch = 0x3F3F3F3F,
+    kLoadCFrag = 1,
+    kFindCFrag = 2,
+    kDataCFragSymbol = 1,
+    kCodeCFragSymbol = 0,
+    kTVectorCFragSymbol = 2,
+    kTOCCFragSymbol = 3,
+    kGlueCFragSymbol = 4
+};
+typedef struct OpaqueCFragContextID *CFragContextID;
+enum {
+    kMemoryCFragLocator = 0,
+    kDataForkCFragLocator = 1,
+    kResourceCFragLocator = 2,
+    kNamedFragmentCFragLocator = 4,
+    kCFragGoesToEOF = 0,
+    kPrivateCFragCopy = 5
+};
+typedef struct CFragSystem7MemoryLocator {
+    void *address;
+    uint32_t length;
+    Boolean inPlace;
+    uint8_t reservedA;
+    uint16_t reservedB;
+} CFragSystem7MemoryLocator;
+typedef struct CFragSystem7DiskFlatLocator {
+    struct FSSpec *fileSpec;
+    uint32_t offset;
+    uint32_t length;
+} CFragSystem7DiskFlatLocator;
+typedef struct CFragSystem7SegmentedLocator {
+    struct FSSpec *fileSpec;
+    uint32_t rsrcType;
+    int16_t rsrcID;
+    uint16_t reservedA;
+} CFragSystem7SegmentedLocator;
+typedef struct CFragSystem7Locator {
+    int32_t where;
+    union {
+        CFragSystem7DiskFlatLocator onDisk;
+        CFragSystem7MemoryLocator inMem;
+        CFragSystem7SegmentedLocator inSegs;
+    } u;
+} CFragSystem7Locator;
+typedef struct CFragSystem7InitBlock {
+    CFragContextID contextID;
+    CFragClosureID closureID;
+    CFragConnectionID connectionID;
+    CFragSystem7Locator fragLocator;
+    unsigned char *libName;
+    uint32_t reservedA;
+} CFragSystem7InitBlock;
+typedef CFragSystem7InitBlock CFragInitBlock;
+typedef CFragInitBlock *CFragInitBlockPtr;
+
 enum { _CodeFragmentDispatch = 0xAA5A };
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'cfrg'") pascal OSErr GetDiskFragment(FSSpecPtr fsp, LONGINT offset, LONGINT length, ConstStr63Param fragname, LoadFlags flags, ConnectionID *connp, Ptr *mainAddrp, Str255 errname) M68K_INLINE(0x3F3C, 0x0002, 0xAA5A);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'cfrg'") pascal OSErr GetDiskFragment(const FSSpec *fsp, LONGINT offset, LONGINT length, ConstStr63Param fragname, LoadFlags flags, ConnectionID *connp, Ptr *mainAddrp, Str255 errname) M68K_INLINE(0x3F3C, 0x0002, 0xAA5A);
 
 typedef uint8_t SymClass;
 
@@ -143,6 +217,10 @@ MAC_SINCE_GESTALT(0x0761, "7.6.1", "'cfrg'") pascal OSErr GetMemFragment(void *a
 MAC_SINCE_GESTALT(0x0761, "7.6.1", "'cfrg'") pascal OSErr CountSymbols(ConnectionID id, LONGINT *countp) M68K_INLINE(0x3F3C, 0x0006, 0xAA5A);
 
 MAC_SINCE_GESTALT(0x0761, "7.6.1", "'cfrg'") pascal OSErr GetIndSymbol(ConnectionID id, LONGINT index, Str255 name, Ptr *addrp, SymClass *classp) M68K_INLINE(0x3F3C, 0x0007, 0xAA5A);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

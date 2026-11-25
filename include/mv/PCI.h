@@ -13,6 +13,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // configAddr is typed as an address but carries a register offset in
 // configuration space, 0 to 255.  The word and long routines swap
 // bytes, so values arrive as they appear on the bus.
@@ -27,6 +32,10 @@ pascal OSErr ExpMgrConfigWriteByte(RegEntryIDPtr node, LogicalAddress configAddr
 pascal OSErr ExpMgrConfigWriteWord(RegEntryIDPtr node, LogicalAddress configAddr, UInt16 value);
 
 pascal OSErr ExpMgrConfigWriteLong(RegEntryIDPtr node, LogicalAddress configAddr, UInt32 value);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

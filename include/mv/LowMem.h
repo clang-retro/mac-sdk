@@ -10,6 +10,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // Declarations of low memory globals which haven't been put anywhere else
 // yet follow. Whenever a low memory global clearly belongs to one manager/module,
 // put it should live in the appropriate header.
@@ -163,6 +168,10 @@
 
 #define LMGetABusGlobals() (*(Ptr *)0x000002D8)
 #define LMSetABusGlobals(val) ((*(Ptr *)0x000002D8) = (val))
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

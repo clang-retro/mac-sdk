@@ -19,6 +19,30 @@
 
 # ####
 
+- typedef:
+    name: QTAtom
+    type: LONGINT
+
+# ####
+
+- typedef:
+    name: QTAtomType
+    type: LONGINT
+
+# ####
+
+- typedef:
+    name: QTAtomID
+    type: LONGINT
+
+# ####
+
+- typedef:
+    name: QTAtomContainer
+    type: Handle
+
+# ####
+
 - dispatcher:
     name: QuickTime
     trap: 0xAAAA

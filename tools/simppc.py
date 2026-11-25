@@ -483,6 +483,18 @@ def main():
         "DisposeThread": dispose_thread,
         "ThreadBeginCritical": lambda: ret(0),
         "ThreadEndCritical": lambda: ret(0),
+        # A routine descriptor here is the procedure's own transition
+        # vector: the simulator runs only PowerPC code.
+        "NewRoutineDescriptor": lambda: ret(arg(0)),
+        "DisposeRoutineDescriptor": lambda: ret(0),
+        # The Process Manager knows one process, and the Display Manager
+        # sends no notices. FindFolder finds no folder.
+        "GetCurrentProcess": lambda: (
+            uc.mem_write(arg(0), struct.pack(">II", 0, 2)), ret(0)),
+        "GetProcessInformation": lambda: ret(-600),   # procNotFound
+        "DMRegisterNotifyProc": lambda: ret(0),
+        "DMRemoveNotifyProc": lambda: ret(0),
+        "FindFolder": lambda: ret(-43),               # fnfErr
     })
 
     # Apple OpenGL: each imported agl*, gl* and glu* function.

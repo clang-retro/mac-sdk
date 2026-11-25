@@ -13,6 +13,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct SndCommand SndCommand;
 struct SndCommand {
     INTEGER cmd;
@@ -464,6 +469,10 @@ MAC_SINCE(0x0608, "6.0.8") pascal OSErr ParseSndHeader(Handle sndHandle, SoundCo
 MAC_SINCE(0x0608, "6.0.8") pascal OSErr OpenMixerSoundComponent(SoundComponentDataPtr outputDescription, long outputFlags, ComponentInstance *mixerComponent) M68K_INLINE(0x203C, 0x0614, 0x0018, 0xA800);
 
 MAC_SINCE(0x0608, "6.0.8") pascal OSErr CloseMixerSoundComponent(ComponentInstance ci) M68K_INLINE(0x203C, 0x0218, 0x0018, 0xA800);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

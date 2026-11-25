@@ -95,5 +95,9 @@
 #include "mv/URLAccess.h"
 #include "mv/UnicodeConverter.h"
 
+#ifdef __cplusplus
+extern "C" QDGlobals qd;
+#else
 extern QDGlobals qd;
+#endif
 #endif

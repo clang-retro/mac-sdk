@@ -11,6 +11,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef union DefStartRec DefStartRec;
 union DefStartRec {
 struct {
@@ -136,6 +141,10 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
 }
 #else
 MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetOSDefault(DefOSPtr paramBlock);
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

@@ -11,6 +11,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum { _Pack2 = 0xA9E9 };
 
 pascal void DILoad(void) M68K_INLINE(0x3F3C, 0x0002, 0xA9E9);
@@ -24,6 +29,10 @@ pascal OSErr DIFormat(INTEGER dn) M68K_INLINE(0x3F3C, 0x0006, 0xA9E9);
 pascal OSErr DIVerify(INTEGER dn) M68K_INLINE(0x3F3C, 0x0008, 0xA9E9);
 
 pascal OSErr DIZero(INTEGER dn, StringPtr vname) M68K_INLINE(0x3F3C, 0x000A, 0xA9E9);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

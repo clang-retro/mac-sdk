@@ -13,6 +13,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
     putDlgID = -3999,
 };
@@ -199,6 +204,10 @@ pascal void StandardPutFile(ConstStringPtr prompt, ConstStringPtr defaultname, S
 pascal void CustomPutFile(ConstStringPtr prompt, ConstStringPtr defaultName, StandardFileReply *replyp, INTEGER dlgid, Point where, DlgHookYDUPP dlghook, ModalFilterYDUPP filterproc, Ptr activeList, ActivateYDUPP activateproc, void *yourdatap) M68K_INLINE(0x3F3C, 0x0007, 0xA9EA);
 
 pascal void CustomGetFile(FileFilterYDUPP filefilter, INTEGER numtypes, SFTypeList typelist, StandardFileReply *replyp, INTEGER dlgid, Point where, DlgHookYDUPP dlghook, ModalFilterYDUPP filterproc, Ptr activeList, ActivateYDUPP activateproc, void *yourdatap) M68K_INLINE(0x3F3C, 0x0008, 0xA9EA);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

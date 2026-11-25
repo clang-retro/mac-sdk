@@ -31,6 +31,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // C-string forms of Toolbox calls (C calling convention; they take C
 // strings, and Points by address). On 68k they need MPW-style glue.
 #if TARGET_CPU_68K
@@ -1459,6 +1464,10 @@ static __inline__ void P2CStr(StringPtr pString) {
     pString[n] = 0;
 }
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

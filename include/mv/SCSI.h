@@ -11,6 +11,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct SCSIInstr SCSIInstr;
 struct SCSIInstr {
     INTEGER scOpcode;
@@ -266,6 +271,10 @@ MAC_SINCE(0x0761, "7.6.1") static __inline__ __attribute__((__always_inline__)) 
 }
 #else
 MAC_SINCE(0x0761, "7.6.1") pascal OSErr SCSIKillXPT(SIMInitInfo *SIMinfoPtr);
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

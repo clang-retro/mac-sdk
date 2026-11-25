@@ -14,6 +14,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // Keychain Manager (Mac OS 9; Keychain 1.0 was an extension for 8.6).
 typedef struct OpaqueKCRef *KCRef;
 
@@ -279,6 +284,10 @@ pascal OSStatus KCFindNextItem(KCSearchRef search, KCItemRef *item);
 
 #if !TARGET_CPU_68K
 pascal OSStatus KCReleaseSearch(KCSearchRef *search);
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

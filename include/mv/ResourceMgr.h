@@ -12,6 +12,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // resource attribute masks
 enum {
     resSysHeap = 64,
@@ -279,6 +284,10 @@ static __inline__ void TempInsertROMMap(Boolean tempResLoad) {
     *(INTEGER *)0xB9E = tempResLoad ? (INTEGER)0xFFFF : (INTEGER)0xFF00;
 }
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

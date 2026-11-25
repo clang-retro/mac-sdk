@@ -12,6 +12,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum { _ExitToShell = 0xA9F4 };
 pascal void ExitToShell(void) M68K_INLINE(0xA9F4);
 
@@ -125,6 +130,10 @@ static __inline__ void ClrAppFiles(INTEGER index) {
     *(OSType *)(p + 2) = 0;
 }
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

@@ -11,6 +11,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // IPv4 address.  Numeric value; guest byte order (big-endian) is
 // identical to network byte order.
 typedef ULONGINT ip_addr;
@@ -319,6 +324,10 @@ struct GetAddrParamBlock {
     ip_addr ourAddress;
     ip_addr ourNetMask;
 };
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

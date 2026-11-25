@@ -12,6 +12,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // Identifies one entry in the Name Registry.  Opaque: copy the whole
 // structure, and dispose of IDs the Registry hands out with
 // RegistryEntryIDDispose.
@@ -74,6 +79,10 @@ pascal OSStatus RegistryPropertyGetSize(const RegEntryID *entryID, const RegProp
 pascal OSStatus RegistryPropertyGet(const RegEntryID *entryID, const RegPropertyName *propertyName, void *propertyValue, RegPropertyValueSize *propertySize);
 
 pascal OSStatus RegistryPropertySet(const RegEntryID *entryID, const RegPropertyName *propertyName, const void *propertyValue, RegPropertyValueSize propertySize);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

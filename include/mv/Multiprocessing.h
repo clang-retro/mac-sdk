@@ -12,6 +12,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // Multiprocessing Services 2.x (MPLibrary, Mac OS 8.6 to 9.2): preemptive tasks on PowerPC.
 typedef struct OpaqueMPOpaqueID *MPOpaqueID;
 
@@ -358,6 +363,10 @@ Boolean _MPIsFullyInitialized(void);
 
 #if !TARGET_CPU_68K
 Duration AbsoluteToDuration(AbsoluteTime absoluteTime);
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

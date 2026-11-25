@@ -17,6 +17,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef pascal void (*DMNotificationProcPtr)(AppleEvent *theEvent);
 #if TARGET_RT_MAC_CFM
 typedef UniversalProcPtr DMNotificationUPP;
@@ -235,6 +240,10 @@ MAC_SINCE(0x0761, "7.6.1") pascal OSErr DMGetDeviceAVIDByPortAVID(AVIDType portA
 MAC_SINCE(0x0761, "7.6.1") pascal OSErr DMGetEnableByAVID(AVIDType theAVID, Boolean *isAVIDEnabledNow, Boolean *canChangeEnableNow) M68K_INLINE(0x303C, 0x063C, 0xABEB);
 
 MAC_SINCE(0x0761, "7.6.1") pascal OSErr DMSetEnableByAVID(AVIDType theAVID, Boolean doEnable, Handle displayState) M68K_INLINE(0x303C, 0x053D, 0xABEB);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

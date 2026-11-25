@@ -13,6 +13,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
     baud300 = 380,
     baud600 = 189,
@@ -251,6 +256,10 @@ static __inline__ OSErr SerStatus(INTEGER rn, SerStaRec *serstap) {
     return err;
 }
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

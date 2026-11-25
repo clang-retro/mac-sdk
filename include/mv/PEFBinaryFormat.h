@@ -11,6 +11,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
     kPEFTag1 = 'Joy!',
     kPEFTag2 = 'peff',
@@ -174,6 +179,10 @@ enum {
 #define PEFRelocComposeLgByImport_1st(fullIndex) (0xA400 | (uint16_t)((uint32_t)(fullIndex) >> 16))
 
 #define PEFRelocComposeLgByImport_2nd(fullIndex) ((uint16_t) ((uint32_t)(fullIndex)))
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

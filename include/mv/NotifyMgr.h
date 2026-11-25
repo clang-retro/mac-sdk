@@ -11,6 +11,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct NMRec NMRec;
 struct NMRec {
     QElemPtr qLink;
@@ -58,6 +63,10 @@ MAC_SINCE(0x0600, "6.0") static __inline__ __attribute__((__always_inline__)) OS
 }
 #else
 MAC_SINCE(0x0600, "6.0") pascal OSErr NMRemove(NMRecPtr nmptr);
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

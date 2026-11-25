@@ -17,6 +17,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
     ctrlItem = 4,
     btnCtrl = 0,
@@ -537,6 +542,10 @@ static __inline__ Boolean StdFilterProc(DialogPtr theDialog, EventRecord *event,
     return proc(theDialog, event, itemHit);
 }
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

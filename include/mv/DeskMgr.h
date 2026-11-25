@@ -13,6 +13,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
     undoCmd = 0,
     cutCmd = 2,
@@ -56,6 +61,10 @@ pascal Boolean SystemEvent(EventRecord *evp) M68K_INLINE(0xA9B2);
 
 enum { _SystemMenu = 0xA9B5 };
 pascal void SystemMenu(LONGINT menu) M68K_INLINE(0xA9B5);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

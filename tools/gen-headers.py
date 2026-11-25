@@ -54,6 +54,7 @@ APPLE_NAMES = [
     "MixedMode", "NameRegistry", "Navigation", "Notification",
     "NumberFormatting", "OSUtils", "Packages", "PCI", "Printing",
     "Processes", "Quickdraw", "QuickdrawText", "Resources", "Retrace",
+    "ColorPicker",
     "Scrap", "Script", "SegLoad", "Serial", "ShutDown", "Sound",
     "StandardFile", "Strings", "TextEdit", "TextUtils", "Timer",
     "ToolUtils", "Traps", "Types", "Windows",
@@ -531,7 +532,9 @@ class Generator:
                 "/* The headers' own inline code may call newer calls behind a",
                 "   check; the MAC_MIN_SYSTEM warnings are for the program's calls. */",
                 "#pragma clang diagnostic push",
-                '#pragma clang diagnostic ignored "-Wuser-defined-warnings"', ""]
+                '#pragma clang diagnostic ignored "-Wuser-defined-warnings"', "",
+                "/* The Toolbox calls are C functions, also in C++. */",
+                "#ifdef __cplusplus", 'extern "C" {', "#endif", ""]
         self.deferred = []
         for item in h.items:
             key, v = main_elem(item)
@@ -573,7 +576,8 @@ class Generator:
                 out += ([f"#if {cond}"] if cond else []) + body + \
                     (["#endif"] if cond else []) + [""]
             out += ["#endif", ""]
-        out += ["#pragma clang diagnostic pop", "#pragma options align=reset", "", "#endif", ""]
+        out += ["#ifdef __cplusplus", "}", "#endif", "",
+                "#pragma clang diagnostic pop", "#pragma options align=reset", "", "#endif", ""]
         return "\n".join(out)
 
 
@@ -745,7 +749,8 @@ def main():
         for n in order:
             if n != "MPW":
                 f.write(f'#include "mv/{n}.h"\n')
-        f.write("\nextern QDGlobals qd;\n#endif\n")
+        f.write('\n#ifdef __cplusplus\nextern "C" QDGlobals qd;\n#else\n'
+                'extern QDGlobals qd;\n#endif\n#endif\n')
     for n in APPLE_NAMES:
         if n == "ConditionalMacros":
             continue

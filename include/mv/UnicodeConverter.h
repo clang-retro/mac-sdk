@@ -13,6 +13,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // Unicode Converter (Mac OS 8.5 and later; an extension for 7.6 and 8.1).
 typedef struct OpaqueTextToUnicodeInfo *TextToUnicodeInfo;
 
@@ -194,6 +199,10 @@ pascal OSStatus ResetUnicodeToTextInfo(UnicodeToTextInfo ioUnicodeToTextInfo);
 
 #if !TARGET_CPU_68K
 pascal OSStatus ResetUnicodeToTextRunInfo(UnicodeToTextRunInfo ioUnicodeToTextRunInfo);
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

@@ -11,6 +11,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // number of bytes InitGraf needs
 enum {
     grafSize = 206,
@@ -745,7 +750,7 @@ typedef QDGlobals *QDGlobalsPtr;
 #define LMSetPortList(val) ((*(Handle *)0x00000D66) = (val))
 
 enum { _CopyBits = 0xA8EC };
-pascal void CopyBits(BitMap *src_bitmap, BitMap *dst_bitmap, const Rect *src_rect, const Rect *dst_rect, INTEGER mode, RgnHandle mask) M68K_INLINE(0xA8EC);
+pascal void CopyBits(const BitMap *src_bitmap, const BitMap *dst_bitmap, const Rect *src_rect, const Rect *dst_rect, INTEGER mode, RgnHandle mask) M68K_INLINE(0xA8EC);
 
 enum { _ScrollRect = 0xA8EF };
 pascal void ScrollRect(Rect *rp, INTEGER dh, INTEGER dv, RgnHandle updatergn) M68K_INLINE(0xA8EF);
@@ -829,7 +834,7 @@ enum { _CalcMask = 0xA838 };
 MAC_SINCE(0x0070, "0.7") pascal void CalcMask(Ptr srcp, Ptr dstp, INTEGER srcr, INTEGER dstr, INTEGER height, INTEGER width) M68K_INLINE(0xA838);
 
 enum { _CopyMask = 0xA817 };
-MAC_SINCE(0x0070, "0.7") pascal void CopyMask(BitMap *srcbp, BitMap *mskbp, BitMap *dstbp, const Rect *srcrp, const Rect *mskrp, const Rect *dstrp) M68K_INLINE(0xA817);
+MAC_SINCE(0x0070, "0.7") pascal void CopyMask(const BitMap *srcbp, const BitMap *mskbp, const BitMap *dstbp, const Rect *srcrp, const Rect *mskrp, const Rect *dstrp) M68K_INLINE(0xA817);
 
 enum { _GetMaskTable = 0xA836 };
 MAC_SINCE(0x0070, "0.7") pascal INTEGER* GetMaskTable(void) M68K_INLINE(0xA836);
@@ -1216,7 +1221,7 @@ enum { _CalcCMask = 0xAA4F };
 MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void CalcCMask(BitMap *srcbp, BitMap *dstbp, const Rect *srcrp, const Rect *dstrp, RGBColor *seedrgbp, ProcPtr matchprocp, LONGINT matchdata) M68K_INLINE(0xAA4F);
 
 enum { _CopyDeepMask = 0xAA51 };
-MAC_SINCE(0x0700, "7.0") MAC_COLOR_QD pascal void CopyDeepMask(BitMap *srcBits, BitMap *maskBits, BitMap *dstBits, const Rect *srcRect, const Rect *maskRect, const Rect *dstRect, INTEGER mode, RgnHandle maskRgn) M68K_INLINE(0xAA51);
+MAC_SINCE(0x0700, "7.0") MAC_COLOR_QD pascal void CopyDeepMask(const BitMap *srcBits, const BitMap *maskBits, const BitMap *dstBits, const Rect *srcRect, const Rect *maskRect, const Rect *dstRect, INTEGER mode, RgnHandle maskRgn) M68K_INLINE(0xAA51);
 
 #if TARGET_API_MAC_CARBON
 #if TARGET_CPU_68K
@@ -1276,9 +1281,9 @@ pascal void GetRegionBounds(RgnHandle rgn, Rect *r);
 
 #if TARGET_API_MAC_CARBON
 #if TARGET_CPU_68K
-static __inline__ BitMap * GetPortBitMapForCopyBits(CGrafPtr p);
+static __inline__ const BitMap * GetPortBitMapForCopyBits(CGrafPtr p);
 #else
-pascal BitMap * GetPortBitMapForCopyBits(CGrafPtr p);
+pascal const BitMap * GetPortBitMapForCopyBits(CGrafPtr p);
 #endif
 #endif
 
@@ -1336,7 +1341,7 @@ static __inline__ void GetRegionBounds(RgnHandle rgn, Rect *r) {
 #endif
 
 #if TARGET_API_MAC_CARBON
-static __inline__ BitMap * GetPortBitMapForCopyBits(CGrafPtr p) {
+static __inline__ const BitMap * GetPortBitMapForCopyBits(CGrafPtr p) {
     return &((GrafPtr)p)->portBits;
 }
 #endif
@@ -1348,6 +1353,10 @@ static __inline__ void GetQDGlobalsScreenBits(BitMap *bm) {
 }
 #endif
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop

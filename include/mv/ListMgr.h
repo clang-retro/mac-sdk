@@ -13,6 +13,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef Point Cell;
 
 typedef Byte DataArray[32001];
@@ -167,6 +172,10 @@ MAC_SINCE(0x0100, "1.0") pascal void LSetCell(Ptr dp, INTEGER dl, Cell cell, Lis
 MAC_SINCE(0x0100, "1.0") pascal void LCellSize(Point csize, ListHandle list) M68K_INLINE(0x3F3C, 0x0014, 0xA9E7);
 
 MAC_SINCE(0x0100, "1.0") pascal Boolean LGetSelect(Boolean next, Cell *cellp, ListHandle list) M68K_INLINE(0x3F3C, 0x003C, 0xA9E7);
+
+#ifdef __cplusplus
+}
+#endif
 
 #pragma clang diagnostic pop
 #pragma options align=reset

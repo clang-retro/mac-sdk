@@ -19,6 +19,11 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wuser-defined-warnings"
 
+/* The Toolbox calls are C functions, also in C++. */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
     documentProc = 0,
     dBoxProc = 1,
@@ -835,6 +840,10 @@ static __inline__ void InvalWindowRect(WindowRef w, const Rect *r) {
 }
 #endif
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #pragma clang diagnostic pop
