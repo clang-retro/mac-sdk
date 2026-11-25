@@ -1,7 +1,8 @@
 """Run a PowerPC Mac application from peflink.py (or fatlink.py) on a
 PowerPC CPU emulator, with the InterfaceLib functions it imports faked
 by tools/sim68k.py's fake Memory Manager, File Manager and devices, and
-ThreadsLib's cooperative threads by its FakeThreads.
+ThreadsLib's cooperative threads by its FakeThreads, and Apple OpenGL
+(OpenGLLibrary and OpenGLUtility) by tools/fakegl.py.
 
 This checks what the 68k simulator cannot: the PEF container and its
 relocations, the import glue and the TOC, and the C library's PowerPC
@@ -9,6 +10,7 @@ build. It is not a Mac: only the functions in FUNCS are known, and a
 program that imports another one stops when it calls it.
 
     python3 simppc.py App.bin [--files] [--input TEXT] [--keys TEXT]
+        [--steps N]
 
 It prints each DrawString and DrawText, and with --files the files the
 program left. --input fills "App Input" (the C library's stdin) and
@@ -30,14 +32,16 @@ from unicorn import Uc, UcError, UC_ARCH_PPC, UC_MODE_PPC32, \
 from unicorn import ppc_const
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from sim68k import FakeOS, FakeThreads, GMT_DELTA, GESTALT, THREAD_STACK, \
-    key_events  # noqa: E402
+from sim68k import FakeNet, FakeOS, FakeScreen, FakeThreads, GMT_DELTA, GESTALT, \
+    THREAD_STACK, key_events  # noqa: E402
+from fakegl import FakeGL  # noqa: E402
 
 MEM_SIZE = 32 << 20
 CODE_AT, DATA_AT = 0x00400000, 0x00800000
 SCRATCH = 0x00100000                # parameter blocks for the fakes
 STUBS = 0x01E00000                  # one "blr" per import
 TVECS = 0x01F00000                  # one transition vector per import
+MAX_STUBS = 8192                    # imports and FindSymbol's functions
 STACK_TOP = 0x01D00000
 RETURN = STUBS - 4                  # where main returns to
 THREAD_END = STUBS - 8              # where a thread's entry function returns to
@@ -190,12 +194,17 @@ def main():
     ap.add_argument("--input", metavar="TEXT",
                     help="the file \"App Input\" holds TEXT, with \\n as "
                     "the Mac's \\r")
+    ap.add_argument("--steps", type=int, default=20_000_000,
+                    help="the most instructions to run (default 20000000)")
     a = ap.parse_args()
 
     uc = Uc(UC_ARCH_PPC, UC_MODE_PPC32 | UC_MODE_BIG_ENDIAN)
     uc.mem_map(0, MEM_SIZE)
     os_ = PpcOS(uc)
     imports, entry, toc = load(uc, pef_of(a.app))
+    screen = FakeScreen(os_)
+    net = FakeNet(os_)
+    GESTALT[b"qd  "] = 0x0230               # 32-bit Color QuickDraw 1.3
 
     blob = open(a.app, "rb").read(128)
     app = blob[2:2 + min(blob[1], 31)] if blob[:4] != b"Joy!" else b"App"
@@ -217,6 +226,11 @@ def main():
 
     def ret(v):
         uc.reg_write(R["r3"], v & 0xFFFFFFFF)
+
+    def farg(n):
+        """Floating-point argument n (in f1 to f13)."""
+        bits = uc.reg_read(getattr(ppc_const, f"UC_PPC_REG_FPR{1 + n}"))
+        return struct.unpack(">d", struct.pack(">Q", bits & (2**64 - 1)))[0]
 
     def pstring(addr):
         n = uc.mem_read(addr, 1)[0]
@@ -255,6 +269,13 @@ def main():
         err = file_call(0xA000, [(18, ">I", arg(0)), (22, ">h", sarg(1))])
         uc.mem_write(arg(2), bytes(uc.mem_read(SCRATCH + 24, 2)))
         return err
+
+    def create():
+        # Create(name, vRefNum, creator, type): the file and its type.
+        err = file_call(0xA008, [(18, ">I", arg(0)), (22, ">h", sarg(1))])
+        if err == 0:
+            os_.types[os_.name(arg(0))] = struct.pack(">II", arg(3), arg(2))
+        ret(err)
 
     def draw():
         print(f"DrawString({pstring(arg(0))!r})")
@@ -362,8 +383,7 @@ def main():
         "DisposePtr": lambda: memory(0xA01F),
         "SetPtrSize": lambda: memory(0xA020),
         "GetPtrSize": lambda: ret(memory(0xA021)[1]),
-        "Create": lambda: ret(file_call(0xA008, [(18, ">I", arg(0)),
-                                                 (22, ">h", sarg(1))])),
+        "Create": create,
         "FSOpen": lambda: ret(fs_open()),
         "FSClose": lambda: ret(file_call(0xA001, [(24, ">h", sarg(0))])),
         "FSRead": lambda: ret(io(0xA002)),
@@ -398,6 +418,60 @@ def main():
         "ReadLocation": lambda: os_.call("device", 0xA051, arg(0),
                                          0x000C00E4),
     })
+    def get_port():
+        uc.mem_write(arg(0), struct.pack(">I", screen.port))
+
+    def wait_next_event():
+        state["ticks"] += 1
+        ret(screen.wait_event(arg(1), state["ticks"]))
+
+    # What a program that shows its own pictures uses (FakeScreen).
+    for n in ("HideWindow", "SetWTitle", "ForeColor", "BackColor",
+              "GlobalToLocal", "LocalToGlobal", "HiliteMenu"):
+        funcs[n] = lambda: ret(0)
+    funcs.update({
+        "NewWindow": lambda: ret(screen.new_window(arg(0), arg(1), sarg(7))),
+        "NewCWindow": lambda: ret(screen.new_window(arg(0), arg(1), sarg(7))),
+        "DisposeWindow": lambda: screen.dispose(arg(0)),
+        "GetWRefCon": lambda: ret(screen.refcon(arg(0))),
+        "SetPort": lambda: setattr(screen, "port", arg(0)),
+        "GetPort": get_port,
+        "GetMouse": lambda: uc.mem_write(arg(0), bytes(4)),
+        "WaitNextEvent": wait_next_event,
+        "MenuSelect": lambda: ret(0),
+        "GetGrayRgn": lambda: ret(struct.unpack(
+            ">I", bytes(uc.mem_read(0x9EE, 4)))[0]),
+        "CopyBits": lambda: screen.copy_bits(arg(0), arg(1), arg(2), arg(3)),
+        "NewHandle": lambda: ret(memory(0xA122)[0]),
+        "NewHandleClear": lambda: ret(memory(0xA322)[0]),
+        "DisposeHandle": lambda: memory(0xA023),
+    })
+    def open_driver():
+        if pstring(arg(0)) != ".IPP":
+            ret(-35)                            # nsvErr
+            return
+        uc.mem_write(arg(1), struct.pack(">h", FakeNet.IPP))
+        ret(0)
+
+    def control(is_async):
+        pb = arg(0)
+        if os_.r16(pb + 24) != FakeNet.IPP:
+            ret(-28)                            # notOpenErr
+            return
+        ret(net.control(pb, is_async))
+
+    funcs.update({
+        "OpenDriver": open_driver,
+        "PBControlSync": lambda: control(False),
+        "PBControlAsync": lambda: control(True),
+        "EventAvail": lambda: (uc.mem_write(arg(1), bytes(16)), ret(0)),
+        "PPCInit": lambda: ret(0),
+    })
+    for i, n in enumerate(("Open", "Start", "Inform", "Accept", "Reject",
+                           "Write", "Read", "End", "Close")):
+        for kind in ("Sync", "Async"):
+            funcs[f"PPC{n}{kind}"] = (
+                lambda sel=i + 1: ret(net.ppc(sel, arg(0))))
     funcs.update({
         "TickCount": tick_count,
         "Gestalt": gestalt,
@@ -411,6 +485,60 @@ def main():
         "ThreadEndCritical": lambda: ret(0),
     })
 
+    # Apple OpenGL: each imported agl*, gl* and glu* function.
+    gl = FakeGL(uc, arg, sarg, farg, ret, os_.alloc)
+
+    def add_gl(name):
+        if name.startswith(("agl", "gl")) and name not in funcs:
+            funcs[name] = lambda n=name: gl.call(n)
+
+    for name, *_ in imports:
+        add_gl(name)
+
+    # The Code Fragment Manager: GetSharedLibrary connects to a library
+    # that the simulator fakes, and FindSymbol gives a function's
+    # transition vector, adding a stub for a name the program does not
+    # import.
+    libraries = ["InterfaceLib", "ThreadsLib", "MathLib", "OpenGLLibrary",
+                 "OpenGLUtility"]
+
+    def get_shared_library():
+        name = pstring(arg(0))
+        if name not in libraries:
+            ret(-2804)                          # cfragNoLibraryErr
+            return
+        if arg(3):
+            uc.mem_write(arg(3), struct.pack(">I", 0x00C00000 +
+                                             16 * libraries.index(name)))
+        if arg(4):
+            uc.mem_write(arg(4), struct.pack(">I", 0))
+        ret(0)
+
+    def find_symbol():
+        name = pstring(arg(1))
+        names = [n for n, _ in imports]
+        if name in names:
+            i = names.index(name)
+        elif name in funcs or name.startswith(("agl", "gl")):
+            i = len(imports)
+            if i >= MAX_STUBS:
+                ret(-2802)                      # cfragNoSymbolErr
+                return
+            imports.append((name, 2))
+            uc.mem_write(STUBS + 4 * i, struct.pack(">I", 0x4E800020))
+            uc.mem_write(TVECS + 8 * i, struct.pack(">II", STUBS + 4 * i, 0))
+            add_gl(name)
+        else:
+            ret(-2802)                          # cfragNoSymbolErr
+            return
+        uc.mem_write(arg(2), struct.pack(">I", TVECS + 8 * i))
+        if arg(3):
+            uc.mem_write(arg(3), bytes([2]))    # kTVectorCFragSymbol
+        ret(0)
+
+    funcs["GetSharedLibrary"] = get_shared_library
+    funcs["FindSymbol"] = find_symbol
+
     def on_code(uc, pc, size, _):
         if pc == THREAD_END:
             thread_end()
@@ -419,6 +547,7 @@ def main():
             state["done"] = True
             uc.emu_stop()
             return
+        net.pump()
         i = (pc - STUBS) // 4
         name = imports[i][0]
         f = funcs.get(name)
@@ -434,7 +563,7 @@ def main():
         uc.emu_stop()
 
     uc.hook_add(UC_HOOK_CODE, on_code, begin=THREAD_END,
-                end=STUBS + 4 * len(imports))
+                end=STUBS + 4 * MAX_STUBS)
     uc.hook_add(UC_HOOK_INTR, on_intr)
     uc.mem_write(RETURN, struct.pack(">I", 0x4E800020))
     uc.mem_write(THREAD_END, struct.pack(">I", 0x4E800020))
@@ -444,19 +573,25 @@ def main():
     uc.reg_write(R["r2"], toc)
     uc.reg_write(LR, RETURN)
     try:
-        uc.emu_start(BOOT, RETURN, count=20_000_000)
+        uc.emu_start(BOOT, RETURN, count=a.steps)
     except UcError as e:
         sys.exit(f"simppc: {e} at code offset "
                  f"{uc.reg_read(PC) - CODE_AT:#x}")
     if uc.reg_read(PC) == RETURN:
         state["done"] = True            # main returned
-    if not state["done"]:
-        sys.exit("simppc: the program did not finish")
+    # The files, also when the program did not finish: they tell how
+    # far it went.
     if a.files:
         for n, data in sorted(os_.files.items()):
             text = bytes(data).replace(b"\r", b"\n").decode("mac_roman")
             print(f"file {n!r}:\n{text}",
                   end="" if text.endswith("\n") else "\n")
+    gl.summary()
+    if not state["done"]:
+        screen.summary()
+        sys.exit("simppc: the program did not finish")
+    if not screen.summary():
+        sys.exit(1)
     print("simppc: the program ended")
 
 

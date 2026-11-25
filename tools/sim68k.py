@@ -47,7 +47,8 @@ STACK_TOP = MEM_SIZE - 0x100
 IRQ_RETURN = MEM_SIZE - 0x10  # where a completion routine returns to
 THREAD_END = MEM_SIZE - 0x20  # where a thread's entry function returns to
 THREAD_STACK = 24 * 1024      # the Thread Manager's default stack size
-GESTALT = {b"thds": 0x7}      # Thread Manager, specific match, ThreadsLib
+GESTALT = {b"thds": 0x7,      # Thread Manager, specific match, ThreadsLib
+           b"ppc ": 0x7}      # PPC Toolbox, real-time sessions
 # SR first: writing it can switch stacks.
 REGS = [UC_M68K_REG_SR, UC_M68K_REG_PC] + [
     getattr(m68k_const, f"UC_M68K_REG_{r}{i}") for r in "DA" for i in range(8)]
@@ -103,8 +104,20 @@ TRAPS = {
     0xA91E: ("TrackGoAway", 8, 2), 0xA91F: ("SelectWindow", 4, 0),
     0xA9B3: ("SystemClick", 8, 0), 0xA8D8: ("NewRgn", 0, 4),
     0xA8EF: ("ScrollRect", 12, 0), 0xA975: ("TickCount", 0, 4),
+    # What a program that shows its own pictures uses (FakeScreen).
+    0xA916: ("HideWindow", 4, 0), 0xA91A: ("SetWTitle", 8, 0),
+    0xA917: ("GetWRefCon", 4, 4), 0xA862: ("ForeColor", 4, 0),
+    0xA863: ("BackColor", 4, 0), 0xA874: ("GetPort", 4, 0),
+    0xA871: ("GlobalToLocal", 4, 0), 0xA870: ("LocalToGlobal", 4, 0),
+    0xA972: ("GetMouse", 4, 0), 0xA860: ("WaitNextEvent", 14, 2),
+    0xA93D: ("MenuSelect", 4, 4), 0xA938: ("HiliteMenu", 2, 0),
+    0xA8EC: ("CopyBits", 22, 0), 0xA971: ("EventAvail", 6, 2),
 }
-QUIET = {"SystemTask", "EraseRect", "MoveTo", "TickCount"}   # not printed
+QUIET = {"SystemTask", "EraseRect", "MoveTo", "TickCount",   # not printed
+         "HideWindow", "SetWTitle", "GetWRefCon", "ForeColor", "BackColor",
+         "GetPort", "GlobalToLocal", "LocalToGlobal", "GetMouse",
+         "WaitNextEvent", "MenuSelect", "HiliteMenu", "CopyBits",
+         "EventAvail"}
 
 
 def key_events(text):
@@ -179,6 +192,497 @@ class FakeThreads:
         return self.ready.pop(i, None) is not None
 
 
+class FakeScreen:
+    """A 640 by 480 screen with a 20-pixel menu bar, and the Window Manager
+    and QuickDraw calls that a program makes to show its own pictures in
+    plain windows: windows are records with a refCon and a portRect,
+    CopyBits checks its source and destination and counts the pixels,
+    WaitNextEvent gives null events and the mouse stays at 0, 0. Low
+    memory gets MBarHeight (0xBAA) and GrayRgn (0x9EE). The other
+    calls do nothing. summary() tells what the program did."""
+
+    WIDTH, HEIGHT, MBAR = 640, 480, 20
+    RECORD = 170                # sizeof(WindowRecord)
+
+    def __init__(self, fake):
+        self.fake, self.uc = fake, fake.uc
+        self.port = 0
+        self.windows = set()
+        self.made = self.copies = self.pixels = self.waits = 0
+        self.errors = []
+        uc = self.uc
+        uc.mem_write(0xBAA, struct.pack(">h", self.MBAR))
+        rgn = fake.alloc(10)
+        uc.mem_write(rgn, struct.pack(">hhhhh", 10, 0, 0, self.HEIGHT,
+                                      self.WIDTH))
+        handle = fake.alloc(4)
+        uc.mem_write(handle, struct.pack(">I", rgn))
+        uc.mem_write(0x9EE, struct.pack(">I", handle))
+
+    def rect(self, addr):
+        """Gives the Rect at addr as (top, left, bottom, right)."""
+        return struct.unpack(">hhhh", bytes(self.uc.mem_read(addr, 8)))
+
+    def new_window(self, storage, rect, refcon):
+        """NewWindow and NewCWindow: gives the window record."""
+        w = storage or self.fake.alloc(self.RECORD)
+        if not w:
+            return 0
+        t, l, b, r = self.rect(rect)
+        self.uc.mem_write(w, bytes(self.RECORD))
+        self.uc.mem_write(w + 16, struct.pack(">hhhh", 0, 0, b - t, r - l))
+        self.uc.mem_write(w + 152, struct.pack(">i", refcon))
+        self.windows.add(w)
+        self.made += 1
+        return w
+
+    def refcon(self, w):
+        """GetWRefCon."""
+        return struct.unpack(">i", bytes(self.uc.mem_read(w + 152, 4)))[0]
+
+    def dispose(self, w):
+        """DisposeWindow and CloseWindow."""
+        self.windows.discard(w)
+
+    def copy_bits(self, src, dst, src_rect, dst_rect):
+        """CopyBits: the source rectangle must be in the source bitmap or
+        PixMap, and the destination must be a window's port."""
+        uc = self.uc
+        row = struct.unpack(">h", bytes(uc.mem_read(src + 4, 2)))[0]
+        bounds = self.rect(src + 6)
+        sr, dr = self.rect(src_rect), self.rect(dst_rect)
+        if not (bounds[0] <= sr[0] < sr[2] <= bounds[2] and
+                bounds[1] <= sr[1] < sr[3] <= bounds[3]):
+            self.errors.append(f"CopyBits: {sr} is not in {bounds}")
+        depth = 32 if row & 0x8000 else 1
+        width = (row & 0x3FFF) * 8 // depth
+        if width < bounds[3] - bounds[1]:
+            self.errors.append(f"CopyBits: rowBytes {row & 0x3FFF} is short "
+                               f"for {bounds}")
+        if dst - 2 not in self.windows:
+            self.errors.append(f"CopyBits: {dst:#x} is not a window's port")
+        self.copies += 1
+        self.pixels += (sr[2] - sr[0]) * (sr[3] - sr[1])
+
+    def wait_event(self, evp, ticks):
+        """WaitNextEvent and GetNextEvent: a null event."""
+        self.waits += 1
+        self.uc.mem_write(evp, struct.pack(">HIIIH", 0, 0, ticks, 0, 0))
+        return 0
+
+    def summary(self):
+        """Prints what the program did with the screen."""
+        if self.made:
+            print(f"screen: {self.made} windows made, {len(self.windows)} "
+                  f"left, {self.copies} CopyBits of {self.pixels} pixels, "
+                  f"{self.waits} WaitNextEvent")
+        for e in self.errors[:10]:
+            print(f"screen: {e}")
+        return not self.errors
+
+
+class FakeNet:
+    """MacTCP's .IPP driver over the host's sockets, and the PPC Toolbox
+    between the program's own ports. A call that cannot end at once
+    stays in progress (ioResult 1) until pump() ends it; the simulators
+    call pump() at each trap. Stream pointers are numbers that the
+    program does not read."""
+
+    IPP = -60                   # the driver's reference number
+    LOOPBACK = 0x7F000001
+
+    def __init__(self, fake):
+        self.fake, self.uc = fake, fake.uc
+        self.streams = {}       # stream pointer -> dict
+        self.next_stream = 0x00F80000
+        self.listeners = {}     # TCP port -> host listening socket
+        self.pending = []       # (kind, pb, stream) of calls in progress
+        self.ports = {}         # PPC port refNum -> name
+        self.next_port = 1
+        self.sessions = {}      # PPC session -> dict(peer, reads, writes, closed)
+        self.next_sess = 1
+        self.informs = []       # (pb, port) of PPCInform calls in progress
+        self.starts = []        # (pb, port, name) of PPCStart calls in progress
+        self.ppc_io = []        # PPCRead and PPCWrite calls in progress
+
+    # -- memory --------------------------------------------------------
+    def r8(self, a):
+        return self.fake.rd(a, 1)[0]
+
+    def done(self, pb, err):
+        self.fake.w16(pb + 16, err)
+
+    def new_stream(self, **kw):
+        sp = self.next_stream
+        self.next_stream += 16
+        st = {"sock": None, "buf": bytearray(), "eof": False,
+              "port": 0, "listening": False, "udp": None}
+        st.update(kw)
+        self.streams[sp] = st
+        return sp
+
+    # -- the .IPP driver -------------------------------------------------
+    def control(self, pb, is_async):
+        """A PBControl call of the .IPP driver. Gives the result now (1
+        while it is in progress)."""
+        import socket as so
+        f = self.fake
+        code = f.r16(pb + 26)
+        sp = f.r32(pb + 28)
+        st = self.streams.get(sp)
+        err = 0
+        self.done(pb, 1)
+        if code == 15:                          # ipctlGetAddr
+            f.w32(pb + 28, self.LOOPBACK)
+            f.w32(pb + 32, 0xFF000000)
+        elif code == 30:                        # TCPCreate
+            f.w32(pb + 28, self.new_stream())
+        elif code == 20:                        # UDPCreate
+            u = so.socket(so.AF_INET, so.SOCK_DGRAM)
+            port = f.r16(pb + 44) & 0xFFFF
+            try:
+                u.bind(("127.0.0.1", port))
+            except OSError:
+                err = -23017                    # duplicateSocket
+            if not err:
+                u.setblocking(False)
+                sp = self.new_stream(udp=u, rcv=f.r32(pb + 32),
+                                     rcvlen=f.r32(pb + 36))
+                f.w32(pb + 28, sp)
+                f.w16(pb + 44, u.getsockname()[1])
+        elif st is None:
+            err = -23010                        # invalidStreamPtr
+        elif code == 31:                        # TCPPassiveOpen
+            port = f.r16(pb + 46) & 0xFFFF
+            lsock = self.listeners.get(port) if port else None
+            if lsock is None:
+                lsock = so.socket(so.AF_INET, so.SOCK_STREAM)
+                lsock.setsockopt(so.SOL_SOCKET, so.SO_REUSEADDR, 1)
+                try:
+                    lsock.bind(("127.0.0.1", port))
+                except OSError:                 # a port of another program
+                    lsock.close()
+                    lsock, err = None, -23017   # duplicateSocket
+                if lsock:
+                    lsock.listen(8)
+                    lsock.setblocking(False)
+                    port = lsock.getsockname()[1]
+                    self.listeners[port] = lsock
+            if lsock:
+                st["port"], st["listening"] = port, True
+                f.w16(pb + 46, port)
+                self.pending.append(("accept", pb, sp))
+        elif code == 32:                        # TCPActiveOpen
+            host, port = f.r32(pb + 36), f.r16(pb + 40) & 0xFFFF
+            c = so.socket(so.AF_INET, so.SOCK_STREAM)
+            c.setblocking(False)
+            c.connect_ex((so.inet_ntoa(struct.pack(">I", host)), port))
+            st["sock"] = c
+            self.pending.append(("connect", pb, sp))
+        elif code == 34:                        # TCPSend
+            if st["sock"] is None:
+                err = -23008
+            else:
+                data, w = b"", f.r32(pb + 38)
+                while True:
+                    n = f.r16(w) & 0xFFFF
+                    if n == 0:
+                        break
+                    data += f.rd(f.r32(w + 2), n)
+                    w += 6
+                st["sock"].setblocking(True)
+                try:
+                    st["sock"].sendall(data)
+                except OSError:
+                    err = -23012
+                st["sock"].setblocking(False)
+        elif code == 37:                        # TCPRcv
+            self.pending.append(("rcv", pb, sp))
+        elif code == 38:                        # TCPClose
+            if st["sock"] is not None:
+                try:
+                    st["sock"].shutdown(so.SHUT_WR)
+                except OSError:
+                    pass
+        elif code == 39:                        # TCPAbort
+            self.abort(sp)
+        elif code == 40:                        # TCPStatus
+            if st["sock"] is None and not st["listening"]:
+                err = -23008                    # connectionDoesntExist
+            else:
+                self.pull(st)
+                state = 2 if st["sock"] is None else (14 if st["eof"] else 8)
+                f.uc.mem_write(pb + 32, bytes(70))
+                if st["sock"] is not None:
+                    try:
+                        lh, lp = st["sock"].getsockname()
+                        rh, rp = st["sock"].getpeername()
+                        f.w32(pb + 38, struct.unpack(">I", so.inet_aton(rh))[0])
+                        f.w16(pb + 42, rp)
+                        f.w32(pb + 44, struct.unpack(">I", so.inet_aton(lh))[0])
+                        f.w16(pb + 48, lp)
+                    except OSError:
+                        state = 0
+                else:
+                    f.w16(pb + 48, st["port"])
+                f.uc.mem_write(pb + 52, bytes([state]))
+                f.w16(pb + 60, min(len(st["buf"]), 0xFFFF))
+        elif code == 42:                        # TCPRelease
+            self.abort(sp)
+            gone = self.streams.pop(sp, None)
+            # The last stream that waits on a port closes its listener, so
+            # that a connection to the port is then refused.
+            if gone and gone.get("listening"):
+                port = gone["port"]
+                if not any(o.get("listening") and o.get("port") == port
+                           for o in self.streams.values()):
+                    lsock = self.listeners.pop(port, None)
+                    if lsock:
+                        lsock.close()
+        elif code == 21:                        # UDPRead
+            self.pending.append(("udpread", pb, sp))
+        elif code == 22:                        # UDPBfrReturn
+            pass
+        elif code == 23:                        # UDPWrite
+            data, w = b"", f.r32(pb + 40)
+            while True:
+                n = f.r16(w) & 0xFFFF
+                if n == 0:
+                    break
+                data += f.rd(f.r32(w + 2), n)
+                w += 6
+            host, port = f.r32(pb + 34), f.r16(pb + 38) & 0xFFFF
+            st["udp"].sendto(data, (so.inet_ntoa(struct.pack(">I", host)), port))
+        elif code == 24:                        # UDPRelease
+            self.abort(sp)
+            st["udp"].close()
+            self.streams.pop(sp, None)
+        else:
+            err = -50
+        if any(p[1] == pb for p in self.pending):
+            self.pump()
+            if not is_async:
+                while f.r16(pb + 16) > 0:
+                    self.pump(wait=True)
+            return f.r16(pb + 16)
+        self.done(pb, err)
+        return err
+
+    def abort(self, sp):
+        """Ends a stream's calls in progress and its connection."""
+        st = self.streams.get(sp)
+        for p in [p for p in self.pending if p[2] == sp]:
+            self.pending.remove(p)
+            self.done(p[1], -23012)             # connectionTerminated
+        if st and st["sock"] is not None:
+            st["sock"].close()
+            st["sock"] = None
+
+    def pull(self, st):
+        """Takes what the host socket has into the stream's buffer."""
+        s = st["sock"]
+        if s is None or st["eof"]:
+            return
+        while True:
+            try:
+                d = s.recv(65536)
+            except BlockingIOError:
+                return
+            except OSError:
+                st["eof"] = True
+                return
+            if not d:
+                st["eof"] = True
+                return
+            st["buf"] += d
+
+    def pump(self, wait=False):
+        """Ends the calls in progress that can end."""
+        import select
+        import socket as so
+        f = self.fake
+        if wait:
+            socks = [st["sock"] for st in self.streams.values()
+                     if st["sock"] is not None]
+            socks += [st["udp"] for st in self.streams.values() if st["udp"]]
+            socks += list(self.listeners.values())
+            select.select(socks, [], [], 0.05)
+        for kind, pb, sp in list(self.pending):
+            st = self.streams.get(sp)
+            fin = None
+            if kind == "accept":
+                lsock = self.listeners.get(st["port"])
+                try:
+                    c, (h, p) = lsock.accept()
+                except BlockingIOError:
+                    continue
+                c.setblocking(False)
+                st["sock"], st["listening"] = c, False
+                f.w32(pb + 36, struct.unpack(">I", so.inet_aton(h))[0])
+                f.w16(pb + 40, p)
+                f.w32(pb + 42, self.LOOPBACK)
+                f.w16(pb + 46, c.getsockname()[1])
+                fin = 0
+            elif kind == "connect":
+                r = select.select([], [st["sock"]], [], 0)[1]
+                if not r:
+                    continue
+                e = st["sock"].getsockopt(so.SOL_SOCKET, so.SO_ERROR)
+                if e:
+                    st["sock"].close()
+                    st["sock"] = None
+                    fin = -23015                # openFailed
+                else:
+                    f.w32(pb + 42, self.LOOPBACK)
+                    f.w16(pb + 46, st["sock"].getsockname()[1])
+                    fin = 0
+            elif kind == "rcv":
+                self.pull(st)
+                if st["buf"]:
+                    n = min(len(st["buf"]), f.r16(pb + 40) & 0xFFFF)
+                    f.uc.mem_write(f.r32(pb + 36), bytes(st["buf"][:n]))
+                    del st["buf"][:n]
+                    f.w16(pb + 40, n)
+                    fin = 0
+                elif st["eof"]:
+                    fin = -23005                # connectionClosing
+                else:
+                    continue
+            elif kind == "udpread":
+                try:
+                    d, (h, p) = st["udp"].recvfrom(65536)
+                except BlockingIOError:
+                    continue
+                d = d[:st["rcvlen"]]
+                f.uc.mem_write(st["rcv"], d)
+                f.w32(pb + 34, struct.unpack(">I", so.inet_aton(h))[0])
+                f.w16(pb + 38, p)
+                f.w32(pb + 40, st["rcv"])
+                f.w16(pb + 44, len(d))
+                fin = 0
+            self.pending.remove((kind, pb, sp))
+            self.done(pb, fin)
+        self.ppc_pump()
+
+    # -- the PPC Toolbox -------------------------------------------------
+    def port_name(self, rec):
+        """The name of a PPCPortRec (its name and type strings)."""
+        f = self.fake
+        name = f.rd(rec + 3, self.r8(rec + 2))
+        return name
+
+    def ppc(self, sel, pb):
+        """A PPC Toolbox call (selector sel). Gives the result now."""
+        f = self.fake
+        self.done(pb, 1)
+        err = 0
+        if sel == 0:                            # PPCInit
+            return 0
+        if sel == 1:                            # PPCOpen
+            name = self.port_name(f.r32(pb + 46))
+            if name in self.ports.values():
+                err = -910                      # portNameExistsErr
+            else:
+                ref = self.next_port
+                self.next_port += 1
+                self.ports[ref] = name
+                f.w16(pb + 38, ref)
+        elif sel == 2:                          # PPCStart
+            name = self.port_name(f.r32(pb + 46))
+            if name not in self.ports.values():
+                err = -903                      # noPortErr
+            else:
+                self.starts.append((pb, f.r16(pb + 38), name))
+        elif sel == 3:                          # PPCInform
+            self.informs.append((pb, f.r16(pb + 38)))
+        elif sel in (6, 7):                     # PPCWrite, PPCRead
+            sess = f.r32(pb + 40)
+            if sess not in self.sessions or self.sessions[sess]["closed"]:
+                err = -917                      # sessClosedErr
+            else:
+                self.ppc_io.append((sel, pb, sess))
+        elif sel == 8:                          # PPCEnd
+            self.end_session(f.r32(pb + 40))
+        elif sel == 9:                          # PPCClose
+            ref = f.r16(pb + 38)
+            self.ports.pop(ref, None)
+            for p in [p for p in self.informs if p[1] == ref]:
+                self.informs.remove(p)
+                self.done(p[0], -916)           # portClosedErr
+            for s, d in list(self.sessions.items()):
+                if d["port"] == ref:
+                    self.end_session(s)
+        else:
+            err = -50
+        if sel in (2, 3, 6, 7) and not err:
+            # Start, Inform, Write and Read wait for the other end.
+            self.ppc_pump()
+            return 0
+        self.done(pb, err)
+        return err
+
+    def end_session(self, sess):
+        """Ends a session and its other end."""
+        d = self.sessions.get(sess)
+        if not d:
+            return
+        for s in (sess, d["peer"]):
+            if s in self.sessions:
+                self.sessions[s]["closed"] = True
+        for p in [p for p in self.ppc_io if p[2] in (sess, d["peer"])]:
+            self.ppc_io.remove(p)
+            self.done(p[1], -917)
+
+    def ppc_pump(self):
+        """Ends the PPC calls that can end: a start meets an inform, and a
+        write meets a read of the other end."""
+        f = self.fake
+        for start in list(self.starts):
+            pb, port, name = start
+            target = next((r for r, n in self.ports.items() if n == name),
+                          None)
+            inf = next((i for i in self.informs if i[1] == target), None)
+            if inf is None:
+                continue
+            a, b = self.next_sess, self.next_sess + 1
+            self.next_sess += 2
+            self.sessions[a] = {"peer": b, "closed": False, "port": port}
+            self.sessions[b] = {"peer": a, "closed": False, "port": target}
+            self.starts.remove(start)
+            self.informs.remove(inf)
+            f.w32(pb + 40, a)
+            ipb = inf[0]
+            f.w32(ipb + 40, b)
+            rec = f.r32(ipb + 46)
+            if rec:
+                n = self.ports.get(port, b"")
+                f.uc.mem_write(rec + 2, bytes([len(n)]) + n)
+            self.done(pb, 0)
+            self.done(ipb, 0)
+        for w in [p for p in self.ppc_io if p[0] == 6]:
+            _, wpb, sess = w
+            peer = self.sessions[sess]["peer"]
+            r = next((p for p in self.ppc_io if p[0] == 7 and p[2] == peer),
+                     None)
+            if r is None:
+                continue
+            rpb = r[1]
+            total, done = f.r32(wpb + 44), f.r32(wpb + 48)
+            room = f.r32(rpb + 44)
+            n = min(total - done, room)
+            f.uc.mem_write(f.r32(rpb + 52),
+                           f.rd(f.r32(wpb + 52) + done, n))
+            f.w32(rpb + 48, n)
+            f.uc.mem_write(rpb + 56, bytes([1 if done + n < total else 0]))
+            f.w32(rpb + 66, f.r32(wpb + 66))    # blockType
+            f.w32(wpb + 48, done + n)
+            self.ppc_io.remove(r)
+            self.done(rpb, 0)
+            if done + n >= total:
+                self.ppc_io.remove(w)
+                self.done(wpb, 0)
+
+
 class FakeOS:
     """The Memory Manager's pointer calls and the File Manager's basic
     parameter block calls, on files kept in memory in one folder."""
@@ -214,7 +718,7 @@ class FakeOS:
         return bytes(self.uc.mem_read(a, n))
 
     def w16(self, a, v):
-        self.uc.mem_write(a, struct.pack(">h", v))
+        self.uc.mem_write(a, struct.pack(">H", v & 0xFFFF))
 
     def w32(self, a, v):
         self.uc.mem_write(a, struct.pack(">I", v & 0xFFFFFFFF))
@@ -258,6 +762,18 @@ class FakeOS:
                 self.blocks[p] = d0
                 uc.mem_write(p, bytes(d0))      # NewPtrClear or not
                 self.set_a0(p)
+        elif op == 0xA122:                      # NewHandle, NewHandleClear
+            p = self.alloc(max(d0, 4))
+            h = self.alloc(4) if p else 0
+            if not h:
+                self.set_a0(0)
+                err = -108
+            else:
+                uc.mem_write(p, bytes(d0))
+                uc.mem_write(h, struct.pack(">I", p))
+                self.set_a0(h)
+        elif op == 0xA023:                      # DisposeHandle
+            pass
         elif op == 0xA01F:                      # DisposePtr
             if self.blocks.pop(a0, None) is None:
                 err = -111
@@ -430,6 +946,7 @@ class FakeOS:
                 if n in self.files:
                     locked = n in self.__dict__.get("locked", ())
                     uc.mem_write(pb + 30, b"\1" if locked else b"\0")
+                    uc.mem_write(pb + 32, self.types.get(n, bytes(8)))
                     self.w32(pb + 48, self.file_id(n))
                     self.w32(pb + 54, len(self.files[n]))
                     self.w32(pb + 58, (len(self.files[n]) + 511) & ~511)
@@ -594,6 +1111,13 @@ class FakeOS:
                 err = -43
             else:
                 self.uc.mem_write(pb + 32, bytes(48))
+                self.uc.mem_write(pb + 32, self.types.get(n, bytes(8)))
+        elif op == 0xA00D:                      # SetFileInfo: the type
+            n = self.name(self.r32(pb + 18))
+            if n not in self.files:
+                err = -43
+            else:
+                self.types[n] = self.rd(pb + 32, 8)
         elif op in (0xA041, 0xA042):            # SetFilLock, RstFilLock
             n = self.name(self.r32(pb + 18))
             locked = self.__dict__.setdefault("locked", set())
@@ -603,13 +1127,14 @@ class FakeOS:
                 locked.add(n)
             else:
                 locked.discard(n)
-        # SetFileInfo, FlushVol, SetVol and FlushFile do nothing.
+        # FlushVol, SetVol and FlushFile do nothing.
         self.w16(pb + 16, err)
         self.set_d0(err)
         return True
 
 
 def main():
+    global MEM_SIZE, STACK_TOP, IRQ_RETURN, THREAD_END, HEAP_AT, HEAP_END
     ap = argparse.ArgumentParser()
     ap.add_argument("app")
     ap.add_argument("--clicks", type=int, default=3,
@@ -631,10 +1156,24 @@ def main():
     ap.add_argument("--exit-anywhere", action="store_true",
                     help="do not check the stack at ExitToShell (exit() "
                          "calls it from inside the program)")
+    ap.add_argument("--mem", type=int, default=4, metavar="MB",
+                    help="the Mac's memory (default 4 MB); the heap is "
+                    "what the code and the stack leave")
+    ap.add_argument("--steps", type=int, default=2_000_000,
+                    help="the most instructions to run (default 2000000)")
     a = ap.parse_args()
 
     code = resources(read_macbinary(a.app), b"CODE")
     code0, code1 = code[0], code[1]
+    # A larger Mac: the stack and the return addresses move to the top,
+    # and the heap starts after the code.
+    if a.mem != 4:
+        MEM_SIZE = a.mem << 20
+        STACK_TOP = MEM_SIZE - 0x100
+        IRQ_RETURN = MEM_SIZE - 0x10
+        THREAD_END = MEM_SIZE - 0x20
+        HEAP_AT = max(0x200000, (CODE_AT + len(code1) + 0xFFFF) & ~0xFFFF)
+        HEAP_END = MEM_SIZE - 0x20000
     above, below, jtsize, jtoff = struct.unpack_from(">IIII", code0, 0)
     entry = struct.unpack_from(">H", code0, 16)[0]
 
@@ -648,6 +1187,10 @@ def main():
     state = {"clicks": a.clicks, "done": False, "log": [], "port": None,
              "keys": key_events(a.keys)}
     fake = FakeOS(uc) if a.os else None
+    screen = FakeScreen(fake) if fake else None
+    net = FakeNet(fake) if fake else None
+    if fake and a.cpu != "68000":
+        GESTALT[b"qd  "] = 0x0230           # 32-bit Color QuickDraw 1.3
     # CurApName (0x910): the application's name, from the MacBinary header.
     mb = open(a.app, "rb").read(128)
     uc.mem_write(0x910, mb[1:2 + min(mb[1], 31)])
@@ -761,6 +1304,22 @@ def main():
                 uc.reg_write(UC_M68K_REG_D0, 0)
                 uc.reg_write(UC_M68K_REG_PC, done)
                 return
+        if net and word & 0x0800 == 0:
+            net.pump()
+            pb = uc.reg_read(UC_M68K_REG_A0)
+            res = None
+            if word & 0xF9FF == 0xA000 and fake.name(fake.r32(pb + 18)) == ".IPP":
+                fake.w16(pb + 24, FakeNet.IPP)  # OpenDriver(".IPP")
+                fake.w16(pb + 16, 0)
+                res = 0
+            elif word & 0xF9FF == 0xA004 and fake.r16(pb + 24) == FakeNet.IPP:
+                res = net.control(pb, word & 0x0400)
+            elif word & 0xFBFF == 0xA0DD:       # _PPC
+                res = net.ppc(uc.reg_read(UC_M68K_REG_D0) & 0xFF, pb)
+            if res is not None:
+                uc.reg_write(UC_M68K_REG_D0, res & 0xFFFFFFFF)
+                uc.reg_write(UC_M68K_REG_PC, pc + 2)
+                return
         if fake and word & 0x0800 == 0 and (fake.memory(word) or
                                             fake.device(word) or
                                             fake.hfs(word) or
@@ -830,9 +1389,37 @@ def main():
             print(f"{name}({desc})")
         if nargs:
             sp += nargs
-        if name == "NewWindow" or name == "NewCWindow":
+        def addr(off):
+            return struct.unpack_from(">I", args, off)[0]
+
+        if (name == "NewWindow" or name == "NewCWindow") and screen:
+            w = screen.new_window(addr(22), addr(18),
+                                  struct.unpack_from(">i", args, 0)[0])
+            uc.mem_write(sp, struct.pack(">I", w))
+        elif name == "NewWindow" or name == "NewCWindow":
             struct.pack_into(">I", buf := bytearray(4), 0, 0x30000)
             uc.mem_write(sp, bytes(buf))
+        elif name == "DisposeWindow" and screen:
+            screen.dispose(addr(0))
+        elif name == "GetWRefCon" and screen:
+            uc.mem_write(sp, struct.pack(">i", screen.refcon(addr(0))))
+        elif name == "SetPort" and screen:
+            screen.port = addr(0)
+        elif name == "GetPort" and screen:
+            uc.mem_write(addr(0), struct.pack(">I", screen.port))
+        elif name == "GetMouse":
+            uc.mem_write(addr(0), bytes(4))
+        elif name == "WaitNextEvent" and screen:
+            state["ticks"] += 1
+            uc.mem_write(sp, bytes([screen.wait_event(addr(8),
+                                                      state["ticks"]), 0]))
+        elif name == "EventAvail":
+            uc.mem_write(addr(0), bytes(16))
+            uc.mem_write(sp, bytes(2))
+        elif name == "MenuSelect":
+            uc.mem_write(sp, bytes(4))
+        elif name == "CopyBits" and screen:
+            screen.copy_bits(addr(18), addr(14), addr(10), addr(6))
         elif name == "GetNextEvent":
             ch, mods = next(state["keys"])
             ev = struct.pack(">HIIIH", 3, ch, 0, 0, mods)   # keyDown
@@ -865,17 +1452,23 @@ def main():
     uc.hook_add(UC_HOOK_CODE, on_code)
     uc.hook_add(UC_HOOK_INTR, on_intr)
     try:
-        uc.emu_start(seg_start + entry, MEM_SIZE, count=2_000_000)
+        uc.emu_start(seg_start + entry, MEM_SIZE, count=a.steps)
     except UcError as e:
         pc = uc.reg_read(UC_M68K_REG_PC)
         sys.exit(f"sim68k: {e} at {pc:#x} (segment offset "
                  f"{pc - seg_start:#x})")
-    if not state["done"]:
-        sys.exit("sim68k: the program did not reach ExitToShell")
+    # The files, also when the program did not finish: they tell how
+    # far it went.
     if fake and a.files:
         for n, data in sorted(fake.files.items()):
             text = bytes(data).replace(b"\r", b"\n").decode("mac_roman")
             print(f"file {n!r}:\n{text}", end="" if text.endswith("\n") else "\n")
+    if not state["done"]:
+        if screen:
+            screen.summary()
+        sys.exit("sim68k: the program did not reach ExitToShell")
+    if screen and not screen.summary():
+        sys.exit(1)
     balance = state["sp"] - STACK_TOP
     print(f"sim68k: reached ExitToShell; stack {'balanced' if balance == 0 else f'off by {balance}'}")
     sys.exit(0 if balance == 0 or a.exit_anywhere else 1)

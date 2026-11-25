@@ -67,7 +67,7 @@ static void fill_stat(const CInfoPBRec *pb, struct stat *st) {
     cr = pb->dirInfo.ioDrCrDat;
     md = pb->dirInfo.ioDrMdDat;
   } else {
-    st->st_mode = S_IFREG |
+    st->st_mode = (pb->hFileInfo.ioFlFndrInfo.fdType == 'fifo' ? S_IFIFO : S_IFREG) |
                   ((pb->hFileInfo.ioFlAttrib & ATTR_LOCKED) ? 0444 : 0644);
     st->st_ino = (ino_t)pb->hFileInfo.ioDirID;
     st->st_size = pb->hFileInfo.ioFlLgLen;
@@ -113,6 +113,12 @@ int fstat(int fd, struct stat *st) {
   if (fd >= 0 && fd < 3) {
     memset(st, 0, sizeof *st);
     st->st_mode = S_IFCHR | 0666;
+    return 0;
+  }
+  if (__mac_fd_ops(fd)) {
+    memset(st, 0, sizeof *st);
+    st->st_mode = __mac_fd_ops(fd)->mode | 0600;
+    st->st_blksize = 512;
     return 0;
   }
   ref = __mac_fd_ref(fd);

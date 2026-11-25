@@ -370,9 +370,16 @@ links both archives before `libmacrt.a`, and starts the program at
   `getcwd` gives `/Volume/folder`.
 - other POSIX functions for programs from Unix: `dup`, `fcntl`,
   `pread`, `pwrite`, `fsync`, `access`, `chmod`, `chdir`, `realpath`,
-  `mmap` (over the heap), `shm_open`, `poll`, `uname`, `dlopen` and
-  more. Functions for pipes, processes and terminals fail with the
-  usual error. See docs/posix.md.
+  `mmap` (over the heap), `shm_open`, `poll`, `select`, `pipe`,
+  `uname`, `dlopen` and more. Functions for processes and terminals
+  fail with the usual error. See docs/posix.md.
+- BSD sockets: TCP and UDP over MacTCP (or Open Transport's MacTCP
+  driver), names from the MacTCP resolver (`getaddrinfo`,
+  `gethostbyname`), and `AF_UNIX` sockets and named pipes (`mkfifo`)
+  between programs over the PPC Toolbox. See docs/network.md.
+- OpenGL on PowerPC: `GL/gl.h` (OpenGL 1.2 and Apple's extensions),
+  `GL/glu.h` and `AGL/agl.h`, imported weakly from Apple's
+  `OpenGLLibrary` and `OpenGLUtility`. See docs/opengl.md.
 - POSIX threads (`pthread.h`) over the Thread Manager: cooperative
   threads, mutexes, condition variables, keys and `pthread_once`, and
   `sched_yield`, `nanosleep`, `usleep` and `clock_gettime`. The C++
@@ -447,9 +454,10 @@ the C library. `runtime/build-libstdcxx.sh` builds the library, and
   relocations, and gives each imported InterfaceLib function a fake
   built on `sim68k.py`'s (the Memory Manager, the File Manager,
   `ReadLocation`, `DrawString`, `ExitToShell`, the console window's
-  calls, with `--keys` too, and ThreadsLib). A program that calls
+  calls, with `--keys` too, ThreadsLib, and a fake OpenGL in
+  `tools/fakegl.py`). A program that calls
   any other import stops there. `tests/run.sh` runs the runtime, glue,
-  C library and thread tests in it.
+  C library, thread, socket and OpenGL tests in it.
 - `tools/mame/` boots Apple's System disks in MAME (Systems 0.1 to 7.1)
   with an application in place of the Finder: `mkroms.py` makes ROM sets
   from dumps you own, `matrix.py App.bin OUTDIR` boots every System and
@@ -481,7 +489,7 @@ definition gives one, checks the argument-block calls against the ROM,
 and links every example into a fat application. With `LLVM_SRC` set it
 also builds the runtime library and runs its test, and with
 `PICOLIBC_SRC` set as well it builds the C library and runs its tests
-(`tests/libc.c`, `tests/console.c` and `tests/thread.c`).
+(`tests/libc.c`, `tests/console.c`, `tests/thread.c` and `tests/net.c`).
 With `GCC_SRC` set too, it builds the C++ library and runs
 `tests/cxx.cpp`.
 
@@ -504,6 +512,8 @@ and also fails when `include/` or `docs/coverage.md` differ from what
   run only in `tools/sim68k.py` and `tools/simppc.py`.
 - Threads on a real Thread Manager: `tests/thread.c` has run only on
   the simulators' fake Thread Manager.
+- Sockets on a real network: `tests/net.c` has run only on the
+  simulators' fake MacTCP and PPC Toolbox.
 - Shared libraries in the linkers.
 - Programs over 32 KB of 68k code are one CODE segment that large.
   `tests/cxx.cpp` (415 KB of 68k code) has run on System 7.6.1, but no

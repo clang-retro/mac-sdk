@@ -21,17 +21,25 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/ioctl.h>
+#include <sys/select.h>
 #include <sys/stat.h>
 #include <sys/utsname.h>
 #include <sys/wait.h>
 #include <termios.h>
 #include <time.h>
 #include <unistd.h>
+#include <Events.h>
 #include <Gestalt.h>
 #include "macos.h"
 
 /* The ioctl request for the number of bytes that a read can get, as on
    Linux. */
+#ifndef FIONBIO
+#define FIONBIO 0x5421
+#endif
+#ifndef SIOCATMARK
+#define SIOCATMARK 0x8905
+#endif
 #ifndef FIONREAD
 #define FIONREAD 0x541B
 #endif
@@ -213,37 +221,118 @@ int flock(int fd, int op) {
   return 0;
 }
 
-/* Tells which descriptors are ready. Files and the console are always
-   ready: a read of the console waits for a line. When none is ready,
-   poll waits for timeout milliseconds (other threads run) and gives 0. */
-int poll(struct pollfd *fds, nfds_t n, int timeout) {
-  nfds_t i;
-  int ready = 0;
-  for (i = 0; i < n; i++) {
-    int fd = fds[i].fd;
-    fds[i].revents = 0;
-    if (fd < 0)
-      continue;
-    if (fd < 3 || __mac_fd_ref(fd))
-      fds[i].revents = fds[i].events & (POLLIN | POLLOUT);
-    else
-      fds[i].revents = POLLNVAL;
-    if (fds[i].revents)
-      ready++;
-  }
-  if (!ready && timeout > 0) {
-    struct timespec ts;
-    ts.tv_sec = timeout / 1000;
-    ts.tv_nsec = (timeout % 1000) * 1000000L;
-    nanosleep(&ts, NULL);
-  }
-  return ready;
+/* Gives the poll events of one descriptor that are true now. Files and
+   the console are always ready: a read of the console waits for a
+   line. Pipes and sockets tell for themselves. */
+static short ready_events(int fd, short events) {
+  const struct __mac_fd_ops *ops;
+  if (fd < 3 || __mac_fd_ref(fd))
+    return events & (POLLIN | POLLOUT);
+  ops = __mac_fd_ops(fd);
+  if (!ops)
+    return POLLNVAL;
+  return ops->ready(__mac_fd_obj(fd, ops, NULL)) &
+         (events | POLLHUP | POLLERR);
 }
 
-/* Does the ioctl request FIONREAD (the bytes after the mark) for an open
-   file. There are no devices, so the other requests fail with ENOTTY. */
+/* Tells which descriptors are ready. It waits up to timeout
+   milliseconds (for ever when it is negative) for one to become ready,
+   and lets the other threads and programs run meanwhile. */
+int poll(struct pollfd *fds, nfds_t n, int timeout) {
+  unsigned long end = TickCount() + (timeout > 0 ? ((unsigned long)timeout * 60 + 999) / 1000 : 0);
+  for (;;) {
+    nfds_t i;
+    int ready = 0;
+    for (i = 0; i < n; i++) {
+      fds[i].revents = fds[i].fd < 0 ? 0 : ready_events(fds[i].fd, fds[i].events);
+      if (fds[i].revents)
+        ready++;
+    }
+    if (ready || timeout == 0 || (timeout > 0 && (long)(end - TickCount()) <= 0))
+      return ready;
+    __mac_wait();
+  }
+}
+
+/* Tells which descriptors are ready to read, ready to write or have an
+   error, over poll. */
+int select(int n, fd_set *rd, fd_set *wr, fd_set *ex, struct timeval *tv) {
+  struct pollfd p[FD_SETSIZE];
+  int count = 0, i, got, timeout;
+  if (n < 0 || n > FD_SETSIZE) {
+    errno = EINVAL;
+    return -1;
+  }
+  for (i = 0; i < n; i++) {
+    short ev = 0;
+    if (rd && FD_ISSET(i, rd))
+      ev |= POLLIN;
+    if (wr && FD_ISSET(i, wr))
+      ev |= POLLOUT;
+    if (ex && FD_ISSET(i, ex))
+      ev |= POLLPRI;
+    if (ev) {
+      p[count].fd = i;
+      p[count].events = ev;
+      count++;
+    }
+  }
+  timeout = tv ? (int)(tv->tv_sec * 1000 + tv->tv_usec / 1000) : -1;
+  got = poll(p, (nfds_t)count, timeout);
+  if (got < 0)
+    return -1;
+  if (rd)
+    FD_ZERO(rd);
+  if (wr)
+    FD_ZERO(wr);
+  if (ex)
+    FD_ZERO(ex);
+  got = 0;
+  for (i = 0; i < count; i++) {
+    if (p[i].revents & POLLNVAL) {
+      errno = EBADF;
+      return -1;
+    }
+    if (rd && (p[i].revents & (POLLIN | POLLHUP | POLLERR)) && (p[i].events & POLLIN)) {
+      FD_SET(p[i].fd, rd);
+      got++;
+    }
+    if (wr && (p[i].revents & (POLLOUT | POLLERR)) && (p[i].events & POLLOUT)) {
+      FD_SET(p[i].fd, wr);
+      got++;
+    }
+    if (ex && (p[i].revents & POLLPRI)) {
+      FD_SET(p[i].fd, ex);
+      got++;
+    }
+  }
+  return got;
+}
+
+/* Does the ioctl request FIONREAD (the bytes after the mark of an open
+   file, or the bytes a pipe or a socket has to read), and FIONBIO and
+   SIOCATMARK for pipes and sockets. There are no devices, so the other
+   requests fail with ENOTTY. */
 int ioctl(int fd, unsigned long op, void *param) {
   short ref = __mac_fd_ref(fd);
+  const struct __mac_fd_ops *ops = __mac_fd_ops(fd);
+  if (ops) {
+    void *obj = __mac_fd_obj(fd, ops, NULL);
+    if (op == FIONREAD) {
+      *(int *)param = (int)ops->nread(obj);
+      return 0;
+    }
+    if (op == FIONBIO) {
+      int fl = fcntl(fd, F_GETFL);
+      return fcntl(fd, F_SETFL, *(int *)param ? fl | O_NONBLOCK : fl & ~O_NONBLOCK);
+    }
+    if (op == SIOCATMARK) {
+      *(int *)param = 0;        /* MacTCP gives no urgent data */
+      return 0;
+    }
+    errno = ENOTTY;
+    return -1;
+  }
   if (fd >= 3 && !ref) {
     errno = EBADF;
     return -1;
@@ -419,9 +508,11 @@ pid_t fork(void) {
   return -1;
 }
 
-/* There are no pipes between programs: fails with ENOSYS. */
-int pipe(int fds[2]) {
-  (void)fds;
+/* A program cannot run another in its place: fails with ENOSYS. */
+int execve(const char *path, char *const argv[], char *const envp[]) {
+  (void)path;
+  (void)argv;
+  (void)envp;
   errno = ENOSYS;
   return -1;
 }
@@ -540,4 +631,28 @@ int dladdr(const void *addr, Dl_info *info) {
   (void)addr;
   (void)info;
   return 0;
+}
+
+/* Makes a new folder from a template that ends in "XXXXXX", which it
+   changes to the name it used. Gives the template, or NULL with errno
+   set. picolibc has mkstemp but not this. */
+char *mkdtemp(char *tmpl) {
+  static const char digits[] = "abcdefghijklmnopqrstuvwxyz0123456789";
+  size_t n = strlen(tmpl);
+  if (n < 6 || strcmp(tmpl + n - 6, "XXXXXX") != 0) {
+    errno = EINVAL;
+    return NULL;
+  }
+  unsigned long seed = (unsigned long)time(NULL) ^ (unsigned long)(size_t)tmpl;
+  for (int tries = 0; tries < 100; tries++) {
+    unsigned long v = seed + (unsigned long)tries * 7919UL;
+    for (int i = 0; i < 6; i++) {
+      tmpl[n - 6 + i] = digits[v % 36];
+      v /= 36;
+    }
+    if (mkdir(tmpl, 0700) == 0) return tmpl;
+    if (errno != EEXIST) return NULL;
+  }
+  errno = EEXIST;
+  return NULL;
 }

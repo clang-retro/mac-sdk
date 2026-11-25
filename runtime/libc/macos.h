@@ -46,4 +46,41 @@ void __mac_console_close(void);
 /* Console input (stdin): up to n bytes, 0 at end of file, or -1. */
 long __mac_console_read(void *buf, size_t n);
 
+/* A descriptor that is not a file: a pipe or a socket. The functions
+   get the object that __mac_fd_new was given. read and write give the
+   count, or -1 with errno set; with nonblock set they give -1 with
+   EAGAIN instead of waiting. ready gives the poll events (POLLIN,
+   POLLOUT, POLLHUP, POLLERR) that are true now. close is called when the
+   last descriptor of the object closes. */
+struct __mac_fd_ops {
+  long (*read)(void *obj, void *buf, size_t n, int nonblock);
+  long (*write)(void *obj, const void *buf, size_t n, int nonblock);
+  short (*ready)(void *obj);
+  int (*close)(void *obj);
+  long (*nread)(void *obj);    /* the bytes a read gives now (FIONREAD) */
+  unsigned mode;               /* S_IFIFO or S_IFSOCK, for fstat */
+};
+
+/* Gives a new descriptor (3 or more) for obj, with the open() flags
+   (O_RDONLY, O_WRONLY or O_RDWR, and O_NONBLOCK), or -1 with errno
+   set. */
+int __mac_fd_new(const struct __mac_fd_ops *ops, void *obj, int flags);
+
+/* The object of descriptor fd when its functions are ops (NULL for
+   any), or NULL with errno set: EBADF when fd is not open, ENOTSOCK
+   when it has other functions. *flags gets its open() flags when flags
+   is not NULL. */
+void *__mac_fd_obj(int fd, const struct __mac_fd_ops *ops, int *flags);
+
+/* The functions of descriptor fd, or NULL when it is a file, the
+   console or not open. */
+const struct __mac_fd_ops *__mac_fd_ops(int fd);
+
+/* Opens a named pipe (unix.c). */
+int __mac_fifo_open(const char *path, int flags);
+
+/* Lets the other threads and the other programs run for a moment: the
+   way to wait for a pipe, a socket or a driver. */
+void __mac_wait(void);
+
 #endif

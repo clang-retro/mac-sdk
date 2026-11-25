@@ -1,7 +1,7 @@
 /* File descriptors over the File Manager: open, close, read, write,
  * lseek, pread, pwrite, dup, dup2, fcntl and fsync. Descriptors 0, 1 and 2 are the console (stdin reads from
  * input.c, stdout and stderr write to console.c); the others are open
- * data forks.
+ * data forks, pipes or sockets (see __mac_fd_new).
  *
  * Copyright (C) clang-retro contributors.
  * SPDX-License-Identifier: AGPL-3.0-only */
@@ -9,6 +9,7 @@
 #include <fcntl.h>
 #include <stdarg.h>
 #include <unistd.h>
+#include <sys/uio.h>
 #include "macos.h"
 
 /* The file type and creator that open(..., O_CREAT) gives a new file, as
@@ -23,6 +24,8 @@ static struct {
   short ref;
   int flags;            /* the open() flags */
   char used;            /* 0 when the slot is free */
+  const struct __mac_fd_ops *ops; /* a pipe's or a socket's, or NULL */
+  void *obj;            /* the pipe or the socket */
 } fds[NFD];
 
 /* Tells if fd is not an open file, and sets errno to EBADF if so. */
@@ -49,6 +52,14 @@ int open(const char *path, int flags, ...) {
 
   if (__mac_path(path, name) < 0)
     return -1;
+  {
+    /* A named pipe (mkfifo) is a file of type 'fifo' (unix.c). */
+    CInfoPBRec ci;
+    Str255 ciname;
+    if (__mac_cat_info(path, &ci, ciname) == noErr && !(ci.hFileInfo.ioFlAttrib & 0x10) &&
+        ci.hFileInfo.ioFlFndrInfo.fdType == 'fifo')
+      return __mac_fifo_open(path, flags);
+  }
   for (fd = 3; fd < NFD && fds[fd].used; fd++)
     ;
   if (fd == NFD) {
@@ -87,27 +98,83 @@ int open(const char *path, int flags, ...) {
   return fd;
 }
 
-/* Tells if a descriptor other than fd has the same open file (a copy
-   from dup). */
+/* Tells if a descriptor other than fd has the same open file, pipe or
+   socket (a copy from dup). */
 static int shared(int fd) {
   int i;
   for (i = 3; i < NFD; i++)
-    if (i != fd && fds[i].used && fds[i].ref == fds[fd].ref)
+    if (i != fd && fds[i].used && fds[i].ops == fds[fd].ops &&
+        (fds[i].ops ? fds[i].obj == fds[fd].obj : fds[i].ref == fds[fd].ref))
       return 1;
   return 0;
 }
 
-/* Closes fd. The file closes when its last descriptor closes. */
+/* Closes fd. The file, pipe or socket closes when its last descriptor
+   closes. */
 int close(int fd) {
   OSErr err = noErr;
+  int r = 0;
   if (fd >= 0 && fd < 3)
     return 0;
   if (bad(fd))
     return -1;
+  fds[fd].used = 0;
+  if (fds[fd].ops) {
+    fds[fd].used = 1;
+    if (!shared(fd))
+      r = fds[fd].ops->close(fds[fd].obj);
+    fds[fd].used = 0;
+    fds[fd].ops = 0;
+    return r;
+  }
+  fds[fd].used = 1;
   if (!shared(fd))
     err = FSClose(fds[fd].ref);
   fds[fd].used = 0;
   return err == noErr ? 0 : fail(err);
+}
+
+/* Gives a new descriptor for an object that is not a file (a pipe or a
+   socket). The calls of "ops" read, write and close it. */
+int __mac_fd_new(const struct __mac_fd_ops *ops, void *obj, int flags) {
+  int fd;
+  for (fd = 3; fd < NFD && fds[fd].used; fd++)
+    ;
+  if (fd == NFD) {
+    errno = EMFILE;
+    return -1;
+  }
+  fds[fd].ref = 0;
+  fds[fd].flags = flags;
+  fds[fd].ops = ops;
+  fds[fd].obj = obj;
+  fds[fd].used = 1;
+  return fd;
+}
+
+/* Gives the object of a descriptor, if its calls are "ops" (or any calls,
+   for NULL), and its flags. Sets ENOTSOCK for other descriptors. */
+void *__mac_fd_obj(int fd, const struct __mac_fd_ops *ops, int *flags) {
+  if (fd >= 0 && fd < 3) {
+    errno = ENOTSOCK;
+    return 0;
+  }
+  if (bad(fd))
+    return 0;
+  if (!fds[fd].ops || (ops && fds[fd].ops != ops)) {
+    errno = ENOTSOCK;
+    return 0;
+  }
+  if (flags)
+    *flags = fds[fd].flags;
+  return fds[fd].obj;
+}
+
+/* Gives the calls of a descriptor, or NULL for a file. */
+const struct __mac_fd_ops *__mac_fd_ops(int fd) {
+  if (fd < 3 || fd >= NFD || !fds[fd].used)
+    return 0;
+  return fds[fd].ops;
 }
 
 /* Makes descriptor to (3 or more) a copy of descriptor from. The two
@@ -196,6 +263,8 @@ int fsync(int fd) {
     return 0;
   if (bad(fd))
     return -1;
+  if (fds[fd].ops)
+    return 0;
   pb.ioParam.ioCompletion = 0;
   pb.ioParam.ioRefNum = fds[fd].ref;
   err = PBFlushFileSync(&pb);
@@ -218,6 +287,9 @@ ssize_t read(int fd, void *buf, size_t n) {
     errno = EBADF;
     return -1;
   }
+  if (fds[fd].ops)
+    return fds[fd].ops->read(fds[fd].obj, buf, n,
+                             (fds[fd].flags & O_NONBLOCK) != 0);
   err = FSRead(fds[fd].ref, &count, buf);
   if (err != noErr && err != eofErr)
     return fail(err);
@@ -238,6 +310,9 @@ ssize_t write(int fd, const void *buf, size_t n) {
     errno = EBADF;
     return -1;
   }
+  if (fds[fd].ops)
+    return fds[fd].ops->write(fds[fd].obj, buf, n,
+                              (fds[fd].flags & O_NONBLOCK) != 0);
   if (fds[fd].flags & O_APPEND) {
     err = SetFPos(fds[fd].ref, fsFromLEOF, 0);
     if (err != noErr)
@@ -261,6 +336,10 @@ off_t lseek(int fd, off_t offset, int whence) {
   }
   if (bad(fd))
     return -1;
+  if (fds[fd].ops) {
+    errno = ESPIPE;
+    return -1;
+  }
   ref = fds[fd].ref;
   /* Work out the new mark, so that a seek past the end can grow the file
      as POSIX says. */
@@ -333,4 +412,34 @@ int isatty(int fd) {
     return 1;
   errno = ENOTTY;
   return 0;
+}
+
+/* Reads into each buffer in turn, and stops at the first short read. */
+ssize_t readv(int fd, const struct iovec *iov, int count) {
+  ssize_t total = 0;
+  int i;
+  for (i = 0; i < count; i++) {
+    ssize_t got = read(fd, iov[i].iov_base, iov[i].iov_len);
+    if (got < 0)
+      return total ? total : -1;
+    total += got;
+    if ((size_t)got < iov[i].iov_len)
+      break;
+  }
+  return total;
+}
+
+/* Writes each buffer in turn, and stops at the first short write. */
+ssize_t writev(int fd, const struct iovec *iov, int count) {
+  ssize_t total = 0;
+  int i;
+  for (i = 0; i < count; i++) {
+    ssize_t put = write(fd, iov[i].iov_base, iov[i].iov_len);
+    if (put < 0)
+      return total ? total : -1;
+    total += put;
+    if ((size_t)put < iov[i].iov_len)
+      break;
+  }
+  return total;
 }

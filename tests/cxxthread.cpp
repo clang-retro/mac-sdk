@@ -1,8 +1,8 @@
 // Checks the C++ library's threads over the C library's POSIX threads
 // (docs/threads.md): std::thread, std::mutex, std::lock_guard,
 // std::condition_variable, std::call_once, std::this_thread::yield and
-// sleep_for, std::async, and static locals that two threads start
-// together. tests/run.sh runs it in the simulators and checks the
+// sleep_for, std::async, static locals that two threads start together,
+// and thread_local variables with a constructor. tests/run.sh runs it in the simulators and checks the
 // console output: one "ok" line per check, then "all ok".
 //
 // Copyright (C) clang-retro contributors.
@@ -41,6 +41,23 @@ struct Slow {
 static int slow_value() {
   static Slow s;
   return s.value;
+}
+
+static int tls_made;
+
+// A type that counts its constructions, for thread_local.
+struct Counted {
+  int value;
+  Counted() : value(7) { tls_made++; }
+};
+
+static thread_local Counted per_thread;
+
+// Changes the current thread's copy, yields, and gives the copy's value.
+static int bump(int by) {
+  per_thread.value += by;
+  std::this_thread::yield();
+  return per_thread.value;
 }
 
 int main() {
@@ -110,6 +127,14 @@ int main() {
   sleeper.join();
   check("sleep_for", woke);
   check("id", std::this_thread::get_id() != std::thread::id());
+
+  int t1 = 0, t2 = 0;
+  std::thread e([&] { t1 = bump(1); });
+  std::thread g([&] { t2 = bump(2); });
+  e.join();
+  g.join();
+  check("thread_local", t1 == 8 && t2 == 9 && per_thread.value == 7 &&
+                            tls_made == 3);
 
   std::printf(failures ? "FAILED\n" : "all ok\n");
   return 0;

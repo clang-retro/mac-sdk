@@ -19,6 +19,7 @@
 #include <Gestalt.h>
 #include <Threads.h>
 #include <Events.h>
+#include "macos.h"
 
 /* The Thread Manager calls are newer than the oldest Systems; this file
    checks with Gestalt before it uses them. */
@@ -498,7 +499,8 @@ int sched_yield(void) {
 }
 
 /* Waits for a time, and lets the other threads run. The clock is the
-   Mac's tick count, 60 per second. */
+   Mac's tick count, 60 per second. A wait of more than 0 always lets the
+   other threads run one time, also when the tick ends at once. */
 int nanosleep(const struct timespec *req, struct timespec *rem) {
   unsigned long ticks, end;
   if (req->tv_nsec < 0 || req->tv_nsec >= 1000000000L) {
@@ -508,6 +510,8 @@ int nanosleep(const struct timespec *req, struct timespec *rem) {
   ticks = (unsigned long)req->tv_sec * 60 +
           (unsigned long)((req->tv_nsec + 16666666L) / 16666667L);
   end = TickCount() + ticks;
+  if (ticks)
+    yield();
   while ((long)(end - TickCount()) > 0)
     yield();
   if (rem) {
@@ -523,4 +527,26 @@ int usleep(useconds_t usec) {
   t.tv_sec = (time_t)(usec / 1000000);
   t.tv_nsec = (long)(usec % 1000000) * 1000;
   return nanosleep(&t, NULL);
+}
+
+/* Lets the other threads run, and about once a tick the other programs
+   too: a cooperative Mac switches programs only in the Event Manager's
+   calls. EventAvail with an empty mask takes no event from the program.
+   It is called only when the program has started QuickDraw (CurrentA5
+   points to a port), because the Event Manager needs it. */
+void __mac_wait(void) {
+  static unsigned long last;
+  unsigned long now;
+  yield();
+  now = TickCount();
+  if (now != last) {
+    long *a5 = *(long **)0x904;
+    last = now;
+    if (a5 && *a5) {
+      EventRecord ev;
+      int saved = errno;
+      EventAvail(0, &ev);
+      errno = saved;
+    }
+  }
 }

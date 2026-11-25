@@ -489,6 +489,12 @@ def link(objs, imports, entry="main", gc=True):
                     if rtype == R_POS and length == 32 and c.out == "data":
                         struct.pack_into(">I", img, at, 0)
                         continue
+                    # A call to an undefined weak function: the code
+                    # tests the function's address (a TOC word, 0 here)
+                    # first, so the call never runs. The branch stays as
+                    # the compiler wrote it.
+                    if rtype in (R_BR, R_RBR) and length == 26:
+                        continue
                     raise LinkError(f"{o.path}: undefined weak symbol "
                                     f"{orig_sym.name} used in {c.name}")
                 if rtype == R_POS and length == 32:
