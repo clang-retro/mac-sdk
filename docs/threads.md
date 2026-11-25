@@ -65,6 +65,25 @@ made it waits.
 - `pthread_once`.
 - `sched_yield`, `nanosleep`, `usleep` and `clock_gettime`.
 
+## Thread-local variables
+
+C (`_Thread_local`, `thread_local`) and C++ (`thread_local`) programs
+can declare thread-local variables. The CPUs of the classic Mac OS have
+no thread pointer. Thus clang uses emulated TLS for these targets: each
+access calls `__emutls_get_address` (`runtime/libc/emutls.c`).
+
+- Each thread gets its own copy of a variable at its first access. The
+  copy starts with the initial value of the variable.
+- The copies of a thread are released when the thread ends.
+- An access is a function call. Thus keep the address of a thread-local
+  variable in a local variable when a loop uses it frequently.
+- If there is no memory for a copy, `__emutls_get_address` gives
+  `NULL`, and the program fails at the access.
+
+clang selects emulated TLS for these targets since clang-retro/llvm
+#57. An older clang needs the option `-femulated-tls`, and on PowerPC it
+cannot compile thread-local variables.
+
 ## Limits
 
 - A thread that locks a normal mutex again gets `EDEADLK`. It does not

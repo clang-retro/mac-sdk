@@ -2,15 +2,16 @@
  * the Thread Manager: create and join, results, detached threads,
  * mutexes (normal, recursive, trylock), a condition variable between a
  * producer and a consumer, keys with destructors, pthread_once,
- * pthread_exit, sched_yield and usleep. tests/run.sh runs it in
- * tools/sim68k.py --os and tools/simppc.py, which fake the Thread
- * Manager, and checks the console output: one "ok" line per check, then
- * "all ok".
+ * pthread_exit, sched_yield, usleep and _Thread_local variables.
+ * tests/run.sh runs it in tools/sim68k.py --os and tools/simppc.py, which
+ * fake the Thread Manager, and checks the console output: one "ok" line
+ * per check, then "all ok".
  *
  * Copyright (C) clang-retro contributors.
  * SPDX-License-Identifier: AGPL-3.0-only */
 #include <errno.h>
 #include <pthread.h>
+#include <stdint.h>
 #include <sched.h>
 #include <stdio.h>
 #include <string.h>
@@ -106,6 +107,15 @@ static void *keyed(void *arg) {
   return NULL;
 }
 
+static _Thread_local int own = 5;   /* each thread has its own copy */
+
+/* Changes its own copy of "own", yields, and gives the copy's value. */
+static void *local(void *arg) {
+  own += (int)(intptr_t)arg;
+  sched_yield();
+  return (void *)(intptr_t)own;
+}
+
 static int once_calls;
 
 /* The pthread_once function: counts its calls. */
@@ -170,6 +180,12 @@ int main(void) {
   check("exit and values", res[0] == (void *)2 && res[1] == (void *)2 &&
                                pthread_getspecific(key) == &one);
   check("destructor", destroyed == 3);
+
+  pthread_create(&t[0], NULL, local, (void *)10);
+  pthread_create(&t[1], NULL, local, (void *)20);
+  pthread_join(t[0], &res[0]);
+  pthread_join(t[1], &res[1]);
+  check("thread_local", res[0] == (void *)15 && res[1] == (void *)25 && own == 5);
 
   pthread_attr_init(&attr);
   pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);

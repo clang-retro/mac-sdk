@@ -152,7 +152,8 @@ On 68k, programs with more than 32 KB of code use 32-bit addresses
   `std::mutex`, `std::condition_variable`, `std::call_once`,
   `std::async` and `std::this_thread::sleep_for` work. A thread runs
   until it waits, locks a locked mutex, sleeps or calls
-  `std::this_thread::yield`. `thread_local` is not available.
+  `std::this_thread::yield`. `thread_local` variables use emulated
+  TLS (see docs/threads.md).
 - `std::filesystem` is not available. The library is built without it
   (`--disable-libstdcxx-filesystem-ts`). Use the C library's directory
   functions (`opendir`, `readdir`, `stat`, `mkdir`) instead.
