@@ -9,6 +9,7 @@ build. It is not a Mac: only the functions in FUNCS are known, and a
 program that imports another one stops when it calls it.
 
     python3 simppc.py App.bin [--files] [--input TEXT] [--keys TEXT]
+        [--steps N]
 
 It prints each DrawString and DrawText, and with --files the files the
 program left. --input fills "App Input" (the C library's stdin) and
@@ -30,8 +31,8 @@ from unicorn import Uc, UcError, UC_ARCH_PPC, UC_MODE_PPC32, \
 from unicorn import ppc_const
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from sim68k import FakeOS, FakeThreads, GMT_DELTA, GESTALT, THREAD_STACK, \
-    key_events  # noqa: E402
+from sim68k import FakeOS, FakeScreen, FakeThreads, GMT_DELTA, GESTALT, \
+    THREAD_STACK, key_events  # noqa: E402
 
 MEM_SIZE = 32 << 20
 CODE_AT, DATA_AT = 0x00400000, 0x00800000
@@ -190,12 +191,16 @@ def main():
     ap.add_argument("--input", metavar="TEXT",
                     help="the file \"App Input\" holds TEXT, with \\n as "
                     "the Mac's \\r")
+    ap.add_argument("--steps", type=int, default=20_000_000,
+                    help="the most instructions to run (default 20000000)")
     a = ap.parse_args()
 
     uc = Uc(UC_ARCH_PPC, UC_MODE_PPC32 | UC_MODE_BIG_ENDIAN)
     uc.mem_map(0, MEM_SIZE)
     os_ = PpcOS(uc)
     imports, entry, toc = load(uc, pef_of(a.app))
+    screen = FakeScreen(os_)
+    GESTALT[b"qd  "] = 0x0230               # 32-bit Color QuickDraw 1.3
 
     blob = open(a.app, "rb").read(128)
     app = blob[2:2 + min(blob[1], 31)] if blob[:4] != b"Joy!" else b"App"
@@ -398,6 +403,34 @@ def main():
         "ReadLocation": lambda: os_.call("device", 0xA051, arg(0),
                                          0x000C00E4),
     })
+    def get_port():
+        uc.mem_write(arg(0), struct.pack(">I", screen.port))
+
+    def wait_next_event():
+        state["ticks"] += 1
+        ret(screen.wait_event(arg(1), state["ticks"]))
+
+    # What a program that shows its own pictures uses (FakeScreen).
+    for n in ("HideWindow", "SetWTitle", "ForeColor", "BackColor",
+              "GlobalToLocal", "LocalToGlobal", "HiliteMenu"):
+        funcs[n] = lambda: ret(0)
+    funcs.update({
+        "NewWindow": lambda: ret(screen.new_window(arg(0), arg(1), sarg(7))),
+        "NewCWindow": lambda: ret(screen.new_window(arg(0), arg(1), sarg(7))),
+        "DisposeWindow": lambda: screen.dispose(arg(0)),
+        "GetWRefCon": lambda: ret(screen.refcon(arg(0))),
+        "SetPort": lambda: setattr(screen, "port", arg(0)),
+        "GetPort": get_port,
+        "GetMouse": lambda: uc.mem_write(arg(0), bytes(4)),
+        "WaitNextEvent": wait_next_event,
+        "MenuSelect": lambda: ret(0),
+        "GetGrayRgn": lambda: ret(struct.unpack(
+            ">I", bytes(uc.mem_read(0x9EE, 4)))[0]),
+        "CopyBits": lambda: screen.copy_bits(arg(0), arg(1), arg(2), arg(3)),
+        "NewHandle": lambda: ret(memory(0xA122)[0]),
+        "NewHandleClear": lambda: ret(memory(0xA322)[0]),
+        "DisposeHandle": lambda: memory(0xA023),
+    })
     funcs.update({
         "TickCount": tick_count,
         "Gestalt": gestalt,
@@ -444,7 +477,7 @@ def main():
     uc.reg_write(R["r2"], toc)
     uc.reg_write(LR, RETURN)
     try:
-        uc.emu_start(BOOT, RETURN, count=20_000_000)
+        uc.emu_start(BOOT, RETURN, count=a.steps)
     except UcError as e:
         sys.exit(f"simppc: {e} at code offset "
                  f"{uc.reg_read(PC) - CODE_AT:#x}")
@@ -457,6 +490,8 @@ def main():
             text = bytes(data).replace(b"\r", b"\n").decode("mac_roman")
             print(f"file {n!r}:\n{text}",
                   end="" if text.endswith("\n") else "\n")
+    if not screen.summary():
+        sys.exit(1)
     print("simppc: the program ended")
 
 

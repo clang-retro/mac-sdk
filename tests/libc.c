@@ -241,6 +241,12 @@ int main(int argc, char **argv) {
     remove("dir/one.txt");
     remove("dir/two.txt");
     check("rmdir", rmdir("dir") == 0 && stat("dir", &st) != 0);
+    {
+      char tmpl[] = "tmpXXXXXX";
+      check("mkdtemp", mkdtemp(tmpl) == tmpl && strncmp(tmpl, "tmp", 3) == 0 &&
+                           strchr(tmpl, 'X') == NULL && stat(tmpl, &st) == 0 &&
+                           S_ISDIR(st.st_mode) && rmdir(tmpl) == 0);
+    }
     check("getcwd", getcwd(buf, sizeof buf) != NULL && buf[0] == '/');
     printf("cwd %s\n", buf);
   }

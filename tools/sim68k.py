@@ -103,8 +103,19 @@ TRAPS = {
     0xA91E: ("TrackGoAway", 8, 2), 0xA91F: ("SelectWindow", 4, 0),
     0xA9B3: ("SystemClick", 8, 0), 0xA8D8: ("NewRgn", 0, 4),
     0xA8EF: ("ScrollRect", 12, 0), 0xA975: ("TickCount", 0, 4),
+    # What a program that shows its own pictures uses (FakeScreen).
+    0xA916: ("HideWindow", 4, 0), 0xA91A: ("SetWTitle", 8, 0),
+    0xA917: ("GetWRefCon", 4, 4), 0xA862: ("ForeColor", 4, 0),
+    0xA863: ("BackColor", 4, 0), 0xA874: ("GetPort", 4, 0),
+    0xA871: ("GlobalToLocal", 4, 0), 0xA870: ("LocalToGlobal", 4, 0),
+    0xA972: ("GetMouse", 4, 0), 0xA860: ("WaitNextEvent", 14, 2),
+    0xA93D: ("MenuSelect", 4, 4), 0xA938: ("HiliteMenu", 2, 0),
+    0xA8EC: ("CopyBits", 22, 0),
 }
-QUIET = {"SystemTask", "EraseRect", "MoveTo", "TickCount"}   # not printed
+QUIET = {"SystemTask", "EraseRect", "MoveTo", "TickCount",   # not printed
+         "HideWindow", "SetWTitle", "GetWRefCon", "ForeColor", "BackColor",
+         "GetPort", "GlobalToLocal", "LocalToGlobal", "GetMouse",
+         "WaitNextEvent", "MenuSelect", "HiliteMenu", "CopyBits"}
 
 
 def key_events(text):
@@ -177,6 +188,95 @@ class FakeThreads:
         """Deletes a thread that does not run. Gives False if there is no
         such thread."""
         return self.ready.pop(i, None) is not None
+
+
+class FakeScreen:
+    """A 640 by 480 screen with a 20-pixel menu bar, and the Window Manager
+    and QuickDraw calls that a program makes to show its own pictures in
+    plain windows: windows are records with a refCon and a portRect,
+    CopyBits checks its source and destination and counts the pixels,
+    WaitNextEvent gives null events and the mouse stays at 0, 0. Low
+    memory gets MBarHeight (0xBAA) and GrayRgn (0x9EE). The other
+    calls do nothing. summary() tells what the program did."""
+
+    WIDTH, HEIGHT, MBAR = 640, 480, 20
+    RECORD = 170                # sizeof(WindowRecord)
+
+    def __init__(self, fake):
+        self.fake, self.uc = fake, fake.uc
+        self.port = 0
+        self.windows = set()
+        self.made = self.copies = self.pixels = self.waits = 0
+        self.errors = []
+        uc = self.uc
+        uc.mem_write(0xBAA, struct.pack(">h", self.MBAR))
+        rgn = fake.alloc(10)
+        uc.mem_write(rgn, struct.pack(">hhhhh", 10, 0, 0, self.HEIGHT,
+                                      self.WIDTH))
+        handle = fake.alloc(4)
+        uc.mem_write(handle, struct.pack(">I", rgn))
+        uc.mem_write(0x9EE, struct.pack(">I", handle))
+
+    def rect(self, addr):
+        """Gives the Rect at addr as (top, left, bottom, right)."""
+        return struct.unpack(">hhhh", bytes(self.uc.mem_read(addr, 8)))
+
+    def new_window(self, storage, rect, refcon):
+        """NewWindow and NewCWindow: gives the window record."""
+        w = storage or self.fake.alloc(self.RECORD)
+        if not w:
+            return 0
+        t, l, b, r = self.rect(rect)
+        self.uc.mem_write(w, bytes(self.RECORD))
+        self.uc.mem_write(w + 16, struct.pack(">hhhh", 0, 0, b - t, r - l))
+        self.uc.mem_write(w + 152, struct.pack(">i", refcon))
+        self.windows.add(w)
+        self.made += 1
+        return w
+
+    def refcon(self, w):
+        """GetWRefCon."""
+        return struct.unpack(">i", bytes(self.uc.mem_read(w + 152, 4)))[0]
+
+    def dispose(self, w):
+        """DisposeWindow and CloseWindow."""
+        self.windows.discard(w)
+
+    def copy_bits(self, src, dst, src_rect, dst_rect):
+        """CopyBits: the source rectangle must be in the source bitmap or
+        PixMap, and the destination must be a window's port."""
+        uc = self.uc
+        row = struct.unpack(">h", bytes(uc.mem_read(src + 4, 2)))[0]
+        bounds = self.rect(src + 6)
+        sr, dr = self.rect(src_rect), self.rect(dst_rect)
+        if not (bounds[0] <= sr[0] < sr[2] <= bounds[2] and
+                bounds[1] <= sr[1] < sr[3] <= bounds[3]):
+            self.errors.append(f"CopyBits: {sr} is not in {bounds}")
+        depth = 32 if row & 0x8000 else 1
+        width = (row & 0x3FFF) * 8 // depth
+        if width < bounds[3] - bounds[1]:
+            self.errors.append(f"CopyBits: rowBytes {row & 0x3FFF} is short "
+                               f"for {bounds}")
+        if dst - 2 not in self.windows:
+            self.errors.append(f"CopyBits: {dst:#x} is not a window's port")
+        self.copies += 1
+        self.pixels += (sr[2] - sr[0]) * (sr[3] - sr[1])
+
+    def wait_event(self, evp, ticks):
+        """WaitNextEvent and GetNextEvent: a null event."""
+        self.waits += 1
+        self.uc.mem_write(evp, struct.pack(">HIIIH", 0, 0, ticks, 0, 0))
+        return 0
+
+    def summary(self):
+        """Prints what the program did with the screen."""
+        if self.made:
+            print(f"screen: {self.made} windows made, {len(self.windows)} "
+                  f"left, {self.copies} CopyBits of {self.pixels} pixels, "
+                  f"{self.waits} WaitNextEvent")
+        for e in self.errors[:10]:
+            print(f"screen: {e}")
+        return not self.errors
 
 
 class FakeOS:
@@ -258,6 +358,18 @@ class FakeOS:
                 self.blocks[p] = d0
                 uc.mem_write(p, bytes(d0))      # NewPtrClear or not
                 self.set_a0(p)
+        elif op == 0xA122:                      # NewHandle, NewHandleClear
+            p = self.alloc(max(d0, 4))
+            h = self.alloc(4) if p else 0
+            if not h:
+                self.set_a0(0)
+                err = -108
+            else:
+                uc.mem_write(p, bytes(d0))
+                uc.mem_write(h, struct.pack(">I", p))
+                self.set_a0(h)
+        elif op == 0xA023:                      # DisposeHandle
+            pass
         elif op == 0xA01F:                      # DisposePtr
             if self.blocks.pop(a0, None) is None:
                 err = -111
@@ -663,6 +775,9 @@ def main():
     state = {"clicks": a.clicks, "done": False, "log": [], "port": None,
              "keys": key_events(a.keys)}
     fake = FakeOS(uc) if a.os else None
+    screen = FakeScreen(fake) if fake else None
+    if fake and a.cpu != "68000":
+        GESTALT[b"qd  "] = 0x0230           # 32-bit Color QuickDraw 1.3
     # CurApName (0x910): the application's name, from the MacBinary header.
     mb = open(a.app, "rb").read(128)
     uc.mem_write(0x910, mb[1:2 + min(mb[1], 31)])
@@ -845,9 +960,34 @@ def main():
             print(f"{name}({desc})")
         if nargs:
             sp += nargs
-        if name == "NewWindow" or name == "NewCWindow":
+        def addr(off):
+            return struct.unpack_from(">I", args, off)[0]
+
+        if (name == "NewWindow" or name == "NewCWindow") and screen:
+            w = screen.new_window(addr(22), addr(18),
+                                  struct.unpack_from(">i", args, 0)[0])
+            uc.mem_write(sp, struct.pack(">I", w))
+        elif name == "NewWindow" or name == "NewCWindow":
             struct.pack_into(">I", buf := bytearray(4), 0, 0x30000)
             uc.mem_write(sp, bytes(buf))
+        elif name == "DisposeWindow" and screen:
+            screen.dispose(addr(0))
+        elif name == "GetWRefCon" and screen:
+            uc.mem_write(sp, struct.pack(">i", screen.refcon(addr(0))))
+        elif name == "SetPort" and screen:
+            screen.port = addr(0)
+        elif name == "GetPort" and screen:
+            uc.mem_write(addr(0), struct.pack(">I", screen.port))
+        elif name == "GetMouse":
+            uc.mem_write(addr(0), bytes(4))
+        elif name == "WaitNextEvent" and screen:
+            state["ticks"] += 1
+            uc.mem_write(sp, bytes([screen.wait_event(addr(8),
+                                                      state["ticks"]), 0]))
+        elif name == "MenuSelect":
+            uc.mem_write(sp, bytes(4))
+        elif name == "CopyBits" and screen:
+            screen.copy_bits(addr(18), addr(14), addr(10), addr(6))
         elif name == "GetNextEvent":
             ch, mods = next(state["keys"])
             ev = struct.pack(">HIIIH", 3, ch, 0, 0, mods)   # keyDown
@@ -891,6 +1031,8 @@ def main():
         for n, data in sorted(fake.files.items()):
             text = bytes(data).replace(b"\r", b"\n").decode("mac_roman")
             print(f"file {n!r}:\n{text}", end="" if text.endswith("\n") else "\n")
+    if screen and not screen.summary():
+        sys.exit(1)
     balance = state["sp"] - STACK_TOP
     print(f"sim68k: reached ExitToShell; stack {'balanced' if balance == 0 else f'off by {balance}'}")
     sys.exit(0 if balance == 0 or a.exit_anywhere else 1)

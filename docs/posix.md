@@ -33,6 +33,7 @@ have the function. A program can find the failure and continue.
 | `flock` | It always succeeds: no other program uses the lock. |
 | `sigaction` | It uses `signal`. Only `sa_handler` is used. |
 | `malloc_usable_size` | The size of the block. |
+| `mkdtemp` | It makes a new folder with a name from the template. The last six characters of the template must be `XXXXXX`. |
 | `dlopen`, `dlsym`, `dlclose`, `dlerror`, `dladdr` | `dlopen(NULL)` gives a handle for the program. `dlsym` finds no symbol, and all other `dlopen` calls fail. |
 
 ## Functions that fail
@@ -40,7 +41,7 @@ have the function. A program can find the failure and continue.
 | Functions | Error |
 | --- | --- |
 | `pipe` | `ENOSYS` |
-| `fork` | `ENOSYS` |
+| `fork`, `execve` and the other `exec` functions | `ENOSYS` |
 | `waitpid` | `ECHILD` |
 | `posix_spawn`, `posix_spawnp` | `ENOSYS` (the file action functions succeed and keep nothing) |
 | `tcgetattr`, `tcsetattr`, `tcdrain`, `tcflow`, `tcflush` | `ENOTTY` |

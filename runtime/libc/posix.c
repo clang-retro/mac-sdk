@@ -419,6 +419,15 @@ pid_t fork(void) {
   return -1;
 }
 
+/* A program cannot run another in its place: fails with ENOSYS. */
+int execve(const char *path, char *const argv[], char *const envp[]) {
+  (void)path;
+  (void)argv;
+  (void)envp;
+  errno = ENOSYS;
+  return -1;
+}
+
 /* There are no pipes between programs: fails with ENOSYS. */
 int pipe(int fds[2]) {
   (void)fds;
@@ -540,4 +549,28 @@ int dladdr(const void *addr, Dl_info *info) {
   (void)addr;
   (void)info;
   return 0;
+}
+
+/* Makes a new folder from a template that ends in "XXXXXX", which it
+   changes to the name it used. Gives the template, or NULL with errno
+   set. picolibc has mkstemp but not this. */
+char *mkdtemp(char *tmpl) {
+  static const char digits[] = "abcdefghijklmnopqrstuvwxyz0123456789";
+  size_t n = strlen(tmpl);
+  if (n < 6 || strcmp(tmpl + n - 6, "XXXXXX") != 0) {
+    errno = EINVAL;
+    return NULL;
+  }
+  unsigned long seed = (unsigned long)time(NULL) ^ (unsigned long)(size_t)tmpl;
+  for (int tries = 0; tries < 100; tries++) {
+    unsigned long v = seed + (unsigned long)tries * 7919UL;
+    for (int i = 0; i < 6; i++) {
+      tmpl[n - 6 + i] = digits[v % 36];
+      v /= 36;
+    }
+    if (mkdir(tmpl, 0700) == 0) return tmpl;
+    if (errno != EEXIST) return NULL;
+  }
+  errno = EEXIST;
+  return NULL;
 }
