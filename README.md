@@ -368,6 +368,11 @@ links both archives before `libmacrt.a`, and starts the program at
   A folder is `S_IFDIR` and a file is `S_IFREG`, with the size of its
   data fork. A locked file has no write permission. The times are UTC.
   `getcwd` gives `/Volume/folder`.
+- other POSIX functions for programs from Unix: `dup`, `fcntl`,
+  `pread`, `pwrite`, `fsync`, `access`, `chmod`, `chdir`, `realpath`,
+  `mmap` (over the heap), `shm_open`, `poll`, `uname`, `dlopen` and
+  more. Functions for pipes, processes and terminals fail with the
+  usual error. See docs/posix.md.
 - POSIX threads (`pthread.h`) over the Thread Manager: cooperative
   threads, mutexes, condition variables, keys and `pthread_once`, and
   `sched_yield`, `nanosleep`, `usleep` and `clock_gettime`. The C++

@@ -28,6 +28,7 @@ nav:
   - "Building applications": building.md
   - "C++": cxx.md
   - "Threads": threads.md
+  - "POSIX functions": posix.md
   - "Coverage": coverage.md
   - "Tests": tests.md
   - "Not done yet": status.md
