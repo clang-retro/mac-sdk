@@ -1,7 +1,8 @@
 """Run a PowerPC Mac application from peflink.py (or fatlink.py) on a
 PowerPC CPU emulator, with the InterfaceLib functions it imports faked
 by tools/sim68k.py's fake Memory Manager, File Manager and devices, and
-ThreadsLib's cooperative threads by its FakeThreads.
+ThreadsLib's cooperative threads by its FakeThreads, and Apple OpenGL
+(OpenGLLibrary and OpenGLUtility) by tools/fakegl.py.
 
 This checks what the 68k simulator cannot: the PEF container and its
 relocations, the import glue and the TOC, and the C library's PowerPC
@@ -33,6 +34,7 @@ from unicorn import ppc_const
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from sim68k import FakeNet, FakeOS, FakeScreen, FakeThreads, GMT_DELTA, GESTALT, \
     THREAD_STACK, key_events  # noqa: E402
+from fakegl import FakeGL  # noqa: E402
 
 MEM_SIZE = 32 << 20
 CODE_AT, DATA_AT = 0x00400000, 0x00800000
@@ -223,6 +225,11 @@ def main():
 
     def ret(v):
         uc.reg_write(R["r3"], v & 0xFFFFFFFF)
+
+    def farg(n):
+        """Floating-point argument n (in f1 to f13)."""
+        bits = uc.reg_read(getattr(ppc_const, f"UC_PPC_REG_FPR{1 + n}"))
+        return struct.unpack(">d", struct.pack(">Q", bits & (2**64 - 1)))[0]
 
     def pstring(addr):
         n = uc.mem_read(addr, 1)[0]
@@ -477,6 +484,12 @@ def main():
         "ThreadEndCritical": lambda: ret(0),
     })
 
+    # Apple OpenGL: each imported agl*, gl* and glu* function.
+    gl = FakeGL(uc, arg, sarg, farg, ret, os_.alloc)
+    for name, *_ in imports:
+        if name.startswith(("agl", "gl")) and name not in funcs:
+            funcs[name] = lambda n=name: gl.call(n)
+
     def on_code(uc, pc, size, _):
         if pc == THREAD_END:
             thread_end()
@@ -524,6 +537,7 @@ def main():
             text = bytes(data).replace(b"\r", b"\n").decode("mac_roman")
             print(f"file {n!r}:\n{text}",
                   end="" if text.endswith("\n") else "\n")
+    gl.summary()
     if not state["done"]:
         screen.summary()
         sys.exit("simppc: the program did not finish")

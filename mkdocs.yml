@@ -30,6 +30,7 @@ nav:
   - "Threads": threads.md
   - "POSIX functions": posix.md
   - "Networking and pipes": network.md
+  - "OpenGL": opengl.md
   - "Coverage": coverage.md
   - "Tests": tests.md
   - "Not done yet": status.md

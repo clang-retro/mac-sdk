@@ -10,6 +10,9 @@ so no code is used from them.
     python3 gen-imports.py LLVM_NM IMPORTLIB_DIR imports.json
 
 The output maps each library to {"func": [...], "data": [...], "weak": bool}.
+It also has the libraries of data/opengl-exports.json (OpenGLLibrary and
+OpenGLUtility), which tools/gen-gl.py makes from the OpenGL headers:
+Retro68 has no import libraries for them.
 """
 import json
 import os
@@ -48,6 +51,12 @@ for fn in sorted(os.listdir(src)):
         name = name[:-6]
     libs[name] = {"func": sorted(funcs), "data": sorted(data - funcs),
                   "weak": weak or name in ALSO_WEAK}
+
+# The OpenGL libraries, from tools/gen-gl.py.
+extra = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..",
+                     "data", "opengl-exports.json")
+if os.path.exists(extra):
+    libs.update(json.load(open(extra, encoding="utf-8")))
 
 with open(out, "w", encoding="utf-8") as f:
     json.dump(libs, f, separators=(",", ":"), sort_keys=True)

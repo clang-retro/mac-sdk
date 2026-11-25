@@ -86,8 +86,9 @@ fi
 # tools/sim68k.py with its Memory and File Managers, and the PowerPC one
 # in tools/simppc.py, checking the console output file each leaves, and tests/console.c
 # with the console window, typing into it, tests/thread.c with the
-# simulators' fake Thread Manager, and tests/net.c with their fake MacTCP
-# and PPC Toolbox.
+# simulators' fake Thread Manager, tests/net.c with their fake MacTCP
+# and PPC Toolbox, and tests/gl.c with the PowerPC simulator's fake
+# OpenGL.
 if [ -n "$LLVM_SRC" ] && [ -n "$PICOLIBC_SRC" ]; then
   CLANG="$CLANG" PICOLIBC_SRC="$PICOLIBC_SRC" runtime/build-libc.sh "$APPS/lib"
   for cpu in 68k ppc; do
@@ -101,6 +102,9 @@ if [ -n "$LLVM_SRC" ] && [ -n "$PICOLIBC_SRC" ]; then
     CLANG="$CLANG" python3 tools/macapp.py --cpu $cpu --lib "$APPS/lib" \
       -o "$APPS/net-$cpu.bin" -- -Wall -Werror tests/net.c >/dev/null
   done
+  # OpenGL is PowerPC only.
+  CLANG="$CLANG" python3 tools/macapp.py --cpu ppc --lib "$APPS/lib" \
+    -o "$APPS/gl-ppc.bin" -- -Wall -Werror tests/gl.c >/dev/null
   if python3 -c "import unicorn" 2>/dev/null; then
     for c in 68000 68020; do
       python3 tools/sim68k.py --cpu $c --os --files --exit-anywhere --input "typed\nline\n" \
@@ -140,6 +144,12 @@ if [ -n "$LLVM_SRC" ] && [ -n "$PICOLIBC_SRC" ]; then
       { cat "$APPS/sim.txt"; exit 1; }
     if grep -q FAILED "$APPS/sim.txt" || ! grep -q "^all ok" "$APPS/sim.txt"; then
       echo "sockets on PowerPC:"; cat "$APPS/sim.txt"; exit 1
+    fi
+    # OpenGL and AGL, over the PowerPC simulator's fake OpenGL.
+    python3 tools/simppc.py --files "$APPS/gl-ppc.bin" >"$APPS/sim.txt" ||
+      { cat "$APPS/sim.txt"; exit 1; }
+    if grep -q FAILED "$APPS/sim.txt" || ! grep -q "^all ok" "$APPS/sim.txt"; then
+      echo "OpenGL on PowerPC:"; cat "$APPS/sim.txt"; exit 1
     fi
     # The console window: typed keys in, the text it draws out.
     for c in 68000 68020; do
