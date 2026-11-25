@@ -483,9 +483,10 @@ and also fails when `include/` or `docs/coverage.md` differ from what
   with the console window has run on System 7.6.1 (QEMU `q800`) and
   Mac OS 9.2.1 (QEMU `mac99`), but `tests/libc.c`, with its files, has
   run only in `tools/sim68k.py` and `tools/simppc.py`.
-- Shared libraries in the linkers. Programs over 32 KB of 68k code have run only in `tools/sim68k.py`;
-  they are one CODE segment that large, which no real System has been
-  tried with yet.
+- Shared libraries in the linkers.
+- Programs over 32 KB of 68k code are one CODE segment that large.
+  `tests/cxx.cpp` (415 KB of 68k code) has run on System 7.6.1, but no
+  System before 7 has been tried with one.
 
 ## License
 

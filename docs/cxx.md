@@ -191,8 +191,9 @@ and clang's assembler does not accept GCC's `jbne`.
 `tests/run.sh` builds the C++ library and runs the test in
 `tools/sim68k.py` (as a 68000 and a 68020) and in `tools/simppc.py`.
 
-The PowerPC build of the test also passes on Mac OS 9.2.1 (QEMU
-`mac99`).
+The test also passes on real Systems: the 68k build on System 7.6.1
+(QEMU `q800`), and the PowerPC build and the fat build on Mac OS 9.2.1
+(QEMU `mac99`).
 
 ## Licence
 
