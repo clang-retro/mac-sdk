@@ -72,15 +72,15 @@ mapping is a block in the heap of the application:
 
 The C library adds `dlfcn.h`, `sys/utsname.h`, `sys/uio.h` and the
 socket headers (`sys/socket.h`, `sys/un.h`, `netinet/in.h`,
-`netinet/tcp.h`, `arpa/inet.h` and `netdb.h`). picolibc does not
-declare `shm_open`, `shm_unlink`, `cfmakeraw`, `FIONREAD` or
-`_SC_NPROCESSORS_ONLN`. Declare them in the program:
+`netinet/tcp.h`, `arpa/inet.h` and `netdb.h`). Its `sys/ioctl.h` has
+`FIONREAD`, `FIONBIO` and `SIOCATMARK`. picolibc does not declare
+`shm_open`, `shm_unlink`, `cfmakeraw` or `_SC_NPROCESSORS_ONLN`. Declare
+them in the program:
 
 ```c
 int shm_open(const char *name, int flags, mode_t mode);
 int shm_unlink(const char *name);
 void cfmakeraw(struct termios *t);
-#define FIONREAD 0x541B
 #define _SC_NPROCESSORS_ONLN 84
 ```
 
