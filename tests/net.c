@@ -94,6 +94,9 @@ static void check_tcp(void) {
   check("tcp listen", listen(l, 2) == 0);
   check("tcp getsockname", getsockname(l, (struct sockaddr *)&sa, &len) == 0 && sa.sin_port != 0);
   c = socket(AF_INET, SOCK_STREAM, 0);
+  check("tcp port in use", bind(c, (struct sockaddr *)&sa, sizeof sa) == -1 && errno == EADDRINUSE);
+  close(c);
+  c = socket(AF_INET, SOCK_STREAM, 0);
   check("tcp connect", connect(c, (struct sockaddr *)&sa, sizeof sa) == 0);
   FD_ZERO(&rd);
   FD_SET(l, &rd);

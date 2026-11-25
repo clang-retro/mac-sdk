@@ -266,9 +266,47 @@ static int in_addr_of(const struct sockaddr *a, socklen_t len, ip_addr *host, un
 
 static int udp_open(struct sock *k);
 
+/* The TCP sockets of this program that have a port: MacTCP finds a port
+   in use only when it opens a stream, so bind looks here first. */
+#define MAX_BOUND 32
+static struct sock *bound[MAX_BOUND];
+
+/* Tells if another TCP socket of this program has the port of k on an
+   address that overlaps, and neither socket permits reuse. */
+static int port_in_use(struct sock *k) {
+  int i;
+  for (i = 0; i < MAX_BOUND; i++) {
+    struct sock *o = bound[i];
+    if (!o || o == k || o->port != k->port)
+      continue;
+    if (o->host != k->host && o->host != INADDR_ANY && k->host != INADDR_ANY)
+      continue;
+    if (!(o->reuse && k->reuse) || o->listening)
+      return 1;
+  }
+  return 0;
+}
+
+/* Adds k to the TCP sockets that have a port, or removes it. */
+static void set_bound(struct sock *k, int on) {
+  int i, free_slot = -1;
+  for (i = 0; i < MAX_BOUND; i++) {
+    if (bound[i] == k) {
+      if (!on)
+        bound[i] = NULL;
+      return;
+    }
+    if (!bound[i] && free_slot < 0)
+      free_slot = i;
+  }
+  if (on && free_slot >= 0)
+    bound[free_slot] = k;
+}
+
 /* Keeps the address for the socket. MacTCP takes a TCP stream's port
    when it opens a connection; a UDP socket gets its stream (and port)
-   now. */
+   now. A TCP port that another socket of this program has fails with
+   EADDRINUSE, and port 0 gets a free port from 49152 to 65535 now. */
 static int inet_bind(struct sock *k, const struct sockaddr *a, socklen_t len) {
   ip_addr host;
   unsigned short port;
@@ -276,7 +314,27 @@ static int inet_bind(struct sock *k, const struct sockaddr *a, socklen_t len) {
     return -1;
   k->host = host;
   k->port = port;
-  return k->type == SOCK_DGRAM ? udp_open(k) : 0;
+  if (k->type == SOCK_DGRAM)
+    return udp_open(k);
+  if (!port) {
+    /* Choose the port now, so that getsockname gives it before listen. */
+    static unsigned short next;
+    int tries;
+    if (!next)
+      next = (unsigned short)(49152 + TickCount() % 8192);
+    for (tries = 0; tries < 16384; tries++) {
+      k->port = htons(next);
+      next = next >= 65535 ? 49152 : next + 1;
+      if (!port_in_use(k))
+        break;
+    }
+  } else if (port_in_use(k)) {
+    k->port = 0;
+    errno = EADDRINUSE;
+    return -1;
+  }
+  set_bound(k, 1);
+  return 0;
 }
 
 /* Makes a UDP socket's stream the first time. */
@@ -344,6 +402,8 @@ static int inet_listen(struct sock *k, int backlog) {
   }
   if (!n->npend)
     return -1;
+  if (k->port)
+    set_bound(k, 1);
   return 0;
 }
 
@@ -722,6 +782,7 @@ static int inet_shutdown(struct sock *k, int how) {
 static void inet_close(struct sock *k) {
   struct inet *n = k->impl;
   int i;
+  set_bound(k, 0);
   if (k->type == SOCK_DGRAM) {
     if (n->us) {
       struct udp_iopb pb;

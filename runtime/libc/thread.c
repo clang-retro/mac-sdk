@@ -499,7 +499,8 @@ int sched_yield(void) {
 }
 
 /* Waits for a time, and lets the other threads run. The clock is the
-   Mac's tick count, 60 per second. */
+   Mac's tick count, 60 per second. A wait of more than 0 always lets the
+   other threads run one time, also when the tick ends at once. */
 int nanosleep(const struct timespec *req, struct timespec *rem) {
   unsigned long ticks, end;
   if (req->tv_nsec < 0 || req->tv_nsec >= 1000000000L) {
@@ -509,6 +510,8 @@ int nanosleep(const struct timespec *req, struct timespec *rem) {
   ticks = (unsigned long)req->tv_sec * 60 +
           (unsigned long)((req->tv_nsec + 16666666L) / 16666667L);
   end = TickCount() + ticks;
+  if (ticks)
+    yield();
   while ((long)(end - TickCount()) > 0)
     yield();
   if (rem) {
