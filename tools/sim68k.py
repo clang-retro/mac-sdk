@@ -121,7 +121,8 @@ HEAP_AT, HEAP_END = 0x200000, 0x3E0000
 # Open, Close, Read, Write, Create, Delete, Rename, GetFileInfo,
 # SetFileInfo, GetEOF, SetEOF, FlushVol, GetFPos, SetFPos.
 FILE_TRAPS = {0xA000, 0xA001, 0xA002, 0xA003, 0xA008, 0xA009, 0xA00B,
-              0xA00C, 0xA00D, 0xA011, 0xA012, 0xA013, 0xA018, 0xA044}
+              0xA00C, 0xA00D, 0xA011, 0xA012, 0xA013, 0xA015, 0xA018,
+              0xA041, 0xA042, 0xA044, 0xA045}
 
 
 class FakeThreads:
@@ -427,7 +428,8 @@ class FakeOS:
                 self.w32(pb + 76, date)
                 self.w16(pb + 22, -1)
                 if n in self.files:
-                    uc.mem_write(pb + 30, b"\0")
+                    locked = n in self.__dict__.get("locked", ())
+                    uc.mem_write(pb + 30, b"\1" if locked else b"\0")
                     self.w32(pb + 48, self.file_id(n))
                     self.w32(pb + 54, len(self.files[n]))
                     self.w32(pb + 58, (len(self.files[n]) + 511) & ~511)
@@ -462,6 +464,7 @@ class FakeOS:
                     raw = f[0].rsplit(":", 1)[-1].encode("mac_roman")
                     uc.mem_write(ptr, bytes([len(raw)]) + raw)
                 parent = self.folder_of(f[0])
+                self.w32(pb + 32, self.file_id(f[0]))
                 self.w32(pb + 40, len(self.files[f[0]]))
                 self.w32(pb + 48, f[1])
                 self.w16(pb + 52, -1)
@@ -496,7 +499,7 @@ class FakeOS:
         err = 0
         f = self.open.get(ref)
         if op in (0xA001, 0xA002, 0xA003, 0xA011, 0xA012, 0xA018,
-                  0xA044) and f is None:
+                  0xA044, 0xA045) and f is None:
             err = -51                           # rfNumErr
         elif op == 0xA008:                      # Create
             n = self.name(self.r32(pb + 18))
@@ -591,7 +594,16 @@ class FakeOS:
                 err = -43
             else:
                 self.uc.mem_write(pb + 32, bytes(48))
-        # SetFileInfo and FlushVol do nothing.
+        elif op in (0xA041, 0xA042):            # SetFilLock, RstFilLock
+            n = self.name(self.r32(pb + 18))
+            locked = self.__dict__.setdefault("locked", set())
+            if n not in self.files:
+                err = -43
+            elif op == 0xA041:
+                locked.add(n)
+            else:
+                locked.discard(n)
+        # SetFileInfo, FlushVol, SetVol and FlushFile do nothing.
         self.w16(pb + 16, err)
         self.set_d0(err)
         return True

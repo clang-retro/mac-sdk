@@ -63,11 +63,19 @@ EOF
   mkdir -p "$out/$cpu"
   cp "$work/install-$cpu/lib/libc.a" "$out/$cpu/libc.a"
   # The headers are the same for both CPUs.
+  # Keep the C++ library's headers (include/c++) that
+  # build-libstdcxx.sh installed before.
   if [ $cpu = m68k ]; then
+    if [ -d "$out/include/c++" ]; then
+      mv "$out/include/c++" "$work/c++.keep"
+    fi
     rm -rf "$out/include"
     cp -R "$work/install-$cpu/include" "$out/include"
-    # The Mac layer's own headers (pthread.h).
-    cp "$here"/libc/include/*.h "$out/include/"
+    if [ -d "$work/c++.keep" ]; then
+      mv "$work/c++.keep" "$out/include/c++"
+    fi
+    # The Mac layer's own headers (pthread.h, dlfcn.h, sys/utsname.h).
+    cp -R "$here"/libc/include/. "$out/include/"
   fi
 
   # The Mac layer, one archive member per file.

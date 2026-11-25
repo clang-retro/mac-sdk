@@ -34,6 +34,7 @@ static struct aligned *take_aligned(void *p) {
   return NULL;
 }
 
+/* Gives a block of n bytes, or NULL with ENOMEM. */
 void *malloc(size_t n) {
   Ptr p = NewPtr((Size)n);
   if (!p)
@@ -41,6 +42,7 @@ void *malloc(size_t n) {
   return p;
 }
 
+/* Releases a block from malloc and friends. */
 void free(void *p) {
   struct aligned *a;
   if (!p)
@@ -49,6 +51,7 @@ void free(void *p) {
   DisposePtr(a ? a->block : (Ptr)p);
 }
 
+/* Gives a zeroed block for count objects of size bytes. */
 void *calloc(size_t count, size_t size) {
   Ptr p;
   if (size && count > (size_t)0x7FFFFFFF / size) {
@@ -61,6 +64,7 @@ void *calloc(size_t count, size_t size) {
   return p;
 }
 
+/* Changes the size of a block; it can move. */
 void *realloc(void *old, size_t n) {
   Ptr p;
   Size have;
@@ -96,6 +100,7 @@ void *realloc(void *old, size_t n) {
   return p;
 }
 
+/* Gives a block of n bytes at a multiple of align (a power of 2). */
 void *aligned_alloc(size_t align, size_t n) {
   Ptr p;
   char *q;
@@ -125,10 +130,12 @@ void *aligned_alloc(size_t align, size_t n) {
   return q;
 }
 
+/* The same as aligned_alloc. */
 void *memalign(size_t align, size_t n) {
   return aligned_alloc(align, n);
 }
 
+/* Puts an aligned block in *out; gives 0 or an error number. */
 int posix_memalign(void **out, size_t align, size_t n) {
   void *p;
   int saved = errno;
@@ -141,4 +148,15 @@ int posix_memalign(void **out, size_t align, size_t n) {
   }
   *out = p;
   return 0;
+}
+
+/* Gives the number of bytes that the block p can hold. */
+size_t malloc_usable_size(void *p) {
+  struct aligned *a;
+  if (!p)
+    return 0;
+  for (a = aligned_blocks; a; a = a->next)
+    if ((void *)(a + 1) == p)
+      return (size_t)(GetPtrSize(a->block) - ((char *)p - (char *)a->block));
+  return (size_t)GetPtrSize((Ptr)p);
 }

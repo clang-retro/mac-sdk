@@ -16,6 +16,7 @@
 /* The DIR fields: fd holds the volume reference number, count the folder's
    directory ID and offset the index of the next item (from 1). */
 
+/* Starts a listing of the folder at path. */
 DIR *opendir(const char *path) {
   CInfoPBRec pb;
   Str255 name;
@@ -84,15 +85,15 @@ int closedir(DIR *d) {
   return 0;
 }
 
-/* The POSIX path of the current folder: "/Volume/Folder/...", from the
-   folder up to the volume's root (directory ID 2). */
-char *getcwd(char *buf, size_t size) {
+/* Puts the POSIX path of folder dir on volume vol ("/Volume/Folder/...",
+   up to the volume's root, directory ID 2) in buf, or in a new block
+   from malloc when buf is NULL. vol 0 and dir 0 are the current folder.
+   Gives buf, or NULL with errno set. */
+char *__mac_folder_path(short vol, long dir, char *buf, size_t size) {
   char path[1024];
   size_t len = 0, at = sizeof path;
   CInfoPBRec pb;
   Str255 name;
-  long dir = 0;
-  short vol = 0;
   OSErr err;
   unsigned i;
   path[--at] = 0;
@@ -134,4 +135,9 @@ char *getcwd(char *buf, size_t size) {
   }
   memcpy(buf, path + at, len + 1);
   return buf;
+}
+
+/* The POSIX path of the current folder. */
+char *getcwd(char *buf, size_t size) {
+  return __mac_folder_path(0, 0, buf, size);
 }

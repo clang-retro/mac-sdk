@@ -1,4 +1,5 @@
-/* stat, fstat, lstat, ftruncate, mkdir, rmdir and utime over the File
+/* stat, fstat, lstat, access, chmod, ftruncate, mkdir, rmdir, utime
+ * and futimens over the File
  * Manager's catalog calls. A folder is S_IFDIR, a file S_IFREG with the
  * size of its data fork; a locked file has no write permission. The
  * dates are the Mac's, which count local time, given in UTC.
@@ -11,6 +12,12 @@
 #include <unistd.h>
 #include <utime.h>
 #include "macos.h"
+
+/* The special times of futimens, when the C library does not have them. */
+#ifndef UTIME_NOW
+#define UTIME_NOW ((1L << 30) - 1L)
+#define UTIME_OMIT ((1L << 30) - 2L)
+#endif
 
 /* Seconds from 1904-01-01 to 1970-01-01. */
 #define MAC_EPOCH 2082844800UL
@@ -211,6 +218,82 @@ int utime(const char *path, const struct utimbuf *times) {
      folder's own ID names it. */
   if (name[0] != 0)
     pb.hFileInfo.ioDirID = 0;
+  pb.hFileInfo.ioFDirIndex = 0;
+  err = PBSetCatInfoSync(&pb);
+  return err == noErr ? 0 : fail(err);
+}
+
+/* Tells if the file or folder at path exists and, for W_OK, if it is
+   not locked. The Mac has no other permissions. */
+int access(const char *path, int mode) {
+  CInfoPBRec pb;
+  Str255 name;
+  OSErr err = __mac_cat_info(path, &pb, name);
+  if (err != noErr)
+    return fail(err);
+  if ((mode & W_OK) && (pb.hFileInfo.ioFlAttrib & ATTR_LOCKED)) {
+    errno = EACCES;
+    return -1;
+  }
+  return 0;
+}
+
+/* Locks a file when mode has no write permission, and unlocks it
+   otherwise. A folder cannot be locked here. */
+int chmod(const char *path, mode_t mode) {
+  CInfoPBRec pb;
+  Str255 name;
+  OSErr err = __mac_cat_info(path, &pb, name);
+  if (err != noErr)
+    return fail(err);
+  if (pb.hFileInfo.ioFlAttrib & ATTR_DIR)
+    return 0;
+  {
+    HParamBlockRec hp;
+    if (__mac_path(path, name) < 0)
+      return -1;
+    memset(&hp, 0, sizeof hp);
+    hp.fileParam.ioNamePtr = name;
+    err = (mode & 0222) ? PBHRstFLockSync(&hp) : PBHSetFLockSync(&hp);
+  }
+  return err == noErr ? 0 : fail(err);
+}
+
+/* Sets the modification date of an open file from times[1] (the access
+   date times[0] does not exist on the Mac). NULL or UTIME_NOW sets the
+   current time; UTIME_OMIT keeps the date. */
+int futimens(int fd, const struct timespec times[2]) {
+  FCBPBRec fcb;
+  CInfoPBRec pb;
+  Str255 name;
+  unsigned long date;
+  OSErr err;
+  short ref = __mac_fd_ref(fd);
+  if (!ref) {
+    errno = EBADF;
+    return -1;
+  }
+  if (times && times[1].tv_nsec == UTIME_OMIT)
+    return 0;
+  memset(&fcb, 0, sizeof fcb);
+  fcb.ioNamePtr = name;
+  fcb.ioRefNum = ref;
+  err = PBGetFCBInfoSync(&fcb);
+  if (err != noErr)
+    return fail(err);
+  memset(&pb, 0, sizeof pb);
+  pb.hFileInfo.ioNamePtr = name;
+  pb.hFileInfo.ioVRefNum = fcb.ioFCBVRefNum;
+  pb.hFileInfo.ioDirID = fcb.ioFCBParID;
+  err = PBGetCatInfoSync(&pb);
+  if (err != noErr)
+    return fail(err);
+  if (times && times[1].tv_nsec != UTIME_NOW)
+    date = __mac_time_to_date(times[1].tv_sec);
+  else
+    GetDateTime(&date);
+  pb.hFileInfo.ioFlMdDat = date;
+  pb.hFileInfo.ioDirID = fcb.ioFCBParID;
   pb.hFileInfo.ioFDirIndex = 0;
   err = PBSetCatInfoSync(&pb);
   return err == noErr ? 0 : fail(err);
