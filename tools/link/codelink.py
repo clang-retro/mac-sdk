@@ -9,10 +9,19 @@ Segment Loader to __start (start.S), which adds the image's load address
 to each listed pointer and calls main.
 
     python3 codelink.py -o Hello.bin start.o hello.o [more.o ...] [lib.a ...]
-        [--name Hello] [--creator ????] [--size KB] [--map FILE]
+        [--name Hello] [--creator ????] [--type APPL] [--size KB]
+        [--background-only] [--code-resource TYPE,ID] [--map FILE]
 
 The output is MacBinary II, for hfsutils' "hcopy -m". Put start.o first.
 From archives (.a), only the members the program needs are linked.
+
+--type sets the file type (APPL by default). --background-only sets
+onlyBackground in the SIZE resource, for a faceless background
+application. --code-resource TYPE,ID writes one resource of that type
+and ID with the image in place of CODE 0, CODE 1 and SIZE: for example
+a screen saver module or an INIT. Then put start-coderes.o first. Each
+call to the resource relocates the image to its load address and jumps
+to main with the caller's stack.
 
 For C++, the linker also:
 - keeps one copy of each COMDAT group (inline functions, templates, type
@@ -31,7 +40,7 @@ import struct
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from macres import macbinary, resource_fork, size_res  # noqa: E402
+from macres import file_type, macbinary, resource_fork, size_res  # noqa: E402
 import archive  # noqa: E402
 
 SHT_PROGBITS, SHT_SYMTAB, SHT_NOBITS, SHT_RELA = 1, 2, 8, 4
@@ -539,6 +548,14 @@ def main():
     ap.add_argument("--creator", default="????")
     ap.add_argument("--size", type=int, default=1024,
                     help="memory partition in KiB")
+    ap.add_argument("--type", default="APPL",
+                    help="file type (default APPL)")
+    ap.add_argument("--background-only", action="store_true",
+                    help="set onlyBackground in the SIZE resource (an "
+                    "application without a user interface)")
+    ap.add_argument("--code-resource", metavar="TYPE,ID",
+                    help="write one code resource of this type and ID "
+                    "instead of an application; put start-coderes.o first")
     ap.add_argument("--map", help="write symbol addresses here")
     ap.add_argument("--no-gc-sections", dest="gc", action="store_false",
                     help="keep the sections that nothing refers to")
@@ -556,17 +573,31 @@ def main():
         image, syms, _ = link(objs, a.gc)
     except (LinkError, archive.ArchiveError) as e:
         sys.exit(f"codelink: error: {e}")
-    code0, code1 = code_resources(image)
     name = a.name or os.path.splitext(os.path.basename(a.output))[0]
-    rsrc = resource_fork([(b"CODE", 0, code0), (b"CODE", 1, code1),
-                          (b"SIZE", -1, size_res(a.size))])
-    creator = a.creator.encode("mac_roman")[:4].ljust(4)
-    open(a.output, "wb").write(macbinary(name, b"APPL", creator, b"", rsrc))
+    if a.code_resource:
+        # One code resource: the image itself, with __start at offset 0.
+        rtype, _, rid = a.code_resource.partition(",")
+        try:
+            rid = int(rid)
+        except ValueError:
+            sys.exit("codelink: error: --code-resource needs TYPE,ID")
+        rsrc = resource_fork([(file_type(rtype), rid, image)])
+    else:
+        code0, code1 = code_resources(image)
+        rsrc = resource_fork([(b"CODE", 0, code0), (b"CODE", 1, code1),
+                              (b"SIZE", -1,
+                               size_res(a.size, a.background_only))])
+    open(a.output, "wb").write(macbinary(name, file_type(a.type),
+                                         file_type(a.creator), b"", rsrc))
     if a.map:
         with open(a.map, "w") as f:
             for n, (k, v) in sorted(syms.items(), key=lambda kv: kv[1][1]):
                 f.write(f"{v:08x} {k[0]} {n}\n")
-    print(f"codelink: {a.output}: {len(code1)} bytes in CODE 1")
+    if a.code_resource:
+        print(f"codelink: {a.output}: {len(image)} bytes in "
+              f"{a.code_resource}")
+    else:
+        print(f"codelink: {a.output}: {len(code1)} bytes in CODE 1")
 
 
 if __name__ == "__main__":

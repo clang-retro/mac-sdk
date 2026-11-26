@@ -47,6 +47,28 @@ for ex in examples/*.c; do
     -- -Wall -Werror "$ex" >/dev/null
 done
 echo "examples: linked"
+# A 68k code resource and a faceless background application: the file
+# types, the resource and the SIZE flags.
+CLANG="$CLANG" python3 tools/macapp.py --cpu 68k --no-libc --no-runtime \
+  --code-resource 'TEST,128' --type TeSt \
+  -o "$APPS/coderes.bin" -- -Wall -Werror tests/coderes.c >/dev/null
+CLANG="$CLANG" python3 tools/macapp.py --type appe --background-only \
+  -o "$APPS/bg.bin" -- -Wall -Werror examples/hello.c >/dev/null
+python3 - "$APPS/coderes.bin" "$APPS/bg.bin" <<'PY'
+import sys
+sys.path.insert(0, "tools/link")
+from macres import read_macbinary, read_resource_fork
+_, ftype, _, data, rsrc = read_macbinary(open(sys.argv[1], "rb").read())
+res = read_resource_fork(rsrc)
+assert ftype == b"TeSt" and not data, ftype
+assert [(t, i) for t, i, _ in res] == [(b"TEST", 128)], res
+# start-coderes.S comes first: movem.l d0-d2/a0-a1,-(sp)
+assert res[0][2][:4] == bytes.fromhex("48e7e0c0"), res[0][2][:4].hex()
+_, ftype, _, _, rsrc = read_macbinary(open(sys.argv[2], "rb").read())
+size = [b for t, _, b in read_resource_fork(rsrc) if t == b"SIZE"][0]
+assert ftype == b"appe" and size[0] & 0x04, (ftype, size.hex())
+PY
+echo "code resource, background application: linked"
 # The runtime library, when LLVM_SRC names a clang-retro/llvm checkout (for
 # compiler-rt): build it, link tests/runtime.c for both CPUs, and run the
 # 68k build as a 68000 and a 68020 in tools/sim68k.py (with unicorn).
