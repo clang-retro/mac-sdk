@@ -60,7 +60,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTGetPath(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTGetPath(DTPBPtr dtp) MAC_IMPORT(PBDTGetPath);
 #endif
 
 #if TARGET_CPU_68K
@@ -74,7 +74,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTCloseDown(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTCloseDown(DTPBPtr dtp) MAC_IMPORT(PBDTCloseDown);
 #endif
 
 #if TARGET_CPU_68K
@@ -88,7 +88,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTAddIconSync(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTAddIconSync(DTPBPtr dtp) MAC_IMPORT(PBDTAddIconSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBDTAddIconAsync(DTPBPtr dtp) {
@@ -101,7 +101,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTAddIconAsync(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTAddIconAsync(DTPBPtr dtp) MAC_IMPORT(PBDTAddIconAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -115,7 +115,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTGetIconSync(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTGetIconSync(DTPBPtr dtp) MAC_IMPORT(PBDTGetIconSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBDTGetIconAsync(DTPBPtr dtp) {
@@ -128,7 +128,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTGetIconAsync(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTGetIconAsync(DTPBPtr dtp) MAC_IMPORT(PBDTGetIconAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -142,7 +142,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTGetIconInfoSync(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTGetIconInfoSync(DTPBPtr dtp) MAC_IMPORT(PBDTGetIconInfoSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBDTGetIconInfoAsync(DTPBPtr dtp) {
@@ -155,7 +155,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTGetIconInfoAsync(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTGetIconInfoAsync(DTPBPtr dtp) MAC_IMPORT(PBDTGetIconInfoAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -169,7 +169,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTAddAPPLSync(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTAddAPPLSync(DTPBPtr dtp) MAC_IMPORT(PBDTAddAPPLSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBDTAddAPPLAsync(DTPBPtr dtp) {
@@ -182,7 +182,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTAddAPPLAsync(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTAddAPPLAsync(DTPBPtr dtp) MAC_IMPORT(PBDTAddAPPLAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -196,7 +196,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTRemoveAPPLSync(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTRemoveAPPLSync(DTPBPtr dtp) MAC_IMPORT(PBDTRemoveAPPLSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBDTRemoveAPPLAsync(DTPBPtr dtp) {
@@ -209,7 +209,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTRemoveAPPLAsync(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTRemoveAPPLAsync(DTPBPtr dtp) MAC_IMPORT(PBDTRemoveAPPLAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -223,7 +223,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTGetAPPLSync(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTGetAPPLSync(DTPBPtr dtp) MAC_IMPORT(PBDTGetAPPLSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBDTGetAPPLAsync(DTPBPtr dtp) {
@@ -236,7 +236,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTGetAPPLAsync(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTGetAPPLAsync(DTPBPtr dtp) MAC_IMPORT(PBDTGetAPPLAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -250,7 +250,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTSetCommentSync(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTSetCommentSync(DTPBPtr dtp) MAC_IMPORT(PBDTSetCommentSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBDTSetCommentAsync(DTPBPtr dtp) {
@@ -263,7 +263,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTSetCommentAsync(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTSetCommentAsync(DTPBPtr dtp) MAC_IMPORT(PBDTSetCommentAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -277,7 +277,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTRemoveCommentSync(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTRemoveCommentSync(DTPBPtr dtp) MAC_IMPORT(PBDTRemoveCommentSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBDTRemoveCommentAsync(DTPBPtr dtp) {
@@ -290,7 +290,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTRemoveCommentAsync(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTRemoveCommentAsync(DTPBPtr dtp) MAC_IMPORT(PBDTRemoveCommentAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -304,7 +304,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTGetCommentSync(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTGetCommentSync(DTPBPtr dtp) MAC_IMPORT(PBDTGetCommentSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBDTGetCommentAsync(DTPBPtr dtp) {
@@ -317,7 +317,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTGetCommentAsync(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTGetCommentAsync(DTPBPtr dtp) MAC_IMPORT(PBDTGetCommentAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -331,7 +331,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTFlushSync(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTFlushSync(DTPBPtr dtp) MAC_IMPORT(PBDTFlushSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBDTFlushAsync(DTPBPtr dtp) {
@@ -344,7 +344,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTFlushAsync(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTFlushAsync(DTPBPtr dtp) MAC_IMPORT(PBDTFlushAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -358,7 +358,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTResetSync(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTResetSync(DTPBPtr dtp) MAC_IMPORT(PBDTResetSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBDTResetAsync(DTPBPtr dtp) {
@@ -371,7 +371,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTResetAsync(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTResetAsync(DTPBPtr dtp) MAC_IMPORT(PBDTResetAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -385,7 +385,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTGetInfoSync(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTGetInfoSync(DTPBPtr dtp) MAC_IMPORT(PBDTGetInfoSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBDTGetInfoAsync(DTPBPtr dtp) {
@@ -398,7 +398,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTGetInfoAsync(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTGetInfoAsync(DTPBPtr dtp) MAC_IMPORT(PBDTGetInfoAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -412,7 +412,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTOpenInform(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTOpenInform(DTPBPtr dtp) MAC_IMPORT(PBDTOpenInform);
 #endif
 
 #if TARGET_CPU_68K
@@ -426,7 +426,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTDeleteSync(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTDeleteSync(DTPBPtr dtp) MAC_IMPORT(PBDTDeleteSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBDTDeleteAsync(DTPBPtr dtp) {
@@ -439,7 +439,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTDeleteAsync(DTPBPtr dtp);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDTDeleteAsync(DTPBPtr dtp) MAC_IMPORT(PBDTDeleteAsync);
 #endif
 
 #ifdef __cplusplus

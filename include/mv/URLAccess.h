@@ -143,79 +143,79 @@ enum {
 
 // URL Access Manager
 #if !TARGET_CPU_68K
-pascal OSStatus URLGetURLAccessVersion(UInt32 *returnVers);
+pascal OSStatus URLGetURLAccessVersion(UInt32 *returnVers) MAC_IMPORT(URLGetURLAccessVersion);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus URLSimpleDownload(const char *url, FSSpec *destination, Handle destinationHandle, URLOpenFlags openFlags, URLSystemEventUPP eventProc, void *userContext);
+pascal OSStatus URLSimpleDownload(const char *url, FSSpec *destination, Handle destinationHandle, URLOpenFlags openFlags, URLSystemEventUPP eventProc, void *userContext) MAC_IMPORT(URLSimpleDownload);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus URLDownload(URLReference urlRef, FSSpec *destination, Handle destinationHandle, URLOpenFlags openFlags, URLSystemEventUPP eventProc, void *userContext);
+pascal OSStatus URLDownload(URLReference urlRef, FSSpec *destination, Handle destinationHandle, URLOpenFlags openFlags, URLSystemEventUPP eventProc, void *userContext) MAC_IMPORT(URLDownload);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus URLSimpleUpload(const char *url, const FSSpec *source, URLOpenFlags openFlags, URLSystemEventUPP eventProc, void *userContext);
+pascal OSStatus URLSimpleUpload(const char *url, const FSSpec *source, URLOpenFlags openFlags, URLSystemEventUPP eventProc, void *userContext) MAC_IMPORT(URLSimpleUpload);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus URLUpload(URLReference urlRef, const FSSpec *source, URLOpenFlags openFlags, URLSystemEventUPP eventProc, void *userContext);
+pascal OSStatus URLUpload(URLReference urlRef, const FSSpec *source, URLOpenFlags openFlags, URLSystemEventUPP eventProc, void *userContext) MAC_IMPORT(URLUpload);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus URLNewReference(const char *url, URLReference *urlRef);
+pascal OSStatus URLNewReference(const char *url, URLReference *urlRef) MAC_IMPORT(URLNewReference);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus URLDisposeReference(URLReference urlRef);
+pascal OSStatus URLDisposeReference(URLReference urlRef) MAC_IMPORT(URLDisposeReference);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus URLOpen(URLReference urlRef, FSSpec *fileSpec, URLOpenFlags openFlags, URLNotifyUPP notifyProc, URLEventMask eventRegister, void *userContext);
+pascal OSStatus URLOpen(URLReference urlRef, FSSpec *fileSpec, URLOpenFlags openFlags, URLNotifyUPP notifyProc, URLEventMask eventRegister, void *userContext) MAC_IMPORT(URLOpen);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus URLAbort(URLReference urlRef);
+pascal OSStatus URLAbort(URLReference urlRef) MAC_IMPORT(URLAbort);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus URLGetDataAvailable(URLReference urlRef, Size *dataSize);
+pascal OSStatus URLGetDataAvailable(URLReference urlRef, Size *dataSize) MAC_IMPORT(URLGetDataAvailable);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus URLGetBuffer(URLReference urlRef, void **buffer, Size *bufferSize);
+pascal OSStatus URLGetBuffer(URLReference urlRef, void **buffer, Size *bufferSize) MAC_IMPORT(URLGetBuffer);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus URLReleaseBuffer(URLReference urlRef, void *buffer);
+pascal OSStatus URLReleaseBuffer(URLReference urlRef, void *buffer) MAC_IMPORT(URLReleaseBuffer);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus URLGetProperty(URLReference urlRef, const char *property, void *propertyBuffer, Size bufferSize);
+pascal OSStatus URLGetProperty(URLReference urlRef, const char *property, void *propertyBuffer, Size bufferSize) MAC_IMPORT(URLGetProperty);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus URLGetPropertySize(URLReference urlRef, const char *property, Size *propertySize);
+pascal OSStatus URLGetPropertySize(URLReference urlRef, const char *property, Size *propertySize) MAC_IMPORT(URLGetPropertySize);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus URLSetProperty(URLReference urlRef, const char *property, void *propertyBuffer, Size bufferSize);
+pascal OSStatus URLSetProperty(URLReference urlRef, const char *property, void *propertyBuffer, Size bufferSize) MAC_IMPORT(URLSetProperty);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus URLGetCurrentState(URLReference urlRef, URLState *state);
+pascal OSStatus URLGetCurrentState(URLReference urlRef, URLState *state) MAC_IMPORT(URLGetCurrentState);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus URLGetError(URLReference urlRef, OSStatus *urlError);
+pascal OSStatus URLGetError(URLReference urlRef, OSStatus *urlError) MAC_IMPORT(URLGetError);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus URLIdle(void);
+pascal OSStatus URLIdle(void) MAC_IMPORT(URLIdle);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus URLGetFileInfo(StringPtr fName, OSType *fType, OSType *fCreator);
+pascal OSStatus URLGetFileInfo(StringPtr fName, OSType *fType, OSType *fCreator) MAC_IMPORT(URLGetFileInfo);
 #endif
 
 #ifdef __cplusplus

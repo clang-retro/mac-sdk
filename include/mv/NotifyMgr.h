@@ -47,7 +47,7 @@ MAC_SINCE(0x0600, "6.0") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0600, "6.0") pascal OSErr NMInstall(NMRecPtr nmptr);
+MAC_SINCE(0x0600, "6.0") pascal OSErr NMInstall(NMRecPtr nmptr) MAC_IMPORT(NMInstall);
 #endif
 
 enum { _NMRemove = 0xA05F };
@@ -62,7 +62,7 @@ MAC_SINCE(0x0600, "6.0") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0600, "6.0") pascal OSErr NMRemove(NMRecPtr nmptr);
+MAC_SINCE(0x0600, "6.0") pascal OSErr NMRemove(NMRecPtr nmptr) MAC_IMPORT(NMRemove);
 #endif
 
 #ifdef __cplusplus

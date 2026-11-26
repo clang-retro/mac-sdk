@@ -658,282 +658,282 @@ typedef WindowPaintProcPtr WindowPaintUPP;
 #define DisposeWindowPaintProc(proc) DisposeWindowPaintUPP(proc)
 
 // Appearance Manager 1.0 (Mac OS 8)
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus RegisterAppearanceClient(void) M68K_INLINE(0x7015, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus RegisterAppearanceClient(void) MAC_IMPORT(RegisterAppearanceClient) M68K_INLINE(0x7015, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus UnregisterAppearanceClient(void) M68K_INLINE(0x7016, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus UnregisterAppearanceClient(void) MAC_IMPORT(UnregisterAppearanceClient) M68K_INLINE(0x7016, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus SetThemePen(ThemeBrush inBrush, SInt16 inDepth, Boolean inIsColorDevice) M68K_INLINE(0x7001, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus SetThemePen(ThemeBrush inBrush, SInt16 inDepth, Boolean inIsColorDevice) MAC_IMPORT(SetThemePen) M68K_INLINE(0x7001, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus SetThemeBackground(ThemeBrush inBrush, SInt16 inDepth, Boolean inIsColorDevice) M68K_INLINE(0x7002, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus SetThemeBackground(ThemeBrush inBrush, SInt16 inDepth, Boolean inIsColorDevice) MAC_IMPORT(SetThemeBackground) M68K_INLINE(0x7002, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus SetThemeTextColor(ThemeTextColor inColor, SInt16 inDepth, Boolean inIsColorDevice) M68K_INLINE(0x7003, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus SetThemeTextColor(ThemeTextColor inColor, SInt16 inDepth, Boolean inIsColorDevice) MAC_IMPORT(SetThemeTextColor) M68K_INLINE(0x7003, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus SetThemeWindowBackground(WindowRef inWindow, ThemeBrush inBrush, Boolean inUpdate) M68K_INLINE(0x7004, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus SetThemeWindowBackground(WindowRef inWindow, ThemeBrush inBrush, Boolean inUpdate) MAC_IMPORT(SetThemeWindowBackground) M68K_INLINE(0x7004, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeWindowHeader(const Rect *inRect, ThemeDrawState inState) M68K_INLINE(0x7005, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeWindowHeader(const Rect *inRect, ThemeDrawState inState) MAC_IMPORT(DrawThemeWindowHeader) M68K_INLINE(0x7005, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeWindowListViewHeader(const Rect *inRect, ThemeDrawState inState) M68K_INLINE(0x7006, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeWindowListViewHeader(const Rect *inRect, ThemeDrawState inState) MAC_IMPORT(DrawThemeWindowListViewHeader) M68K_INLINE(0x7006, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemePlacard(const Rect *inRect, ThemeDrawState inState) M68K_INLINE(0x7007, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemePlacard(const Rect *inRect, ThemeDrawState inState) MAC_IMPORT(DrawThemePlacard) M68K_INLINE(0x7007, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeEditTextFrame(const Rect *inRect, ThemeDrawState inState) M68K_INLINE(0x7009, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeEditTextFrame(const Rect *inRect, ThemeDrawState inState) MAC_IMPORT(DrawThemeEditTextFrame) M68K_INLINE(0x7009, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeListBoxFrame(const Rect *inRect, ThemeDrawState inState) M68K_INLINE(0x700A, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeListBoxFrame(const Rect *inRect, ThemeDrawState inState) MAC_IMPORT(DrawThemeListBoxFrame) M68K_INLINE(0x700A, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeFocusRect(const Rect *inRect, Boolean inHasFocus) M68K_INLINE(0x700B, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeFocusRect(const Rect *inRect, Boolean inHasFocus) MAC_IMPORT(DrawThemeFocusRect) M68K_INLINE(0x700B, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemePrimaryGroup(const Rect *inRect, ThemeDrawState inState) M68K_INLINE(0x700C, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemePrimaryGroup(const Rect *inRect, ThemeDrawState inState) MAC_IMPORT(DrawThemePrimaryGroup) M68K_INLINE(0x700C, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeSecondaryGroup(const Rect *inRect, ThemeDrawState inState) M68K_INLINE(0x700D, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeSecondaryGroup(const Rect *inRect, ThemeDrawState inState) MAC_IMPORT(DrawThemeSecondaryGroup) M68K_INLINE(0x700D, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeSeparator(const Rect *inRect, ThemeDrawState inState) M68K_INLINE(0x700E, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeSeparator(const Rect *inRect, ThemeDrawState inState) MAC_IMPORT(DrawThemeSeparator) M68K_INLINE(0x700E, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeModelessDialogFrame(const Rect *inRect, ThemeDrawState inState) M68K_INLINE(0x7008, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeModelessDialogFrame(const Rect *inRect, ThemeDrawState inState) MAC_IMPORT(DrawThemeModelessDialogFrame) M68K_INLINE(0x7008, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeGenericWell(const Rect *inRect, ThemeDrawState inState, Boolean inFillCenter) M68K_INLINE(0x7022, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeGenericWell(const Rect *inRect, ThemeDrawState inState, Boolean inFillCenter) MAC_IMPORT(DrawThemeGenericWell) M68K_INLINE(0x7022, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeFocusRegion(RgnHandle inRegion, Boolean inHasFocus) M68K_INLINE(0x7023, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeFocusRegion(RgnHandle inRegion, Boolean inHasFocus) MAC_IMPORT(DrawThemeFocusRegion) M68K_INLINE(0x7023, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal Boolean IsThemeInColor(SInt16 inDepth, Boolean inIsColorDevice) M68K_INLINE(0x7024, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal Boolean IsThemeInColor(SInt16 inDepth, Boolean inIsColorDevice) MAC_IMPORT(IsThemeInColor) M68K_INLINE(0x7024, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus GetThemeAccentColors(CTabHandle *outColors) M68K_INLINE(0x7025, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus GetThemeAccentColors(CTabHandle *outColors) MAC_IMPORT(GetThemeAccentColors) M68K_INLINE(0x7025, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeMenuBarBackground(const Rect *inBounds, ThemeMenuBarState inState, UInt32 inAttributes) M68K_INLINE(0x7018, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeMenuBarBackground(const Rect *inBounds, ThemeMenuBarState inState, UInt32 inAttributes) MAC_IMPORT(DrawThemeMenuBarBackground) M68K_INLINE(0x7018, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeMenuTitle(const Rect *inMenuBarRect, const Rect *inTitleRect, ThemeMenuState inState, UInt32 inAttributes, MenuTitleDrawingUPP inTitleProc, UInt32 inTitleData) M68K_INLINE(0x7019, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeMenuTitle(const Rect *inMenuBarRect, const Rect *inTitleRect, ThemeMenuState inState, UInt32 inAttributes, MenuTitleDrawingUPP inTitleProc, UInt32 inTitleData) MAC_IMPORT(DrawThemeMenuTitle) M68K_INLINE(0x7019, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus GetThemeMenuBarHeight(SInt16 *outHeight) M68K_INLINE(0x701A, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus GetThemeMenuBarHeight(SInt16 *outHeight) MAC_IMPORT(GetThemeMenuBarHeight) M68K_INLINE(0x701A, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeMenuBackground(const Rect *inMenuRect, ThemeMenuType inMenuType) M68K_INLINE(0x701B, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeMenuBackground(const Rect *inMenuRect, ThemeMenuType inMenuType) MAC_IMPORT(DrawThemeMenuBackground) M68K_INLINE(0x701B, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus GetThemeMenuBackgroundRegion(const Rect *inMenuRect, ThemeMenuType menuType, RgnHandle region) M68K_INLINE(0x701C, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus GetThemeMenuBackgroundRegion(const Rect *inMenuRect, ThemeMenuType menuType, RgnHandle region) MAC_IMPORT(GetThemeMenuBackgroundRegion) M68K_INLINE(0x701C, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeMenuItem(const Rect *inMenuRect, const Rect *inItemRect, SInt16 inVirtualMenuTop, SInt16 inVirtualMenuBottom, ThemeMenuState inState, ThemeMenuItemType inItemType, MenuItemDrawingUPP inDrawProc, UInt32 inUserData) M68K_INLINE(0x701D, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeMenuItem(const Rect *inMenuRect, const Rect *inItemRect, SInt16 inVirtualMenuTop, SInt16 inVirtualMenuBottom, ThemeMenuState inState, ThemeMenuItemType inItemType, MenuItemDrawingUPP inDrawProc, UInt32 inUserData) MAC_IMPORT(DrawThemeMenuItem) M68K_INLINE(0x701D, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeMenuSeparator(const Rect *inItemRect) M68K_INLINE(0x701E, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus DrawThemeMenuSeparator(const Rect *inItemRect) MAC_IMPORT(DrawThemeMenuSeparator) M68K_INLINE(0x701E, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus GetThemeMenuSeparatorHeight(SInt16 *outHeight) M68K_INLINE(0x701F, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus GetThemeMenuSeparatorHeight(SInt16 *outHeight) MAC_IMPORT(GetThemeMenuSeparatorHeight) M68K_INLINE(0x701F, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus GetThemeMenuItemExtra(ThemeMenuItemType inItemType, SInt16 *outHeight, SInt16 *outWidth) M68K_INLINE(0x7020, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus GetThemeMenuItemExtra(ThemeMenuItemType inItemType, SInt16 *outHeight, SInt16 *outWidth) MAC_IMPORT(GetThemeMenuItemExtra) M68K_INLINE(0x7020, 0xAA74);
 
-MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus GetThemeMenuTitleExtra(SInt16 *outWidth, Boolean inIsSquished) M68K_INLINE(0x7021, 0xAA74);
+MAC_SINCE_GESTALT(0x0810, "8.1", "'appr'") pascal OSStatus GetThemeMenuTitleExtra(SInt16 *outWidth, Boolean inIsSquished) MAC_IMPORT(GetThemeMenuTitleExtra) M68K_INLINE(0x7021, 0xAA74);
 
 // Appearance Manager 1.1 (Mac OS 8.5)
 #if !TARGET_CPU_68K
-pascal Boolean IsAppearanceClient(const ProcessSerialNumber *process);
+pascal Boolean IsAppearanceClient(const ProcessSerialNumber *process) MAC_IMPORT(IsAppearanceClient);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetThemeDrawingState(ThemeDrawingState *outState);
+pascal OSStatus GetThemeDrawingState(ThemeDrawingState *outState) MAC_IMPORT(GetThemeDrawingState);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus SetThemeDrawingState(ThemeDrawingState inState, Boolean inDisposeNow);
+pascal OSStatus SetThemeDrawingState(ThemeDrawingState inState, Boolean inDisposeNow) MAC_IMPORT(SetThemeDrawingState);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus DisposeThemeDrawingState(ThemeDrawingState inState);
+pascal OSStatus DisposeThemeDrawingState(ThemeDrawingState inState) MAC_IMPORT(DisposeThemeDrawingState);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus NormalizeThemeDrawingState(void);
+pascal OSStatus NormalizeThemeDrawingState(void) MAC_IMPORT(NormalizeThemeDrawingState);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetThemeTextColor(ThemeTextColor inColor, SInt16 inDepth, Boolean inColorDev, RGBColor *outColor);
+pascal OSStatus GetThemeTextColor(ThemeTextColor inColor, SInt16 inDepth, Boolean inColorDev, RGBColor *outColor) MAC_IMPORT(GetThemeTextColor);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetThemeBrushAsColor(ThemeBrush inBrush, SInt16 inDepth, Boolean inColorDev, RGBColor *outColor);
+pascal OSStatus GetThemeBrushAsColor(ThemeBrush inBrush, SInt16 inDepth, Boolean inColorDev, RGBColor *outColor) MAC_IMPORT(GetThemeBrushAsColor);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus ApplyThemeBackground(ThemeBackgroundKind inKind, const Rect *bounds, ThemeDrawState inState, SInt16 inDepth, Boolean inColorDev);
+pascal OSStatus ApplyThemeBackground(ThemeBackgroundKind inKind, const Rect *bounds, ThemeDrawState inState, SInt16 inDepth, Boolean inColorDev) MAC_IMPORT(ApplyThemeBackground);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus SetThemeTextColorForWindow(WindowRef inWindow, Boolean isActive, SInt16 depth, Boolean isColorDev);
+pascal OSStatus SetThemeTextColorForWindow(WindowRef inWindow, Boolean isActive, SInt16 depth, Boolean isColorDev) MAC_IMPORT(SetThemeTextColorForWindow);
 #endif
 
 #if !TARGET_CPU_68K
-pascal Boolean IsValidAppearanceFileType(OSType fileType);
+pascal Boolean IsValidAppearanceFileType(OSType fileType) MAC_IMPORT(IsValidAppearanceFileType);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetThemeFont(ThemeFontID inFontID, ScriptCode inScript, Str255 outFontName, SInt16 *outFontSize, Style *outStyle);
+pascal OSStatus GetThemeFont(ThemeFontID inFontID, ScriptCode inScript, Str255 outFontName, SInt16 *outFontSize, Style *outStyle) MAC_IMPORT(GetThemeFont);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus UseThemeFont(ThemeFontID inFontID, ScriptCode inScript);
+pascal OSStatus UseThemeFont(ThemeFontID inFontID, ScriptCode inScript) MAC_IMPORT(UseThemeFont);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus DrawThemeTabPane(const Rect *inRect, ThemeDrawState inState);
+pascal OSStatus DrawThemeTabPane(const Rect *inRect, ThemeDrawState inState) MAC_IMPORT(DrawThemeTabPane);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus DrawThemeTab(const Rect *inRect, ThemeTabStyle inStyle, ThemeTabDirection inDirection, ThemeTabTitleDrawUPP labelProc, UInt32 userData);
+pascal OSStatus DrawThemeTab(const Rect *inRect, ThemeTabStyle inStyle, ThemeTabDirection inDirection, ThemeTabTitleDrawUPP labelProc, UInt32 userData) MAC_IMPORT(DrawThemeTab);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetThemeTabRegion(const Rect *inRect, ThemeTabStyle inStyle, ThemeTabDirection inDirection, RgnHandle ioRgn);
+pascal OSStatus GetThemeTabRegion(const Rect *inRect, ThemeTabStyle inStyle, ThemeTabDirection inDirection, RgnHandle ioRgn) MAC_IMPORT(GetThemeTabRegion);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus SetThemeCursor(ThemeCursor inCursor);
+pascal OSStatus SetThemeCursor(ThemeCursor inCursor) MAC_IMPORT(SetThemeCursor);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus SetAnimatedThemeCursor(ThemeCursor inCursor, UInt32 inAnimationStep);
+pascal OSStatus SetAnimatedThemeCursor(ThemeCursor inCursor, UInt32 inAnimationStep) MAC_IMPORT(SetAnimatedThemeCursor);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetThemeScrollBarThumbStyle(ThemeScrollBarThumbStyle *outStyle);
+pascal OSStatus GetThemeScrollBarThumbStyle(ThemeScrollBarThumbStyle *outStyle) MAC_IMPORT(GetThemeScrollBarThumbStyle);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetThemeScrollBarArrowStyle(ThemeScrollBarArrowStyle *outStyle);
+pascal OSStatus GetThemeScrollBarArrowStyle(ThemeScrollBarArrowStyle *outStyle) MAC_IMPORT(GetThemeScrollBarArrowStyle);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetThemeCheckBoxStyle(ThemeCheckBoxStyle *outStyle);
+pascal OSStatus GetThemeCheckBoxStyle(ThemeCheckBoxStyle *outStyle) MAC_IMPORT(GetThemeCheckBoxStyle);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus DrawThemeScrollBarArrows(const Rect *bounds, ThemeTrackEnableState enableState, ThemeTrackPressState pressState, Boolean isHoriz, Rect *trackBounds);
+pascal OSStatus DrawThemeScrollBarArrows(const Rect *bounds, ThemeTrackEnableState enableState, ThemeTrackPressState pressState, Boolean isHoriz, Rect *trackBounds) MAC_IMPORT(DrawThemeScrollBarArrows);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetThemeScrollBarTrackRect(const Rect *bounds, ThemeTrackEnableState enableState, ThemeTrackPressState pressState, Boolean isHoriz, Rect *trackBounds);
+pascal OSStatus GetThemeScrollBarTrackRect(const Rect *bounds, ThemeTrackEnableState enableState, ThemeTrackPressState pressState, Boolean isHoriz, Rect *trackBounds) MAC_IMPORT(GetThemeScrollBarTrackRect);
 #endif
 
 #if !TARGET_CPU_68K
-pascal Boolean HitTestThemeScrollBarArrows(const Rect *scrollBarBounds, ThemeTrackEnableState enableState, ThemeTrackPressState pressState, Boolean isHoriz, Point ptHit, Rect *trackBounds, ControlPartCode *partcode);
+pascal Boolean HitTestThemeScrollBarArrows(const Rect *scrollBarBounds, ThemeTrackEnableState enableState, ThemeTrackPressState pressState, Boolean isHoriz, Point ptHit, Rect *trackBounds, ControlPartCode *partcode) MAC_IMPORT(HitTestThemeScrollBarArrows);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetThemeTrackBounds(const ThemeTrackDrawInfo *drawInfo, Rect *bounds);
+pascal OSStatus GetThemeTrackBounds(const ThemeTrackDrawInfo *drawInfo, Rect *bounds) MAC_IMPORT(GetThemeTrackBounds);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetThemeTrackThumbRgn(const ThemeTrackDrawInfo *drawInfo, RgnHandle thumbRgn);
+pascal OSStatus GetThemeTrackThumbRgn(const ThemeTrackDrawInfo *drawInfo, RgnHandle thumbRgn) MAC_IMPORT(GetThemeTrackThumbRgn);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetThemeTrackDragRect(const ThemeTrackDrawInfo *drawInfo, Rect *dragRect);
+pascal OSStatus GetThemeTrackDragRect(const ThemeTrackDrawInfo *drawInfo, Rect *dragRect) MAC_IMPORT(GetThemeTrackDragRect);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus DrawThemeTrack(const ThemeTrackDrawInfo *drawInfo, RgnHandle rgnGhost, ThemeEraseUPP eraseProc, UInt32 eraseData);
+pascal OSStatus DrawThemeTrack(const ThemeTrackDrawInfo *drawInfo, RgnHandle rgnGhost, ThemeEraseUPP eraseProc, UInt32 eraseData) MAC_IMPORT(DrawThemeTrack);
 #endif
 
 #if !TARGET_CPU_68K
-pascal Boolean HitTestThemeTrack(const ThemeTrackDrawInfo *drawInfo, Point mousePoint, AppearancePartCode *partHit);
+pascal Boolean HitTestThemeTrack(const ThemeTrackDrawInfo *drawInfo, Point mousePoint, AppearancePartCode *partHit) MAC_IMPORT(HitTestThemeTrack);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetThemeTrackLiveValue(const ThemeTrackDrawInfo *drawInfo, SInt32 relativePosition, SInt32 *value);
+pascal OSStatus GetThemeTrackLiveValue(const ThemeTrackDrawInfo *drawInfo, SInt32 relativePosition, SInt32 *value) MAC_IMPORT(GetThemeTrackLiveValue);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus DrawThemeTrackTickMarks(const ThemeTrackDrawInfo *drawInfo, ItemCount numTicks, ThemeEraseUPP eraseProc, UInt32 eraseData);
+pascal OSStatus DrawThemeTrackTickMarks(const ThemeTrackDrawInfo *drawInfo, ItemCount numTicks, ThemeEraseUPP eraseProc, UInt32 eraseData) MAC_IMPORT(DrawThemeTrackTickMarks);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetThemeTrackThumbPositionFromOffset(const ThemeTrackDrawInfo *drawInfo, Point thumbOffset, SInt32 *relativePosition);
+pascal OSStatus GetThemeTrackThumbPositionFromOffset(const ThemeTrackDrawInfo *drawInfo, Point thumbOffset, SInt32 *relativePosition) MAC_IMPORT(GetThemeTrackThumbPositionFromOffset);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetThemeTrackThumbPositionFromRegion(const ThemeTrackDrawInfo *drawInfo, RgnHandle thumbRgn, SInt32 *relativePosition);
+pascal OSStatus GetThemeTrackThumbPositionFromRegion(const ThemeTrackDrawInfo *drawInfo, RgnHandle thumbRgn, SInt32 *relativePosition) MAC_IMPORT(GetThemeTrackThumbPositionFromRegion);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus DrawThemeChasingArrows(const Rect *bounds, UInt32 index, ThemeDrawState state, ThemeEraseUPP eraseProc, UInt32 eraseData);
+pascal OSStatus DrawThemeChasingArrows(const Rect *bounds, UInt32 index, ThemeDrawState state, ThemeEraseUPP eraseProc, UInt32 eraseData) MAC_IMPORT(DrawThemeChasingArrows);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus DrawThemePopupArrow(const Rect *bounds, ThemeArrowOrientation orientation, ThemePopupArrowSize size, ThemeDrawState state, ThemeEraseUPP eraseProc, UInt32 eraseData);
+pascal OSStatus DrawThemePopupArrow(const Rect *bounds, ThemeArrowOrientation orientation, ThemePopupArrowSize size, ThemeDrawState state, ThemeEraseUPP eraseProc, UInt32 eraseData) MAC_IMPORT(DrawThemePopupArrow);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus DrawThemeStandaloneGrowBox(Point origin, ThemeGrowDirection growDirection, Boolean isSmall, ThemeDrawState state);
+pascal OSStatus DrawThemeStandaloneGrowBox(Point origin, ThemeGrowDirection growDirection, Boolean isSmall, ThemeDrawState state) MAC_IMPORT(DrawThemeStandaloneGrowBox);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus DrawThemeStandaloneNoGrowBox(Point origin, ThemeGrowDirection growDirection, Boolean isSmall, ThemeDrawState state);
+pascal OSStatus DrawThemeStandaloneNoGrowBox(Point origin, ThemeGrowDirection growDirection, Boolean isSmall, ThemeDrawState state) MAC_IMPORT(DrawThemeStandaloneNoGrowBox);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetThemeStandaloneGrowBoxBounds(Point origin, ThemeGrowDirection growDirection, Boolean isSmall, Rect *bounds);
+pascal OSStatus GetThemeStandaloneGrowBoxBounds(Point origin, ThemeGrowDirection growDirection, Boolean isSmall, Rect *bounds) MAC_IMPORT(GetThemeStandaloneGrowBoxBounds);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus DrawThemeTickMark(const Rect *bounds, ThemeDrawState state);
+pascal OSStatus DrawThemeTickMark(const Rect *bounds, ThemeDrawState state) MAC_IMPORT(DrawThemeTickMark);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus DrawThemeButton(const Rect *inBounds, ThemeButtonKind inKind, const ThemeButtonDrawInfo *inNewInfo, const ThemeButtonDrawInfo *inPrevInfo, ThemeEraseUPP inEraseProc, ThemeButtonDrawUPP inLabelProc, UInt32 inUserData);
+pascal OSStatus DrawThemeButton(const Rect *inBounds, ThemeButtonKind inKind, const ThemeButtonDrawInfo *inNewInfo, const ThemeButtonDrawInfo *inPrevInfo, ThemeEraseUPP inEraseProc, ThemeButtonDrawUPP inLabelProc, UInt32 inUserData) MAC_IMPORT(DrawThemeButton);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetThemeButtonRegion(const Rect *inBounds, ThemeButtonKind inKind, const ThemeButtonDrawInfo *inNewInfo, RgnHandle outRegion);
+pascal OSStatus GetThemeButtonRegion(const Rect *inBounds, ThemeButtonKind inKind, const ThemeButtonDrawInfo *inNewInfo, RgnHandle outRegion) MAC_IMPORT(GetThemeButtonRegion);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetThemeButtonContentBounds(const Rect *inBounds, ThemeButtonKind inKind, const ThemeButtonDrawInfo *inDrawInfo, Rect *outBounds);
+pascal OSStatus GetThemeButtonContentBounds(const Rect *inBounds, ThemeButtonKind inKind, const ThemeButtonDrawInfo *inDrawInfo, Rect *outBounds) MAC_IMPORT(GetThemeButtonContentBounds);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetThemeButtonBackgroundBounds(const Rect *inBounds, ThemeButtonKind inKind, const ThemeButtonDrawInfo *inDrawInfo, Rect *outBounds);
+pascal OSStatus GetThemeButtonBackgroundBounds(const Rect *inBounds, ThemeButtonKind inKind, const ThemeButtonDrawInfo *inDrawInfo, Rect *outBounds) MAC_IMPORT(GetThemeButtonBackgroundBounds);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus PlayThemeSound(ThemeSoundKind kind);
+pascal OSStatus PlayThemeSound(ThemeSoundKind kind) MAC_IMPORT(PlayThemeSound);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus BeginThemeDragSound(ThemeDragSoundKind kind);
+pascal OSStatus BeginThemeDragSound(ThemeDragSoundKind kind) MAC_IMPORT(BeginThemeDragSound);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus EndThemeDragSound(void);
+pascal OSStatus EndThemeDragSound(void) MAC_IMPORT(EndThemeDragSound);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus DrawThemeWindowFrame(ThemeWindowType flavor, const Rect *contRect, ThemeDrawState state, const ThemeWindowMetrics *metrics, ThemeWindowAttributes attributes, WindowTitleDrawingUPP titleProc, UInt32 titleData);
+pascal OSStatus DrawThemeWindowFrame(ThemeWindowType flavor, const Rect *contRect, ThemeDrawState state, const ThemeWindowMetrics *metrics, ThemeWindowAttributes attributes, WindowTitleDrawingUPP titleProc, UInt32 titleData) MAC_IMPORT(DrawThemeWindowFrame);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus DrawThemeTitleBarWidget(ThemeWindowType flavor, const Rect *contRect, ThemeDrawState state, const ThemeWindowMetrics *metrics, ThemeWindowAttributes attributes, ThemeTitleBarWidget widget);
+pascal OSStatus DrawThemeTitleBarWidget(ThemeWindowType flavor, const Rect *contRect, ThemeDrawState state, const ThemeWindowMetrics *metrics, ThemeWindowAttributes attributes, ThemeTitleBarWidget widget) MAC_IMPORT(DrawThemeTitleBarWidget);
 #endif
 
 #if !TARGET_CPU_68K
-pascal Boolean GetThemeWindowRegionHit(ThemeWindowType flavor, const Rect *inContRect, ThemeDrawState state, const ThemeWindowMetrics *metrics, ThemeWindowAttributes inAttributes, Point inPoint, WindowRegionCode *outRegionHit);
+pascal Boolean GetThemeWindowRegionHit(ThemeWindowType flavor, const Rect *inContRect, ThemeDrawState state, const ThemeWindowMetrics *metrics, ThemeWindowAttributes inAttributes, Point inPoint, WindowRegionCode *outRegionHit) MAC_IMPORT(GetThemeWindowRegionHit);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetThemeWindowRegion(ThemeWindowType flavor, const Rect *contRect, ThemeDrawState state, const ThemeWindowMetrics *metrics, ThemeWindowAttributes attributes, WindowRegionCode winRegion, RgnHandle rgn);
+pascal OSStatus GetThemeWindowRegion(ThemeWindowType flavor, const Rect *contRect, ThemeDrawState state, const ThemeWindowMetrics *metrics, ThemeWindowAttributes attributes, WindowRegionCode winRegion, RgnHandle rgn) MAC_IMPORT(GetThemeWindowRegion);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus DrawThemeScrollBarDelimiters(ThemeWindowType flavor, const Rect *inContRect, ThemeDrawState state, ThemeWindowAttributes attributes);
+pascal OSStatus DrawThemeScrollBarDelimiters(ThemeWindowType flavor, const Rect *inContRect, ThemeDrawState state, ThemeWindowAttributes attributes) MAC_IMPORT(DrawThemeScrollBarDelimiters);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus IterateThemes(ThemeIteratorUPP inProc, void *inUserData);
+pascal OSStatus IterateThemes(ThemeIteratorUPP inProc, void *inUserData) MAC_IMPORT(IterateThemes);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetTheme(Collection ioCollection);
+pascal OSStatus GetTheme(Collection ioCollection) MAC_IMPORT(GetTheme);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus SetTheme(Collection ioCollection);
+pascal OSStatus SetTheme(Collection ioCollection) MAC_IMPORT(SetTheme);
 #endif
 
 // Window content painting (Mac OS 8.5, WindowsLib)
 #if !TARGET_CPU_68K
-pascal OSStatus InstallWindowContentPaintProc(WindowRef window, WindowPaintUPP paintProc, WindowPaintProcOptions options, void *refCon);
+pascal OSStatus InstallWindowContentPaintProc(WindowRef window, WindowPaintUPP paintProc, WindowPaintProcOptions options, void *refCon) MAC_IMPORT(InstallWindowContentPaintProc);
 #endif
 
 #ifdef __cplusplus

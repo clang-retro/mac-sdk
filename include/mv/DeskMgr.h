@@ -42,25 +42,25 @@ enum {
 #define LMSetSEvtEnb(val) ((*(Byte *)0x0000015C) = (val))
 
 enum { _OpenDeskAcc = 0xA9B6 };
-pascal INTEGER OpenDeskAcc(ConstStringPtr acc) M68K_INLINE(0xA9B6);
+pascal INTEGER OpenDeskAcc(ConstStringPtr acc) MAC_IMPORT(OpenDeskAcc) M68K_INLINE(0xA9B6);
 
 enum { _CloseDeskAcc = 0xA9B7 };
-pascal void CloseDeskAcc(INTEGER rn) M68K_INLINE(0xA9B7);
+pascal void CloseDeskAcc(INTEGER rn) MAC_IMPORT(CloseDeskAcc) M68K_INLINE(0xA9B7);
 
 enum { _SystemClick = 0xA9B3 };
-pascal void SystemClick(EventRecord *evp, WindowPtr wp) M68K_INLINE(0xA9B3);
+pascal void SystemClick(EventRecord *evp, WindowPtr wp) MAC_IMPORT(SystemClick) M68K_INLINE(0xA9B3);
 
 enum { _SystemEdit = 0xA9C2 };
-pascal Boolean SystemEdit(INTEGER editcmd) M68K_INLINE(0xA9C2);
+pascal Boolean SystemEdit(INTEGER editcmd) MAC_IMPORT(SystemEdit) M68K_INLINE(0xA9C2);
 
 enum { _SystemTask = 0xA9B4 };
-pascal void SystemTask(void) M68K_INLINE(0xA9B4);
+pascal void SystemTask(void) MAC_IMPORT(SystemTask) M68K_INLINE(0xA9B4);
 
 enum { _SystemEvent = 0xA9B2 };
-pascal Boolean SystemEvent(EventRecord *evp) M68K_INLINE(0xA9B2);
+pascal Boolean SystemEvent(EventRecord *evp) MAC_IMPORT(SystemEvent) M68K_INLINE(0xA9B2);
 
 enum { _SystemMenu = 0xA9B5 };
-pascal void SystemMenu(LONGINT menu) M68K_INLINE(0xA9B5);
+pascal void SystemMenu(LONGINT menu) MAC_IMPORT(SystemMenu) M68K_INLINE(0xA9B5);
 
 #ifdef __cplusplus
 }

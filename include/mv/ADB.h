@@ -39,12 +39,12 @@ struct ADBSetInfoBlock {
 #define LMSetKbdType(val) ((*(Byte *)0x0000021E) = (val))
 
 enum { _ADBReInit = 0xA07B };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void ADBReInit(void) M68K_INLINE(0xA07B);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void ADBReInit(void) MAC_IMPORT(ADBReInit) M68K_INLINE(0xA07B);
 
 #if TARGET_CPU_68K
 MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ OSErr ADBOp(Ptr data, ProcPtr procp, Ptr buffer, INTEGER command);
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr ADBOp(Ptr data, ProcPtr procp, Ptr buffer, INTEGER command);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr ADBOp(Ptr data, ProcPtr procp, Ptr buffer, INTEGER command) MAC_IMPORT(ADBOp);
 #endif
 
 enum { _CountADBs = 0xA077 };
@@ -58,7 +58,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal INTEGER CountADBs(void);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal INTEGER CountADBs(void) MAC_IMPORT(CountADBs);
 #endif
 
 enum { _GetIndADB = 0xA078 };
@@ -74,7 +74,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr GetIndADB(ADBDataBlock *adbp, INTEGER index);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr GetIndADB(ADBDataBlock *adbp, INTEGER index) MAC_IMPORT(GetIndADB);
 #endif
 
 enum { _GetADBInfo = 0xA079 };
@@ -90,7 +90,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr GetADBInfo(ADBDataBlock *adbp, INTEGER address);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr GetADBInfo(ADBDataBlock *adbp, INTEGER address) MAC_IMPORT(GetADBInfo);
 #endif
 
 enum { _SetADBInfo = 0xA07A };
@@ -106,7 +106,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SetADBInfo(ADBSetInfoBlock *adbp, INTEGER address);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SetADBInfo(ADBSetInfoBlock *adbp, INTEGER address) MAC_IMPORT(SetADBInfo);
 #endif
 
 #if TARGET_CPU_68K

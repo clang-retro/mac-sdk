@@ -62,19 +62,19 @@ struct DrvSts {
 #if TARGET_CPU_68K
 static __inline__ OSErr DiskEject(INTEGER rn);
 #else
-pascal OSErr DiskEject(INTEGER rn);
+pascal OSErr DiskEject(INTEGER rn) MAC_IMPORT(DiskEject);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr SetTagBuffer(Ptr bp);
 #else
-pascal OSErr SetTagBuffer(Ptr bp);
+pascal OSErr SetTagBuffer(Ptr bp) MAC_IMPORT(SetTagBuffer);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr DriveStatus(INTEGER dn, DrvSts *statp);
 #else
-pascal OSErr DriveStatus(INTEGER dn, DrvSts *statp);
+pascal OSErr DriveStatus(INTEGER dn, DrvSts *statp) MAC_IMPORT(DriveStatus);
 #endif
 
 #if TARGET_CPU_68K

@@ -106,31 +106,31 @@ typedef FTSynthRec *FTsynthPtr;
 #if TARGET_CPU_68K
 static __inline__ void StartSound(Ptr srec, LONGINT nb, ProcPtr comp);
 #else
-pascal void StartSound(Ptr srec, LONGINT nb, ProcPtr comp);
+pascal void StartSound(Ptr srec, LONGINT nb, ProcPtr comp) MAC_IMPORT(StartSound);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void StopSound(void);
 #else
-pascal void StopSound(void);
+pascal void StopSound(void) MAC_IMPORT(StopSound);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ Boolean SoundDone(void);
 #else
-pascal Boolean SoundDone(void);
+pascal Boolean SoundDone(void) MAC_IMPORT(SoundDone);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void GetSoundVol(INTEGER *volp);
 #else
-pascal void GetSoundVol(INTEGER *volp);
+pascal void GetSoundVol(INTEGER *volp) MAC_IMPORT(GetSoundVol);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void SetSoundVol(INTEGER vol);
 #else
-pascal void SetSoundVol(INTEGER vol);
+pascal void SetSoundVol(INTEGER vol) MAC_IMPORT(SetSoundVol);
 #endif
 
 #if TARGET_CPU_68K

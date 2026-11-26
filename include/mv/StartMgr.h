@@ -75,7 +75,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void GetDefaultStartup(DefStartPtr paramBlock);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void GetDefaultStartup(DefStartPtr paramBlock) MAC_IMPORT(GetDefaultStartup);
 #endif
 
 enum { _SetDefaultStartup = 0xA07E };
@@ -88,7 +88,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetDefaultStartup(DefStartPtr paramBlock);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetDefaultStartup(DefStartPtr paramBlock) MAC_IMPORT(SetDefaultStartup);
 #endif
 
 enum { _GetVideoDefault = 0xA080 };
@@ -101,7 +101,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void GetVideoDefault(DefVideoPtr paramBlock);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void GetVideoDefault(DefVideoPtr paramBlock) MAC_IMPORT(GetVideoDefault);
 #endif
 
 enum { _SetVideoDefault = 0xA081 };
@@ -114,7 +114,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetVideoDefault(DefVideoPtr paramBlock);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetVideoDefault(DefVideoPtr paramBlock) MAC_IMPORT(SetVideoDefault);
 #endif
 
 enum { _GetOSDefault = 0xA084 };
@@ -127,7 +127,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void GetOSDefault(DefOSPtr paramBlock);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void GetOSDefault(DefOSPtr paramBlock) MAC_IMPORT(GetOSDefault);
 #endif
 
 enum { _SetOSDefault = 0xA083 };
@@ -140,7 +140,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetOSDefault(DefOSPtr paramBlock);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetOSDefault(DefOSPtr paramBlock) MAC_IMPORT(SetOSDefault);
 #endif
 
 #ifdef __cplusplus

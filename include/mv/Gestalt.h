@@ -232,7 +232,7 @@ MAC_SINCE(0x0604, "6.0.4") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0604, "6.0.4") pascal OSErr Gestalt(OSType selector, LONGINT *responsep);
+MAC_SINCE(0x0604, "6.0.4") pascal OSErr Gestalt(OSType selector, LONGINT *responsep) MAC_IMPORT(Gestalt);
 #endif
 
 #if TARGET_CPU_68K
@@ -247,7 +247,7 @@ MAC_SINCE(0x0604, "6.0.4") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0604, "6.0.4") pascal OSErr NewGestalt(OSType selector, SelectorFunctionUPP selFunc);
+MAC_SINCE(0x0604, "6.0.4") pascal OSErr NewGestalt(OSType selector, SelectorFunctionUPP selFunc) MAC_IMPORT(NewGestalt);
 #endif
 
 #if TARGET_CPU_68K
@@ -264,17 +264,17 @@ MAC_SINCE(0x0604, "6.0.4") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0604, "6.0.4") pascal OSErr ReplaceGestalt(OSType selector, SelectorFunctionUPP selFunc, SelectorFunctionUPP *oldSelFuncp);
+MAC_SINCE(0x0604, "6.0.4") pascal OSErr ReplaceGestalt(OSType selector, SelectorFunctionUPP selFunc, SelectorFunctionUPP *oldSelFuncp) MAC_IMPORT(ReplaceGestalt);
 #endif
 
 // Gestalt values (System 7.5 and later)
-MAC_SINCE(0x0761, "7.6.1") pascal OSErr NewGestaltValue(OSType selector, long newValue) M68K_INLINE(0x303C, 0x0401, 0xABF1);
+MAC_SINCE(0x0761, "7.6.1") pascal OSErr NewGestaltValue(OSType selector, long newValue) MAC_IMPORT(NewGestaltValue) M68K_INLINE(0x303C, 0x0401, 0xABF1);
 
-MAC_SINCE(0x0761, "7.6.1") pascal OSErr ReplaceGestaltValue(OSType selector, long replacementValue) M68K_INLINE(0x303C, 0x0402, 0xABF1);
+MAC_SINCE(0x0761, "7.6.1") pascal OSErr ReplaceGestaltValue(OSType selector, long replacementValue) MAC_IMPORT(ReplaceGestaltValue) M68K_INLINE(0x303C, 0x0402, 0xABF1);
 
-MAC_SINCE(0x0761, "7.6.1") pascal OSErr SetGestaltValue(OSType selector, long newValue) M68K_INLINE(0x303C, 0x0404, 0xABF1);
+MAC_SINCE(0x0761, "7.6.1") pascal OSErr SetGestaltValue(OSType selector, long newValue) MAC_IMPORT(SetGestaltValue) M68K_INLINE(0x303C, 0x0404, 0xABF1);
 
-MAC_SINCE(0x0761, "7.6.1") pascal OSErr DeleteGestaltValue(OSType selector) M68K_INLINE(0x303C, 0x0203, 0xABF1);
+MAC_SINCE(0x0761, "7.6.1") pascal OSErr DeleteGestaltValue(OSType selector) MAC_IMPORT(DeleteGestaltValue) M68K_INLINE(0x303C, 0x0203, 0xABF1);
 
 enum { _GestaltValueDispatch = 0xABF1 };
 

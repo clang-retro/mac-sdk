@@ -41,679 +41,679 @@ extern "C" {
 #if TARGET_CPU_68K
 static __inline__ void addpt(Point *src, Point *dst);
 #else
-void addpt(Point *src, Point *dst);
+void addpt(Point *src, Point *dst) MAC_IMPORT(addpt);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void addresource(Handle data, ResType typ, INTEGER id, const char *name);
 #else
-void addresource(Handle data, ResType typ, INTEGER id, const char *name);
+void addresource(Handle data, ResType typ, INTEGER id, const char *name) MAC_IMPORT(addresource);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void appendmenu(MenuHandle mh, const char *str);
 #else
-void appendmenu(MenuHandle mh, const char *str);
+void appendmenu(MenuHandle mh, const char *str) MAC_IMPORT(appendmenu);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr create(const char *filen, INTEGER vrn, OSType creator, OSType filtyp);
 #else
-OSErr create(const char *filen, INTEGER vrn, OSType creator, OSType filtyp);
+OSErr create(const char *filen, INTEGER vrn, OSType creator, OSType filtyp) MAC_IMPORT(create);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void createresfile(const char *fn);
 #else
-void createresfile(const char *fn);
+void createresfile(const char *fn) MAC_IMPORT(createresfile);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void debugstr(const char *p);
 #else
-void debugstr(const char *p);
+void debugstr(const char *p) MAC_IMPORT(debugstr);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ LONGINT deltapoint(Point *a, Point *b);
 #else
-LONGINT deltapoint(Point *a, Point *b);
+LONGINT deltapoint(Point *a, Point *b) MAC_IMPORT(deltapoint);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER dibadmount(Point *pt, LONGINT evtmess);
 #else
-INTEGER dibadmount(Point *pt, LONGINT evtmess);
+INTEGER dibadmount(Point *pt, LONGINT evtmess) MAC_IMPORT(dibadmount);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr dizero(INTEGER dn, char *vname);
 #else
-OSErr dizero(INTEGER dn, char *vname);
+OSErr dizero(INTEGER dn, char *vname) MAC_IMPORT(dizero);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void dragcontrol(ControlHandle c, Point *p, const Rect *limit, const Rect *slop, INTEGER axis);
 #else
-void dragcontrol(ControlHandle c, Point *p, const Rect *limit, const Rect *slop, INTEGER axis);
+void dragcontrol(ControlHandle c, Point *p, const Rect *limit, const Rect *slop, INTEGER axis) MAC_IMPORT(dragcontrol);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ LONGINT draggrayrgn(RgnHandle rgn, Point *startp, const Rect *limit, const Rect *slop, INTEGER axis, ProcPtr proc);
 #else
-LONGINT draggrayrgn(RgnHandle rgn, Point *startp, const Rect *limit, const Rect *slop, INTEGER axis, ProcPtr proc);
+LONGINT draggrayrgn(RgnHandle rgn, Point *startp, const Rect *limit, const Rect *slop, INTEGER axis, ProcPtr proc) MAC_IMPORT(draggrayrgn);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void dragwindow(WindowPtr wp, Point *p, const Rect *rp);
 #else
-void dragwindow(WindowPtr wp, Point *p, const Rect *rp);
+void dragwindow(WindowPtr wp, Point *p, const Rect *rp) MAC_IMPORT(dragwindow);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void drawstring(const char *s);
 #else
-void drawstring(const char *s);
+void drawstring(const char *s) MAC_IMPORT(drawstring);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr eject(const char *voln, INTEGER vrn);
 #else
-OSErr eject(const char *voln, INTEGER vrn);
+OSErr eject(const char *voln, INTEGER vrn) MAC_IMPORT(eject);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ Boolean equalpt(Point *p1, Point *p2);
 #else
-Boolean equalpt(Point *p1, Point *p2);
+Boolean equalpt(Point *p1, Point *p2) MAC_IMPORT(equalpt);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ Boolean equalstring(const char *s1, const char *s2, Boolean casesig, Boolean diacsig);
 #else
-Boolean equalstring(const char *s1, const char *s2, Boolean casesig, Boolean diacsig);
+Boolean equalstring(const char *s1, const char *s2, Boolean casesig, Boolean diacsig) MAC_IMPORT(equalstring);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER findcontrol(Point *p, WindowPtr w, ControlHandle *cp);
 #else
-INTEGER findcontrol(Point *p, WindowPtr w, ControlHandle *cp);
+INTEGER findcontrol(Point *p, WindowPtr w, ControlHandle *cp) MAC_IMPORT(findcontrol);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER finddialogitem(DialogPtr dp, Point *pt);
 #else
-INTEGER finddialogitem(DialogPtr dp, Point *pt);
+INTEGER finddialogitem(DialogPtr dp, Point *pt) MAC_IMPORT(finddialogitem);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER findwindow(Point *p, WindowPtr *wpp);
 #else
-INTEGER findwindow(Point *p, WindowPtr *wpp);
+INTEGER findwindow(Point *p, WindowPtr *wpp) MAC_IMPORT(findwindow);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr flushvol(const char *voln, INTEGER vrn);
 #else
-OSErr flushvol(const char *voln, INTEGER vrn);
+OSErr flushvol(const char *voln, INTEGER vrn) MAC_IMPORT(flushvol);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr fsdelete(const char *filen, INTEGER vrn);
 #else
-OSErr fsdelete(const char *filen, INTEGER vrn);
+OSErr fsdelete(const char *filen, INTEGER vrn) MAC_IMPORT(fsdelete);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr fsopen(const char *filen, INTEGER vrn, INTEGER *rn);
 #else
-OSErr fsopen(const char *filen, INTEGER vrn, INTEGER *rn);
+OSErr fsopen(const char *filen, INTEGER vrn, INTEGER *rn) MAC_IMPORT(fsopen);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr fsrename(const char *filen, INTEGER vrn, const char *newf);
 #else
-OSErr fsrename(const char *filen, INTEGER vrn, const char *newf);
+OSErr fsrename(const char *filen, INTEGER vrn, const char *newf) MAC_IMPORT(fsrename);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ Handle get1namedresource(ResType typ, const char *s);
 #else
-Handle get1namedresource(ResType typ, const char *s);
+Handle get1namedresource(ResType typ, const char *s) MAC_IMPORT(get1namedresource);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void getcontroltitle(ControlHandle c, char *t);
 #else
-void getcontroltitle(ControlHandle c, char *t);
+void getcontroltitle(ControlHandle c, char *t) MAC_IMPORT(getcontroltitle);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void getdialogitemtext(Handle item, char *text);
 #else
-void getdialogitemtext(Handle item, char *text);
+void getdialogitemtext(Handle item, char *text) MAC_IMPORT(getdialogitemtext);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr getfinfo(const char *filen, INTEGER vrn, FInfo *fndrinfo);
 #else
-OSErr getfinfo(const char *filen, INTEGER vrn, FInfo *fndrinfo);
+OSErr getfinfo(const char *filen, INTEGER vrn, FInfo *fndrinfo) MAC_IMPORT(getfinfo);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void getfnum(const char *fnam, INTEGER *fnum);
 #else
-void getfnum(const char *fnam, INTEGER *fnum);
+void getfnum(const char *fnam, INTEGER *fnum) MAC_IMPORT(getfnum);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void getfontname(INTEGER fnum, char *fnam);
 #else
-void getfontname(INTEGER fnum, char *fnam);
+void getfontname(INTEGER fnum, char *fnam) MAC_IMPORT(getfontname);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void getindstring(char *s, INTEGER sid, INTEGER index);
 #else
-void getindstring(char *s, INTEGER sid, INTEGER index);
+void getindstring(char *s, INTEGER sid, INTEGER index) MAC_IMPORT(getindstring);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void getmenuitemtext(MenuHandle mh, INTEGER item, char *str);
 #else
-void getmenuitemtext(MenuHandle mh, INTEGER item, char *str);
+void getmenuitemtext(MenuHandle mh, INTEGER item, char *str) MAC_IMPORT(getmenuitemtext);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ Handle getnamedresource(ResType typ, const char *nam);
 #else
-Handle getnamedresource(ResType typ, const char *nam);
+Handle getnamedresource(ResType typ, const char *nam) MAC_IMPORT(getnamedresource);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void getresinfo(Handle res, INTEGER *id1, ResType *typ, char *name);
 #else
-void getresinfo(Handle res, INTEGER *id1, ResType *typ, char *name);
+void getresinfo(Handle res, INTEGER *id1, ResType *typ, char *name) MAC_IMPORT(getresinfo);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr getvinfo(INTEGER drv, char *voln, INTEGER *vrn, LONGINT *freeb);
 #else
-OSErr getvinfo(INTEGER drv, char *voln, INTEGER *vrn, LONGINT *freeb);
+OSErr getvinfo(INTEGER drv, char *voln, INTEGER *vrn, LONGINT *freeb) MAC_IMPORT(getvinfo);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr getvol(char *voln, INTEGER *vrn);
 #else
-OSErr getvol(char *voln, INTEGER *vrn);
+OSErr getvol(char *voln, INTEGER *vrn) MAC_IMPORT(getvol);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void getwtitle(WindowPtr w, char *t);
 #else
-void getwtitle(WindowPtr w, char *t);
+void getwtitle(WindowPtr w, char *t) MAC_IMPORT(getwtitle);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ LONGINT growwindow(WindowPtr w, Point *startp, const Rect *rp);
 #else
-LONGINT growwindow(WindowPtr w, Point *startp, const Rect *rp);
+LONGINT growwindow(WindowPtr w, Point *startp, const Rect *rp) MAC_IMPORT(growwindow);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void insertmenuitem(MenuHandle mh, const char *str, INTEGER after);
 #else
-void insertmenuitem(MenuHandle mh, const char *str, INTEGER after);
+void insertmenuitem(MenuHandle mh, const char *str, INTEGER after) MAC_IMPORT(insertmenuitem);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER iucomppstring(const char *aStr, const char *bStr, Handle itl2Handle);
 #else
-INTEGER iucomppstring(const char *aStr, const char *bStr, Handle itl2Handle);
+INTEGER iucomppstring(const char *aStr, const char *bStr, Handle itl2Handle) MAC_IMPORT(iucomppstring);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER iucompstring(const char *str1, const char *str2);
 #else
-INTEGER iucompstring(const char *str1, const char *str2);
+INTEGER iucompstring(const char *str1, const char *str2) MAC_IMPORT(iucompstring);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void iudatepstring(LONGINT date, DateForm form, char *p, Handle h);
 #else
-void iudatepstring(LONGINT date, DateForm form, char *p, Handle h);
+void iudatepstring(LONGINT date, DateForm form, char *p, Handle h) MAC_IMPORT(iudatepstring);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void iudatestring(LONGINT date, DateForm form, char *p);
 #else
-void iudatestring(LONGINT date, DateForm form, char *p);
+void iudatestring(LONGINT date, DateForm form, char *p) MAC_IMPORT(iudatestring);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER iuequalpstring(const char *aStr, const char *bStr, Handle itl2Handle);
 #else
-INTEGER iuequalpstring(const char *aStr, const char *bStr, Handle itl2Handle);
+INTEGER iuequalpstring(const char *aStr, const char *bStr, Handle itl2Handle) MAC_IMPORT(iuequalpstring);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER iuequalstring(const char *str1, const char *str2);
 #else
-INTEGER iuequalstring(const char *str1, const char *str2);
+INTEGER iuequalstring(const char *str1, const char *str2) MAC_IMPORT(iuequalstring);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void iuldatestring(LongDateTime *datetimep, DateForm longflag, char *result, Handle intlhand);
 #else
-void iuldatestring(LongDateTime *datetimep, DateForm longflag, char *result, Handle intlhand);
+void iuldatestring(LongDateTime *datetimep, DateForm longflag, char *result, Handle intlhand) MAC_IMPORT(iuldatestring);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void iultimestring(LongDateTime *datetimep, Boolean wantseconds, char *result, Handle intlhand);
 #else
-void iultimestring(LongDateTime *datetimep, Boolean wantseconds, char *result, Handle intlhand);
+void iultimestring(LongDateTime *datetimep, Boolean wantseconds, char *result, Handle intlhand) MAC_IMPORT(iultimestring);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER iustringorder(const char *aStr, const char *bStr, ScriptCode aScript, ScriptCode bScript, LangCode aLang, LangCode bLang);
 #else
-INTEGER iustringorder(const char *aStr, const char *bStr, ScriptCode aScript, ScriptCode bScript, LangCode aLang, LangCode bLang);
+INTEGER iustringorder(const char *aStr, const char *bStr, ScriptCode aScript, ScriptCode bScript, LangCode aLang, LangCode bLang) MAC_IMPORT(iustringorder);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void iutimepstring(LONGINT date, Boolean secs, char *p, Handle h);
 #else
-void iutimepstring(LONGINT date, Boolean secs, char *p, Handle h);
+void iutimepstring(LONGINT date, Boolean secs, char *p, Handle h) MAC_IMPORT(iutimepstring);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void iutimestring(LONGINT date, Boolean secs, char *p);
 #else
-void iutimestring(LONGINT date, Boolean secs, char *p);
+void iutimestring(LONGINT date, Boolean secs, char *p) MAC_IMPORT(iutimestring);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void laddtocell(Ptr dp, INTEGER dl, Cell cell, ListHandle list);
 #else
-void laddtocell(Ptr dp, INTEGER dl, Cell cell, ListHandle list);
+void laddtocell(Ptr dp, INTEGER dl, Cell cell, ListHandle list) MAC_IMPORT(laddtocell);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void lcellsize(Point *csize, ListHandle list);
 #else
-void lcellsize(Point *csize, ListHandle list);
+void lcellsize(Point *csize, ListHandle list) MAC_IMPORT(lcellsize);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ Boolean lclick(Point *pt, INTEGER mods, ListHandle list);
 #else
-Boolean lclick(Point *pt, INTEGER mods, ListHandle list);
+Boolean lclick(Point *pt, INTEGER mods, ListHandle list) MAC_IMPORT(lclick);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void lclrcell(Cell cell, ListHandle list);
 #else
-void lclrcell(Cell cell, ListHandle list);
+void lclrcell(Cell cell, ListHandle list) MAC_IMPORT(lclrcell);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void ldraw(Cell cell, ListHandle list);
 #else
-void ldraw(Cell cell, ListHandle list);
+void ldraw(Cell cell, ListHandle list) MAC_IMPORT(ldraw);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void lgetcell(Ptr dp, INTEGER *dlp, Cell cell, ListHandle list);
 #else
-void lgetcell(Ptr dp, INTEGER *dlp, Cell cell, ListHandle list);
+void lgetcell(Ptr dp, INTEGER *dlp, Cell cell, ListHandle list) MAC_IMPORT(lgetcell);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void lgetcelldatalocation(INTEGER *offsetp, INTEGER *lenp, Cell cell, ListHandle list);
 #else
-void lgetcelldatalocation(INTEGER *offsetp, INTEGER *lenp, Cell cell, ListHandle list);
+void lgetcelldatalocation(INTEGER *offsetp, INTEGER *lenp, Cell cell, ListHandle list) MAC_IMPORT(lgetcelldatalocation);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ ListHandle lnew(const Rect *rview, const Rect *bounds, Point *csize, INTEGER proc, WindowPtr wind, Boolean draw, Boolean grow, Boolean scrollh, Boolean scrollv);
 #else
-ListHandle lnew(const Rect *rview, const Rect *bounds, Point *csize, INTEGER proc, WindowPtr wind, Boolean draw, Boolean grow, Boolean scrollh, Boolean scrollv);
+ListHandle lnew(const Rect *rview, const Rect *bounds, Point *csize, INTEGER proc, WindowPtr wind, Boolean draw, Boolean grow, Boolean scrollh, Boolean scrollv) MAC_IMPORT(lnew);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void lrect(Rect *cellrect, Cell cell, ListHandle list);
 #else
-void lrect(Rect *cellrect, Cell cell, ListHandle list);
+void lrect(Rect *cellrect, Cell cell, ListHandle list) MAC_IMPORT(lrect);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void lsetcell(Ptr dp, INTEGER dl, Cell cell, ListHandle list);
 #else
-void lsetcell(Ptr dp, INTEGER dl, Cell cell, ListHandle list);
+void lsetcell(Ptr dp, INTEGER dl, Cell cell, ListHandle list) MAC_IMPORT(lsetcell);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void lsetselect(Boolean setit, Cell cell, ListHandle list);
 #else
-void lsetselect(Boolean setit, Cell cell, ListHandle list);
+void lsetselect(Boolean setit, Cell cell, ListHandle list) MAC_IMPORT(lsetselect);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ LONGINT menuselect(Point *p);
 #else
-LONGINT menuselect(Point *p);
+LONGINT menuselect(Point *p) MAC_IMPORT(menuselect);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ DialogPtr newcolordialog(void *arg0, const Rect *arg1, const char *arg2, Boolean arg3, INTEGER arg4, WindowPtr arg5, Boolean arg6, LONGINT arg7, Handle arg8);
 #else
-DialogPtr newcolordialog(void *arg0, const Rect *arg1, const char *arg2, Boolean arg3, INTEGER arg4, WindowPtr arg5, Boolean arg6, LONGINT arg7, Handle arg8);
+DialogPtr newcolordialog(void *arg0, const Rect *arg1, const char *arg2, Boolean arg3, INTEGER arg4, WindowPtr arg5, Boolean arg6, LONGINT arg7, Handle arg8) MAC_IMPORT(newcolordialog);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ ControlHandle newcontrol(WindowPtr wst, const Rect *r, const char *title, Boolean vis, INTEGER value, INTEGER min, INTEGER max, INTEGER procid, LONGINT rc);
 #else
-ControlHandle newcontrol(WindowPtr wst, const Rect *r, const char *title, Boolean vis, INTEGER value, INTEGER min, INTEGER max, INTEGER procid, LONGINT rc);
+ControlHandle newcontrol(WindowPtr wst, const Rect *r, const char *title, Boolean vis, INTEGER value, INTEGER min, INTEGER max, INTEGER procid, LONGINT rc) MAC_IMPORT(newcontrol);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ WindowPtr newcwindow(void *storage, const Rect *arg1, const char *arg2, Boolean arg3, INTEGER arg4, WindowPtr arg5, Boolean arg6, LONGINT arg7);
 #else
-WindowPtr newcwindow(void *storage, const Rect *arg1, const char *arg2, Boolean arg3, INTEGER arg4, WindowPtr arg5, Boolean arg6, LONGINT arg7);
+WindowPtr newcwindow(void *storage, const Rect *arg1, const char *arg2, Boolean arg3, INTEGER arg4, WindowPtr arg5, Boolean arg6, LONGINT arg7) MAC_IMPORT(newcwindow);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ DialogPtr newdialog(void *dst, const Rect *r, const char *tit, Boolean vis, INTEGER procid, WindowPtr behind, Boolean gaflag, LONGINT rc, Handle items);
 #else
-DialogPtr newdialog(void *dst, const Rect *r, const char *tit, Boolean vis, INTEGER procid, WindowPtr behind, Boolean gaflag, LONGINT rc, Handle items);
+DialogPtr newdialog(void *dst, const Rect *r, const char *tit, Boolean vis, INTEGER procid, WindowPtr behind, Boolean gaflag, LONGINT rc, Handle items) MAC_IMPORT(newdialog);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ MenuHandle newmenu(INTEGER mid, const char *str);
 #else
-MenuHandle newmenu(INTEGER mid, const char *str);
+MenuHandle newmenu(INTEGER mid, const char *str) MAC_IMPORT(newmenu);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ StringHandle newstring(const char *s);
 #else
-StringHandle newstring(const char *s);
+StringHandle newstring(const char *s) MAC_IMPORT(newstring);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ WindowPtr newwindow(void *wst, const Rect *r, const char *title, Boolean vis, INTEGER procid, WindowPtr behind, Boolean gaflag, LONGINT rc);
 #else
-WindowPtr newwindow(void *wst, const Rect *r, const char *title, Boolean vis, INTEGER procid, WindowPtr behind, Boolean gaflag, LONGINT rc);
+WindowPtr newwindow(void *wst, const Rect *r, const char *title, Boolean vis, INTEGER procid, WindowPtr behind, Boolean gaflag, LONGINT rc) MAC_IMPORT(newwindow);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void numtostring(LONGINT l, char *s);
 #else
-void numtostring(LONGINT l, char *s);
+void numtostring(LONGINT l, char *s) MAC_IMPORT(numtostring);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER opendeskacc(const char *acc);
 #else
-INTEGER opendeskacc(const char *acc);
+INTEGER opendeskacc(const char *acc) MAC_IMPORT(opendeskacc);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr opendriver(const char *name, INTEGER *rnp);
 #else
-OSErr opendriver(const char *name, INTEGER *rnp);
+OSErr opendriver(const char *name, INTEGER *rnp) MAC_IMPORT(opendriver);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER openresfile(const char *fn);
 #else
-INTEGER openresfile(const char *fn);
+INTEGER openresfile(const char *fn) MAC_IMPORT(openresfile);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr openrf(const char *filen, INTEGER vrn, INTEGER *rn);
 #else
-OSErr openrf(const char *filen, INTEGER vrn, INTEGER *rn);
+OSErr openrf(const char *filen, INTEGER vrn, INTEGER *rn) MAC_IMPORT(openrf);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER openrfperm(const char *fn, INTEGER vref, Byte perm);
 #else
-INTEGER openrfperm(const char *fn, INTEGER vref, Byte perm);
+INTEGER openrfperm(const char *fn, INTEGER vref, Byte perm) MAC_IMPORT(openrfperm);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void paramtext(const char *p0, const char *p1, const char *p2, const char *p3);
 #else
-void paramtext(const char *p0, const char *p1, const char *p2, const char *p3);
+void paramtext(const char *p0, const char *p1, const char *p2, const char *p3) MAC_IMPORT(paramtext);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ LONGINT pinrect(const Rect *r, Point *p);
 #else
-LONGINT pinrect(const Rect *r, Point *p);
+LONGINT pinrect(const Rect *r, Point *p) MAC_IMPORT(pinrect);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void pt2rect(Point *p1, Point *p2, Rect *dest);
 #else
-void pt2rect(Point *p1, Point *p2, Rect *dest);
+void pt2rect(Point *p1, Point *p2, Rect *dest) MAC_IMPORT(pt2rect);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ Boolean ptinrect(Point *p, const Rect *r);
 #else
-Boolean ptinrect(Point *p, const Rect *r);
+Boolean ptinrect(Point *p, const Rect *r) MAC_IMPORT(ptinrect);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ Boolean ptinrgn(Point *p, RgnHandle rh);
 #else
-Boolean ptinrgn(Point *p, RgnHandle rh);
+Boolean ptinrgn(Point *p, RgnHandle rh) MAC_IMPORT(ptinrgn);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void pttoangle(const Rect *rp, Point *p, INTEGER *angle);
 #else
-void pttoangle(const Rect *rp, Point *p, INTEGER *angle);
+void pttoangle(const Rect *rp, Point *p, INTEGER *angle) MAC_IMPORT(pttoangle);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER relstring(const char *s1, const char *s2, Boolean casesig, Boolean diacsig);
 #else
-INTEGER relstring(const char *s1, const char *s2, Boolean casesig, Boolean diacsig);
+INTEGER relstring(const char *s1, const char *s2, Boolean casesig, Boolean diacsig) MAC_IMPORT(relstring);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr rstflock(const char *filen, INTEGER vrn);
 #else
-OSErr rstflock(const char *filen, INTEGER vrn);
+OSErr rstflock(const char *filen, INTEGER vrn) MAC_IMPORT(rstflock);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void setcontroltitle(ControlHandle c, const char *t);
 #else
-void setcontroltitle(ControlHandle c, const char *t);
+void setcontroltitle(ControlHandle c, const char *t) MAC_IMPORT(setcontroltitle);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void setdialogitemtext(Handle item, const char *text);
 #else
-void setdialogitemtext(Handle item, const char *text);
+void setdialogitemtext(Handle item, const char *text) MAC_IMPORT(setdialogitemtext);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr setfinfo(const char *filen, INTEGER vrn, FInfo *fndrinfo);
 #else
-OSErr setfinfo(const char *filen, INTEGER vrn, FInfo *fndrinfo);
+OSErr setfinfo(const char *filen, INTEGER vrn, FInfo *fndrinfo) MAC_IMPORT(setfinfo);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr setflock(const char *filen, INTEGER vrn);
 #else
-OSErr setflock(const char *filen, INTEGER vrn);
+OSErr setflock(const char *filen, INTEGER vrn) MAC_IMPORT(setflock);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void setmenuitemtext(MenuHandle mh, INTEGER item, const char *str);
 #else
-void setmenuitemtext(MenuHandle mh, INTEGER item, const char *str);
+void setmenuitemtext(MenuHandle mh, INTEGER item, const char *str) MAC_IMPORT(setmenuitemtext);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void setresinfo(Handle res, INTEGER id, const char *name);
 #else
-void setresinfo(Handle res, INTEGER id, const char *name);
+void setresinfo(Handle res, INTEGER id, const char *name) MAC_IMPORT(setresinfo);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void setstring(StringHandle h, const char *s);
 #else
-void setstring(StringHandle h, const char *s);
+void setstring(StringHandle h, const char *s) MAC_IMPORT(setstring);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr setvol(const char *voln, INTEGER vrn);
 #else
-OSErr setvol(const char *voln, INTEGER vrn);
+OSErr setvol(const char *voln, INTEGER vrn) MAC_IMPORT(setvol);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void setwtitle(WindowPtr w, const char *t);
 #else
-void setwtitle(WindowPtr w, const char *t);
+void setwtitle(WindowPtr w, const char *t) MAC_IMPORT(setwtitle);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void sfgetfile(Point *p, const char *prompt, FileFilterUPP filef, INTEGER numt, SFTypeList tl, DlgHookUPP dh, SFReply *rep);
 #else
-void sfgetfile(Point *p, const char *prompt, FileFilterUPP filef, INTEGER numt, SFTypeList tl, DlgHookUPP dh, SFReply *rep);
+void sfgetfile(Point *p, const char *prompt, FileFilterUPP filef, INTEGER numt, SFTypeList tl, DlgHookUPP dh, SFReply *rep) MAC_IMPORT(sfgetfile);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void sfpgetfile(Point *p, const char *prompt, FileFilterUPP filef, INTEGER numt, SFTypeList tl, DlgHookUPP dh, SFReply *rep, INTEGER dig, ModalFilterUPP fp);
 #else
-void sfpgetfile(Point *p, const char *prompt, FileFilterUPP filef, INTEGER numt, SFTypeList tl, DlgHookUPP dh, SFReply *rep, INTEGER dig, ModalFilterUPP fp);
+void sfpgetfile(Point *p, const char *prompt, FileFilterUPP filef, INTEGER numt, SFTypeList tl, DlgHookUPP dh, SFReply *rep, INTEGER dig, ModalFilterUPP fp) MAC_IMPORT(sfpgetfile);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void sfpputfile(Point *p, const char *prompt, const char *name, DlgHookUPP dh, SFReply *rep, INTEGER dig, ModalFilterUPP fp);
 #else
-void sfpputfile(Point *p, const char *prompt, const char *name, DlgHookUPP dh, SFReply *rep, INTEGER dig, ModalFilterUPP fp);
+void sfpputfile(Point *p, const char *prompt, const char *name, DlgHookUPP dh, SFReply *rep, INTEGER dig, ModalFilterUPP fp) MAC_IMPORT(sfpputfile);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void sfputfile(Point *p, const char *prompt, const char *name, DlgHookUPP dh, SFReply *rep);
 #else
-void sfputfile(Point *p, const char *prompt, const char *name, DlgHookUPP dh, SFReply *rep);
+void sfputfile(Point *p, const char *prompt, const char *name, DlgHookUPP dh, SFReply *rep) MAC_IMPORT(sfputfile);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void shieldcursor(Rect *rp, Point *p);
 #else
-void shieldcursor(Rect *rp, Point *p);
+void shieldcursor(Rect *rp, Point *p) MAC_IMPORT(shieldcursor);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void stdline(Point *p);
 #else
-void stdline(Point *p);
+void stdline(Point *p) MAC_IMPORT(stdline);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void stdtext(INTEGER n, Ptr textbufp, Point *num, Point *den);
 #else
-void stdtext(INTEGER n, Ptr textbufp, Point *num, Point *den);
+void stdtext(INTEGER n, Ptr textbufp, Point *num, Point *den) MAC_IMPORT(stdtext);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void stringtonum(const char *s, LONGINT *lp);
 #else
-void stringtonum(const char *s, LONGINT *lp);
+void stringtonum(const char *s, LONGINT *lp) MAC_IMPORT(stringtonum);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER stringwidth(const char *s);
 #else
-INTEGER stringwidth(const char *s);
+INTEGER stringwidth(const char *s) MAC_IMPORT(stringwidth);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void stuffhex(Ptr p, const char *s);
 #else
-void stuffhex(Ptr p, const char *s);
+void stuffhex(Ptr p, const char *s) MAC_IMPORT(stuffhex);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void subpt(Point *src, Point *dst);
 #else
-void subpt(Point *src, Point *dst);
+void subpt(Point *src, Point *dst) MAC_IMPORT(subpt);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void teclick(Point *p, Boolean ext, TEHandle teh);
 #else
-void teclick(Point *p, Boolean ext, TEHandle teh);
+void teclick(Point *p, Boolean ext, TEHandle teh) MAC_IMPORT(teclick);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER testcontrol(ControlHandle c, Point *p);
 #else
-INTEGER testcontrol(ControlHandle c, Point *p);
+INTEGER testcontrol(ControlHandle c, Point *p) MAC_IMPORT(testcontrol);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ Boolean trackbox(WindowPtr wp, Point *pt, INTEGER part);
 #else
-Boolean trackbox(WindowPtr wp, Point *pt, INTEGER part);
+Boolean trackbox(WindowPtr wp, Point *pt, INTEGER part) MAC_IMPORT(trackbox);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER trackcontrol(ControlHandle c, Point *p, ControlActionUPP a);
 #else
-INTEGER trackcontrol(ControlHandle c, Point *p, ControlActionUPP a);
+INTEGER trackcontrol(ControlHandle c, Point *p, ControlActionUPP a) MAC_IMPORT(trackcontrol);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ Boolean trackgoaway(WindowPtr w, Point *p);
 #else
-Boolean trackgoaway(WindowPtr w, Point *p);
+Boolean trackgoaway(WindowPtr w, Point *p) MAC_IMPORT(trackgoaway);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr unmountvol(const char *voln, INTEGER vrn);
 #else
-OSErr unmountvol(const char *voln, INTEGER vrn);
+OSErr unmountvol(const char *voln, INTEGER vrn) MAC_IMPORT(unmountvol);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void upperstring(char *s, Boolean diac);
 #else
-void upperstring(char *s, Boolean diac);
+void upperstring(char *s, Boolean diac) MAC_IMPORT(upperstring);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ char* p2cstr(StringPtr aStr);
 #else
-char* p2cstr(StringPtr aStr);
+char* p2cstr(StringPtr aStr) MAC_IMPORT(p2cstr);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ StringPtr c2pstr(char *aStr);
 #else
-StringPtr c2pstr(char *aStr);
+StringPtr c2pstr(char *aStr) MAC_IMPORT(c2pstr);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void C2PStr(Ptr cString);
 #else
-void C2PStr(Ptr cString);
+void C2PStr(Ptr cString) MAC_IMPORT(C2PStr);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void P2CStr(StringPtr pString);
 #else
-void P2CStr(StringPtr pString);
+void P2CStr(StringPtr pString) MAC_IMPORT(P2CStr);
 #endif
 
 #if TARGET_CPU_68K

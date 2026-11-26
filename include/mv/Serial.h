@@ -149,55 +149,55 @@ enum {
 #if TARGET_CPU_68K
 static __inline__ OSErr RAMSDOpen(SPortSel port);
 #else
-pascal OSErr RAMSDOpen(SPortSel port);
+pascal OSErr RAMSDOpen(SPortSel port) MAC_IMPORT(RAMSDOpen);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void RAMSDClose(SPortSel port);
 #else
-pascal void RAMSDClose(SPortSel port);
+pascal void RAMSDClose(SPortSel port) MAC_IMPORT(RAMSDClose);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr SerReset(INTEGER rn, INTEGER config);
 #else
-pascal OSErr SerReset(INTEGER rn, INTEGER config);
+pascal OSErr SerReset(INTEGER rn, INTEGER config) MAC_IMPORT(SerReset);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr SerSetBuf(INTEGER rn, Ptr p, INTEGER len);
 #else
-pascal OSErr SerSetBuf(INTEGER rn, Ptr p, INTEGER len);
+pascal OSErr SerSetBuf(INTEGER rn, Ptr p, INTEGER len) MAC_IMPORT(SerSetBuf);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr SerHShake(INTEGER rn, const SerShk *flags);
 #else
-pascal OSErr SerHShake(INTEGER rn, const SerShk *flags);
+pascal OSErr SerHShake(INTEGER rn, const SerShk *flags) MAC_IMPORT(SerHShake);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr SerSetBrk(INTEGER rn);
 #else
-pascal OSErr SerSetBrk(INTEGER rn);
+pascal OSErr SerSetBrk(INTEGER rn) MAC_IMPORT(SerSetBrk);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr SerClrBrk(INTEGER rn);
 #else
-pascal OSErr SerClrBrk(INTEGER rn);
+pascal OSErr SerClrBrk(INTEGER rn) MAC_IMPORT(SerClrBrk);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr SerGetBuf(INTEGER rn, LONGINT *lp);
 #else
-pascal OSErr SerGetBuf(INTEGER rn, LONGINT *lp);
+pascal OSErr SerGetBuf(INTEGER rn, LONGINT *lp) MAC_IMPORT(SerGetBuf);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr SerStatus(INTEGER rn, SerStaRec *serstap);
 #else
-pascal OSErr SerStatus(INTEGER rn, SerStaRec *serstap);
+pascal OSErr SerStatus(INTEGER rn, SerStaRec *serstap) MAC_IMPORT(SerStatus);
 #endif
 
 #if TARGET_CPU_68K

@@ -598,184 +598,184 @@ typedef FSSpecPtr FSSpecArrayPtr;
 #if TARGET_CPU_68K
 static __inline__ OSErr FSOpen(ConstStringPtr filen, INTEGER vrn, INTEGER *rn);
 #else
-pascal OSErr FSOpen(ConstStringPtr filen, INTEGER vrn, INTEGER *rn);
+pascal OSErr FSOpen(ConstStringPtr filen, INTEGER vrn, INTEGER *rn) MAC_IMPORT(FSOpen);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr OpenRF(ConstStringPtr filen, INTEGER vrn, INTEGER *rn);
 #else
-pascal OSErr OpenRF(ConstStringPtr filen, INTEGER vrn, INTEGER *rn);
+pascal OSErr OpenRF(ConstStringPtr filen, INTEGER vrn, INTEGER *rn) MAC_IMPORT(OpenRF);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr OpenDF(ConstStringPtr filen, INTEGER vrn, INTEGER *rn);
 #else
-pascal OSErr OpenDF(ConstStringPtr filen, INTEGER vrn, INTEGER *rn);
+pascal OSErr OpenDF(ConstStringPtr filen, INTEGER vrn, INTEGER *rn) MAC_IMPORT(OpenDF);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSRead(INTEGER rn, LONGINT *count, void *buffp);
 #else
-pascal OSErr FSRead(INTEGER rn, LONGINT *count, void *buffp);
+pascal OSErr FSRead(INTEGER rn, LONGINT *count, void *buffp) MAC_IMPORT(FSRead);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSWrite(INTEGER rn, LONGINT *count, const void *buffp);
 #else
-pascal OSErr FSWrite(INTEGER rn, LONGINT *count, const void *buffp);
+pascal OSErr FSWrite(INTEGER rn, LONGINT *count, const void *buffp) MAC_IMPORT(FSWrite);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr GetFPos(INTEGER rn, LONGINT *filep);
 #else
-pascal OSErr GetFPos(INTEGER rn, LONGINT *filep);
+pascal OSErr GetFPos(INTEGER rn, LONGINT *filep) MAC_IMPORT(GetFPos);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr SetFPos(INTEGER rn, INTEGER posmode, LONGINT possoff);
 #else
-pascal OSErr SetFPos(INTEGER rn, INTEGER posmode, LONGINT possoff);
+pascal OSErr SetFPos(INTEGER rn, INTEGER posmode, LONGINT possoff) MAC_IMPORT(SetFPos);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr GetEOF(INTEGER rn, LONGINT *eof);
 #else
-pascal OSErr GetEOF(INTEGER rn, LONGINT *eof);
+pascal OSErr GetEOF(INTEGER rn, LONGINT *eof) MAC_IMPORT(GetEOF);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr SetEOF(INTEGER rn, LONGINT eof);
 #else
-pascal OSErr SetEOF(INTEGER rn, LONGINT eof);
+pascal OSErr SetEOF(INTEGER rn, LONGINT eof) MAC_IMPORT(SetEOF);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr Allocate(INTEGER rn, LONGINT *count);
 #else
-pascal OSErr Allocate(INTEGER rn, LONGINT *count);
+pascal OSErr Allocate(INTEGER rn, LONGINT *count) MAC_IMPORT(Allocate);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr AllocContig(INTEGER rn, LONGINT *count);
 #else
-pascal OSErr AllocContig(INTEGER rn, LONGINT *count);
+pascal OSErr AllocContig(INTEGER rn, LONGINT *count) MAC_IMPORT(AllocContig);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSClose(INTEGER rn);
 #else
-pascal OSErr FSClose(INTEGER rn);
+pascal OSErr FSClose(INTEGER rn) MAC_IMPORT(FSClose);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr Create(ConstStringPtr filen, INTEGER vrn, OSType creator, OSType filtyp);
 #else
-pascal OSErr Create(ConstStringPtr filen, INTEGER vrn, OSType creator, OSType filtyp);
+pascal OSErr Create(ConstStringPtr filen, INTEGER vrn, OSType creator, OSType filtyp) MAC_IMPORT(Create);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSDelete(ConstStringPtr filen, INTEGER vrn);
 #else
-pascal OSErr FSDelete(ConstStringPtr filen, INTEGER vrn);
+pascal OSErr FSDelete(ConstStringPtr filen, INTEGER vrn) MAC_IMPORT(FSDelete);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr GetFInfo(ConstStringPtr filen, INTEGER vrn, FInfo *fndrinfo);
 #else
-pascal OSErr GetFInfo(ConstStringPtr filen, INTEGER vrn, FInfo *fndrinfo);
+pascal OSErr GetFInfo(ConstStringPtr filen, INTEGER vrn, FInfo *fndrinfo) MAC_IMPORT(GetFInfo);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr HGetFInfo(INTEGER vref, LONGINT dirid, ConstStringPtr name, FInfo *fndrinfo);
 #else
-pascal OSErr HGetFInfo(INTEGER vref, LONGINT dirid, ConstStringPtr name, FInfo *fndrinfo);
+pascal OSErr HGetFInfo(INTEGER vref, LONGINT dirid, ConstStringPtr name, FInfo *fndrinfo) MAC_IMPORT(HGetFInfo);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr SetFInfo(ConstStringPtr filen, INTEGER vrn, FInfo *fndrinfo);
 #else
-pascal OSErr SetFInfo(ConstStringPtr filen, INTEGER vrn, FInfo *fndrinfo);
+pascal OSErr SetFInfo(ConstStringPtr filen, INTEGER vrn, FInfo *fndrinfo) MAC_IMPORT(SetFInfo);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr SetFLock(ConstStringPtr filen, INTEGER vrn);
 #else
-pascal OSErr SetFLock(ConstStringPtr filen, INTEGER vrn);
+pascal OSErr SetFLock(ConstStringPtr filen, INTEGER vrn) MAC_IMPORT(SetFLock);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr RstFLock(ConstStringPtr filen, INTEGER vrn);
 #else
-pascal OSErr RstFLock(ConstStringPtr filen, INTEGER vrn);
+pascal OSErr RstFLock(ConstStringPtr filen, INTEGER vrn) MAC_IMPORT(RstFLock);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr Rename(ConstStringPtr filen, INTEGER vrn, ConstStringPtr newf);
 #else
-pascal OSErr Rename(ConstStringPtr filen, INTEGER vrn, ConstStringPtr newf);
+pascal OSErr Rename(ConstStringPtr filen, INTEGER vrn, ConstStringPtr newf) MAC_IMPORT(Rename);
 #endif
 
 enum { _FInitQueue = 0xA016 };
-pascal void FInitQueue(void) M68K_INLINE(0xA016);
+pascal void FInitQueue(void) MAC_IMPORT(FInitQueue) M68K_INLINE(0xA016);
 
 #if TARGET_CPU_68K
 static __inline__ QHdrPtr GetFSQHdr(void);
 #else
-pascal QHdrPtr GetFSQHdr(void);
+pascal QHdrPtr GetFSQHdr(void) MAC_IMPORT(GetFSQHdr);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ QHdrPtr GetVCBQHdr(void);
 #else
-pascal QHdrPtr GetVCBQHdr(void);
+pascal QHdrPtr GetVCBQHdr(void) MAC_IMPORT(GetVCBQHdr);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ QHdrPtr GetDrvQHdr(void);
 #else
-pascal QHdrPtr GetDrvQHdr(void);
+pascal QHdrPtr GetDrvQHdr(void) MAC_IMPORT(GetDrvQHdr);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr GetVInfo(INTEGER drv, StringPtr voln, INTEGER *vrn, LONGINT *freeb);
 #else
-pascal OSErr GetVInfo(INTEGER drv, StringPtr voln, INTEGER *vrn, LONGINT *freeb);
+pascal OSErr GetVInfo(INTEGER drv, StringPtr voln, INTEGER *vrn, LONGINT *freeb) MAC_IMPORT(GetVInfo);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr GetVRefNum(INTEGER prn, INTEGER *vrn);
 #else
-pascal OSErr GetVRefNum(INTEGER prn, INTEGER *vrn);
+pascal OSErr GetVRefNum(INTEGER prn, INTEGER *vrn) MAC_IMPORT(GetVRefNum);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr GetVol(StringPtr voln, INTEGER *vrn);
 #else
-pascal OSErr GetVol(StringPtr voln, INTEGER *vrn);
+pascal OSErr GetVol(StringPtr voln, INTEGER *vrn) MAC_IMPORT(GetVol);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr SetVol(ConstStringPtr voln, INTEGER vrn);
 #else
-pascal OSErr SetVol(ConstStringPtr voln, INTEGER vrn);
+pascal OSErr SetVol(ConstStringPtr voln, INTEGER vrn) MAC_IMPORT(SetVol);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FlushVol(ConstStringPtr voln, INTEGER vrn);
 #else
-pascal OSErr FlushVol(ConstStringPtr voln, INTEGER vrn);
+pascal OSErr FlushVol(ConstStringPtr voln, INTEGER vrn) MAC_IMPORT(FlushVol);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr UnmountVol(ConstStringPtr voln, INTEGER vrn);
 #else
-pascal OSErr UnmountVol(ConstStringPtr voln, INTEGER vrn);
+pascal OSErr UnmountVol(ConstStringPtr voln, INTEGER vrn) MAC_IMPORT(UnmountVol);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr Eject(ConstStringPtr voln, INTEGER vrn);
 #else
-pascal OSErr Eject(ConstStringPtr voln, INTEGER vrn);
+pascal OSErr Eject(ConstStringPtr voln, INTEGER vrn) MAC_IMPORT(Eject);
 #endif
 
 enum { _PBAllocContigSync = 0xA210 };
@@ -790,7 +790,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBAllocContigSync(Par
     return _ret;
 }
 #else
-pascal OSErr PBAllocContigSync(ParmBlkPtr pb);
+pascal OSErr PBAllocContigSync(ParmBlkPtr pb) MAC_IMPORT(PBAllocContigSync);
 #endif
 enum { _PBAllocContigAsync = 0xA610 };
 #if TARGET_CPU_68K
@@ -804,7 +804,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBAllocContigAsync(Pa
     return _ret;
 }
 #else
-pascal OSErr PBAllocContigAsync(ParmBlkPtr pb);
+pascal OSErr PBAllocContigAsync(ParmBlkPtr pb) MAC_IMPORT(PBAllocContigAsync);
 #endif
 
 // TODO: Trap?
@@ -820,7 +820,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBOpenSync(ParmBlkPtr
     return _ret;
 }
 #else
-pascal OSErr PBOpenSync(ParmBlkPtr pb);
+pascal OSErr PBOpenSync(ParmBlkPtr pb) MAC_IMPORT(PBOpenSync);
 #endif
 enum { _PBOpenAsync = 0xA400 };
 #if TARGET_CPU_68K
@@ -834,7 +834,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBOpenAsync(ParmBlkPt
     return _ret;
 }
 #else
-pascal OSErr PBOpenAsync(ParmBlkPtr pb);
+pascal OSErr PBOpenAsync(ParmBlkPtr pb) MAC_IMPORT(PBOpenAsync);
 #endif
 
 enum { _PBHOpenSync = 0xA200 };
@@ -849,7 +849,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBHOpenSync(HParmBlkP
     return _ret;
 }
 #else
-pascal OSErr PBHOpenSync(HParmBlkPtr pb);
+pascal OSErr PBHOpenSync(HParmBlkPtr pb) MAC_IMPORT(PBHOpenSync);
 #endif
 enum { _PBHOpenAsync = 0xA600 };
 #if TARGET_CPU_68K
@@ -863,7 +863,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBHOpenAsync(HParmBlk
     return _ret;
 }
 #else
-pascal OSErr PBHOpenAsync(HParmBlkPtr pb);
+pascal OSErr PBHOpenAsync(HParmBlkPtr pb) MAC_IMPORT(PBHOpenAsync);
 #endif
 
 enum { _PBCloseSync = 0xA001 };
@@ -878,7 +878,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBCloseSync(ParmBlkPt
     return _ret;
 }
 #else
-pascal OSErr PBCloseSync(ParmBlkPtr pb);
+pascal OSErr PBCloseSync(ParmBlkPtr pb) MAC_IMPORT(PBCloseSync);
 #endif
 enum { _PBCloseAsync = 0xA401 };
 #if TARGET_CPU_68K
@@ -892,7 +892,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBCloseAsync(ParmBlkP
     return _ret;
 }
 #else
-pascal OSErr PBCloseAsync(ParmBlkPtr pb);
+pascal OSErr PBCloseAsync(ParmBlkPtr pb) MAC_IMPORT(PBCloseAsync);
 #endif
 
 enum { _PBReadSync = 0xA002 };
@@ -907,7 +907,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBReadSync(ParmBlkPtr
     return _ret;
 }
 #else
-pascal OSErr PBReadSync(ParmBlkPtr pb);
+pascal OSErr PBReadSync(ParmBlkPtr pb) MAC_IMPORT(PBReadSync);
 #endif
 enum { _PBReadAsync = 0xA402 };
 #if TARGET_CPU_68K
@@ -921,7 +921,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBReadAsync(ParmBlkPt
     return _ret;
 }
 #else
-pascal OSErr PBReadAsync(ParmBlkPtr pb);
+pascal OSErr PBReadAsync(ParmBlkPtr pb) MAC_IMPORT(PBReadAsync);
 #endif
 
 enum { _PBWriteSync = 0xA003 };
@@ -936,7 +936,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBWriteSync(ParmBlkPt
     return _ret;
 }
 #else
-pascal OSErr PBWriteSync(ParmBlkPtr pb);
+pascal OSErr PBWriteSync(ParmBlkPtr pb) MAC_IMPORT(PBWriteSync);
 #endif
 enum { _PBWriteAsync = 0xA403 };
 #if TARGET_CPU_68K
@@ -950,7 +950,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBWriteAsync(ParmBlkP
     return _ret;
 }
 #else
-pascal OSErr PBWriteAsync(ParmBlkPtr pb);
+pascal OSErr PBWriteAsync(ParmBlkPtr pb) MAC_IMPORT(PBWriteAsync);
 #endif
 
 enum { _PBGetVInfoSync = 0xA007 };
@@ -965,7 +965,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBGetVInfoSync(ParmBl
     return _ret;
 }
 #else
-pascal OSErr PBGetVInfoSync(ParmBlkPtr pb);
+pascal OSErr PBGetVInfoSync(ParmBlkPtr pb) MAC_IMPORT(PBGetVInfoSync);
 #endif
 enum { _PBGetVInfoAsync = 0xA407 };
 #if TARGET_CPU_68K
@@ -979,7 +979,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBGetVInfoAsync(ParmB
     return _ret;
 }
 #else
-pascal OSErr PBGetVInfoAsync(ParmBlkPtr pb);
+pascal OSErr PBGetVInfoAsync(ParmBlkPtr pb) MAC_IMPORT(PBGetVInfoAsync);
 #endif
 
 enum { _PBHGetVInfoSync = 0xA207 };
@@ -994,7 +994,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBHGetVInfoSync(HParm
     return _ret;
 }
 #else
-pascal OSErr PBHGetVInfoSync(HParmBlkPtr pb);
+pascal OSErr PBHGetVInfoSync(HParmBlkPtr pb) MAC_IMPORT(PBHGetVInfoSync);
 #endif
 enum { _PBHGetVInfoAsync = 0xA607 };
 #if TARGET_CPU_68K
@@ -1008,7 +1008,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBHGetVInfoAsync(HPar
     return _ret;
 }
 #else
-pascal OSErr PBHGetVInfoAsync(HParmBlkPtr pb);
+pascal OSErr PBHGetVInfoAsync(HParmBlkPtr pb) MAC_IMPORT(PBHGetVInfoAsync);
 #endif
 
 enum { _PBCreateSync = 0xA008 };
@@ -1023,7 +1023,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBCreateSync(ParmBlkP
     return _ret;
 }
 #else
-pascal OSErr PBCreateSync(ParmBlkPtr pb);
+pascal OSErr PBCreateSync(ParmBlkPtr pb) MAC_IMPORT(PBCreateSync);
 #endif
 enum { _PBCreateAsync = 0xA408 };
 #if TARGET_CPU_68K
@@ -1037,7 +1037,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBCreateAsync(ParmBlk
     return _ret;
 }
 #else
-pascal OSErr PBCreateAsync(ParmBlkPtr pb);
+pascal OSErr PBCreateAsync(ParmBlkPtr pb) MAC_IMPORT(PBCreateAsync);
 #endif
 
 enum { _PBHCreateSync = 0xA208 };
@@ -1052,7 +1052,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBHCreateSync(HParmBl
     return _ret;
 }
 #else
-pascal OSErr PBHCreateSync(HParmBlkPtr pb);
+pascal OSErr PBHCreateSync(HParmBlkPtr pb) MAC_IMPORT(PBHCreateSync);
 #endif
 enum { _PBHCreateAsync = 0xA608 };
 #if TARGET_CPU_68K
@@ -1066,7 +1066,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBHCreateAsync(HParmB
     return _ret;
 }
 #else
-pascal OSErr PBHCreateAsync(HParmBlkPtr pb);
+pascal OSErr PBHCreateAsync(HParmBlkPtr pb) MAC_IMPORT(PBHCreateAsync);
 #endif
 
 enum { _PBDeleteSync = 0xA009 };
@@ -1081,7 +1081,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBDeleteSync(ParmBlkP
     return _ret;
 }
 #else
-pascal OSErr PBDeleteSync(ParmBlkPtr pb);
+pascal OSErr PBDeleteSync(ParmBlkPtr pb) MAC_IMPORT(PBDeleteSync);
 #endif
 enum { _PBDeleteAsync = 0xA409 };
 #if TARGET_CPU_68K
@@ -1095,7 +1095,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBDeleteAsync(ParmBlk
     return _ret;
 }
 #else
-pascal OSErr PBDeleteAsync(ParmBlkPtr pb);
+pascal OSErr PBDeleteAsync(ParmBlkPtr pb) MAC_IMPORT(PBDeleteAsync);
 #endif
 
 enum { _PBHDeleteSync = 0xA209 };
@@ -1110,7 +1110,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBHDeleteSync(HParmBl
     return _ret;
 }
 #else
-pascal OSErr PBHDeleteSync(HParmBlkPtr pb);
+pascal OSErr PBHDeleteSync(HParmBlkPtr pb) MAC_IMPORT(PBHDeleteSync);
 #endif
 enum { _PBHDeleteAsync = 0xA609 };
 #if TARGET_CPU_68K
@@ -1124,7 +1124,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBHDeleteAsync(HParmB
     return _ret;
 }
 #else
-pascal OSErr PBHDeleteAsync(HParmBlkPtr pb);
+pascal OSErr PBHDeleteAsync(HParmBlkPtr pb) MAC_IMPORT(PBHDeleteAsync);
 #endif
 
 enum { _PBOpenRFSync = 0xA00A };
@@ -1139,7 +1139,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBOpenRFSync(ParmBlkP
     return _ret;
 }
 #else
-pascal OSErr PBOpenRFSync(ParmBlkPtr pb);
+pascal OSErr PBOpenRFSync(ParmBlkPtr pb) MAC_IMPORT(PBOpenRFSync);
 #endif
 enum { _PBOpenRFAsync = 0xA40A };
 #if TARGET_CPU_68K
@@ -1153,7 +1153,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBOpenRFAsync(ParmBlk
     return _ret;
 }
 #else
-pascal OSErr PBOpenRFAsync(ParmBlkPtr pb);
+pascal OSErr PBOpenRFAsync(ParmBlkPtr pb) MAC_IMPORT(PBOpenRFAsync);
 #endif
 
 enum { _PBHOpenRFSync = 0xA20A };
@@ -1168,7 +1168,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBHOpenRFSync(HParmBl
     return _ret;
 }
 #else
-pascal OSErr PBHOpenRFSync(HParmBlkPtr pb);
+pascal OSErr PBHOpenRFSync(HParmBlkPtr pb) MAC_IMPORT(PBHOpenRFSync);
 #endif
 enum { _PBHOpenRFAsync = 0xA60A };
 #if TARGET_CPU_68K
@@ -1182,7 +1182,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBHOpenRFAsync(HParmB
     return _ret;
 }
 #else
-pascal OSErr PBHOpenRFAsync(HParmBlkPtr pb);
+pascal OSErr PBHOpenRFAsync(HParmBlkPtr pb) MAC_IMPORT(PBHOpenRFAsync);
 #endif
 
 enum { _PBRenameSync = 0xA00B };
@@ -1197,7 +1197,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBRenameSync(ParmBlkP
     return _ret;
 }
 #else
-pascal OSErr PBRenameSync(ParmBlkPtr pb);
+pascal OSErr PBRenameSync(ParmBlkPtr pb) MAC_IMPORT(PBRenameSync);
 #endif
 enum { _PBRenameAsync = 0xA40B };
 #if TARGET_CPU_68K
@@ -1211,7 +1211,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBRenameAsync(ParmBlk
     return _ret;
 }
 #else
-pascal OSErr PBRenameAsync(ParmBlkPtr pb);
+pascal OSErr PBRenameAsync(ParmBlkPtr pb) MAC_IMPORT(PBRenameAsync);
 #endif
 
 enum { _PBHRenameSync = 0xA20B };
@@ -1226,7 +1226,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBHRenameSync(HParmBl
     return _ret;
 }
 #else
-pascal OSErr PBHRenameSync(HParmBlkPtr pb);
+pascal OSErr PBHRenameSync(HParmBlkPtr pb) MAC_IMPORT(PBHRenameSync);
 #endif
 enum { _PBHRenameAsync = 0xA60B };
 #if TARGET_CPU_68K
@@ -1240,7 +1240,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBHRenameAsync(HParmB
     return _ret;
 }
 #else
-pascal OSErr PBHRenameAsync(HParmBlkPtr pb);
+pascal OSErr PBHRenameAsync(HParmBlkPtr pb) MAC_IMPORT(PBHRenameAsync);
 #endif
 
 enum { _PBGetFInfoSync = 0xA00C };
@@ -1255,7 +1255,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBGetFInfoSync(ParmBl
     return _ret;
 }
 #else
-pascal OSErr PBGetFInfoSync(ParmBlkPtr pb);
+pascal OSErr PBGetFInfoSync(ParmBlkPtr pb) MAC_IMPORT(PBGetFInfoSync);
 #endif
 enum { _PBGetFInfoAsync = 0xA40C };
 #if TARGET_CPU_68K
@@ -1269,7 +1269,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBGetFInfoAsync(ParmB
     return _ret;
 }
 #else
-pascal OSErr PBGetFInfoAsync(ParmBlkPtr pb);
+pascal OSErr PBGetFInfoAsync(ParmBlkPtr pb) MAC_IMPORT(PBGetFInfoAsync);
 #endif
 
 enum { _PBHGetFInfoSync = 0xA20C };
@@ -1284,7 +1284,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBHGetFInfoSync(HParm
     return _ret;
 }
 #else
-pascal OSErr PBHGetFInfoSync(HParmBlkPtr pb);
+pascal OSErr PBHGetFInfoSync(HParmBlkPtr pb) MAC_IMPORT(PBHGetFInfoSync);
 #endif
 enum { _PBHGetFInfoAsync = 0xA60C };
 #if TARGET_CPU_68K
@@ -1298,7 +1298,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBHGetFInfoAsync(HPar
     return _ret;
 }
 #else
-pascal OSErr PBHGetFInfoAsync(HParmBlkPtr pb);
+pascal OSErr PBHGetFInfoAsync(HParmBlkPtr pb) MAC_IMPORT(PBHGetFInfoAsync);
 #endif
 
 enum { _PBSetFInfoSync = 0xA00D };
@@ -1313,7 +1313,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBSetFInfoSync(ParmBl
     return _ret;
 }
 #else
-pascal OSErr PBSetFInfoSync(ParmBlkPtr pb);
+pascal OSErr PBSetFInfoSync(ParmBlkPtr pb) MAC_IMPORT(PBSetFInfoSync);
 #endif
 enum { _PBSetFInfoAsync = 0xA40D };
 #if TARGET_CPU_68K
@@ -1327,7 +1327,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBSetFInfoAsync(ParmB
     return _ret;
 }
 #else
-pascal OSErr PBSetFInfoAsync(ParmBlkPtr pb);
+pascal OSErr PBSetFInfoAsync(ParmBlkPtr pb) MAC_IMPORT(PBSetFInfoAsync);
 #endif
 
 enum { _PBHSetFInfoSync = 0xA20D };
@@ -1342,7 +1342,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBHSetFInfoSync(HParm
     return _ret;
 }
 #else
-pascal OSErr PBHSetFInfoSync(HParmBlkPtr pb);
+pascal OSErr PBHSetFInfoSync(HParmBlkPtr pb) MAC_IMPORT(PBHSetFInfoSync);
 #endif
 enum { _PBHSetFInfoAsync = 0xA60D };
 #if TARGET_CPU_68K
@@ -1356,7 +1356,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBHSetFInfoAsync(HPar
     return _ret;
 }
 #else
-pascal OSErr PBHSetFInfoAsync(HParmBlkPtr pb);
+pascal OSErr PBHSetFInfoAsync(HParmBlkPtr pb) MAC_IMPORT(PBHSetFInfoAsync);
 #endif
 
 enum { _PBUnmountVol = 0xA00E };
@@ -1371,7 +1371,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBUnmountVol(ParmBlkP
     return _ret;
 }
 #else
-pascal OSErr PBUnmountVol(ParmBlkPtr pb);
+pascal OSErr PBUnmountVol(ParmBlkPtr pb) MAC_IMPORT(PBUnmountVol);
 #endif
 
 enum { _PBMountVol = 0xA00F };
@@ -1386,7 +1386,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBMountVol(ParmBlkPtr
     return _ret;
 }
 #else
-pascal OSErr PBMountVol(ParmBlkPtr pb);
+pascal OSErr PBMountVol(ParmBlkPtr pb) MAC_IMPORT(PBMountVol);
 #endif
 
 enum { _PBAllocateSync = 0xA010 };
@@ -1401,7 +1401,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBAllocateSync(ParmBl
     return _ret;
 }
 #else
-pascal OSErr PBAllocateSync(ParmBlkPtr pb);
+pascal OSErr PBAllocateSync(ParmBlkPtr pb) MAC_IMPORT(PBAllocateSync);
 #endif
 enum { _PBAllocateAsync = 0xA410 };
 #if TARGET_CPU_68K
@@ -1415,7 +1415,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBAllocateAsync(ParmB
     return _ret;
 }
 #else
-pascal OSErr PBAllocateAsync(ParmBlkPtr pb);
+pascal OSErr PBAllocateAsync(ParmBlkPtr pb) MAC_IMPORT(PBAllocateAsync);
 #endif
 
 enum { _PBGetEOFSync = 0xA011 };
@@ -1430,7 +1430,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBGetEOFSync(ParmBlkP
     return _ret;
 }
 #else
-pascal OSErr PBGetEOFSync(ParmBlkPtr pb);
+pascal OSErr PBGetEOFSync(ParmBlkPtr pb) MAC_IMPORT(PBGetEOFSync);
 #endif
 enum { _PBGetEOFAsync = 0xA411 };
 #if TARGET_CPU_68K
@@ -1444,7 +1444,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBGetEOFAsync(ParmBlk
     return _ret;
 }
 #else
-pascal OSErr PBGetEOFAsync(ParmBlkPtr pb);
+pascal OSErr PBGetEOFAsync(ParmBlkPtr pb) MAC_IMPORT(PBGetEOFAsync);
 #endif
 
 enum { _PBSetEOFSync = 0xA012 };
@@ -1459,7 +1459,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBSetEOFSync(ParmBlkP
     return _ret;
 }
 #else
-pascal OSErr PBSetEOFSync(ParmBlkPtr pb);
+pascal OSErr PBSetEOFSync(ParmBlkPtr pb) MAC_IMPORT(PBSetEOFSync);
 #endif
 enum { _PBSetEOFAsync = 0xA412 };
 #if TARGET_CPU_68K
@@ -1473,7 +1473,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBSetEOFAsync(ParmBlk
     return _ret;
 }
 #else
-pascal OSErr PBSetEOFAsync(ParmBlkPtr pb);
+pascal OSErr PBSetEOFAsync(ParmBlkPtr pb) MAC_IMPORT(PBSetEOFAsync);
 #endif
 
 enum { _PBFlushVolSync = 0xA013 };
@@ -1488,7 +1488,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBFlushVolSync(ParmBl
     return _ret;
 }
 #else
-pascal OSErr PBFlushVolSync(ParmBlkPtr pb);
+pascal OSErr PBFlushVolSync(ParmBlkPtr pb) MAC_IMPORT(PBFlushVolSync);
 #endif
 enum { _PBFlushVolAsync = 0xA413 };
 #if TARGET_CPU_68K
@@ -1502,7 +1502,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBFlushVolAsync(ParmB
     return _ret;
 }
 #else
-pascal OSErr PBFlushVolAsync(ParmBlkPtr pb);
+pascal OSErr PBFlushVolAsync(ParmBlkPtr pb) MAC_IMPORT(PBFlushVolAsync);
 #endif
 
 enum { _PBGetVolSync = 0xA014 };
@@ -1517,7 +1517,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBGetVolSync(ParmBlkP
     return _ret;
 }
 #else
-pascal OSErr PBGetVolSync(ParmBlkPtr pb);
+pascal OSErr PBGetVolSync(ParmBlkPtr pb) MAC_IMPORT(PBGetVolSync);
 #endif
 enum { _PBGetVolAsync = 0xA414 };
 #if TARGET_CPU_68K
@@ -1531,7 +1531,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBGetVolAsync(ParmBlk
     return _ret;
 }
 #else
-pascal OSErr PBGetVolAsync(ParmBlkPtr pb);
+pascal OSErr PBGetVolAsync(ParmBlkPtr pb) MAC_IMPORT(PBGetVolAsync);
 #endif
 
 enum { _PBHGetVolSync = 0xA214 };
@@ -1546,7 +1546,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBHGetVolSync(WDPBPtr
     return _ret;
 }
 #else
-pascal OSErr PBHGetVolSync(WDPBPtr pb);
+pascal OSErr PBHGetVolSync(WDPBPtr pb) MAC_IMPORT(PBHGetVolSync);
 #endif
 enum { _PBHGetVolAsync = 0xA614 };
 #if TARGET_CPU_68K
@@ -1560,7 +1560,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBHGetVolAsync(WDPBPt
     return _ret;
 }
 #else
-pascal OSErr PBHGetVolAsync(WDPBPtr pb);
+pascal OSErr PBHGetVolAsync(WDPBPtr pb) MAC_IMPORT(PBHGetVolAsync);
 #endif
 
 enum { _PBSetVolSync = 0xA015 };
@@ -1575,7 +1575,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBSetVolSync(ParmBlkP
     return _ret;
 }
 #else
-pascal OSErr PBSetVolSync(ParmBlkPtr pb);
+pascal OSErr PBSetVolSync(ParmBlkPtr pb) MAC_IMPORT(PBSetVolSync);
 #endif
 enum { _PBSetVolAsync = 0xA415 };
 #if TARGET_CPU_68K
@@ -1589,7 +1589,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBSetVolAsync(ParmBlk
     return _ret;
 }
 #else
-pascal OSErr PBSetVolAsync(ParmBlkPtr pb);
+pascal OSErr PBSetVolAsync(ParmBlkPtr pb) MAC_IMPORT(PBSetVolAsync);
 #endif
 
 enum { _PBHSetVolSync = 0xA215 };
@@ -1604,7 +1604,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBHSetVolSync(WDPBPtr
     return _ret;
 }
 #else
-pascal OSErr PBHSetVolSync(WDPBPtr pb);
+pascal OSErr PBHSetVolSync(WDPBPtr pb) MAC_IMPORT(PBHSetVolSync);
 #endif
 enum { _PBHSetVolAsync = 0xA615 };
 #if TARGET_CPU_68K
@@ -1618,7 +1618,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBHSetVolAsync(WDPBPt
     return _ret;
 }
 #else
-pascal OSErr PBHSetVolAsync(WDPBPtr pb);
+pascal OSErr PBHSetVolAsync(WDPBPtr pb) MAC_IMPORT(PBHSetVolAsync);
 #endif
 
 enum { _PBEject = 0xA017 };
@@ -1633,7 +1633,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBEject(ParmBlkPtr pb
     return _ret;
 }
 #else
-pascal OSErr PBEject(ParmBlkPtr pb);
+pascal OSErr PBEject(ParmBlkPtr pb) MAC_IMPORT(PBEject);
 #endif
 
 enum { _PBGetFPosSync = 0xA018 };
@@ -1648,7 +1648,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBGetFPosSync(ParmBlk
     return _ret;
 }
 #else
-pascal OSErr PBGetFPosSync(ParmBlkPtr pb);
+pascal OSErr PBGetFPosSync(ParmBlkPtr pb) MAC_IMPORT(PBGetFPosSync);
 #endif
 enum { _PBGetFPosAsync = 0xA418 };
 #if TARGET_CPU_68K
@@ -1662,7 +1662,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBGetFPosAsync(ParmBl
     return _ret;
 }
 #else
-pascal OSErr PBGetFPosAsync(ParmBlkPtr pb);
+pascal OSErr PBGetFPosAsync(ParmBlkPtr pb) MAC_IMPORT(PBGetFPosAsync);
 #endif
 
 enum { _PBOffLine = 0xA035 };
@@ -1677,7 +1677,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBOffLine(ParmBlkPtr 
     return _ret;
 }
 #else
-pascal OSErr PBOffLine(ParmBlkPtr pb);
+pascal OSErr PBOffLine(ParmBlkPtr pb) MAC_IMPORT(PBOffLine);
 #endif
 
 enum { _PBSetFLockSync = 0xA041 };
@@ -1692,7 +1692,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBSetFLockSync(ParmBl
     return _ret;
 }
 #else
-pascal OSErr PBSetFLockSync(ParmBlkPtr pb);
+pascal OSErr PBSetFLockSync(ParmBlkPtr pb) MAC_IMPORT(PBSetFLockSync);
 #endif
 enum { _PBSetFLockAsync = 0xA441 };
 #if TARGET_CPU_68K
@@ -1706,7 +1706,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBSetFLockAsync(ParmB
     return _ret;
 }
 #else
-pascal OSErr PBSetFLockAsync(ParmBlkPtr pb);
+pascal OSErr PBSetFLockAsync(ParmBlkPtr pb) MAC_IMPORT(PBSetFLockAsync);
 #endif
 
 enum { _PBHSetFLockSync = 0xA241 };
@@ -1721,7 +1721,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBHSetFLockSync(HParm
     return _ret;
 }
 #else
-pascal OSErr PBHSetFLockSync(HParmBlkPtr pb);
+pascal OSErr PBHSetFLockSync(HParmBlkPtr pb) MAC_IMPORT(PBHSetFLockSync);
 #endif
 enum { _PBHSetFLockAsync = 0xA641 };
 #if TARGET_CPU_68K
@@ -1735,7 +1735,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBHSetFLockAsync(HPar
     return _ret;
 }
 #else
-pascal OSErr PBHSetFLockAsync(HParmBlkPtr pb);
+pascal OSErr PBHSetFLockAsync(HParmBlkPtr pb) MAC_IMPORT(PBHSetFLockAsync);
 #endif
 
 enum { _PBRstFLockSync = 0xA042 };
@@ -1750,7 +1750,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBRstFLockSync(ParmBl
     return _ret;
 }
 #else
-pascal OSErr PBRstFLockSync(ParmBlkPtr pb);
+pascal OSErr PBRstFLockSync(ParmBlkPtr pb) MAC_IMPORT(PBRstFLockSync);
 #endif
 enum { _PBRstFLockAsync = 0xA442 };
 #if TARGET_CPU_68K
@@ -1764,7 +1764,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBRstFLockAsync(ParmB
     return _ret;
 }
 #else
-pascal OSErr PBRstFLockAsync(ParmBlkPtr pb);
+pascal OSErr PBRstFLockAsync(ParmBlkPtr pb) MAC_IMPORT(PBRstFLockAsync);
 #endif
 
 enum { _PBHRstFLockSync = 0xA242 };
@@ -1779,7 +1779,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBHRstFLockSync(HParm
     return _ret;
 }
 #else
-pascal OSErr PBHRstFLockSync(HParmBlkPtr pb);
+pascal OSErr PBHRstFLockSync(HParmBlkPtr pb) MAC_IMPORT(PBHRstFLockSync);
 #endif
 enum { _PBHRstFLockAsync = 0xA642 };
 #if TARGET_CPU_68K
@@ -1793,7 +1793,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBHRstFLockAsync(HPar
     return _ret;
 }
 #else
-pascal OSErr PBHRstFLockAsync(HParmBlkPtr pb);
+pascal OSErr PBHRstFLockAsync(HParmBlkPtr pb) MAC_IMPORT(PBHRstFLockAsync);
 #endif
 
 enum { _PBSetFVersSync = 0xA043 };
@@ -1808,7 +1808,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBSetFVersSync(ParmBl
     return _ret;
 }
 #else
-pascal OSErr PBSetFVersSync(ParmBlkPtr pb);
+pascal OSErr PBSetFVersSync(ParmBlkPtr pb) MAC_IMPORT(PBSetFVersSync);
 #endif
 enum { _PBSetFVersAsync = 0xA443 };
 #if TARGET_CPU_68K
@@ -1822,7 +1822,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBSetFVersAsync(ParmB
     return _ret;
 }
 #else
-pascal OSErr PBSetFVersAsync(ParmBlkPtr pb);
+pascal OSErr PBSetFVersAsync(ParmBlkPtr pb) MAC_IMPORT(PBSetFVersAsync);
 #endif
 
 enum { _PBSetFPosSync = 0xA044 };
@@ -1837,7 +1837,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBSetFPosSync(ParmBlk
     return _ret;
 }
 #else
-pascal OSErr PBSetFPosSync(ParmBlkPtr pb);
+pascal OSErr PBSetFPosSync(ParmBlkPtr pb) MAC_IMPORT(PBSetFPosSync);
 #endif
 enum { _PBSetFPosAsync = 0xA444 };
 #if TARGET_CPU_68K
@@ -1851,7 +1851,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBSetFPosAsync(ParmBl
     return _ret;
 }
 #else
-pascal OSErr PBSetFPosAsync(ParmBlkPtr pb);
+pascal OSErr PBSetFPosAsync(ParmBlkPtr pb) MAC_IMPORT(PBSetFPosAsync);
 #endif
 
 enum { _PBFlushFileSync = 0xA045 };
@@ -1866,7 +1866,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBFlushFileSync(ParmB
     return _ret;
 }
 #else
-pascal OSErr PBFlushFileSync(ParmBlkPtr pb);
+pascal OSErr PBFlushFileSync(ParmBlkPtr pb) MAC_IMPORT(PBFlushFileSync);
 #endif
 enum { _PBFlushFileAsync = 0xA445 };
 #if TARGET_CPU_68K
@@ -1880,7 +1880,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBFlushFileAsync(Parm
     return _ret;
 }
 #else
-pascal OSErr PBFlushFileAsync(ParmBlkPtr pb);
+pascal OSErr PBFlushFileAsync(ParmBlkPtr pb) MAC_IMPORT(PBFlushFileAsync);
 #endif
 
 enum { _FSDispatch = 0xA060 };
@@ -1896,7 +1896,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBOpenWDSync(WDPBPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBOpenWDSync(WDPBPtr pb) MAC_IMPORT(PBOpenWDSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBOpenWDAsync(WDPBPtr pb) {
@@ -1909,7 +1909,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBOpenWDAsync(WDPBPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBOpenWDAsync(WDPBPtr pb) MAC_IMPORT(PBOpenWDAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -1923,7 +1923,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBCloseWDSync(WDPBPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBCloseWDSync(WDPBPtr pb) MAC_IMPORT(PBCloseWDSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBCloseWDAsync(WDPBPtr pb) {
@@ -1936,7 +1936,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBCloseWDAsync(WDPBPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBCloseWDAsync(WDPBPtr pb) MAC_IMPORT(PBCloseWDAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -1950,7 +1950,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBCatMoveSync(CMovePBPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBCatMoveSync(CMovePBPtr pb) MAC_IMPORT(PBCatMoveSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBCatMoveAsync(CMovePBPtr pb) {
@@ -1963,7 +1963,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBCatMoveAsync(CMovePBPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBCatMoveAsync(CMovePBPtr pb) MAC_IMPORT(PBCatMoveAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -1977,7 +1977,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDirCreateSync(HParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDirCreateSync(HParmBlkPtr pb) MAC_IMPORT(PBDirCreateSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBDirCreateAsync(HParmBlkPtr pb) {
@@ -1990,7 +1990,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDirCreateAsync(HParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDirCreateAsync(HParmBlkPtr pb) MAC_IMPORT(PBDirCreateAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -2004,7 +2004,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetWDInfoSync(WDPBPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetWDInfoSync(WDPBPtr pb) MAC_IMPORT(PBGetWDInfoSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBGetWDInfoAsync(WDPBPtr pb) {
@@ -2017,7 +2017,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetWDInfoAsync(WDPBPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetWDInfoAsync(WDPBPtr pb) MAC_IMPORT(PBGetWDInfoAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -2031,7 +2031,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetFCBInfoSync(FCBPBPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetFCBInfoSync(FCBPBPtr pb) MAC_IMPORT(PBGetFCBInfoSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBGetFCBInfoAsync(FCBPBPtr pb) {
@@ -2044,7 +2044,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetFCBInfoAsync(FCBPBPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetFCBInfoAsync(FCBPBPtr pb) MAC_IMPORT(PBGetFCBInfoAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -2058,7 +2058,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetCatInfoSync(CInfoPBPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetCatInfoSync(CInfoPBPtr pb) MAC_IMPORT(PBGetCatInfoSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBGetCatInfoAsync(CInfoPBPtr pb) {
@@ -2071,7 +2071,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetCatInfoAsync(CInfoPBPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetCatInfoAsync(CInfoPBPtr pb) MAC_IMPORT(PBGetCatInfoAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -2085,7 +2085,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBSetCatInfoSync(CInfoPBPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBSetCatInfoSync(CInfoPBPtr pb) MAC_IMPORT(PBSetCatInfoSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBSetCatInfoAsync(CInfoPBPtr pb) {
@@ -2098,7 +2098,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBSetCatInfoAsync(CInfoPBPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBSetCatInfoAsync(CInfoPBPtr pb) MAC_IMPORT(PBSetCatInfoAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -2112,7 +2112,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBSetVInfoSync(HParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBSetVInfoSync(HParmBlkPtr pb) MAC_IMPORT(PBSetVInfoSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBSetVInfoAsync(HParmBlkPtr pb) {
@@ -2125,7 +2125,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBSetVInfoAsync(HParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBSetVInfoAsync(HParmBlkPtr pb) MAC_IMPORT(PBSetVInfoAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -2139,7 +2139,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBLockRangeSync(ParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBLockRangeSync(ParmBlkPtr pb) MAC_IMPORT(PBLockRangeSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBLockRangeAsync(ParmBlkPtr pb) {
@@ -2152,7 +2152,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBLockRangeAsync(ParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBLockRangeAsync(ParmBlkPtr pb) MAC_IMPORT(PBLockRangeAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -2166,7 +2166,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBUnlockRangeSync(ParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBUnlockRangeSync(ParmBlkPtr pb) MAC_IMPORT(PBUnlockRangeSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBUnlockRangeAsync(ParmBlkPtr pb) {
@@ -2179,7 +2179,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBUnlockRangeAsync(ParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBUnlockRangeAsync(ParmBlkPtr pb) MAC_IMPORT(PBUnlockRangeAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -2193,7 +2193,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBCreateFileIDRefSync(ParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBCreateFileIDRefSync(ParmBlkPtr pb) MAC_IMPORT(PBCreateFileIDRefSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBCreateFileIDRefAsync(ParmBlkPtr pb) {
@@ -2206,7 +2206,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBCreateFileIDRefAsync(ParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBCreateFileIDRefAsync(ParmBlkPtr pb) MAC_IMPORT(PBCreateFileIDRefAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -2220,7 +2220,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDeleteFileIDRefSync(ParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDeleteFileIDRefSync(ParmBlkPtr pb) MAC_IMPORT(PBDeleteFileIDRefSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBDeleteFileIDRefAsync(ParmBlkPtr pb) {
@@ -2233,7 +2233,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDeleteFileIDRefAsync(ParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDeleteFileIDRefAsync(ParmBlkPtr pb) MAC_IMPORT(PBDeleteFileIDRefAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -2247,7 +2247,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBResolveFileIDRefSync(ParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBResolveFileIDRefSync(ParmBlkPtr pb) MAC_IMPORT(PBResolveFileIDRefSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBResolveFileIDRefAsync(ParmBlkPtr pb) {
@@ -2260,7 +2260,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBResolveFileIDRefAsync(ParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBResolveFileIDRefAsync(ParmBlkPtr pb) MAC_IMPORT(PBResolveFileIDRefAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -2274,7 +2274,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBExchangeFilesSync(ParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBExchangeFilesSync(ParmBlkPtr pb) MAC_IMPORT(PBExchangeFilesSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBExchangeFilesAsync(ParmBlkPtr pb) {
@@ -2287,7 +2287,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBExchangeFilesAsync(ParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBExchangeFilesAsync(ParmBlkPtr pb) MAC_IMPORT(PBExchangeFilesAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -2301,7 +2301,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBCatSearchSync(ParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBCatSearchSync(ParmBlkPtr pb) MAC_IMPORT(PBCatSearchSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBCatSearchAsync(ParmBlkPtr pb) {
@@ -2314,7 +2314,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBCatSearchAsync(ParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBCatSearchAsync(ParmBlkPtr pb) MAC_IMPORT(PBCatSearchAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -2328,7 +2328,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBOpenDFSync(ParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBOpenDFSync(ParmBlkPtr pb) MAC_IMPORT(PBOpenDFSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBOpenDFAsync(ParmBlkPtr pb) {
@@ -2341,7 +2341,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBOpenDFAsync(ParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBOpenDFAsync(ParmBlkPtr pb) MAC_IMPORT(PBOpenDFAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -2355,7 +2355,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBHOpenDFSync(HParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBHOpenDFSync(HParmBlkPtr pb) MAC_IMPORT(PBHOpenDFSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBHOpenDFAsync(HParmBlkPtr pb) {
@@ -2368,7 +2368,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBHOpenDFAsync(HParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBHOpenDFAsync(HParmBlkPtr pb) MAC_IMPORT(PBHOpenDFAsync);
 #endif
 
 typedef struct GetVolParmsInfoBuffer GetVolParmsInfoBuffer;
@@ -2397,7 +2397,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBHGetVolParmsSync(HParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBHGetVolParmsSync(HParmBlkPtr pb) MAC_IMPORT(PBHGetVolParmsSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBHGetVolParmsAsync(HParmBlkPtr pb) {
@@ -2410,7 +2410,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBHGetVolParmsAsync(HParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBHGetVolParmsAsync(HParmBlkPtr pb) MAC_IMPORT(PBHGetVolParmsAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -2424,7 +2424,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBHGetLogInInfoSync(HParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBHGetLogInInfoSync(HParmBlkPtr pb) MAC_IMPORT(PBHGetLogInInfoSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBHGetLogInInfoAsync(HParmBlkPtr pb) {
@@ -2437,7 +2437,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBHGetLogInInfoAsync(HParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBHGetLogInInfoAsync(HParmBlkPtr pb) MAC_IMPORT(PBHGetLogInInfoAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -2451,7 +2451,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBHGetDirAccessSync(HParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBHGetDirAccessSync(HParmBlkPtr pb) MAC_IMPORT(PBHGetDirAccessSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBHGetDirAccessAsync(HParmBlkPtr pb) {
@@ -2464,7 +2464,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBHGetDirAccessAsync(HParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBHGetDirAccessAsync(HParmBlkPtr pb) MAC_IMPORT(PBHGetDirAccessAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -2478,7 +2478,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBHSetDirAccessSync(HParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBHSetDirAccessSync(HParmBlkPtr pb) MAC_IMPORT(PBHSetDirAccessSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBHSetDirAccessAsync(HParmBlkPtr pb) {
@@ -2491,7 +2491,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBHSetDirAccessAsync(HParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBHSetDirAccessAsync(HParmBlkPtr pb) MAC_IMPORT(PBHSetDirAccessAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -2505,7 +2505,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBHMapIDSync(HParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBHMapIDSync(HParmBlkPtr pb) MAC_IMPORT(PBHMapIDSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBHMapIDAsync(HParmBlkPtr pb) {
@@ -2518,7 +2518,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBHMapIDAsync(HParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBHMapIDAsync(HParmBlkPtr pb) MAC_IMPORT(PBHMapIDAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -2532,7 +2532,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBHMapNameSync(HParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBHMapNameSync(HParmBlkPtr pb) MAC_IMPORT(PBHMapNameSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBHMapNameAsync(HParmBlkPtr pb) {
@@ -2545,7 +2545,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBHMapNameAsync(HParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBHMapNameAsync(HParmBlkPtr pb) MAC_IMPORT(PBHMapNameAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -2559,7 +2559,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBHCopyFileSync(HParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBHCopyFileSync(HParmBlkPtr pb) MAC_IMPORT(PBHCopyFileSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBHCopyFileAsync(HParmBlkPtr pb) {
@@ -2572,7 +2572,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBHCopyFileAsync(HParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBHCopyFileAsync(HParmBlkPtr pb) MAC_IMPORT(PBHCopyFileAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -2586,7 +2586,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBHMoveRenameSync(HParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBHMoveRenameSync(HParmBlkPtr pb) MAC_IMPORT(PBHMoveRenameSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBHMoveRenameAsync(HParmBlkPtr pb) {
@@ -2599,7 +2599,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBHMoveRenameAsync(HParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBHMoveRenameAsync(HParmBlkPtr pb) MAC_IMPORT(PBHMoveRenameAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -2613,7 +2613,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBHOpenDenySync(HParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBHOpenDenySync(HParmBlkPtr pb) MAC_IMPORT(PBHOpenDenySync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBHOpenDenyAsync(HParmBlkPtr pb) {
@@ -2626,90 +2626,90 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBHOpenDenyAsync(HParmBlkPtr pb);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBHOpenDenyAsync(HParmBlkPtr pb) MAC_IMPORT(PBHOpenDenyAsync);
 #endif
 
 // prototypes for the high level filesystem dispatch traps
 enum { _HighLevelFSDispatch = 0xAA52 };
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr FSMakeFSSpec(int16_t vRefNum, long dir_id, ConstStringPtr file_name, FSSpecPtr spec) M68K_INLINE(0x7001, 0xAA52);
+MAC_SINCE(0x0700, "7.0") pascal OSErr FSMakeFSSpec(int16_t vRefNum, long dir_id, ConstStringPtr file_name, FSSpecPtr spec) MAC_IMPORT(FSMakeFSSpec) M68K_INLINE(0x7001, 0xAA52);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr FSpExchangeFiles(FSSpecPtr src, FSSpecPtr dst) M68K_INLINE(0x700F, 0xAA52);
+MAC_SINCE(0x0700, "7.0") pascal OSErr FSpExchangeFiles(FSSpecPtr src, FSSpecPtr dst) MAC_IMPORT(FSpExchangeFiles) M68K_INLINE(0x700F, 0xAA52);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr FSpOpenDF(FSSpecPtr spec, SignedByte perms, int16_t *refNum_out) M68K_INLINE(0x7002, 0xAA52);
+MAC_SINCE(0x0700, "7.0") pascal OSErr FSpOpenDF(FSSpecPtr spec, SignedByte perms, int16_t *refNum_out) MAC_IMPORT(FSpOpenDF) M68K_INLINE(0x7002, 0xAA52);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr FSpOpenRF(FSSpecPtr spec, SignedByte perms, int16_t *refNum_out) M68K_INLINE(0x7003, 0xAA52);
+MAC_SINCE(0x0700, "7.0") pascal OSErr FSpOpenRF(FSSpecPtr spec, SignedByte perms, int16_t *refNum_out) MAC_IMPORT(FSpOpenRF) M68K_INLINE(0x7003, 0xAA52);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr FSpCreate(FSSpecPtr spec, OSType creator, OSType file_type, ScriptCode script) M68K_INLINE(0x7004, 0xAA52);
+MAC_SINCE(0x0700, "7.0") pascal OSErr FSpCreate(FSSpecPtr spec, OSType creator, OSType file_type, ScriptCode script) MAC_IMPORT(FSpCreate) M68K_INLINE(0x7004, 0xAA52);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr FSpDirCreate(FSSpecPtr spec, ScriptCode script, long *created_dir_id) M68K_INLINE(0x7005, 0xAA52);
+MAC_SINCE(0x0700, "7.0") pascal OSErr FSpDirCreate(FSSpecPtr spec, ScriptCode script, long *created_dir_id) MAC_IMPORT(FSpDirCreate) M68K_INLINE(0x7005, 0xAA52);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr FSpDelete(FSSpecPtr spec) M68K_INLINE(0x7006, 0xAA52);
+MAC_SINCE(0x0700, "7.0") pascal OSErr FSpDelete(FSSpecPtr spec) MAC_IMPORT(FSpDelete) M68K_INLINE(0x7006, 0xAA52);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr FSpGetFInfo(FSSpecPtr spec, FInfo *fndr_info) M68K_INLINE(0x7007, 0xAA52);
+MAC_SINCE(0x0700, "7.0") pascal OSErr FSpGetFInfo(FSSpecPtr spec, FInfo *fndr_info) MAC_IMPORT(FSpGetFInfo) M68K_INLINE(0x7007, 0xAA52);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr FSpSetFInfo(FSSpecPtr spec, FInfo *fndr_info) M68K_INLINE(0x7008, 0xAA52);
+MAC_SINCE(0x0700, "7.0") pascal OSErr FSpSetFInfo(FSSpecPtr spec, FInfo *fndr_info) MAC_IMPORT(FSpSetFInfo) M68K_INLINE(0x7008, 0xAA52);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr FSpSetFLock(FSSpecPtr spec) M68K_INLINE(0x7009, 0xAA52);
+MAC_SINCE(0x0700, "7.0") pascal OSErr FSpSetFLock(FSSpecPtr spec) MAC_IMPORT(FSpSetFLock) M68K_INLINE(0x7009, 0xAA52);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr FSpRstFLock(FSSpecPtr spec) M68K_INLINE(0x700A, 0xAA52);
+MAC_SINCE(0x0700, "7.0") pascal OSErr FSpRstFLock(FSSpecPtr spec) MAC_IMPORT(FSpRstFLock) M68K_INLINE(0x700A, 0xAA52);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr FSpRename(FSSpecPtr spec, ConstStringPtr new_name) M68K_INLINE(0x700B, 0xAA52);
+MAC_SINCE(0x0700, "7.0") pascal OSErr FSpRename(FSSpecPtr spec, ConstStringPtr new_name) MAC_IMPORT(FSpRename) M68K_INLINE(0x700B, 0xAA52);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr FSpCatMove(FSSpecPtr src, FSSpecPtr dst) M68K_INLINE(0x700C, 0xAA52);
+MAC_SINCE(0x0700, "7.0") pascal OSErr FSpCatMove(FSSpecPtr src, FSSpecPtr dst) MAC_IMPORT(FSpCatMove) M68K_INLINE(0x700C, 0xAA52);
 
-MAC_SINCE(0x0700, "7.0") pascal void FSpCreateResFile(FSSpecPtr spec, OSType creator, OSType file_type, ScriptCode script) M68K_INLINE(0x700E, 0xAA52);
+MAC_SINCE(0x0700, "7.0") pascal void FSpCreateResFile(FSSpecPtr spec, OSType creator, OSType file_type, ScriptCode script) MAC_IMPORT(FSpCreateResFile) M68K_INLINE(0x700E, 0xAA52);
 
-MAC_SINCE(0x0700, "7.0") pascal INTEGER FSpOpenResFile(FSSpecPtr spec, SignedByte perms) M68K_INLINE(0x700D, 0xAA52);
+MAC_SINCE(0x0700, "7.0") pascal INTEGER FSpOpenResFile(FSSpecPtr spec, SignedByte perms) MAC_IMPORT(FSpOpenResFile) M68K_INLINE(0x700D, 0xAA52);
 
 enum { _HOpenResFile = 0xA81A };
-MAC_SINCE(0x0700, "7.0") pascal INTEGER HOpenResFile(INTEGER vref, LONGINT dirid, ConstStringPtr file_name, SignedByte perm) M68K_INLINE(0xA81A);
+MAC_SINCE(0x0700, "7.0") pascal INTEGER HOpenResFile(INTEGER vref, LONGINT dirid, ConstStringPtr file_name, SignedByte perm) MAC_IMPORT(HOpenResFile) M68K_INLINE(0xA81A);
 
 enum { _HCreateResFile = 0xA81B };
-MAC_SINCE(0x0700, "7.0") pascal void HCreateResFile(INTEGER vrefnum, LONGINT parid, ConstStringPtr name) M68K_INLINE(0xA81B);
+MAC_SINCE(0x0700, "7.0") pascal void HCreateResFile(INTEGER vrefnum, LONGINT parid, ConstStringPtr name) MAC_IMPORT(HCreateResFile) M68K_INLINE(0xA81B);
 
 #if TARGET_CPU_68K
 static __inline__ OSErr HCreate(INTEGER vref, LONGINT dirid, ConstStringPtr name, OSType creator, OSType type);
 #else
-pascal OSErr HCreate(INTEGER vref, LONGINT dirid, ConstStringPtr name, OSType creator, OSType type);
+pascal OSErr HCreate(INTEGER vref, LONGINT dirid, ConstStringPtr name, OSType creator, OSType type) MAC_IMPORT(HCreate);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr HOpenRF(INTEGER vref, LONGINT dirid, ConstStringPtr name, SignedByte perm, INTEGER *refp);
 #else
-pascal OSErr HOpenRF(INTEGER vref, LONGINT dirid, ConstStringPtr name, SignedByte perm, INTEGER *refp);
+pascal OSErr HOpenRF(INTEGER vref, LONGINT dirid, ConstStringPtr name, SignedByte perm, INTEGER *refp) MAC_IMPORT(HOpenRF);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr HOpen(INTEGER vref, LONGINT dirid, ConstStringPtr name, SignedByte perm, INTEGER *refp);
 #else
-pascal OSErr HOpen(INTEGER vref, LONGINT dirid, ConstStringPtr name, SignedByte perm, INTEGER *refp);
+pascal OSErr HOpen(INTEGER vref, LONGINT dirid, ConstStringPtr name, SignedByte perm, INTEGER *refp) MAC_IMPORT(HOpen);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr HOpenDF(INTEGER vref, LONGINT dirid, ConstStringPtr name, SignedByte perm, INTEGER *refp);
 #else
-pascal OSErr HOpenDF(INTEGER vref, LONGINT dirid, ConstStringPtr name, SignedByte perm, INTEGER *refp);
+pascal OSErr HOpenDF(INTEGER vref, LONGINT dirid, ConstStringPtr name, SignedByte perm, INTEGER *refp) MAC_IMPORT(HOpenDF);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr HRename(INTEGER vref, LONGINT dirid, ConstStringPtr src, ConstStringPtr dst);
 #else
-pascal OSErr HRename(INTEGER vref, LONGINT dirid, ConstStringPtr src, ConstStringPtr dst);
+pascal OSErr HRename(INTEGER vref, LONGINT dirid, ConstStringPtr src, ConstStringPtr dst) MAC_IMPORT(HRename);
 #endif
 
 // NOTRAP_FUNCTION2(HRename);
 #if TARGET_CPU_68K
 static __inline__ OSErr HDelete(INTEGER vref, LONGINT dirid, ConstStringPtr name);
 #else
-pascal OSErr HDelete(INTEGER vref, LONGINT dirid, ConstStringPtr name);
+pascal OSErr HDelete(INTEGER vref, LONGINT dirid, ConstStringPtr name) MAC_IMPORT(HDelete);
 #endif
 
 // NOTRAP_FUNCTION2(HDelete);
 #if TARGET_CPU_68K
 static __inline__ OSErr GetWDInfo(INTEGER wd, INTEGER *vrefp, LONGINT *dirp, LONGINT *procp);
 #else
-pascal OSErr GetWDInfo(INTEGER wd, INTEGER *vrefp, LONGINT *dirp, LONGINT *procp);
+pascal OSErr GetWDInfo(INTEGER wd, INTEGER *vrefp, LONGINT *dirp, LONGINT *procp) MAC_IMPORT(GetWDInfo);
 #endif
 
 
@@ -2726,7 +2726,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBCloseImmed(ParmBlkP
     return _ret;
 }
 #else
-pascal OSErr PBCloseImmed(ParmBlkPtr paramBlock);
+pascal OSErr PBCloseImmed(ParmBlkPtr paramBlock) MAC_IMPORT(PBCloseImmed);
 #endif
 
 enum { _PBControlImmed = 0xA204 };
@@ -2741,7 +2741,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBControlImmed(ParmBl
     return _ret;
 }
 #else
-pascal OSErr PBControlImmed(ParmBlkPtr paramBlock);
+pascal OSErr PBControlImmed(ParmBlkPtr paramBlock) MAC_IMPORT(PBControlImmed);
 #endif
 
 enum { _PBKillIOImmed = 0xA206 };
@@ -2756,7 +2756,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBKillIOImmed(ParmBlk
     return _ret;
 }
 #else
-pascal OSErr PBKillIOImmed(ParmBlkPtr paramBlock);
+pascal OSErr PBKillIOImmed(ParmBlkPtr paramBlock) MAC_IMPORT(PBKillIOImmed);
 #endif
 
 enum { _PBOpenImmed = 0xA200 };
@@ -2771,7 +2771,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBOpenImmed(ParmBlkPt
     return _ret;
 }
 #else
-pascal OSErr PBOpenImmed(ParmBlkPtr paramBlock);
+pascal OSErr PBOpenImmed(ParmBlkPtr paramBlock) MAC_IMPORT(PBOpenImmed);
 #endif
 
 enum { _PBReadImmed = 0xA202 };
@@ -2786,7 +2786,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBReadImmed(ParmBlkPt
     return _ret;
 }
 #else
-pascal OSErr PBReadImmed(ParmBlkPtr paramBlock);
+pascal OSErr PBReadImmed(ParmBlkPtr paramBlock) MAC_IMPORT(PBReadImmed);
 #endif
 
 enum { _PBStatusImmed = 0xA205 };
@@ -2801,7 +2801,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBStatusImmed(ParmBlk
     return _ret;
 }
 #else
-pascal OSErr PBStatusImmed(ParmBlkPtr paramBlock);
+pascal OSErr PBStatusImmed(ParmBlkPtr paramBlock) MAC_IMPORT(PBStatusImmed);
 #endif
 
 enum { _PBWriteImmed = 0xA203 };
@@ -2816,7 +2816,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBWriteImmed(ParmBlkP
     return _ret;
 }
 #else
-pascal OSErr PBWriteImmed(ParmBlkPtr paramBlock);
+pascal OSErr PBWriteImmed(ParmBlkPtr paramBlock) MAC_IMPORT(PBWriteImmed);
 #endif
 
 #if TARGET_CPU_68K
@@ -2830,7 +2830,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBMakeFSSpecSync(HParmBlkPtr paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBMakeFSSpecSync(HParmBlkPtr paramBlock) MAC_IMPORT(PBMakeFSSpecSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBMakeFSSpecAsync(HParmBlkPtr paramBlock) {
@@ -2843,7 +2843,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBMakeFSSpecAsync(HParmBlkPtr paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBMakeFSSpecAsync(HParmBlkPtr paramBlock) MAC_IMPORT(PBMakeFSSpecAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -2857,7 +2857,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBShareSync(HParmBlkPtr paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBShareSync(HParmBlkPtr paramBlock) MAC_IMPORT(PBShareSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBShareAsync(HParmBlkPtr paramBlock) {
@@ -2870,7 +2870,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBShareAsync(HParmBlkPtr paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBShareAsync(HParmBlkPtr paramBlock) MAC_IMPORT(PBShareAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -2884,7 +2884,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBUnshareSync(HParmBlkPtr paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBUnshareSync(HParmBlkPtr paramBlock) MAC_IMPORT(PBUnshareSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBUnshareAsync(HParmBlkPtr paramBlock) {
@@ -2897,7 +2897,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBUnshareAsync(HParmBlkPtr paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBUnshareAsync(HParmBlkPtr paramBlock) MAC_IMPORT(PBUnshareAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -2911,7 +2911,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetUGEntrySync(HParmBlkPtr paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetUGEntrySync(HParmBlkPtr paramBlock) MAC_IMPORT(PBGetUGEntrySync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBGetUGEntryAsync(HParmBlkPtr paramBlock) {
@@ -2924,7 +2924,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetUGEntryAsync(HParmBlkPtr paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetUGEntryAsync(HParmBlkPtr paramBlock) MAC_IMPORT(PBGetUGEntryAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -2938,7 +2938,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetForeignPrivsSync(HParmBlkPtr paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetForeignPrivsSync(HParmBlkPtr paramBlock) MAC_IMPORT(PBGetForeignPrivsSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBGetForeignPrivsAsync(HParmBlkPtr paramBlock) {
@@ -2951,7 +2951,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetForeignPrivsAsync(HParmBlkPtr paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetForeignPrivsAsync(HParmBlkPtr paramBlock) MAC_IMPORT(PBGetForeignPrivsAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -2965,7 +2965,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBSetForeignPrivsSync(HParmBlkPtr paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBSetForeignPrivsSync(HParmBlkPtr paramBlock) MAC_IMPORT(PBSetForeignPrivsSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBSetForeignPrivsAsync(HParmBlkPtr paramBlock) {
@@ -2978,7 +2978,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBSetForeignPrivsAsync(HParmBlkPtr paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBSetForeignPrivsAsync(HParmBlkPtr paramBlock) MAC_IMPORT(PBSetForeignPrivsAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -2992,7 +2992,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBHOpenRFDenySync(HParmBlkPtr paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBHOpenRFDenySync(HParmBlkPtr paramBlock) MAC_IMPORT(PBHOpenRFDenySync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBHOpenRFDenyAsync(HParmBlkPtr paramBlock) {
@@ -3005,7 +3005,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBHOpenRFDenyAsync(HParmBlkPtr paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBHOpenRFDenyAsync(HParmBlkPtr paramBlock) MAC_IMPORT(PBHOpenRFDenyAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -3019,7 +3019,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetVolMountInfoSize(ParmBlkPtr paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetVolMountInfoSize(ParmBlkPtr paramBlock) MAC_IMPORT(PBGetVolMountInfoSize);
 #endif
 
 #if TARGET_CPU_68K
@@ -3033,7 +3033,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetVolMountInfo(ParmBlkPtr paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetVolMountInfo(ParmBlkPtr paramBlock) MAC_IMPORT(PBGetVolMountInfo);
 #endif
 
 #if TARGET_CPU_68K
@@ -3047,62 +3047,62 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBVolumeMount(ParmBlkPtr paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBVolumeMount(ParmBlkPtr paramBlock) MAC_IMPORT(PBVolumeMount);
 #endif
 
 // High-level calls built on the parameter block calls
 #if TARGET_CPU_68K
 static __inline__ OSErr HGetVol(StringPtr volName, INTEGER *vRefNum, long *dirID);
 #else
-pascal OSErr HGetVol(StringPtr volName, INTEGER *vRefNum, long *dirID);
+pascal OSErr HGetVol(StringPtr volName, INTEGER *vRefNum, long *dirID) MAC_IMPORT(HGetVol);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr HSetVol(ConstStr63Param volName, INTEGER vRefNum, long dirID);
 #else
-pascal OSErr HSetVol(ConstStr63Param volName, INTEGER vRefNum, long dirID);
+pascal OSErr HSetVol(ConstStr63Param volName, INTEGER vRefNum, long dirID) MAC_IMPORT(HSetVol);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr DirCreate(INTEGER vRefNum, long parentDirID, ConstStr255Param directoryName, long *createdDirID);
 #else
-pascal OSErr DirCreate(INTEGER vRefNum, long parentDirID, ConstStr255Param directoryName, long *createdDirID);
+pascal OSErr DirCreate(INTEGER vRefNum, long parentDirID, ConstStr255Param directoryName, long *createdDirID) MAC_IMPORT(DirCreate);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr HSetFInfo(INTEGER vRefNum, long dirID, ConstStr255Param fileName, const FInfo *fndrInfo);
 #else
-pascal OSErr HSetFInfo(INTEGER vRefNum, long dirID, ConstStr255Param fileName, const FInfo *fndrInfo);
+pascal OSErr HSetFInfo(INTEGER vRefNum, long dirID, ConstStr255Param fileName, const FInfo *fndrInfo) MAC_IMPORT(HSetFInfo);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr HSetFLock(INTEGER vRefNum, long dirID, ConstStr255Param fileName);
 #else
-pascal OSErr HSetFLock(INTEGER vRefNum, long dirID, ConstStr255Param fileName);
+pascal OSErr HSetFLock(INTEGER vRefNum, long dirID, ConstStr255Param fileName) MAC_IMPORT(HSetFLock);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr HRstFLock(INTEGER vRefNum, long dirID, ConstStr255Param fileName);
 #else
-pascal OSErr HRstFLock(INTEGER vRefNum, long dirID, ConstStr255Param fileName);
+pascal OSErr HRstFLock(INTEGER vRefNum, long dirID, ConstStr255Param fileName) MAC_IMPORT(HRstFLock);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr CatMove(INTEGER vRefNum, long dirID, ConstStr255Param oldName, long newDirID, ConstStr255Param newName);
 #else
-pascal OSErr CatMove(INTEGER vRefNum, long dirID, ConstStr255Param oldName, long newDirID, ConstStr255Param newName);
+pascal OSErr CatMove(INTEGER vRefNum, long dirID, ConstStr255Param oldName, long newDirID, ConstStr255Param newName) MAC_IMPORT(CatMove);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr OpenWD(INTEGER vRefNum, long dirID, long procID, INTEGER *wdRefNum);
 #else
-pascal OSErr OpenWD(INTEGER vRefNum, long dirID, long procID, INTEGER *wdRefNum);
+pascal OSErr OpenWD(INTEGER vRefNum, long dirID, long procID, INTEGER *wdRefNum) MAC_IMPORT(OpenWD);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr CloseWD(INTEGER wdRefNum);
 #else
-pascal OSErr CloseWD(INTEGER wdRefNum);
+pascal OSErr CloseWD(INTEGER wdRefNum) MAC_IMPORT(CloseWD);
 #endif
 
 typedef UniversalProcPtr IOCompletionUPP;
@@ -3460,199 +3460,199 @@ typedef FSVolumeInfoParam *FSVolumeInfoParamPtr;
 #if TARGET_CPU_68K
 static __inline__ OSErr FSpMakeFSRef(const FSSpec *source, FSRef *newRef);
 #else
-pascal OSErr FSpMakeFSRef(const FSSpec *source, FSRef *newRef);
+pascal OSErr FSpMakeFSRef(const FSSpec *source, FSRef *newRef) MAC_IMPORT(FSpMakeFSRef);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSMakeFSRefUnicode(const FSRef *parentRef, UniCharCount nameLength, const UniChar *name, TextEncoding textEncodingHint, FSRef *newRef);
 #else
-pascal OSErr FSMakeFSRefUnicode(const FSRef *parentRef, UniCharCount nameLength, const UniChar *name, TextEncoding textEncodingHint, FSRef *newRef);
+pascal OSErr FSMakeFSRefUnicode(const FSRef *parentRef, UniCharCount nameLength, const UniChar *name, TextEncoding textEncodingHint, FSRef *newRef) MAC_IMPORT(FSMakeFSRefUnicode);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSCompareFSRefs(const FSRef *ref1, const FSRef *ref2);
 #else
-pascal OSErr FSCompareFSRefs(const FSRef *ref1, const FSRef *ref2);
+pascal OSErr FSCompareFSRefs(const FSRef *ref1, const FSRef *ref2) MAC_IMPORT(FSCompareFSRefs);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSCreateFileUnicode(const FSRef *parentRef, UniCharCount nameLength, const UniChar *name, FSCatalogInfoBitmap whichInfo, const FSCatalogInfo *catalogInfo, FSRef *newRef, FSSpec *newSpec);
 #else
-pascal OSErr FSCreateFileUnicode(const FSRef *parentRef, UniCharCount nameLength, const UniChar *name, FSCatalogInfoBitmap whichInfo, const FSCatalogInfo *catalogInfo, FSRef *newRef, FSSpec *newSpec);
+pascal OSErr FSCreateFileUnicode(const FSRef *parentRef, UniCharCount nameLength, const UniChar *name, FSCatalogInfoBitmap whichInfo, const FSCatalogInfo *catalogInfo, FSRef *newRef, FSSpec *newSpec) MAC_IMPORT(FSCreateFileUnicode);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSCreateDirectoryUnicode(const FSRef *parentRef, UniCharCount nameLength, const UniChar *name, FSCatalogInfoBitmap whichInfo, const FSCatalogInfo *catalogInfo, FSRef *newRef, FSSpec *newSpec, UInt32 *newDirID);
 #else
-pascal OSErr FSCreateDirectoryUnicode(const FSRef *parentRef, UniCharCount nameLength, const UniChar *name, FSCatalogInfoBitmap whichInfo, const FSCatalogInfo *catalogInfo, FSRef *newRef, FSSpec *newSpec, UInt32 *newDirID);
+pascal OSErr FSCreateDirectoryUnicode(const FSRef *parentRef, UniCharCount nameLength, const UniChar *name, FSCatalogInfoBitmap whichInfo, const FSCatalogInfo *catalogInfo, FSRef *newRef, FSSpec *newSpec, UInt32 *newDirID) MAC_IMPORT(FSCreateDirectoryUnicode);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSDeleteObject(const FSRef *ref);
 #else
-pascal OSErr FSDeleteObject(const FSRef *ref);
+pascal OSErr FSDeleteObject(const FSRef *ref) MAC_IMPORT(FSDeleteObject);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSMoveObject(const FSRef *ref, const FSRef *destDirectory, FSRef *newRef);
 #else
-pascal OSErr FSMoveObject(const FSRef *ref, const FSRef *destDirectory, FSRef *newRef);
+pascal OSErr FSMoveObject(const FSRef *ref, const FSRef *destDirectory, FSRef *newRef) MAC_IMPORT(FSMoveObject);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSExchangeObjects(const FSRef *ref, const FSRef *destRef);
 #else
-pascal OSErr FSExchangeObjects(const FSRef *ref, const FSRef *destRef);
+pascal OSErr FSExchangeObjects(const FSRef *ref, const FSRef *destRef) MAC_IMPORT(FSExchangeObjects);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSRenameUnicode(const FSRef *ref, UniCharCount nameLength, const UniChar *name, TextEncoding textEncodingHint, FSRef *newRef);
 #else
-pascal OSErr FSRenameUnicode(const FSRef *ref, UniCharCount nameLength, const UniChar *name, TextEncoding textEncodingHint, FSRef *newRef);
+pascal OSErr FSRenameUnicode(const FSRef *ref, UniCharCount nameLength, const UniChar *name, TextEncoding textEncodingHint, FSRef *newRef) MAC_IMPORT(FSRenameUnicode);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSGetCatalogInfo(const FSRef *ref, FSCatalogInfoBitmap whichInfo, FSCatalogInfo *catalogInfo, HFSUniStr255 *outName, FSSpec *fsSpec, FSRef *parentRef);
 #else
-pascal OSErr FSGetCatalogInfo(const FSRef *ref, FSCatalogInfoBitmap whichInfo, FSCatalogInfo *catalogInfo, HFSUniStr255 *outName, FSSpec *fsSpec, FSRef *parentRef);
+pascal OSErr FSGetCatalogInfo(const FSRef *ref, FSCatalogInfoBitmap whichInfo, FSCatalogInfo *catalogInfo, HFSUniStr255 *outName, FSSpec *fsSpec, FSRef *parentRef) MAC_IMPORT(FSGetCatalogInfo);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSSetCatalogInfo(const FSRef *ref, FSCatalogInfoBitmap whichInfo, const FSCatalogInfo *catalogInfo);
 #else
-pascal OSErr FSSetCatalogInfo(const FSRef *ref, FSCatalogInfoBitmap whichInfo, const FSCatalogInfo *catalogInfo);
+pascal OSErr FSSetCatalogInfo(const FSRef *ref, FSCatalogInfoBitmap whichInfo, const FSCatalogInfo *catalogInfo) MAC_IMPORT(FSSetCatalogInfo);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSOpenIterator(const FSRef *container, FSIteratorFlags iteratorFlags, FSIterator *iterator);
 #else
-pascal OSErr FSOpenIterator(const FSRef *container, FSIteratorFlags iteratorFlags, FSIterator *iterator);
+pascal OSErr FSOpenIterator(const FSRef *container, FSIteratorFlags iteratorFlags, FSIterator *iterator) MAC_IMPORT(FSOpenIterator);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSCloseIterator(FSIterator iterator);
 #else
-pascal OSErr FSCloseIterator(FSIterator iterator);
+pascal OSErr FSCloseIterator(FSIterator iterator) MAC_IMPORT(FSCloseIterator);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSGetCatalogInfoBulk(FSIterator iterator, ItemCount maximumObjects, ItemCount *actualObjects, Boolean *containerChanged, FSCatalogInfoBitmap whichInfo, FSCatalogInfo *catalogInfos, FSRef *refs, FSSpec *specs, HFSUniStr255 *names);
 #else
-pascal OSErr FSGetCatalogInfoBulk(FSIterator iterator, ItemCount maximumObjects, ItemCount *actualObjects, Boolean *containerChanged, FSCatalogInfoBitmap whichInfo, FSCatalogInfo *catalogInfos, FSRef *refs, FSSpec *specs, HFSUniStr255 *names);
+pascal OSErr FSGetCatalogInfoBulk(FSIterator iterator, ItemCount maximumObjects, ItemCount *actualObjects, Boolean *containerChanged, FSCatalogInfoBitmap whichInfo, FSCatalogInfo *catalogInfos, FSRef *refs, FSSpec *specs, HFSUniStr255 *names) MAC_IMPORT(FSGetCatalogInfoBulk);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSCatalogSearch(FSIterator iterator, const FSSearchParams *searchCriteria, ItemCount maximumObjects, ItemCount *actualObjects, Boolean *containerChanged, FSCatalogInfoBitmap whichInfo, FSCatalogInfo *catalogInfos, FSRef *refs, FSSpec *specs, HFSUniStr255 *names);
 #else
-pascal OSErr FSCatalogSearch(FSIterator iterator, const FSSearchParams *searchCriteria, ItemCount maximumObjects, ItemCount *actualObjects, Boolean *containerChanged, FSCatalogInfoBitmap whichInfo, FSCatalogInfo *catalogInfos, FSRef *refs, FSSpec *specs, HFSUniStr255 *names);
+pascal OSErr FSCatalogSearch(FSIterator iterator, const FSSearchParams *searchCriteria, ItemCount maximumObjects, ItemCount *actualObjects, Boolean *containerChanged, FSCatalogInfoBitmap whichInfo, FSCatalogInfo *catalogInfos, FSRef *refs, FSSpec *specs, HFSUniStr255 *names) MAC_IMPORT(FSCatalogSearch);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSCreateFork(const FSRef *ref, UniCharCount forkNameLength, const UniChar *forkName);
 #else
-pascal OSErr FSCreateFork(const FSRef *ref, UniCharCount forkNameLength, const UniChar *forkName);
+pascal OSErr FSCreateFork(const FSRef *ref, UniCharCount forkNameLength, const UniChar *forkName) MAC_IMPORT(FSCreateFork);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSDeleteFork(const FSRef *ref, UniCharCount forkNameLength, const UniChar *forkName);
 #else
-pascal OSErr FSDeleteFork(const FSRef *ref, UniCharCount forkNameLength, const UniChar *forkName);
+pascal OSErr FSDeleteFork(const FSRef *ref, UniCharCount forkNameLength, const UniChar *forkName) MAC_IMPORT(FSDeleteFork);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSIterateForks(const FSRef *ref, CatPositionRec *forkIterator, HFSUniStr255 *forkName, SInt64 *forkSize, UInt64 *forkPhysicalSize);
 #else
-pascal OSErr FSIterateForks(const FSRef *ref, CatPositionRec *forkIterator, HFSUniStr255 *forkName, SInt64 *forkSize, UInt64 *forkPhysicalSize);
+pascal OSErr FSIterateForks(const FSRef *ref, CatPositionRec *forkIterator, HFSUniStr255 *forkName, SInt64 *forkSize, UInt64 *forkPhysicalSize) MAC_IMPORT(FSIterateForks);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSOpenFork(const FSRef *ref, UniCharCount forkNameLength, const UniChar *forkName, SInt8 permissions, SInt16 *forkRefNum);
 #else
-pascal OSErr FSOpenFork(const FSRef *ref, UniCharCount forkNameLength, const UniChar *forkName, SInt8 permissions, SInt16 *forkRefNum);
+pascal OSErr FSOpenFork(const FSRef *ref, UniCharCount forkNameLength, const UniChar *forkName, SInt8 permissions, SInt16 *forkRefNum) MAC_IMPORT(FSOpenFork);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSReadFork(SInt16 forkRefNum, UInt16 positionMode, SInt64 positionOffset, ByteCount requestCount, void *buffer, ByteCount *actualCount);
 #else
-pascal OSErr FSReadFork(SInt16 forkRefNum, UInt16 positionMode, SInt64 positionOffset, ByteCount requestCount, void *buffer, ByteCount *actualCount);
+pascal OSErr FSReadFork(SInt16 forkRefNum, UInt16 positionMode, SInt64 positionOffset, ByteCount requestCount, void *buffer, ByteCount *actualCount) MAC_IMPORT(FSReadFork);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSWriteFork(SInt16 forkRefNum, UInt16 positionMode, SInt64 positionOffset, ByteCount requestCount, const void *buffer, ByteCount *actualCount);
 #else
-pascal OSErr FSWriteFork(SInt16 forkRefNum, UInt16 positionMode, SInt64 positionOffset, ByteCount requestCount, const void *buffer, ByteCount *actualCount);
+pascal OSErr FSWriteFork(SInt16 forkRefNum, UInt16 positionMode, SInt64 positionOffset, ByteCount requestCount, const void *buffer, ByteCount *actualCount) MAC_IMPORT(FSWriteFork);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSGetForkPosition(SInt16 forkRefNum, SInt64 *position);
 #else
-pascal OSErr FSGetForkPosition(SInt16 forkRefNum, SInt64 *position);
+pascal OSErr FSGetForkPosition(SInt16 forkRefNum, SInt64 *position) MAC_IMPORT(FSGetForkPosition);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSSetForkPosition(SInt16 forkRefNum, UInt16 positionMode, SInt64 positionOffset);
 #else
-pascal OSErr FSSetForkPosition(SInt16 forkRefNum, UInt16 positionMode, SInt64 positionOffset);
+pascal OSErr FSSetForkPosition(SInt16 forkRefNum, UInt16 positionMode, SInt64 positionOffset) MAC_IMPORT(FSSetForkPosition);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSGetForkSize(SInt16 forkRefNum, SInt64 *forkSize);
 #else
-pascal OSErr FSGetForkSize(SInt16 forkRefNum, SInt64 *forkSize);
+pascal OSErr FSGetForkSize(SInt16 forkRefNum, SInt64 *forkSize) MAC_IMPORT(FSGetForkSize);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSSetForkSize(SInt16 forkRefNum, UInt16 positionMode, SInt64 positionOffset);
 #else
-pascal OSErr FSSetForkSize(SInt16 forkRefNum, UInt16 positionMode, SInt64 positionOffset);
+pascal OSErr FSSetForkSize(SInt16 forkRefNum, UInt16 positionMode, SInt64 positionOffset) MAC_IMPORT(FSSetForkSize);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSAllocateFork(SInt16 forkRefNum, FSAllocationFlags flags, UInt16 positionMode, SInt64 positionOffset, UInt64 requestCount, UInt64 *actualCount);
 #else
-pascal OSErr FSAllocateFork(SInt16 forkRefNum, FSAllocationFlags flags, UInt16 positionMode, SInt64 positionOffset, UInt64 requestCount, UInt64 *actualCount);
+pascal OSErr FSAllocateFork(SInt16 forkRefNum, FSAllocationFlags flags, UInt16 positionMode, SInt64 positionOffset, UInt64 requestCount, UInt64 *actualCount) MAC_IMPORT(FSAllocateFork);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSFlushFork(SInt16 forkRefNum);
 #else
-pascal OSErr FSFlushFork(SInt16 forkRefNum);
+pascal OSErr FSFlushFork(SInt16 forkRefNum) MAC_IMPORT(FSFlushFork);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSCloseFork(SInt16 forkRefNum);
 #else
-pascal OSErr FSCloseFork(SInt16 forkRefNum);
+pascal OSErr FSCloseFork(SInt16 forkRefNum) MAC_IMPORT(FSCloseFork);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSGetForkCBInfo(SInt16 desiredRefNum, FSVolumeRefNum volume, SInt16 *iterator, SInt16 *actualRefNum, FSForkInfo *forkInfo, FSRef *ref, HFSUniStr255 *outForkName);
 #else
-pascal OSErr FSGetForkCBInfo(SInt16 desiredRefNum, FSVolumeRefNum volume, SInt16 *iterator, SInt16 *actualRefNum, FSForkInfo *forkInfo, FSRef *ref, HFSUniStr255 *outForkName);
+pascal OSErr FSGetForkCBInfo(SInt16 desiredRefNum, FSVolumeRefNum volume, SInt16 *iterator, SInt16 *actualRefNum, FSForkInfo *forkInfo, FSRef *ref, HFSUniStr255 *outForkName) MAC_IMPORT(FSGetForkCBInfo);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSGetVolumeInfo(FSVolumeRefNum volume, ItemCount volumeIndex, FSVolumeRefNum *actualVolume, FSVolumeInfoBitmap whichInfo, FSVolumeInfo *info, HFSUniStr255 *volumeName, FSRef *rootDirectory);
 #else
-pascal OSErr FSGetVolumeInfo(FSVolumeRefNum volume, ItemCount volumeIndex, FSVolumeRefNum *actualVolume, FSVolumeInfoBitmap whichInfo, FSVolumeInfo *info, HFSUniStr255 *volumeName, FSRef *rootDirectory);
+pascal OSErr FSGetVolumeInfo(FSVolumeRefNum volume, ItemCount volumeIndex, FSVolumeRefNum *actualVolume, FSVolumeInfoBitmap whichInfo, FSVolumeInfo *info, HFSUniStr255 *volumeName, FSRef *rootDirectory) MAC_IMPORT(FSGetVolumeInfo);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSSetVolumeInfo(FSVolumeRefNum volume, FSVolumeInfoBitmap whichInfo, const FSVolumeInfo *info);
 #else
-pascal OSErr FSSetVolumeInfo(FSVolumeRefNum volume, FSVolumeInfoBitmap whichInfo, const FSVolumeInfo *info);
+pascal OSErr FSSetVolumeInfo(FSVolumeRefNum volume, FSVolumeInfoBitmap whichInfo, const FSVolumeInfo *info) MAC_IMPORT(FSSetVolumeInfo);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSGetDataForkName(HFSUniStr255 *dataForkName);
 #else
-pascal OSErr FSGetDataForkName(HFSUniStr255 *dataForkName);
+pascal OSErr FSGetDataForkName(HFSUniStr255 *dataForkName) MAC_IMPORT(FSGetDataForkName);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr FSGetResourceForkName(HFSUniStr255 *resourceForkName);
 #else
-pascal OSErr FSGetResourceForkName(HFSUniStr255 *resourceForkName);
+pascal OSErr FSGetResourceForkName(HFSUniStr255 *resourceForkName) MAC_IMPORT(FSGetResourceForkName);
 #endif
 
 // Parameter block forms of the HFS Plus API
@@ -3667,7 +3667,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBMakeFSRefSync(FSRefParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBMakeFSRefSync(FSRefParam *paramBlock) MAC_IMPORT(PBMakeFSRefSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -3679,7 +3679,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBMakeFSRefAsync(FSRefParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBMakeFSRefAsync(FSRefParam *paramBlock) MAC_IMPORT(PBMakeFSRefAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -3693,7 +3693,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBMakeFSRefUnicodeSync(FSRefParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBMakeFSRefUnicodeSync(FSRefParam *paramBlock) MAC_IMPORT(PBMakeFSRefUnicodeSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -3705,7 +3705,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBMakeFSRefUnicodeAsync(FSRefParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBMakeFSRefUnicodeAsync(FSRefParam *paramBlock) MAC_IMPORT(PBMakeFSRefUnicodeAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -3719,7 +3719,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBCompareFSRefsSync(FSRefParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBCompareFSRefsSync(FSRefParam *paramBlock) MAC_IMPORT(PBCompareFSRefsSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -3731,7 +3731,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBCompareFSRefsAsync(FSRefParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBCompareFSRefsAsync(FSRefParam *paramBlock) MAC_IMPORT(PBCompareFSRefsAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -3745,7 +3745,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBCreateFileUnicodeSync(FSRefParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBCreateFileUnicodeSync(FSRefParam *paramBlock) MAC_IMPORT(PBCreateFileUnicodeSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -3757,7 +3757,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBCreateFileUnicodeAsync(FSRefParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBCreateFileUnicodeAsync(FSRefParam *paramBlock) MAC_IMPORT(PBCreateFileUnicodeAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -3771,7 +3771,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBCreateDirectoryUnicodeSync(FSRefParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBCreateDirectoryUnicodeSync(FSRefParam *paramBlock) MAC_IMPORT(PBCreateDirectoryUnicodeSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -3783,7 +3783,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBCreateDirectoryUnicodeAsync(FSRefParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBCreateDirectoryUnicodeAsync(FSRefParam *paramBlock) MAC_IMPORT(PBCreateDirectoryUnicodeAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -3797,7 +3797,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDeleteObjectSync(FSRefParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDeleteObjectSync(FSRefParam *paramBlock) MAC_IMPORT(PBDeleteObjectSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -3809,7 +3809,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBDeleteObjectAsync(FSRefParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBDeleteObjectAsync(FSRefParam *paramBlock) MAC_IMPORT(PBDeleteObjectAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -3823,7 +3823,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBMoveObjectSync(FSRefParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBMoveObjectSync(FSRefParam *paramBlock) MAC_IMPORT(PBMoveObjectSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -3835,7 +3835,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBMoveObjectAsync(FSRefParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBMoveObjectAsync(FSRefParam *paramBlock) MAC_IMPORT(PBMoveObjectAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -3849,7 +3849,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBExchangeObjectsSync(FSRefParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBExchangeObjectsSync(FSRefParam *paramBlock) MAC_IMPORT(PBExchangeObjectsSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -3861,7 +3861,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBExchangeObjectsAsync(FSRefParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBExchangeObjectsAsync(FSRefParam *paramBlock) MAC_IMPORT(PBExchangeObjectsAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -3875,7 +3875,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBRenameUnicodeSync(FSRefParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBRenameUnicodeSync(FSRefParam *paramBlock) MAC_IMPORT(PBRenameUnicodeSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -3887,7 +3887,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBRenameUnicodeAsync(FSRefParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBRenameUnicodeAsync(FSRefParam *paramBlock) MAC_IMPORT(PBRenameUnicodeAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -3901,7 +3901,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetCatalogInfoSync(FSRefParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetCatalogInfoSync(FSRefParam *paramBlock) MAC_IMPORT(PBGetCatalogInfoSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -3913,7 +3913,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBGetCatalogInfoAsync(FSRefParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBGetCatalogInfoAsync(FSRefParam *paramBlock) MAC_IMPORT(PBGetCatalogInfoAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -3927,7 +3927,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBSetCatalogInfoSync(FSRefParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBSetCatalogInfoSync(FSRefParam *paramBlock) MAC_IMPORT(PBSetCatalogInfoSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -3939,7 +3939,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBSetCatalogInfoAsync(FSRefParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBSetCatalogInfoAsync(FSRefParam *paramBlock) MAC_IMPORT(PBSetCatalogInfoAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -3953,7 +3953,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBOpenIteratorSync(FSCatalogBulkParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBOpenIteratorSync(FSCatalogBulkParam *paramBlock) MAC_IMPORT(PBOpenIteratorSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -3965,7 +3965,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBOpenIteratorAsync(FSCatalogBulkParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBOpenIteratorAsync(FSCatalogBulkParam *paramBlock) MAC_IMPORT(PBOpenIteratorAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -3979,7 +3979,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBCloseIteratorSync(FSCatalogBulkParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBCloseIteratorSync(FSCatalogBulkParam *paramBlock) MAC_IMPORT(PBCloseIteratorSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -3991,7 +3991,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBCloseIteratorAsync(FSCatalogBulkParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBCloseIteratorAsync(FSCatalogBulkParam *paramBlock) MAC_IMPORT(PBCloseIteratorAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4005,7 +4005,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetCatalogInfoBulkSync(FSCatalogBulkParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetCatalogInfoBulkSync(FSCatalogBulkParam *paramBlock) MAC_IMPORT(PBGetCatalogInfoBulkSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4017,7 +4017,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBGetCatalogInfoBulkAsync(FSCatalogBulkParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBGetCatalogInfoBulkAsync(FSCatalogBulkParam *paramBlock) MAC_IMPORT(PBGetCatalogInfoBulkAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4031,7 +4031,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBCatalogSearchSync(FSCatalogBulkParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBCatalogSearchSync(FSCatalogBulkParam *paramBlock) MAC_IMPORT(PBCatalogSearchSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4043,7 +4043,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBCatalogSearchAsync(FSCatalogBulkParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBCatalogSearchAsync(FSCatalogBulkParam *paramBlock) MAC_IMPORT(PBCatalogSearchAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4057,7 +4057,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBCreateForkSync(FSForkIOParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBCreateForkSync(FSForkIOParam *paramBlock) MAC_IMPORT(PBCreateForkSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4069,7 +4069,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBCreateForkAsync(FSForkIOParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBCreateForkAsync(FSForkIOParam *paramBlock) MAC_IMPORT(PBCreateForkAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4083,7 +4083,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBDeleteForkSync(FSForkIOParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBDeleteForkSync(FSForkIOParam *paramBlock) MAC_IMPORT(PBDeleteForkSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4095,7 +4095,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBDeleteForkAsync(FSForkIOParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBDeleteForkAsync(FSForkIOParam *paramBlock) MAC_IMPORT(PBDeleteForkAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4109,7 +4109,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBIterateForksSync(FSForkIOParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBIterateForksSync(FSForkIOParam *paramBlock) MAC_IMPORT(PBIterateForksSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4121,7 +4121,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBIterateForksAsync(FSForkIOParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBIterateForksAsync(FSForkIOParam *paramBlock) MAC_IMPORT(PBIterateForksAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4135,7 +4135,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBOpenForkSync(FSForkIOParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBOpenForkSync(FSForkIOParam *paramBlock) MAC_IMPORT(PBOpenForkSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4147,7 +4147,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBOpenForkAsync(FSForkIOParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBOpenForkAsync(FSForkIOParam *paramBlock) MAC_IMPORT(PBOpenForkAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4161,7 +4161,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal OSErr PBReadForkSync(FSForkIOParam *paramBlock);
+MAC_SINCE(0x0921, "9.2.1") pascal OSErr PBReadForkSync(FSForkIOParam *paramBlock) MAC_IMPORT(PBReadForkSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4173,7 +4173,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal void PBReadForkAsync(FSForkIOParam *paramBlock);
+MAC_SINCE(0x0921, "9.2.1") pascal void PBReadForkAsync(FSForkIOParam *paramBlock) MAC_IMPORT(PBReadForkAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4187,7 +4187,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal OSErr PBWriteForkSync(FSForkIOParam *paramBlock);
+MAC_SINCE(0x0921, "9.2.1") pascal OSErr PBWriteForkSync(FSForkIOParam *paramBlock) MAC_IMPORT(PBWriteForkSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4199,7 +4199,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal void PBWriteForkAsync(FSForkIOParam *paramBlock);
+MAC_SINCE(0x0921, "9.2.1") pascal void PBWriteForkAsync(FSForkIOParam *paramBlock) MAC_IMPORT(PBWriteForkAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4213,7 +4213,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetForkPositionSync(FSForkIOParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetForkPositionSync(FSForkIOParam *paramBlock) MAC_IMPORT(PBGetForkPositionSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4225,7 +4225,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBGetForkPositionAsync(FSForkIOParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBGetForkPositionAsync(FSForkIOParam *paramBlock) MAC_IMPORT(PBGetForkPositionAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4239,7 +4239,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBSetForkPositionSync(FSForkIOParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBSetForkPositionSync(FSForkIOParam *paramBlock) MAC_IMPORT(PBSetForkPositionSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4251,7 +4251,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBSetForkPositionAsync(FSForkIOParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBSetForkPositionAsync(FSForkIOParam *paramBlock) MAC_IMPORT(PBSetForkPositionAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4265,7 +4265,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetForkSizeSync(FSForkIOParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetForkSizeSync(FSForkIOParam *paramBlock) MAC_IMPORT(PBGetForkSizeSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4277,7 +4277,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBGetForkSizeAsync(FSForkIOParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBGetForkSizeAsync(FSForkIOParam *paramBlock) MAC_IMPORT(PBGetForkSizeAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4291,7 +4291,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBSetForkSizeSync(FSForkIOParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBSetForkSizeSync(FSForkIOParam *paramBlock) MAC_IMPORT(PBSetForkSizeSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4303,7 +4303,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBSetForkSizeAsync(FSForkIOParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBSetForkSizeAsync(FSForkIOParam *paramBlock) MAC_IMPORT(PBSetForkSizeAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4317,7 +4317,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBAllocateForkSync(FSForkIOParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBAllocateForkSync(FSForkIOParam *paramBlock) MAC_IMPORT(PBAllocateForkSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4329,7 +4329,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBAllocateForkAsync(FSForkIOParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBAllocateForkAsync(FSForkIOParam *paramBlock) MAC_IMPORT(PBAllocateForkAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4343,7 +4343,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBFlushForkSync(FSForkIOParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBFlushForkSync(FSForkIOParam *paramBlock) MAC_IMPORT(PBFlushForkSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4355,7 +4355,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBFlushForkAsync(FSForkIOParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBFlushForkAsync(FSForkIOParam *paramBlock) MAC_IMPORT(PBFlushForkAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4369,7 +4369,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBCloseForkSync(FSForkIOParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBCloseForkSync(FSForkIOParam *paramBlock) MAC_IMPORT(PBCloseForkSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4381,7 +4381,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBCloseForkAsync(FSForkIOParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBCloseForkAsync(FSForkIOParam *paramBlock) MAC_IMPORT(PBCloseForkAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4395,7 +4395,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetForkCBInfoSync(FSForkCBInfoParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetForkCBInfoSync(FSForkCBInfoParam *paramBlock) MAC_IMPORT(PBGetForkCBInfoSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4407,7 +4407,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBGetForkCBInfoAsync(FSForkCBInfoParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBGetForkCBInfoAsync(FSForkCBInfoParam *paramBlock) MAC_IMPORT(PBGetForkCBInfoAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4421,7 +4421,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetVolumeInfoSync(FSVolumeInfoParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetVolumeInfoSync(FSVolumeInfoParam *paramBlock) MAC_IMPORT(PBGetVolumeInfoSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4433,7 +4433,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBGetVolumeInfoAsync(FSVolumeInfoParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBGetVolumeInfoAsync(FSVolumeInfoParam *paramBlock) MAC_IMPORT(PBGetVolumeInfoAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4447,7 +4447,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBSetVolumeInfoSync(FSVolumeInfoParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBSetVolumeInfoSync(FSVolumeInfoParam *paramBlock) MAC_IMPORT(PBSetVolumeInfoSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -4459,7 +4459,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PBSetVolumeInfoAsync(FSVolumeInfoParam *paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal void PBSetVolumeInfoAsync(FSVolumeInfoParam *paramBlock) MAC_IMPORT(PBSetVolumeInfoAsync);
 #endif
 
 typedef DrvQEl *DrvQElPtr;
@@ -4476,7 +4476,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetAltAccessSync(HParmBlkPtr paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetAltAccessSync(HParmBlkPtr paramBlock) MAC_IMPORT(PBGetAltAccessSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBGetAltAccessAsync(HParmBlkPtr paramBlock) {
@@ -4489,7 +4489,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetAltAccessAsync(HParmBlkPtr paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBGetAltAccessAsync(HParmBlkPtr paramBlock) MAC_IMPORT(PBGetAltAccessAsync);
 #endif
 
 // AppleShare alternate access privileges (MPW 3.2 interfaces).
@@ -4504,7 +4504,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBSetAltAccessSync(HParmBlkPtr paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBSetAltAccessSync(HParmBlkPtr paramBlock) MAC_IMPORT(PBSetAltAccessSync);
 #endif
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OSErr PBSetAltAccessAsync(HParmBlkPtr paramBlock) {
@@ -4517,7 +4517,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PBSetAltAccessAsync(HParmBlkPtr paramBlock);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PBSetAltAccessAsync(HParmBlkPtr paramBlock) MAC_IMPORT(PBSetAltAccessAsync);
 #endif
 
 #if TARGET_CPU_68K

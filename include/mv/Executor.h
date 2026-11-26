@@ -19,7 +19,7 @@ extern "C" {
 
 // Published to the guest through the table at low-memory address 0x58,
 // which Executor fills in by hand; this is not a trap.
-pascal OSErr ExecutorUnixMount(CInfoPBRec *cpbp) M68K_INLINE(0x2078, 0x0058, 0x2068, 0x0020, 0x4E90);
+pascal OSErr ExecutorUnixMount(CInfoPBRec *cpbp) MAC_IMPORT(ExecutorUnixMount) M68K_INLINE(0x2078, 0x0058, 0x2068, 0x0020, 0x4E90);
 
 #ifdef __cplusplus
 }

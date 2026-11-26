@@ -36,7 +36,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void InsTime(QElemPtr taskp);
+MAC_SINCE(0x0070, "0.7") pascal void InsTime(QElemPtr taskp) MAC_IMPORT(InsTime);
 #endif
 
 enum { _InsXTime = 0xA458 };
@@ -49,7 +49,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void InsXTime(QElemPtr taskp);
+MAC_SINCE(0x0070, "0.7") pascal void InsXTime(QElemPtr taskp) MAC_IMPORT(InsXTime);
 #endif
 
 enum { _RmvTime = 0xA059 };
@@ -62,7 +62,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void RmvTime(QElemPtr taskp);
+MAC_SINCE(0x0070, "0.7") pascal void RmvTime(QElemPtr taskp) MAC_IMPORT(RmvTime);
 #endif
 
 enum { _PrimeTime = 0xA05A };
@@ -76,11 +76,11 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PrimeTime(QElemPtr taskp, LONGINT count);
+MAC_SINCE(0x0070, "0.7") pascal void PrimeTime(QElemPtr taskp, LONGINT count) MAC_IMPORT(PrimeTime);
 #endif
 
 // The trap returns the high half in A0 and the low half in D0.
-MAC_SINCE(0x0700, "7.0") pascal void Microseconds(UnsignedWide *microTickCount) M68K_INLINE(0xA193, 0x225F, 0x22C8, 0x2280);
+MAC_SINCE(0x0700, "7.0") pascal void Microseconds(UnsignedWide *microTickCount) MAC_IMPORT(Microseconds) M68K_INLINE(0xA193, 0x225F, 0x22C8, 0x2280);
 
 // Time Manager calls that return an error (Mac OS 8.6)
 enum { _InstallTimeTask = 0xA058 };
@@ -95,7 +95,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr InstallTimeTask(QElemPtr tmTaskPtr);
+MAC_SINCE(0x0070, "0.7") pascal OSErr InstallTimeTask(QElemPtr tmTaskPtr) MAC_IMPORT(InstallTimeTask);
 #endif
 
 enum { _InstallXTimeTask = 0xA458 };
@@ -110,7 +110,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr InstallXTimeTask(QElemPtr tmTaskPtr);
+MAC_SINCE(0x0070, "0.7") pascal OSErr InstallXTimeTask(QElemPtr tmTaskPtr) MAC_IMPORT(InstallXTimeTask);
 #endif
 
 enum { _PrimeTimeTask = 0xA05A };
@@ -126,7 +126,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr PrimeTimeTask(QElemPtr tmTaskPtr, long count);
+MAC_SINCE(0x0070, "0.7") pascal OSErr PrimeTimeTask(QElemPtr tmTaskPtr, long count) MAC_IMPORT(PrimeTimeTask);
 #endif
 
 enum { _RemoveTimeTask = 0xA059 };
@@ -141,7 +141,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal OSErr RemoveTimeTask(QElemPtr tmTaskPtr);
+MAC_SINCE(0x0070, "0.7") pascal OSErr RemoveTimeTask(QElemPtr tmTaskPtr) MAC_IMPORT(RemoveTimeTask);
 #endif
 
 #ifdef __cplusplus

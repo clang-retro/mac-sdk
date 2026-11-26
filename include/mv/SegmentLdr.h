@@ -18,7 +18,7 @@ extern "C" {
 #endif
 
 enum { _ExitToShell = 0xA9F4 };
-pascal void ExitToShell(void) M68K_INLINE(0xA9F4);
+pascal void ExitToShell(void) MAC_IMPORT(ExitToShell) M68K_INLINE(0xA9F4);
 
 enum {
     appOpen = 0,
@@ -66,26 +66,26 @@ struct AppFile {
 #if TARGET_CPU_68K
 static __inline__ void CountAppFiles(INTEGER *messagep, INTEGER *countp);
 #else
-pascal void CountAppFiles(INTEGER *messagep, INTEGER *countp);
+pascal void CountAppFiles(INTEGER *messagep, INTEGER *countp) MAC_IMPORT(CountAppFiles);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void GetAppFiles(INTEGER index, AppFile *filep);
 #else
-pascal void GetAppFiles(INTEGER index, AppFile *filep);
+pascal void GetAppFiles(INTEGER index, AppFile *filep) MAC_IMPORT(GetAppFiles);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void ClrAppFiles(INTEGER index);
 #else
-pascal void ClrAppFiles(INTEGER index);
+pascal void ClrAppFiles(INTEGER index) MAC_IMPORT(ClrAppFiles);
 #endif
 
 enum { _GetAppParms = 0xA9F5 };
-pascal void GetAppParms(StringPtr namep, INTEGER *rnp, Handle *aphandp) M68K_INLINE(0xA9F5);
+pascal void GetAppParms(StringPtr namep, INTEGER *rnp, Handle *aphandp) MAC_IMPORT(GetAppParms) M68K_INLINE(0xA9F5);
 
 enum { _UnloadSeg = 0xA9F1 };
-pascal void UnloadSeg(void *addr) M68K_INLINE(0xA9F1);
+pascal void UnloadSeg(void *addr) MAC_IMPORT(UnloadSeg) M68K_INLINE(0xA9F1);
 
 enum {
     _LoadSeg = 43504,

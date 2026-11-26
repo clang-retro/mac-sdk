@@ -26,7 +26,7 @@ static __inline__ __attribute__((__always_inline__)) void NumToString(LONGINT l,
         : "d1", "d2", "a1", "cc", "memory");
 }
 #else
-pascal void NumToString(LONGINT l, StringPtr s);
+pascal void NumToString(LONGINT l, StringPtr s) MAC_IMPORT(NumToString);
 #endif
 
 #if TARGET_CPU_68K
@@ -40,7 +40,7 @@ static __inline__ __attribute__((__always_inline__)) void StringToNum(ConstStrin
     if (lp) *lp = _lp;
 }
 #else
-pascal void StringToNum(ConstStringPtr s, LONGINT *lp);
+pascal void StringToNum(ConstStringPtr s, LONGINT *lp) MAC_IMPORT(StringToNum);
 #endif
 
 #ifdef __cplusplus

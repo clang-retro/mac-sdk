@@ -222,60 +222,60 @@ enum {
 
 enum { _ScriptUtil = 0xA8B5 };
 
-MAC_SINCE(0x0200, "2.0") pascal LONGINT VisibleLength(Ptr textp, LONGINT len) M68K_INLINE(0x2F3C, 0x8408, 0x0028, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal LONGINT VisibleLength(Ptr textp, LONGINT len) MAC_IMPORT(VisibleLength) M68K_INLINE(0x2F3C, 0x8408, 0x0028, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal void LongDateToSeconds(LongDateRec *ldatep, ULONGINT *secs_outp) M68K_INLINE(0x2F3C, 0x8008, 0xFFF2, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal void LongDateToSeconds(LongDateRec *ldatep, ULONGINT *secs_outp) MAC_IMPORT(LongDateToSeconds) M68K_INLINE(0x2F3C, 0x8008, 0xFFF2, 0xA8B5);
 #if OLDROUTINENAMES
 #define LongDate2Secs(ldatep, secs_outp) LongDateToSeconds(ldatep, secs_outp)
 #endif
 
-MAC_SINCE(0x0200, "2.0") pascal void LongSecondsToDate(ULONGINT *secs_inp, LongDateRec *ldatep) M68K_INLINE(0x2F3C, 0x8008, 0xFFF0, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal void LongSecondsToDate(ULONGINT *secs_inp, LongDateRec *ldatep) MAC_IMPORT(LongSecondsToDate) M68K_INLINE(0x2F3C, 0x8008, 0xFFF0, 0xA8B5);
 #if OLDROUTINENAMES
 #define LongSecs2Date(secs_inp, ldatep) LongSecondsToDate(secs_inp, ldatep)
 #endif
 
-MAC_SINCE(0x0200, "2.0") pascal LONGINT GetScriptManagerVariable(INTEGER verb) M68K_INLINE(0x2F3C, 0x8402, 0x0008, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal LONGINT GetScriptManagerVariable(INTEGER verb) MAC_IMPORT(GetScriptManagerVariable) M68K_INLINE(0x2F3C, 0x8402, 0x0008, 0xA8B5);
 #if OLDROUTINENAMES
 #define GetEnvirons(verb) GetScriptManagerVariable(verb)
 #endif
 
-MAC_SINCE(0x0200, "2.0") pascal OSErr SetScriptManagerVariable(INTEGER verb, LONGINT param) M68K_INLINE(0x2F3C, 0x8206, 0x000A, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal OSErr SetScriptManagerVariable(INTEGER verb, LONGINT param) MAC_IMPORT(SetScriptManagerVariable) M68K_INLINE(0x2F3C, 0x8206, 0x000A, 0xA8B5);
 #if OLDROUTINENAMES
 #define SetEnvirons(verb, param) SetScriptManagerVariable(verb, param)
 #endif
 
-MAC_SINCE(0x0200, "2.0") pascal LONGINT GetScriptVariable(INTEGER script, INTEGER verb) M68K_INLINE(0x2F3C, 0x8404, 0x000C, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal LONGINT GetScriptVariable(INTEGER script, INTEGER verb) MAC_IMPORT(GetScriptVariable) M68K_INLINE(0x2F3C, 0x8404, 0x000C, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal OSErr SetScriptVariable(INTEGER script, INTEGER verb, LONGINT param) M68K_INLINE(0x2F3C, 0x8208, 0x000E, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal OSErr SetScriptVariable(INTEGER script, INTEGER verb, LONGINT param) MAC_IMPORT(SetScriptVariable) M68K_INLINE(0x2F3C, 0x8208, 0x000E, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal INTEGER FontToScript(INTEGER fontnum) M68K_INLINE(0x2F3C, 0x8202, 0x0006, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal INTEGER FontToScript(INTEGER fontnum) MAC_IMPORT(FontToScript) M68K_INLINE(0x2F3C, 0x8202, 0x0006, 0xA8B5);
 #if OLDROUTINENAMES
 #define Font2Script(fontnum) FontToScript(fontnum)
 #endif
 
-MAC_SINCE(0x0200, "2.0") pascal INTEGER Transliterate(Handle srch, Handle dsth, INTEGER target, LONGINT srcmask) M68K_INLINE(0x2F3C, 0x820E, 0x0018, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal INTEGER Transliterate(Handle srch, Handle dsth, INTEGER target, LONGINT srcmask) MAC_IMPORT(Transliterate) M68K_INLINE(0x2F3C, 0x820E, 0x0018, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal INTEGER FontScript(void) M68K_INLINE(0x2F3C, 0x8200, 0x0000, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal INTEGER FontScript(void) MAC_IMPORT(FontScript) M68K_INLINE(0x2F3C, 0x8200, 0x0000, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal INTEGER IntlScript(void) M68K_INLINE(0x2F3C, 0x8200, 0x0002, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal INTEGER IntlScript(void) MAC_IMPORT(IntlScript) M68K_INLINE(0x2F3C, 0x8200, 0x0002, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal void KeyScript(INTEGER scriptcode) M68K_INLINE(0x2F3C, 0x8002, 0x0004, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal void KeyScript(INTEGER scriptcode) MAC_IMPORT(KeyScript) M68K_INLINE(0x2F3C, 0x8002, 0x0004, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal INTEGER CharType(Ptr textbufp, INTEGER offset) M68K_INLINE(0x2F3C, 0x8206, 0x0012, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal INTEGER CharType(Ptr textbufp, INTEGER offset) MAC_IMPORT(CharType) M68K_INLINE(0x2F3C, 0x8206, 0x0012, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal void MeasureJust(Ptr textbufp, INTEGER length, INTEGER slop, Ptr charlocs) M68K_INLINE(0x2F3C, 0x800C, 0x0020, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal void MeasureJust(Ptr textbufp, INTEGER length, INTEGER slop, Ptr charlocs) MAC_IMPORT(MeasureJust) M68K_INLINE(0x2F3C, 0x800C, 0x0020, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal INTEGER Pixel2Char(Ptr textbufp, INTEGER len, INTEGER slop, INTEGER pixwidth, Boolean *leftsidep) M68K_INLINE(0x2F3C, 0x820E, 0x0014, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal INTEGER Pixel2Char(Ptr textbufp, INTEGER len, INTEGER slop, INTEGER pixwidth, Boolean *leftsidep) MAC_IMPORT(Pixel2Char) M68K_INLINE(0x2F3C, 0x820E, 0x0014, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal INTEGER Char2Pixel(Ptr textbufp, INTEGER len, INTEGER slop, INTEGER offset, SignedByte dir) M68K_INLINE(0x2F3C, 0x820C, 0x0016, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal INTEGER Char2Pixel(Ptr textbufp, INTEGER len, INTEGER slop, INTEGER offset, SignedByte dir) MAC_IMPORT(Char2Pixel) M68K_INLINE(0x2F3C, 0x820C, 0x0016, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal void FindWord(Ptr textbufp, INTEGER length, INTEGER offset, Boolean leftside, Ptr breaks, INTEGER *offsets) M68K_INLINE(0x2F3C, 0x8012, 0x001A, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal void FindWord(Ptr textbufp, INTEGER length, INTEGER offset, Boolean leftside, Ptr breaks, INTEGER *offsets) MAC_IMPORT(FindWord) M68K_INLINE(0x2F3C, 0x8012, 0x001A, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal void HiliteText(Ptr textbufp, INTEGER textLength, INTEGER firstoffset, INTEGER secondoffset, INTEGER *offsets) M68K_INLINE(0x2F3C, 0x800E, 0x001C, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal void HiliteText(Ptr textbufp, INTEGER textLength, INTEGER firstoffset, INTEGER secondoffset, INTEGER *offsets) MAC_IMPORT(HiliteText) M68K_INLINE(0x2F3C, 0x800E, 0x001C, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal void DrawJust(Ptr textbufp, INTEGER length, INTEGER slop) M68K_INLINE(0x2F3C, 0x8008, 0x001E, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal void DrawJust(Ptr textbufp, INTEGER length, INTEGER slop) MAC_IMPORT(DrawJust) M68K_INLINE(0x2F3C, 0x8008, 0x001E, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal String2DateStatus StringToTime(Ptr textp, LONGINT len, Ptr cachep, LONGINT *lenusedp, Ptr *datetimep) M68K_INLINE(0x2F3C, 0x8214, 0xFFF4, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal String2DateStatus StringToTime(Ptr textp, LONGINT len, Ptr cachep, LONGINT *lenusedp, Ptr *datetimep) MAC_IMPORT(StringToTime) M68K_INLINE(0x2F3C, 0x8214, 0xFFF4, 0xA8B5);
 #if OLDROUTINENAMES
 #define String2Time(textp, len, cachep, lenusedp, datetimep) StringToTime(textp, len, cachep, lenusedp, datetimep)
 #endif
@@ -283,79 +283,79 @@ MAC_SINCE(0x0200, "2.0") pascal String2DateStatus StringToTime(Ptr textp, LONGIN
 #if TARGET_CPU_68K
 static __inline__ INTEGER GetSysDirection(void);
 #else
-pascal INTEGER GetSysDirection(void);
+pascal INTEGER GetSysDirection(void) MAC_IMPORT(GetSysDirection);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void SetSysDirection(INTEGER just);
 #else
-pascal void SetSysDirection(INTEGER just);
+pascal void SetSysDirection(INTEGER just) MAC_IMPORT(SetSysDirection);
 #endif
 
-MAC_SINCE(0x0200, "2.0") pascal OSErr InitDateCache(DateCachePtr theCache) M68K_INLINE(0x2F3C, 0x8204, 0xFFF8, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal OSErr InitDateCache(DateCachePtr theCache) MAC_IMPORT(InitDateCache) M68K_INLINE(0x2F3C, 0x8204, 0xFFF8, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal INTEGER CharByte(Ptr textBuf, INTEGER textOffset) M68K_INLINE(0x2F3C, 0x8206, 0x0010, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal INTEGER CharByte(Ptr textBuf, INTEGER textOffset) MAC_IMPORT(CharByte) M68K_INLINE(0x2F3C, 0x8206, 0x0010, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal String2DateStatus StringToDate(Ptr text, long length, DateCachePtr cache, long *length_used_ret, LongDatePtr date_time) M68K_INLINE(0x2F3C, 0x8214, 0xFFF6, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal String2DateStatus StringToDate(Ptr text, long length, DateCachePtr cache, long *length_used_ret, LongDatePtr date_time) MAC_IMPORT(StringToDate) M68K_INLINE(0x2F3C, 0x8214, 0xFFF6, 0xA8B5);
 #if OLDROUTINENAMES
 #define String2Date(text, length, cache, length_used_ret, date_time) StringToDate(text, length, cache, length_used_ret, date_time)
 #endif
 
-MAC_SINCE(0x0200, "2.0") pascal StyledLineBreakCode StyledLineBreak(Ptr textp, long length, long text_start, long text_end, long flags, Fixed *text_width_fp, long *text_offset) M68K_INLINE(0x2F3C, 0x821C, 0xFFFE, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal StyledLineBreakCode StyledLineBreak(Ptr textp, long length, long text_start, long text_end, long flags, Fixed *text_width_fp, long *text_offset) MAC_IMPORT(StyledLineBreak) M68K_INLINE(0x2F3C, 0x821C, 0xFFFE, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal void MeasureJustified(Ptr text, long length, Fixed slop, Ptr charLocs, JustStyleCode run_pos, Point numer, Point denom) M68K_INLINE(0x2F3C, 0x801A, 0x0034, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal void MeasureJustified(Ptr text, long length, Fixed slop, Ptr charLocs, JustStyleCode run_pos, Point numer, Point denom) MAC_IMPORT(MeasureJustified) M68K_INLINE(0x2F3C, 0x801A, 0x0034, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal Boolean ParseTable(CharByteTable table) M68K_INLINE(0x2F3C, 0x8204, 0x0022, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal Boolean ParseTable(CharByteTable table) MAC_IMPORT(ParseTable) M68K_INLINE(0x2F3C, 0x8204, 0x0022, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal Boolean FillParseTable(CharByteTable table, ScriptCode script) M68K_INLINE(0x2F3C, 0xC204, 0x0022, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal Boolean FillParseTable(CharByteTable table, ScriptCode script) MAC_IMPORT(FillParseTable) M68K_INLINE(0x2F3C, 0xC204, 0x0022, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal INTEGER ReplaceText(Handle base_text, Handle subst_text, Str15 key) M68K_INLINE(0x2F3C, 0x820C, 0xFFDC, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal INTEGER ReplaceText(Handle base_text, Handle subst_text, Str15 key) MAC_IMPORT(ReplaceText) M68K_INLINE(0x2F3C, 0x820C, 0xFFDC, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal INTEGER TruncString(INTEGER width, Str255 string, TruncCode code) M68K_INLINE(0x2F3C, 0x8208, 0xFFE0, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal INTEGER TruncString(INTEGER width, Str255 string, TruncCode code) MAC_IMPORT(TruncString) M68K_INLINE(0x2F3C, 0x8208, 0xFFE0, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal FormatStatus StringToExtended(Str255 string, NumFormatStringRec *formatp, NumberParts *partsp, Extended80 *xp) M68K_INLINE(0x2F3C, 0x8210, 0xFFE6, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal FormatStatus StringToExtended(Str255 string, NumFormatStringRec *formatp, NumberParts *partsp, Extended80 *xp) MAC_IMPORT(StringToExtended) M68K_INLINE(0x2F3C, 0x8210, 0xFFE6, 0xA8B5);
 #if OLDROUTINENAMES
 #define FormatStr2X(string, formatp, partsp, xp) StringToExtended(string, formatp, partsp, xp)
 #endif
 
-MAC_SINCE(0x0200, "2.0") pascal FormatStatus ExtendedToString(Extended80 *xp, NumFormatStringRec *formatp, NumberParts *partsp, Str255 string) M68K_INLINE(0x2F3C, 0x8210, 0xFFE8, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal FormatStatus ExtendedToString(Extended80 *xp, NumFormatStringRec *formatp, NumberParts *partsp, Str255 string) MAC_IMPORT(ExtendedToString) M68K_INLINE(0x2F3C, 0x8210, 0xFFE8, 0xA8B5);
 #if OLDROUTINENAMES
 #define FormatX2Str(xp, formatp, partsp, string) ExtendedToString(xp, formatp, partsp, string)
 #endif
 
-MAC_SINCE(0x0200, "2.0") pascal FormatStatus StringToFormatRec(ConstStringPtr in_string, NumberParts *partsp, NumFormatStringRec *out_string) M68K_INLINE(0x2F3C, 0x820C, 0xFFEC, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal FormatStatus StringToFormatRec(ConstStringPtr in_string, NumberParts *partsp, NumFormatStringRec *out_string) MAC_IMPORT(StringToFormatRec) M68K_INLINE(0x2F3C, 0x820C, 0xFFEC, 0xA8B5);
 #if OLDROUTINENAMES
 #define Str2Format(in_string, partsp, out_string) StringToFormatRec(in_string, partsp, out_string)
 #endif
 
-MAC_SINCE(0x0200, "2.0") pascal ToggleResults ToggleDate(LongDateTime *lsecsp, LongDateField field, DateDelta delta, INTEGER ch, TogglePB *paramsp) M68K_INLINE(0x2F3C, 0x820E, 0xFFEE, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal ToggleResults ToggleDate(LongDateTime *lsecsp, LongDateField field, DateDelta delta, INTEGER ch, TogglePB *paramsp) MAC_IMPORT(ToggleDate) M68K_INLINE(0x2F3C, 0x820E, 0xFFEE, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal Fixed PortionLine(Ptr textPtr, LONGINT textLen, JustStyleCode styleRunPosition, Point numer, Point denom) M68K_INLINE(0x2F3C, 0x8412, 0x0036, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal Fixed PortionLine(Ptr textPtr, LONGINT textLen, JustStyleCode styleRunPosition, Point numer, Point denom) MAC_IMPORT(PortionLine) M68K_INLINE(0x2F3C, 0x8412, 0x0036, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal void DrawJustified(Ptr textPtr, LONGINT textLength, Fixed slop, JustStyleCode styleRunPosition, Point numer, Point denom) M68K_INLINE(0x2F3C, 0x8016, 0x0032, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal void DrawJustified(Ptr textPtr, LONGINT textLength, Fixed slop, JustStyleCode styleRunPosition, Point numer, Point denom) MAC_IMPORT(DrawJustified) M68K_INLINE(0x2F3C, 0x8016, 0x0032, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal ScriptRunStatus FindScriptRun(Ptr textPtr, LONGINT textLen, LONGINT *lenUsedp) M68K_INLINE(0x2F3C, 0x820C, 0x0026, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal ScriptRunStatus FindScriptRun(Ptr textPtr, LONGINT textLen, LONGINT *lenUsedp) MAC_IMPORT(FindScriptRun) M68K_INLINE(0x2F3C, 0x820C, 0x0026, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal INTEGER PixelToChar(Ptr textBuf, LONGINT textLen, Fixed slop, Fixed pixelWidth, Boolean *leadingEdgep, Fixed *widthRemainingp, JustStyleCode styleRunPosition, Point numer, Point denom) M68K_INLINE(0x2F3C, 0x8222, 0x002E, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal INTEGER PixelToChar(Ptr textBuf, LONGINT textLen, Fixed slop, Fixed pixelWidth, Boolean *leadingEdgep, Fixed *widthRemainingp, JustStyleCode styleRunPosition, Point numer, Point denom) MAC_IMPORT(PixelToChar) M68K_INLINE(0x2F3C, 0x8222, 0x002E, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal INTEGER CharToPixel(Ptr textBuf, LONGINT textLen, Fixed slop, LONGINT offset, INTEGER direction, JustStyleCode styleRunPosition, Point numer, Point denom) M68K_INLINE(0x2F3C, 0x821C, 0x0030, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal INTEGER CharToPixel(Ptr textBuf, LONGINT textLen, Fixed slop, LONGINT offset, INTEGER direction, JustStyleCode styleRunPosition, Point numer, Point denom) MAC_IMPORT(CharToPixel) M68K_INLINE(0x2F3C, 0x821C, 0x0030, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal void LowercaseText(Ptr textp, INTEGER len, ScriptCode script) M68K_INLINE(0x3F3C, 0x0000, 0x2F3C, 0x800A, 0xFFB6, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal void LowercaseText(Ptr textp, INTEGER len, ScriptCode script) MAC_IMPORT(LowercaseText) M68K_INLINE(0x3F3C, 0x0000, 0x2F3C, 0x800A, 0xFFB6, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal void UppercaseText(Ptr textp, INTEGER len, ScriptCode script) M68K_INLINE(0x3F3C, 0x0400, 0x2F3C, 0x800A, 0xFFB6, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal void UppercaseText(Ptr textp, INTEGER len, ScriptCode script) MAC_IMPORT(UppercaseText) M68K_INLINE(0x3F3C, 0x0400, 0x2F3C, 0x800A, 0xFFB6, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal void StripDiacritics(Ptr textp, INTEGER len, ScriptCode script) M68K_INLINE(0x3F3C, 0x0200, 0x2F3C, 0x800A, 0xFFB6, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal void StripDiacritics(Ptr textp, INTEGER len, ScriptCode script) MAC_IMPORT(StripDiacritics) M68K_INLINE(0x3F3C, 0x0200, 0x2F3C, 0x800A, 0xFFB6, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal void UppercaseStripDiacritics(Ptr textp, INTEGER len, ScriptCode script) M68K_INLINE(0x3F3C, 0x0600, 0x2F3C, 0x800A, 0xFFB6, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal void UppercaseStripDiacritics(Ptr textp, INTEGER len, ScriptCode script) MAC_IMPORT(UppercaseStripDiacritics) M68K_INLINE(0x3F3C, 0x0600, 0x2F3C, 0x800A, 0xFFB6, 0xA8B5);
 
 // the above four functions are actually one entry point on 68K:
-MAC_SINCE(0x0200, "2.0") pascal void TextUtilFunctions(int16_t selector, Ptr textp, INTEGER len, ScriptCode script) M68K_INLINE(0x2F3C, 0x800A, 0xFFB6, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal void TextUtilFunctions(int16_t selector, Ptr textp, INTEGER len, ScriptCode script) MAC_IMPORT(TextUtilFunctions) M68K_INLINE(0x2F3C, 0x800A, 0xFFB6, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal INTEGER CharacterByteType(Ptr textBuf, INTEGER textOffset, ScriptCode script) M68K_INLINE(0x2F3C, 0xC206, 0x0010, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal INTEGER CharacterByteType(Ptr textBuf, INTEGER textOffset, ScriptCode script) MAC_IMPORT(CharacterByteType) M68K_INLINE(0x2F3C, 0xC206, 0x0010, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal INTEGER CharacterType(Ptr textbufp, INTEGER offset, ScriptCode script) M68K_INLINE(0x2F3C, 0xC206, 0x0012, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal INTEGER CharacterType(Ptr textbufp, INTEGER offset, ScriptCode script) MAC_IMPORT(CharacterType) M68K_INLINE(0x2F3C, 0xC206, 0x0012, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal INTEGER TransliterateText(Handle srch, Handle dsth, INTEGER target, LONGINT srcmask, ScriptCode script) M68K_INLINE(0x2F3C, 0xC20E, 0x0018, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal INTEGER TransliterateText(Handle srch, Handle dsth, INTEGER target, LONGINT srcmask, ScriptCode script) MAC_IMPORT(TransliterateText) M68K_INLINE(0x2F3C, 0xC20E, 0x0018, 0xA8B5);
 
 typedef struct BreakTable BreakTable;
 struct BreakTable {
@@ -540,7 +540,7 @@ MAC_SINCE(0x0600, "6.0") static __inline__ __attribute__((__always_inline__)) vo
         : "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0600, "6.0") pascal void UpperText(Ptr textPtr, INTEGER len);
+MAC_SINCE(0x0600, "6.0") pascal void UpperText(Ptr textPtr, INTEGER len) MAC_IMPORT(UpperText);
 #endif
 
 enum { _LowerText = 0xA056 };
@@ -554,7 +554,7 @@ MAC_SINCE(0x0600, "6.0") static __inline__ __attribute__((__always_inline__)) vo
         : "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0600, "6.0") pascal void LowerText(Ptr textPtr, INTEGER len);
+MAC_SINCE(0x0600, "6.0") pascal void LowerText(Ptr textPtr, INTEGER len) MAC_IMPORT(LowerText);
 #endif
 
 enum { _StripText = 0xA256 };
@@ -568,7 +568,7 @@ MAC_SINCE(0x0600, "6.0") static __inline__ __attribute__((__always_inline__)) vo
         : "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0600, "6.0") pascal void StripText(Ptr textPtr, INTEGER len);
+MAC_SINCE(0x0600, "6.0") pascal void StripText(Ptr textPtr, INTEGER len) MAC_IMPORT(StripText);
 #endif
 
 enum { _StripUpperText = 0xA656 };
@@ -582,7 +582,7 @@ MAC_SINCE(0x0600, "6.0") static __inline__ __attribute__((__always_inline__)) vo
         : "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0600, "6.0") pascal void StripUpperText(Ptr textPtr, INTEGER len);
+MAC_SINCE(0x0600, "6.0") pascal void StripUpperText(Ptr textPtr, INTEGER len) MAC_IMPORT(StripUpperText);
 #endif
 
 enum { _UprText = 0xA054 };
@@ -596,7 +596,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void UprText(Ptr textPtr, INTEGER len);
+MAC_SINCE(0x0070, "0.7") pascal void UprText(Ptr textPtr, INTEGER len) MAC_IMPORT(UprText);
 #endif
 
 enum { _LwrText = 0xA056 };
@@ -610,113 +610,113 @@ MAC_SINCE(0x0600, "6.0") static __inline__ __attribute__((__always_inline__)) vo
         : "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0600, "6.0") pascal void LwrText(Ptr textPtr, INTEGER len);
+MAC_SINCE(0x0600, "6.0") pascal void LwrText(Ptr textPtr, INTEGER len) MAC_IMPORT(LwrText);
 #endif
 
-MAC_SINCE(0x0200, "2.0") pascal INTEGER TruncText(INTEGER width, Ptr textPtr, INTEGER *length, TruncCode truncWhere) M68K_INLINE(0x2F3C, 0x820C, 0xFFDE, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal INTEGER TruncText(INTEGER width, Ptr textPtr, INTEGER *length, TruncCode truncWhere) MAC_IMPORT(TruncText) M68K_INLINE(0x2F3C, 0x820C, 0xFFDE, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal void FindWordBreaks(Ptr textPtr, INTEGER textLength, INTEGER offset, Boolean leadingEdge, BreakTablePtr breaks, OffsetTable offsets, ScriptCode script) M68K_INLINE(0x2F3C, 0xC012, 0x001A, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal void FindWordBreaks(Ptr textPtr, INTEGER textLength, INTEGER offset, Boolean leadingEdge, BreakTablePtr breaks, OffsetTable offsets, ScriptCode script) MAC_IMPORT(FindWordBreaks) M68K_INLINE(0x2F3C, 0xC012, 0x001A, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal void NFindWord(Ptr textPtr, INTEGER textLength, INTEGER offset, Boolean leadingEdge, BreakTablePtr nbreaks, OffsetTable offsets) M68K_INLINE(0x2F3C, 0x8012, 0xFFE2, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal void NFindWord(Ptr textPtr, INTEGER textLength, INTEGER offset, Boolean leadingEdge, BreakTablePtr nbreaks, OffsetTable offsets) MAC_IMPORT(NFindWord) M68K_INLINE(0x2F3C, 0x8012, 0xFFE2, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal Fixed PortionText(Ptr textPtr, long textLength) M68K_INLINE(0x2F3C, 0x8408, 0x0024, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal Fixed PortionText(Ptr textPtr, long textLength) MAC_IMPORT(PortionText) M68K_INLINE(0x2F3C, 0x8408, 0x0024, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal TokenResults IntlTokenize(TokenBlockPtr tokenParam) M68K_INLINE(0x2F3C, 0x8204, 0xFFFA, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal TokenResults IntlTokenize(TokenBlockPtr tokenParam) MAC_IMPORT(IntlTokenize) M68K_INLINE(0x2F3C, 0x8204, 0xFFFA, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal long GetScript(INTEGER script, INTEGER verb) M68K_INLINE(0x2F3C, 0x8404, 0x000C, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal long GetScript(INTEGER script, INTEGER verb) MAC_IMPORT(GetScript) M68K_INLINE(0x2F3C, 0x8404, 0x000C, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal OSErr SetScript(INTEGER script, INTEGER verb, long param) M68K_INLINE(0x2F3C, 0x8208, 0x000E, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal OSErr SetScript(INTEGER script, INTEGER verb, long param) MAC_IMPORT(SetScript) M68K_INLINE(0x2F3C, 0x8208, 0x000E, 0xA8B5);
 
-pascal INTEGER ScriptOrder(ScriptCode script1, ScriptCode script2) M68K_INLINE(0x3F3C, 0x001E, 0xA9ED);
+pascal INTEGER ScriptOrder(ScriptCode script1, ScriptCode script2) MAC_IMPORT(ScriptOrder) M68K_INLINE(0x3F3C, 0x001E, 0xA9ED);
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER LanguageOrder(LangCode language1, LangCode language2);
 #else
-pascal INTEGER LanguageOrder(LangCode language1, LangCode language2);
+pascal INTEGER LanguageOrder(LangCode language1, LangCode language2) MAC_IMPORT(LanguageOrder);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER StringOrder(ConstStr255Param aStr, ConstStr255Param bStr, ScriptCode aScript, ScriptCode bScript, LangCode aLang, LangCode bLang);
 #else
-pascal INTEGER StringOrder(ConstStr255Param aStr, ConstStr255Param bStr, ScriptCode aScript, ScriptCode bScript, LangCode aLang, LangCode bLang);
+pascal INTEGER StringOrder(ConstStr255Param aStr, ConstStr255Param bStr, ScriptCode aScript, ScriptCode bScript, LangCode aLang, LangCode bLang) MAC_IMPORT(StringOrder);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER TextOrder(const void *aPtr, const void *bPtr, INTEGER aLen, INTEGER bLen, ScriptCode aScript, ScriptCode bScript, LangCode aLang, LangCode bLang);
 #else
-pascal INTEGER TextOrder(const void *aPtr, const void *bPtr, INTEGER aLen, INTEGER bLen, ScriptCode aScript, ScriptCode bScript, LangCode aLang, LangCode bLang);
+pascal INTEGER TextOrder(const void *aPtr, const void *bPtr, INTEGER aLen, INTEGER bLen, ScriptCode aScript, ScriptCode bScript, LangCode aLang, LangCode bLang) MAC_IMPORT(TextOrder);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER CompareText(const void *aPtr, const void *bPtr, INTEGER aLen, INTEGER bLen, Handle itl2Handle);
 #else
-pascal INTEGER CompareText(const void *aPtr, const void *bPtr, INTEGER aLen, INTEGER bLen, Handle itl2Handle);
+pascal INTEGER CompareText(const void *aPtr, const void *bPtr, INTEGER aLen, INTEGER bLen, Handle itl2Handle) MAC_IMPORT(CompareText);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER IdenticalText(const void *aPtr, const void *bPtr, INTEGER aLen, INTEGER bLen, Handle itl2Handle);
 #else
-pascal INTEGER IdenticalText(const void *aPtr, const void *bPtr, INTEGER aLen, INTEGER bLen, Handle itl2Handle);
+pascal INTEGER IdenticalText(const void *aPtr, const void *bPtr, INTEGER aLen, INTEGER bLen, Handle itl2Handle) MAC_IMPORT(IdenticalText);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER CompareString(ConstStr255Param aStr, ConstStr255Param bStr, Handle itl2Handle);
 #else
-pascal INTEGER CompareString(ConstStr255Param aStr, ConstStr255Param bStr, Handle itl2Handle);
+pascal INTEGER CompareString(ConstStr255Param aStr, ConstStr255Param bStr, Handle itl2Handle) MAC_IMPORT(CompareString);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER IdenticalString(ConstStr255Param aStr, ConstStr255Param bStr, Handle itl2Handle);
 #else
-pascal INTEGER IdenticalString(ConstStr255Param aStr, ConstStr255Param bStr, Handle itl2Handle);
+pascal INTEGER IdenticalString(ConstStr255Param aStr, ConstStr255Param bStr, Handle itl2Handle) MAC_IMPORT(IdenticalString);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER IUCompPString(ConstStr255Param aStr, ConstStr255Param bStr, Handle itl2Handle);
 #else
-pascal INTEGER IUCompPString(ConstStr255Param aStr, ConstStr255Param bStr, Handle itl2Handle);
+pascal INTEGER IUCompPString(ConstStr255Param aStr, ConstStr255Param bStr, Handle itl2Handle) MAC_IMPORT(IUCompPString);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER IUEqualPString(ConstStr255Param aStr, ConstStr255Param bStr, Handle itl2Handle);
 #else
-pascal INTEGER IUEqualPString(ConstStr255Param aStr, ConstStr255Param bStr, Handle itl2Handle);
+pascal INTEGER IUEqualPString(ConstStr255Param aStr, ConstStr255Param bStr, Handle itl2Handle) MAC_IMPORT(IUEqualPString);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER IUStringOrder(ConstStr255Param aStr, ConstStr255Param bStr, ScriptCode aScript, ScriptCode bScript, LangCode aLang, LangCode bLang);
 #else
-pascal INTEGER IUStringOrder(ConstStr255Param aStr, ConstStr255Param bStr, ScriptCode aScript, ScriptCode bScript, LangCode aLang, LangCode bLang);
+pascal INTEGER IUStringOrder(ConstStr255Param aStr, ConstStr255Param bStr, ScriptCode aScript, ScriptCode bScript, LangCode aLang, LangCode bLang) MAC_IMPORT(IUStringOrder);
 #endif
 
-MAC_SINCE(0x0200, "2.0") pascal FormatStatus FormatRecToString(const NumFormatStringRec *myCanonical, const NumberParts *partsTable, Str255 outString, TripleInt positions) M68K_INLINE(0x2F3C, 0x8210, 0xFFEA, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal FormatStatus FormatRecToString(const NumFormatStringRec *myCanonical, const NumberParts *partsTable, Str255 outString, TripleInt positions) MAC_IMPORT(FormatRecToString) M68K_INLINE(0x2F3C, 0x8210, 0xFFEA, 0xA8B5);
 #if OLDROUTINENAMES
 #define Format2Str(myCanonical, partsTable, outString, positions) FormatRecToString(myCanonical, partsTable, outString, positions)
 #endif
 
-MAC_SINCE(0x0200, "2.0") pascal void GetFormatOrder(FormatOrderPtr ordering, INTEGER firstFormat, INTEGER lastFormat, Boolean lineRight, StyleRunDirectionUPP rlDirProc, Ptr dirParam) M68K_INLINE(0x2F3C, 0x8012, 0xFFFC, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal void GetFormatOrder(FormatOrderPtr ordering, INTEGER firstFormat, INTEGER lastFormat, Boolean lineRight, StyleRunDirectionUPP rlDirProc, Ptr dirParam) MAC_IMPORT(GetFormatOrder) M68K_INLINE(0x2F3C, 0x8012, 0xFFFC, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal INTEGER ValidDate(LongDateRec *date, long flags, LongDateTime *newSecs) M68K_INLINE(0x2F3C, 0x820C, 0xFFE4, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal INTEGER ValidDate(LongDateRec *date, long flags, LongDateTime *newSecs) MAC_IMPORT(ValidDate) M68K_INLINE(0x2F3C, 0x820C, 0xFFE4, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal Boolean IsCmdChar(const EventRecord *event, INTEGER test) M68K_INLINE(0x2F3C, 0x8206, 0xFFD0, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal Boolean IsCmdChar(const EventRecord *event, INTEGER test) MAC_IMPORT(IsCmdChar) M68K_INLINE(0x2F3C, 0x8206, 0xFFD0, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal INTEGER NPixel2Char(Ptr textBuf, long textLen, Fixed slop, Fixed pixelWidth, Boolean *leadingEdge, Fixed *widthRemaining, JustStyleCode styleRunPosition, Point numer, Point denom) M68K_INLINE(0x2F3C, 0x8222, 0x002E, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal INTEGER NPixel2Char(Ptr textBuf, long textLen, Fixed slop, Fixed pixelWidth, Boolean *leadingEdge, Fixed *widthRemaining, JustStyleCode styleRunPosition, Point numer, Point denom) MAC_IMPORT(NPixel2Char) M68K_INLINE(0x2F3C, 0x8222, 0x002E, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal INTEGER NChar2Pixel(Ptr textBuf, long textLen, Fixed slop, long offset, INTEGER direction, JustStyleCode styleRunPosition, Point numer, Point denom) M68K_INLINE(0x2F3C, 0x821C, 0x0030, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal INTEGER NChar2Pixel(Ptr textBuf, long textLen, Fixed slop, long offset, INTEGER direction, JustStyleCode styleRunPosition, Point numer, Point denom) MAC_IMPORT(NChar2Pixel) M68K_INLINE(0x2F3C, 0x821C, 0x0030, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal void NDrawJust(Ptr textPtr, long textLength, Fixed slop, JustStyleCode styleRunPosition, Point numer, Point denom) M68K_INLINE(0x2F3C, 0x8016, 0x0032, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal void NDrawJust(Ptr textPtr, long textLength, Fixed slop, JustStyleCode styleRunPosition, Point numer, Point denom) MAC_IMPORT(NDrawJust) M68K_INLINE(0x2F3C, 0x8016, 0x0032, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal void NMeasureJust(Ptr textPtr, long textLength, Fixed slop, Ptr charLocs, JustStyleCode styleRunPosition, Point numer, Point denom) M68K_INLINE(0x2F3C, 0x801A, 0x0034, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal void NMeasureJust(Ptr textPtr, long textLength, Fixed slop, Ptr charLocs, JustStyleCode styleRunPosition, Point numer, Point denom) MAC_IMPORT(NMeasureJust) M68K_INLINE(0x2F3C, 0x801A, 0x0034, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal Fixed NPortionText(Ptr textPtr, long textLength, JustStyleCode styleRunPosition, Point numer, Point denom) M68K_INLINE(0x2F3C, 0x8412, 0x0036, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal Fixed NPortionText(Ptr textPtr, long textLength, JustStyleCode styleRunPosition, Point numer, Point denom) MAC_IMPORT(NPortionText) M68K_INLINE(0x2F3C, 0x8412, 0x0036, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal Ptr GetScriptUtilityAddress(INTEGER selector, Boolean Before, ScriptCode script) M68K_INLINE(0x2F3C, 0xC404, 0x0038, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal Ptr GetScriptUtilityAddress(INTEGER selector, Boolean Before, ScriptCode script) MAC_IMPORT(GetScriptUtilityAddress) M68K_INLINE(0x2F3C, 0xC404, 0x0038, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal void SetScriptUtilityAddress(INTEGER selector, Boolean Before, Ptr routineAddr, ScriptCode script) M68K_INLINE(0x2F3C, 0xC008, 0x003A, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal void SetScriptUtilityAddress(INTEGER selector, Boolean Before, Ptr routineAddr, ScriptCode script) MAC_IMPORT(SetScriptUtilityAddress) M68K_INLINE(0x2F3C, 0xC008, 0x003A, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal Ptr GetScriptQDPatchAddress(INTEGER trapNum, Boolean before, Boolean forPrinting, ScriptCode script) M68K_INLINE(0x2F3C, 0xC406, 0x003C, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal Ptr GetScriptQDPatchAddress(INTEGER trapNum, Boolean before, Boolean forPrinting, ScriptCode script) MAC_IMPORT(GetScriptQDPatchAddress) M68K_INLINE(0x2F3C, 0xC406, 0x003C, 0xA8B5);
 
-MAC_SINCE(0x0200, "2.0") pascal void SetScriptQDPatchAddress(INTEGER trapNum, Boolean before, Boolean forPrinting, Ptr routineAddr, ScriptCode script) M68K_INLINE(0x2F3C, 0xC00A, 0x003E, 0xA8B5);
+MAC_SINCE(0x0200, "2.0") pascal void SetScriptQDPatchAddress(INTEGER trapNum, Boolean before, Boolean forPrinting, Ptr routineAddr, ScriptCode script) MAC_IMPORT(SetScriptQDPatchAddress) M68K_INLINE(0x2F3C, 0xC00A, 0x003E, 0xA8B5);
 
 enum {
     smTruncEnd = 0,

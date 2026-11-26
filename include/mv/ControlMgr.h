@@ -166,142 +166,142 @@ struct AuxCtlRec {
 #define LMSetAuxCtlHead(val) ((*(AuxCtlHandle *)0x00000CD4) = (val))
 
 enum { _SetControlTitle = 0xA95F };
-pascal void SetControlTitle(ControlHandle c, ConstStringPtr t) M68K_INLINE(0xA95F);
+pascal void SetControlTitle(ControlHandle c, ConstStringPtr t) MAC_IMPORT(SetControlTitle) M68K_INLINE(0xA95F);
 #if OLDROUTINENAMES
 #define SetCTitle(c, t) SetControlTitle(c, t)
 #endif
 
 enum { _GetControlTitle = 0xA95E };
-pascal void GetControlTitle(ControlHandle c, StringPtr t) M68K_INLINE(0xA95E);
+pascal void GetControlTitle(ControlHandle c, StringPtr t) MAC_IMPORT(GetControlTitle) M68K_INLINE(0xA95E);
 #if OLDROUTINENAMES
 #define GetCTitle(c, t) GetControlTitle(c, t)
 #endif
 
 enum { _HideControl = 0xA958 };
-pascal void HideControl(ControlHandle c) M68K_INLINE(0xA958);
+pascal void HideControl(ControlHandle c) MAC_IMPORT(HideControl) M68K_INLINE(0xA958);
 
 enum { _ShowControl = 0xA957 };
-pascal void ShowControl(ControlHandle c) M68K_INLINE(0xA957);
+pascal void ShowControl(ControlHandle c) MAC_IMPORT(ShowControl) M68K_INLINE(0xA957);
 
 enum { _HiliteControl = 0xA95D };
-pascal void HiliteControl(ControlHandle c, INTEGER state) M68K_INLINE(0xA95D);
+pascal void HiliteControl(ControlHandle c, INTEGER state) MAC_IMPORT(HiliteControl) M68K_INLINE(0xA95D);
 
 enum { _DrawControls = 0xA969 };
-pascal void DrawControls(WindowPtr w) M68K_INLINE(0xA969);
+pascal void DrawControls(WindowPtr w) MAC_IMPORT(DrawControls) M68K_INLINE(0xA969);
 
 enum { _Draw1Control = 0xA96D };
-MAC_SINCE(0x0070, "0.7") pascal void Draw1Control(ControlHandle c) M68K_INLINE(0xA96D);
+MAC_SINCE(0x0070, "0.7") pascal void Draw1Control(ControlHandle c) MAC_IMPORT(Draw1Control) M68K_INLINE(0xA96D);
 
 enum { _UpdateControls = 0xA953 };
-MAC_SINCE(0x0070, "0.7") pascal void UpdateControls(WindowPtr wp, RgnHandle rh) M68K_INLINE(0xA953);
+MAC_SINCE(0x0070, "0.7") pascal void UpdateControls(WindowPtr wp, RgnHandle rh) MAC_IMPORT(UpdateControls) M68K_INLINE(0xA953);
 #if OLDROUTINENAMES
 #define UpdtControl(wp, rh) UpdateControls(wp, rh)
 #endif
 
 enum { _NewControl = 0xA954 };
-pascal ControlHandle NewControl(WindowPtr wst, const Rect *r, ConstStringPtr title, Boolean vis, INTEGER value, INTEGER min, INTEGER max, INTEGER procid, LONGINT rc) M68K_INLINE(0xA954);
+pascal ControlHandle NewControl(WindowPtr wst, const Rect *r, ConstStringPtr title, Boolean vis, INTEGER value, INTEGER min, INTEGER max, INTEGER procid, LONGINT rc) MAC_IMPORT(NewControl) M68K_INLINE(0xA954);
 
 enum { _GetNewControl = 0xA9BE };
-pascal ControlHandle GetNewControl(INTEGER cid, WindowPtr wst) M68K_INLINE(0xA9BE);
+pascal ControlHandle GetNewControl(INTEGER cid, WindowPtr wst) MAC_IMPORT(GetNewControl) M68K_INLINE(0xA9BE);
 
 enum { _DisposeControl = 0xA955 };
-pascal void DisposeControl(ControlHandle c) M68K_INLINE(0xA955);
+pascal void DisposeControl(ControlHandle c) MAC_IMPORT(DisposeControl) M68K_INLINE(0xA955);
 
 enum { _KillControls = 0xA956 };
-pascal void KillControls(WindowPtr w) M68K_INLINE(0xA956);
+pascal void KillControls(WindowPtr w) MAC_IMPORT(KillControls) M68K_INLINE(0xA956);
 
 enum { _SetControlReference = 0xA95B };
-pascal void SetControlReference(ControlHandle c, LONGINT data) M68K_INLINE(0xA95B);
+pascal void SetControlReference(ControlHandle c, LONGINT data) MAC_IMPORT(SetControlReference) M68K_INLINE(0xA95B);
 #if OLDROUTINENAMES
 #define SetCRefCon(c, data) SetControlReference(c, data)
 #endif
 
 enum { _GetControlReference = 0xA95A };
-pascal LONGINT GetControlReference(ControlHandle c) M68K_INLINE(0xA95A);
+pascal LONGINT GetControlReference(ControlHandle c) MAC_IMPORT(GetControlReference) M68K_INLINE(0xA95A);
 #if OLDROUTINENAMES
 #define GetCRefCon(c) GetControlReference(c)
 #endif
 
 enum { _SetControlAction = 0xA96B };
-pascal void SetControlAction(ControlHandle c, ControlActionUPP a) M68K_INLINE(0xA96B);
+pascal void SetControlAction(ControlHandle c, ControlActionUPP a) MAC_IMPORT(SetControlAction) M68K_INLINE(0xA96B);
 #if OLDROUTINENAMES
 #define SetCtlAction(c, a) SetControlAction(c, a)
 #endif
 
 enum { _GetControlAction = 0xA96A };
-pascal ControlActionUPP GetControlAction(ControlHandle c) M68K_INLINE(0xA96A);
+pascal ControlActionUPP GetControlAction(ControlHandle c) MAC_IMPORT(GetControlAction) M68K_INLINE(0xA96A);
 #if OLDROUTINENAMES
 #define GetCtlAction(c) GetControlAction(c)
 #endif
 
 enum { _GetControlVariant = 0xA809 };
-MAC_SINCE(0x0200, "2.0") pascal INTEGER GetControlVariant(ControlHandle c) M68K_INLINE(0xA809);
+MAC_SINCE(0x0200, "2.0") pascal INTEGER GetControlVariant(ControlHandle c) MAC_IMPORT(GetControlVariant) M68K_INLINE(0xA809);
 #if OLDROUTINENAMES
 #define GetCVariant(c) GetControlVariant(c)
 #endif
 
 enum { _GetAuxiliaryControlRecord = 0xAA44 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal Boolean GetAuxiliaryControlRecord(ControlHandle c, AuxCtlHandle *acHndl) M68K_INLINE(0xAA44);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal Boolean GetAuxiliaryControlRecord(ControlHandle c, AuxCtlHandle *acHndl) MAC_IMPORT(GetAuxiliaryControlRecord) M68K_INLINE(0xAA44);
 #if OLDROUTINENAMES
 #define GetAuxCtl(c, acHndl) GetAuxiliaryControlRecord(c, acHndl)
 #endif
 
 enum { _FindControl = 0xA96C };
-pascal INTEGER FindControl(Point p, WindowPtr w, ControlHandle *cp) M68K_INLINE(0xA96C);
+pascal INTEGER FindControl(Point p, WindowPtr w, ControlHandle *cp) MAC_IMPORT(FindControl) M68K_INLINE(0xA96C);
 
 enum { _TrackControl = 0xA968 };
-pascal INTEGER TrackControl(ControlHandle c, Point p, ControlActionUPP a) M68K_INLINE(0xA968);
+pascal INTEGER TrackControl(ControlHandle c, Point p, ControlActionUPP a) MAC_IMPORT(TrackControl) M68K_INLINE(0xA968);
 
 enum { _TestControl = 0xA966 };
-pascal INTEGER TestControl(ControlHandle c, Point p) M68K_INLINE(0xA966);
+pascal INTEGER TestControl(ControlHandle c, Point p) MAC_IMPORT(TestControl) M68K_INLINE(0xA966);
 
 enum { _SetControlValue = 0xA963 };
-pascal void SetControlValue(ControlHandle c, INTEGER v) M68K_INLINE(0xA963);
+pascal void SetControlValue(ControlHandle c, INTEGER v) MAC_IMPORT(SetControlValue) M68K_INLINE(0xA963);
 #if OLDROUTINENAMES
 #define SetCtlValue(c, v) SetControlValue(c, v)
 #endif
 
 enum { _GetControlValue = 0xA960 };
-pascal INTEGER GetControlValue(ControlHandle c) M68K_INLINE(0xA960);
+pascal INTEGER GetControlValue(ControlHandle c) MAC_IMPORT(GetControlValue) M68K_INLINE(0xA960);
 #if OLDROUTINENAMES
 #define GetCtlValue(c) GetControlValue(c)
 #endif
 
 enum { _SetControlMinimum = 0xA964 };
-pascal void SetControlMinimum(ControlHandle c, INTEGER v) M68K_INLINE(0xA964);
+pascal void SetControlMinimum(ControlHandle c, INTEGER v) MAC_IMPORT(SetControlMinimum) M68K_INLINE(0xA964);
 #if OLDROUTINENAMES
 #define SetCtlMin(c, v) SetControlMinimum(c, v)
 #endif
 
 enum { _GetControlMinimum = 0xA961 };
-pascal INTEGER GetControlMinimum(ControlHandle c) M68K_INLINE(0xA961);
+pascal INTEGER GetControlMinimum(ControlHandle c) MAC_IMPORT(GetControlMinimum) M68K_INLINE(0xA961);
 #if OLDROUTINENAMES
 #define GetCtlMin(c) GetControlMinimum(c)
 #endif
 
 enum { _SetControlMaximum = 0xA965 };
-pascal void SetControlMaximum(ControlHandle c, INTEGER v) M68K_INLINE(0xA965);
+pascal void SetControlMaximum(ControlHandle c, INTEGER v) MAC_IMPORT(SetControlMaximum) M68K_INLINE(0xA965);
 #if OLDROUTINENAMES
 #define SetCtlMax(c, v) SetControlMaximum(c, v)
 #endif
 
 enum { _GetControlMaximum = 0xA962 };
-pascal INTEGER GetControlMaximum(ControlHandle c) M68K_INLINE(0xA962);
+pascal INTEGER GetControlMaximum(ControlHandle c) MAC_IMPORT(GetControlMaximum) M68K_INLINE(0xA962);
 #if OLDROUTINENAMES
 #define GetCtlMax(c) GetControlMaximum(c)
 #endif
 
 enum { _MoveControl = 0xA959 };
-pascal void MoveControl(ControlHandle c, INTEGER h, INTEGER v) M68K_INLINE(0xA959);
+pascal void MoveControl(ControlHandle c, INTEGER h, INTEGER v) MAC_IMPORT(MoveControl) M68K_INLINE(0xA959);
 
 enum { _DragControl = 0xA967 };
-pascal void DragControl(ControlHandle c, Point p, const Rect *limit, const Rect *slop, INTEGER axis) M68K_INLINE(0xA967);
+pascal void DragControl(ControlHandle c, Point p, const Rect *limit, const Rect *slop, INTEGER axis) MAC_IMPORT(DragControl) M68K_INLINE(0xA967);
 
 enum { _SizeControl = 0xA95C };
-pascal void SizeControl(ControlHandle c, INTEGER width, INTEGER height) M68K_INLINE(0xA95C);
+pascal void SizeControl(ControlHandle c, INTEGER width, INTEGER height) MAC_IMPORT(SizeControl) M68K_INLINE(0xA95C);
 
 enum { _SetControlColor = 0xAA43 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetControlColor(ControlHandle ctl, CCTabHandle ctab) M68K_INLINE(0xAA43);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetControlColor(ControlHandle ctl, CCTabHandle ctab) MAC_IMPORT(SetControlColor) M68K_INLINE(0xAA43);
 #if OLDROUTINENAMES
 #define SetCtlColor(ctl, ctab) SetControlColor(ctl, ctab)
 #endif
@@ -817,272 +817,272 @@ struct ControlID {
 enum { _ControlDispatch = 0xAA73 };
 
 // Control Manager 8: embedding, keyboard focus, control data (Appearance Manager)
-MAC_SINCE(0x0810, "8.1") pascal OSErr CreateRootControl(WindowRef inWindow, ControlRef *outControl) M68K_INLINE(0x7001, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal OSErr CreateRootControl(WindowRef inWindow, ControlRef *outControl) MAC_IMPORT(CreateRootControl) M68K_INLINE(0x7001, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr GetRootControl(WindowRef inWindow, ControlRef *outControl) M68K_INLINE(0x7002, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal OSErr GetRootControl(WindowRef inWindow, ControlRef *outControl) MAC_IMPORT(GetRootControl) M68K_INLINE(0x7002, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr EmbedControl(ControlRef inControl, ControlRef inContainer) M68K_INLINE(0x7003, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal OSErr EmbedControl(ControlRef inControl, ControlRef inContainer) MAC_IMPORT(EmbedControl) M68K_INLINE(0x7003, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr AutoEmbedControl(ControlRef inControl, WindowRef inWindow) M68K_INLINE(0x7004, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal OSErr AutoEmbedControl(ControlRef inControl, WindowRef inWindow) MAC_IMPORT(AutoEmbedControl) M68K_INLINE(0x7004, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal Boolean IsControlActive(ControlRef inControl) M68K_INLINE(0x7005, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal Boolean IsControlActive(ControlRef inControl) MAC_IMPORT(IsControlActive) M68K_INLINE(0x7005, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal Boolean IsControlVisible(ControlRef inControl) M68K_INLINE(0x7006, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal Boolean IsControlVisible(ControlRef inControl) MAC_IMPORT(IsControlVisible) M68K_INLINE(0x7006, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr ActivateControl(ControlRef inControl) M68K_INLINE(0x7007, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal OSErr ActivateControl(ControlRef inControl) MAC_IMPORT(ActivateControl) M68K_INLINE(0x7007, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr DeactivateControl(ControlRef inControl) M68K_INLINE(0x7008, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal OSErr DeactivateControl(ControlRef inControl) MAC_IMPORT(DeactivateControl) M68K_INLINE(0x7008, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal ControlRef FindControlUnderMouse(Point inWhere, WindowRef inWindow, SInt16 *outPart) M68K_INLINE(0x7009, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal ControlRef FindControlUnderMouse(Point inWhere, WindowRef inWindow, SInt16 *outPart) MAC_IMPORT(FindControlUnderMouse) M68K_INLINE(0x7009, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal ControlPartCode HandleControlClick(ControlRef inControl, Point inWhere, EventModifiers inModifiers, ControlActionUPP inAction) M68K_INLINE(0x700A, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal ControlPartCode HandleControlClick(ControlRef inControl, Point inWhere, EventModifiers inModifiers, ControlActionUPP inAction) MAC_IMPORT(HandleControlClick) M68K_INLINE(0x700A, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal SInt16 HandleControlKey(ControlRef inControl, SInt16 inKeyCode, SInt16 inCharCode, EventModifiers inModifiers) M68K_INLINE(0x700B, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal SInt16 HandleControlKey(ControlRef inControl, SInt16 inKeyCode, SInt16 inCharCode, EventModifiers inModifiers) MAC_IMPORT(HandleControlKey) M68K_INLINE(0x700B, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal void IdleControls(WindowRef inWindow) M68K_INLINE(0x700C, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal void IdleControls(WindowRef inWindow) MAC_IMPORT(IdleControls) M68K_INLINE(0x700C, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr GetKeyboardFocus(WindowRef inWindow, ControlRef *outControl) M68K_INLINE(0x700D, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal OSErr GetKeyboardFocus(WindowRef inWindow, ControlRef *outControl) MAC_IMPORT(GetKeyboardFocus) M68K_INLINE(0x700D, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr SetKeyboardFocus(WindowRef inWindow, ControlRef inControl, ControlFocusPart inPart) M68K_INLINE(0x700E, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal OSErr SetKeyboardFocus(WindowRef inWindow, ControlRef inControl, ControlFocusPart inPart) MAC_IMPORT(SetKeyboardFocus) M68K_INLINE(0x700E, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr AdvanceKeyboardFocus(WindowRef inWindow) M68K_INLINE(0x700F, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal OSErr AdvanceKeyboardFocus(WindowRef inWindow) MAC_IMPORT(AdvanceKeyboardFocus) M68K_INLINE(0x700F, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr ReverseKeyboardFocus(WindowRef inWindow) M68K_INLINE(0x7010, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal OSErr ReverseKeyboardFocus(WindowRef inWindow) MAC_IMPORT(ReverseKeyboardFocus) M68K_INLINE(0x7010, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr GetControlFeatures(ControlRef inControl, UInt32 *outFeatures) M68K_INLINE(0x7011, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal OSErr GetControlFeatures(ControlRef inControl, UInt32 *outFeatures) MAC_IMPORT(GetControlFeatures) M68K_INLINE(0x7011, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr SetControlData(ControlRef inControl, ControlPartCode inPart, ResType inTagName, Size inSize, Ptr inData) M68K_INLINE(0x7012, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal OSErr SetControlData(ControlRef inControl, ControlPartCode inPart, ResType inTagName, Size inSize, Ptr inData) MAC_IMPORT(SetControlData) M68K_INLINE(0x7012, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr GetControlData(ControlRef inControl, ControlPartCode inPart, ResType inTagName, Size inBufferSize, Ptr inBuffer, Size *outActualSize) M68K_INLINE(0x7013, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal OSErr GetControlData(ControlRef inControl, ControlPartCode inPart, ResType inTagName, Size inBufferSize, Ptr inBuffer, Size *outActualSize) MAC_IMPORT(GetControlData) M68K_INLINE(0x7013, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr GetControlDataSize(ControlRef inControl, ControlPartCode inPart, ResType inTagName, Size *outMaxSize) M68K_INLINE(0x7014, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal OSErr GetControlDataSize(ControlRef inControl, ControlPartCode inPart, ResType inTagName, Size *outMaxSize) MAC_IMPORT(GetControlDataSize) M68K_INLINE(0x7014, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr GetSuperControl(ControlRef inControl, ControlRef *outParent) M68K_INLINE(0x7015, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal OSErr GetSuperControl(ControlRef inControl, ControlRef *outParent) MAC_IMPORT(GetSuperControl) M68K_INLINE(0x7015, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr CountSubControls(ControlRef inControl, UInt16 *outNumChildren) M68K_INLINE(0x7016, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal OSErr CountSubControls(ControlRef inControl, UInt16 *outNumChildren) MAC_IMPORT(CountSubControls) M68K_INLINE(0x7016, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr GetIndexedSubControl(ControlRef inControl, UInt16 inIndex, ControlRef *outSubControl) M68K_INLINE(0x7017, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal OSErr GetIndexedSubControl(ControlRef inControl, UInt16 inIndex, ControlRef *outSubControl) MAC_IMPORT(GetIndexedSubControl) M68K_INLINE(0x7017, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal void DrawControlInCurrentPort(ControlRef inControl) M68K_INLINE(0x7018, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal void DrawControlInCurrentPort(ControlRef inControl) MAC_IMPORT(DrawControlInCurrentPort) M68K_INLINE(0x7018, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr ClearKeyboardFocus(WindowRef inWindow) M68K_INLINE(0x7019, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal OSErr ClearKeyboardFocus(WindowRef inWindow) MAC_IMPORT(ClearKeyboardFocus) M68K_INLINE(0x7019, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr SetControlSupervisor(ControlRef inControl, ControlRef inBoss) M68K_INLINE(0x701A, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal OSErr SetControlSupervisor(ControlRef inControl, ControlRef inBoss) MAC_IMPORT(SetControlSupervisor) M68K_INLINE(0x701A, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr GetBestControlRect(ControlRef inControl, Rect *outRect, SInt16 *outBaseLineOffset) M68K_INLINE(0x701B, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal OSErr GetBestControlRect(ControlRef inControl, Rect *outRect, SInt16 *outBaseLineOffset) MAC_IMPORT(GetBestControlRect) M68K_INLINE(0x701B, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr SetControlFontStyle(ControlRef inControl, const ControlFontStyleRec *inStyle) M68K_INLINE(0x701C, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal OSErr SetControlFontStyle(ControlRef inControl, const ControlFontStyleRec *inStyle) MAC_IMPORT(SetControlFontStyle) M68K_INLINE(0x701C, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr SetUpControlBackground(ControlRef inControl, SInt16 inDepth, Boolean inIsColorDevice) M68K_INLINE(0x701D, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal OSErr SetUpControlBackground(ControlRef inControl, SInt16 inDepth, Boolean inIsColorDevice) MAC_IMPORT(SetUpControlBackground) M68K_INLINE(0x701D, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr SetControlVisibility(ControlRef inControl, Boolean inIsVisible, Boolean inDoDraw) M68K_INLINE(0x701E, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal OSErr SetControlVisibility(ControlRef inControl, Boolean inIsVisible, Boolean inDoDraw) MAC_IMPORT(SetControlVisibility) M68K_INLINE(0x701E, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal SInt32 SendControlMessage(ControlRef inControl, SInt16 inMessage, void *inParam) M68K_INLINE(0x303C, 0xFFFE, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal SInt32 SendControlMessage(ControlRef inControl, SInt16 inMessage, void *inParam) MAC_IMPORT(SendControlMessage) M68K_INLINE(0x303C, 0xFFFE, 0xAA73);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr DumpControlHierarchy(WindowRef inWindow, const FSSpec *inDumpFile) M68K_INLINE(0x303C, 0xFFFF, 0xAA73);
+MAC_SINCE(0x0810, "8.1") pascal OSErr DumpControlHierarchy(WindowRef inWindow, const FSSpec *inDumpFile) MAC_IMPORT(DumpControlHierarchy) M68K_INLINE(0x303C, 0xFFFF, 0xAA73);
 
 // Control Manager in Mac OS 8.5 (ControlsLib)
 #if !TARGET_CPU_68K
-pascal SInt32 GetControl32BitValue(ControlRef theControl);
+pascal SInt32 GetControl32BitValue(ControlRef theControl) MAC_IMPORT(GetControl32BitValue);
 #endif
 
 #if !TARGET_CPU_68K
-pascal void SetControl32BitValue(ControlRef theControl, SInt32 newValue);
+pascal void SetControl32BitValue(ControlRef theControl, SInt32 newValue) MAC_IMPORT(SetControl32BitValue);
 #endif
 
 #if !TARGET_CPU_68K
-pascal SInt32 GetControl32BitMaximum(ControlRef theControl);
+pascal SInt32 GetControl32BitMaximum(ControlRef theControl) MAC_IMPORT(GetControl32BitMaximum);
 #endif
 
 #if !TARGET_CPU_68K
-pascal void SetControl32BitMaximum(ControlRef theControl, SInt32 newMaximum);
+pascal void SetControl32BitMaximum(ControlRef theControl, SInt32 newMaximum) MAC_IMPORT(SetControl32BitMaximum);
 #endif
 
 #if !TARGET_CPU_68K
-pascal SInt32 GetControl32BitMinimum(ControlRef theControl);
+pascal SInt32 GetControl32BitMinimum(ControlRef theControl) MAC_IMPORT(GetControl32BitMinimum);
 #endif
 
 #if !TARGET_CPU_68K
-pascal void SetControl32BitMinimum(ControlRef theControl, SInt32 newMinimum);
+pascal void SetControl32BitMinimum(ControlRef theControl, SInt32 newMinimum) MAC_IMPORT(SetControl32BitMinimum);
 #endif
 
 #if !TARGET_CPU_68K
-pascal SInt32 GetControlViewSize(ControlRef theControl);
+pascal SInt32 GetControlViewSize(ControlRef theControl) MAC_IMPORT(GetControlViewSize);
 #endif
 
 #if !TARGET_CPU_68K
-pascal void SetControlViewSize(ControlRef theControl, SInt32 newViewSize);
+pascal void SetControlViewSize(ControlRef theControl, SInt32 newViewSize) MAC_IMPORT(SetControlViewSize);
 #endif
 
 #if !TARGET_CPU_68K
-pascal Boolean IsValidControlHandle(ControlRef theControl);
+pascal Boolean IsValidControlHandle(ControlRef theControl) MAC_IMPORT(IsValidControlHandle);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus SetControlID(ControlRef inControl, const ControlID *inID);
+pascal OSStatus SetControlID(ControlRef inControl, const ControlID *inID) MAC_IMPORT(SetControlID);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetControlID(ControlRef inControl, ControlID *outID);
+pascal OSStatus GetControlID(ControlRef inControl, ControlID *outID) MAC_IMPORT(GetControlID);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetControlByID(WindowRef inWindow, const ControlID *inID, ControlRef *outControl);
+pascal OSStatus GetControlByID(WindowRef inWindow, const ControlID *inID, ControlRef *outControl) MAC_IMPORT(GetControlByID);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus SetUpControlTextColor(ControlRef inControl, SInt16 inDepth, Boolean inIsColorDevice);
+pascal OSStatus SetUpControlTextColor(ControlRef inControl, SInt16 inDepth, Boolean inIsColorDevice) MAC_IMPORT(SetUpControlTextColor);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetControlRegion(ControlRef inControl, ControlPartCode inPart, RgnHandle outRegion);
+pascal OSStatus GetControlRegion(ControlRef inControl, ControlPartCode inPart, RgnHandle outRegion) MAC_IMPORT(GetControlRegion);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus SetControlColorProc(ControlRef inControl, ControlColorUPP inProc);
+pascal OSStatus SetControlColorProc(ControlRef inControl, ControlColorUPP inProc) MAC_IMPORT(SetControlColorProc);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetControlProperty(ControlRef control, OSType propertyCreator, OSType propertyTag, UInt32 bufferSize, UInt32 *actualSize, void *propertyBuffer);
+pascal OSStatus GetControlProperty(ControlRef control, OSType propertyCreator, OSType propertyTag, UInt32 bufferSize, UInt32 *actualSize, void *propertyBuffer) MAC_IMPORT(GetControlProperty);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetControlPropertySize(ControlRef control, OSType propertyCreator, OSType propertyTag, UInt32 *size);
+pascal OSStatus GetControlPropertySize(ControlRef control, OSType propertyCreator, OSType propertyTag, UInt32 *size) MAC_IMPORT(GetControlPropertySize);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus SetControlProperty(ControlRef control, OSType propertyCreator, OSType propertyTag, UInt32 propertySize, void *propertyData);
+pascal OSStatus SetControlProperty(ControlRef control, OSType propertyCreator, OSType propertyTag, UInt32 propertySize, void *propertyData) MAC_IMPORT(SetControlProperty);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus RemoveControlProperty(ControlRef control, OSType propertyCreator, OSType propertyTag);
+pascal OSStatus RemoveControlProperty(ControlRef control, OSType propertyCreator, OSType propertyTag) MAC_IMPORT(RemoveControlProperty);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetControlClickActivation(ControlRef inControl, Point inWhere, EventModifiers inModifiers, ClickActivationResult *outResult);
+pascal OSStatus GetControlClickActivation(ControlRef inControl, Point inWhere, EventModifiers inModifiers, ClickActivationResult *outResult) MAC_IMPORT(GetControlClickActivation);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus HandleControlContextualMenuClick(ControlRef inControl, Point inWhere, Boolean *menuDisplayed);
+pascal OSStatus HandleControlContextualMenuClick(ControlRef inControl, Point inWhere, Boolean *menuDisplayed) MAC_IMPORT(HandleControlContextualMenuClick);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus HandleControlSetCursor(ControlRef control, Point localPoint, EventModifiers modifiers, Boolean *cursorWasSet);
+pascal OSStatus HandleControlSetCursor(ControlRef control, Point localPoint, EventModifiers modifiers, Boolean *cursorWasSet) MAC_IMPORT(HandleControlSetCursor);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus HandleControlDragTracking(ControlRef inControl, DragTrackingMessage inMessage, DragReference inDrag, Boolean *outLikesDrag);
+pascal OSStatus HandleControlDragTracking(ControlRef inControl, DragTrackingMessage inMessage, DragReference inDrag, Boolean *outLikesDrag) MAC_IMPORT(HandleControlDragTracking);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus HandleControlDragReceive(ControlRef inControl, DragReference inDrag);
+pascal OSStatus HandleControlDragReceive(ControlRef inControl, DragReference inDrag) MAC_IMPORT(HandleControlDragReceive);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus SetControlDragTrackingEnabled(ControlRef theControl, Boolean tracks);
+pascal OSStatus SetControlDragTrackingEnabled(ControlRef theControl, Boolean tracks) MAC_IMPORT(SetControlDragTrackingEnabled);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus IsControlDragTrackingEnabled(ControlRef theControl, Boolean *tracks);
+pascal OSStatus IsControlDragTrackingEnabled(ControlRef theControl, Boolean *tracks) MAC_IMPORT(IsControlDragTrackingEnabled);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus SetAutomaticControlDragTrackingEnabledForWindow(WindowRef theWindow, Boolean tracks);
+pascal OSStatus SetAutomaticControlDragTrackingEnabledForWindow(WindowRef theWindow, Boolean tracks) MAC_IMPORT(SetAutomaticControlDragTrackingEnabledForWindow);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus IsAutomaticControlDragTrackingEnabledForWindow(WindowRef theWindow, Boolean *tracks);
+pascal OSStatus IsAutomaticControlDragTrackingEnabledForWindow(WindowRef theWindow, Boolean *tracks) MAC_IMPORT(IsAutomaticControlDragTrackingEnabledForWindow);
 #endif
 
 // Accessors for the Appearance controls. On 68k they are inline calls to GetControlData and SetControlData; PowerPC gets them from AppearanceLib.
 #if TARGET_CPU_68K
 static __inline__ OSErr GetBevelButtonMenuValue(ControlRef inButton, SInt16 *outValue);
 #else
-pascal OSErr GetBevelButtonMenuValue(ControlRef inButton, SInt16 *outValue);
+pascal OSErr GetBevelButtonMenuValue(ControlRef inButton, SInt16 *outValue) MAC_IMPORT(GetBevelButtonMenuValue);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr SetBevelButtonMenuValue(ControlRef inButton, SInt16 inValue);
 #else
-pascal OSErr SetBevelButtonMenuValue(ControlRef inButton, SInt16 inValue);
+pascal OSErr SetBevelButtonMenuValue(ControlRef inButton, SInt16 inValue) MAC_IMPORT(SetBevelButtonMenuValue);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr GetBevelButtonMenuHandle(ControlRef inButton, MenuHandle *outHandle);
 #else
-pascal OSErr GetBevelButtonMenuHandle(ControlRef inButton, MenuHandle *outHandle);
+pascal OSErr GetBevelButtonMenuHandle(ControlRef inButton, MenuHandle *outHandle) MAC_IMPORT(GetBevelButtonMenuHandle);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr GetBevelButtonContentInfo(ControlRef inButton, ControlButtonContentInfoPtr outContent);
 #else
-pascal OSErr GetBevelButtonContentInfo(ControlRef inButton, ControlButtonContentInfoPtr outContent);
+pascal OSErr GetBevelButtonContentInfo(ControlRef inButton, ControlButtonContentInfoPtr outContent) MAC_IMPORT(GetBevelButtonContentInfo);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr SetBevelButtonContentInfo(ControlRef inButton, ControlButtonContentInfoPtr inContent);
 #else
-pascal OSErr SetBevelButtonContentInfo(ControlRef inButton, ControlButtonContentInfoPtr inContent);
+pascal OSErr SetBevelButtonContentInfo(ControlRef inButton, ControlButtonContentInfoPtr inContent) MAC_IMPORT(SetBevelButtonContentInfo);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr SetBevelButtonTransform(ControlRef inButton, IconTransformType transform);
 #else
-pascal OSErr SetBevelButtonTransform(ControlRef inButton, IconTransformType transform);
+pascal OSErr SetBevelButtonTransform(ControlRef inButton, IconTransformType transform) MAC_IMPORT(SetBevelButtonTransform);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr SetBevelButtonGraphicAlignment(ControlRef inButton, ControlButtonGraphicAlignment inAlign, SInt16 inHOffset, SInt16 inVOffset);
 #else
-pascal OSErr SetBevelButtonGraphicAlignment(ControlRef inButton, ControlButtonGraphicAlignment inAlign, SInt16 inHOffset, SInt16 inVOffset);
+pascal OSErr SetBevelButtonGraphicAlignment(ControlRef inButton, ControlButtonGraphicAlignment inAlign, SInt16 inHOffset, SInt16 inVOffset) MAC_IMPORT(SetBevelButtonGraphicAlignment);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr SetBevelButtonTextAlignment(ControlRef inButton, ControlButtonTextAlignment inAlign, SInt16 inHOffset);
 #else
-pascal OSErr SetBevelButtonTextAlignment(ControlRef inButton, ControlButtonTextAlignment inAlign, SInt16 inHOffset);
+pascal OSErr SetBevelButtonTextAlignment(ControlRef inButton, ControlButtonTextAlignment inAlign, SInt16 inHOffset) MAC_IMPORT(SetBevelButtonTextAlignment);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr SetBevelButtonTextPlacement(ControlRef inButton, ControlButtonTextPlacement inWhere);
 #else
-pascal OSErr SetBevelButtonTextPlacement(ControlRef inButton, ControlButtonTextPlacement inWhere);
+pascal OSErr SetBevelButtonTextPlacement(ControlRef inButton, ControlButtonTextPlacement inWhere) MAC_IMPORT(SetBevelButtonTextPlacement);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr GetImageWellContentInfo(ControlRef inButton, ControlButtonContentInfoPtr outContent);
 #else
-pascal OSErr GetImageWellContentInfo(ControlRef inButton, ControlButtonContentInfoPtr outContent);
+pascal OSErr GetImageWellContentInfo(ControlRef inButton, ControlButtonContentInfoPtr outContent) MAC_IMPORT(GetImageWellContentInfo);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr SetImageWellContentInfo(ControlRef inButton, ControlButtonContentInfoPtr inContent);
 #else
-pascal OSErr SetImageWellContentInfo(ControlRef inButton, ControlButtonContentInfoPtr inContent);
+pascal OSErr SetImageWellContentInfo(ControlRef inButton, ControlButtonContentInfoPtr inContent) MAC_IMPORT(SetImageWellContentInfo);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr SetImageWellTransform(ControlRef inButton, IconTransformType inTransform);
 #else
-pascal OSErr SetImageWellTransform(ControlRef inButton, IconTransformType inTransform);
+pascal OSErr SetImageWellTransform(ControlRef inButton, IconTransformType inTransform) MAC_IMPORT(SetImageWellTransform);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr GetTabContentRect(ControlRef inTabControl, Rect *outContentRect);
 #else
-pascal OSErr GetTabContentRect(ControlRef inTabControl, Rect *outContentRect);
+pascal OSErr GetTabContentRect(ControlRef inTabControl, Rect *outContentRect) MAC_IMPORT(GetTabContentRect);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr SetTabEnabled(ControlRef inTabControl, SInt16 inTabToHilite, Boolean inEnabled);
 #else
-pascal OSErr SetTabEnabled(ControlRef inTabControl, SInt16 inTabToHilite, Boolean inEnabled);
+pascal OSErr SetTabEnabled(ControlRef inTabControl, SInt16 inTabToHilite, Boolean inEnabled) MAC_IMPORT(SetTabEnabled);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr SetDisclosureTriangleLastValue(ControlRef inTabControl, SInt16 inValue);
 #else
-pascal OSErr SetDisclosureTriangleLastValue(ControlRef inTabControl, SInt16 inValue);
+pascal OSErr SetDisclosureTriangleLastValue(ControlRef inTabControl, SInt16 inValue) MAC_IMPORT(SetDisclosureTriangleLastValue);
 #endif
 
 #if TARGET_CPU_68K

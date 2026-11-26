@@ -37,13 +37,13 @@ enum {
 enum { _ContextualMenuDispatch = 0xAA72 };
 
 // Contextual Menu Manager (Mac OS 8). Trap 0xAA72 with the selector in D0, as installed by the Contextual Menu Extension.
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'cmnu'") pascal OSStatus InitContextualMenus(void) M68K_INLINE(0x7001, 0xAA72);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'cmnu'") pascal OSStatus InitContextualMenus(void) MAC_IMPORT(InitContextualMenus) M68K_INLINE(0x7001, 0xAA72);
 
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'cmnu'") pascal Boolean IsShowContextualMenuClick(const EventRecord *inEvent) M68K_INLINE(0x7002, 0xAA72);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'cmnu'") pascal Boolean IsShowContextualMenuClick(const EventRecord *inEvent) MAC_IMPORT(IsShowContextualMenuClick) M68K_INLINE(0x7002, 0xAA72);
 
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'cmnu'") pascal OSStatus ContextualMenuSelect(MenuHandle inMenu, Point inGlobalLocation, Boolean inReserved, UInt32 inHelpType, ConstStr255Param inHelpItemString, const AEDesc *inSelection, UInt32 *outUserSelectionType, SInt16 *outMenuID, UInt16 *outMenuItem) M68K_INLINE(0x7003, 0xAA72);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'cmnu'") pascal OSStatus ContextualMenuSelect(MenuHandle inMenu, Point inGlobalLocation, Boolean inReserved, UInt32 inHelpType, ConstStr255Param inHelpItemString, const AEDesc *inSelection, UInt32 *outUserSelectionType, SInt16 *outMenuID, UInt16 *outMenuItem) MAC_IMPORT(ContextualMenuSelect) M68K_INLINE(0x7003, 0xAA72);
 
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'cmnu'") pascal OSStatus ProcessIsContextualMenuClient(ProcessSerialNumber *inPSN, Boolean *outIsClient) M68K_INLINE(0x7004, 0xAA72);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'cmnu'") pascal OSStatus ProcessIsContextualMenuClient(ProcessSerialNumber *inPSN, Boolean *outIsClient) MAC_IMPORT(ProcessIsContextualMenuClient) M68K_INLINE(0x7004, 0xAA72);
 
 #ifdef __cplusplus
 }

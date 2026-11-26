@@ -222,49 +222,49 @@ typedef NavObjectFilterProcPtr NavObjectFilterUPP;
 #define NewNavObjectFilterProc(proc) NewNavObjectFilterUPP(proc)
 #define DisposeNavObjectFilterProc(proc) DisposeNavObjectFilterUPP(proc)
 
-pascal Boolean NavServicesCanRun(void);
+pascal Boolean NavServicesCanRun(void) MAC_IMPORT(NavServicesCanRun);
 
 #if !TARGET_CPU_68K
 #define NavServicesAvailable() ((&NavLibraryVersion && NavServicesCanRun()))
 #else
-pascal Boolean NavServicesAvailable(void);
+pascal Boolean NavServicesAvailable(void) MAC_IMPORT(NavServicesAvailable);
 #endif
 
-pascal unsigned long NavLibraryVersion(void);
+pascal unsigned long NavLibraryVersion(void) MAC_IMPORT(NavLibraryVersion);
 
-pascal OSErr NavLoad(void);
+pascal OSErr NavLoad(void) MAC_IMPORT(NavLoad);
 
-pascal OSErr NavUnload(void);
+pascal OSErr NavUnload(void) MAC_IMPORT(NavUnload);
 
-pascal OSErr NavDisposeReply(NavReplyRecord *reply);
+pascal OSErr NavDisposeReply(NavReplyRecord *reply) MAC_IMPORT(NavDisposeReply);
 
-pascal OSErr NavGetFile(AEDesc *defaultLocation, NavReplyRecord *reply, NavDialogOptions *dialogOptions, NavEventUPP eventProc, NavPreviewUPP previewProc, NavObjectFilterUPP filterProc, NavTypeListHandle typeList, void *callBackUD);
+pascal OSErr NavGetFile(AEDesc *defaultLocation, NavReplyRecord *reply, NavDialogOptions *dialogOptions, NavEventUPP eventProc, NavPreviewUPP previewProc, NavObjectFilterUPP filterProc, NavTypeListHandle typeList, void *callBackUD) MAC_IMPORT(NavGetFile);
 
-pascal OSErr NavChooseFile(AEDesc *defaultLocation, NavReplyRecord *reply, NavDialogOptions *dialogOptions, NavEventUPP eventProc, NavPreviewUPP previewProc, NavObjectFilterUPP filterProc, NavTypeListHandle typeList, void *callBackUD);
+pascal OSErr NavChooseFile(AEDesc *defaultLocation, NavReplyRecord *reply, NavDialogOptions *dialogOptions, NavEventUPP eventProc, NavPreviewUPP previewProc, NavObjectFilterUPP filterProc, NavTypeListHandle typeList, void *callBackUD) MAC_IMPORT(NavChooseFile);
 
-pascal OSErr NavTranslateFile(NavReplyRecord *translateInfo, NavTranslationOptions howToTranslate);
+pascal OSErr NavTranslateFile(NavReplyRecord *translateInfo, NavTranslationOptions howToTranslate) MAC_IMPORT(NavTranslateFile);
 
-pascal OSErr NavChooseVolume(AEDesc *defaultLocation, NavReplyRecord *reply, NavDialogOptions *dialogOptions, NavEventUPP eventProc, NavObjectFilterUPP filterProc, void *callBackUD);
+pascal OSErr NavChooseVolume(AEDesc *defaultLocation, NavReplyRecord *reply, NavDialogOptions *dialogOptions, NavEventUPP eventProc, NavObjectFilterUPP filterProc, void *callBackUD) MAC_IMPORT(NavChooseVolume);
 
-pascal OSErr NavChooseFolder(AEDesc *defaultLocation, NavReplyRecord *reply, NavDialogOptions *dialogOptions, NavEventUPP eventProc, NavObjectFilterUPP filterProc, void *callBackUD);
+pascal OSErr NavChooseFolder(AEDesc *defaultLocation, NavReplyRecord *reply, NavDialogOptions *dialogOptions, NavEventUPP eventProc, NavObjectFilterUPP filterProc, void *callBackUD) MAC_IMPORT(NavChooseFolder);
 
-pascal OSErr NavChooseObject(AEDesc *defaultLocation, NavReplyRecord *reply, NavDialogOptions *dialogOptions, NavEventUPP eventProc, NavObjectFilterUPP filterProc, void *callBackUD);
+pascal OSErr NavChooseObject(AEDesc *defaultLocation, NavReplyRecord *reply, NavDialogOptions *dialogOptions, NavEventUPP eventProc, NavObjectFilterUPP filterProc, void *callBackUD) MAC_IMPORT(NavChooseObject);
 
-pascal OSErr NavNewFolder(AEDesc *defaultLocation, NavReplyRecord *reply, NavDialogOptions *dialogOptions, NavEventUPP eventProc, void *callBackUD);
+pascal OSErr NavNewFolder(AEDesc *defaultLocation, NavReplyRecord *reply, NavDialogOptions *dialogOptions, NavEventUPP eventProc, void *callBackUD) MAC_IMPORT(NavNewFolder);
 
-pascal OSErr NavPutFile(AEDesc *defaultLocation, NavReplyRecord *reply, NavDialogOptions *dialogOptions, NavEventUPP eventProc, OSType fileType, OSType fileCreator, void *callBackUD);
+pascal OSErr NavPutFile(AEDesc *defaultLocation, NavReplyRecord *reply, NavDialogOptions *dialogOptions, NavEventUPP eventProc, OSType fileType, OSType fileCreator, void *callBackUD) MAC_IMPORT(NavPutFile);
 
-pascal OSErr NavAskSaveChanges(NavDialogOptions *dialogOptions, NavAskSaveChangesAction action, NavAskSaveChangesResult *reply, NavEventUPP eventProc, void *callBackUD);
+pascal OSErr NavAskSaveChanges(NavDialogOptions *dialogOptions, NavAskSaveChangesAction action, NavAskSaveChangesResult *reply, NavEventUPP eventProc, void *callBackUD) MAC_IMPORT(NavAskSaveChanges);
 
-pascal OSErr NavCustomAskSaveChanges(NavDialogOptions *dialogOptions, NavAskSaveChangesResult *reply, NavEventUPP eventProc, void *callBackUD);
+pascal OSErr NavCustomAskSaveChanges(NavDialogOptions *dialogOptions, NavAskSaveChangesResult *reply, NavEventUPP eventProc, void *callBackUD) MAC_IMPORT(NavCustomAskSaveChanges);
 
-pascal OSErr NavAskDiscardChanges(NavDialogOptions *dialogOptions, NavAskDiscardChangesResult *reply, NavEventUPP eventProc, void *callBackUD);
+pascal OSErr NavAskDiscardChanges(NavDialogOptions *dialogOptions, NavAskDiscardChangesResult *reply, NavEventUPP eventProc, void *callBackUD) MAC_IMPORT(NavAskDiscardChanges);
 
-pascal OSErr NavCompleteSave(NavReplyRecord *translateInfo, NavTranslationOptions howToTranslate);
+pascal OSErr NavCompleteSave(NavReplyRecord *translateInfo, NavTranslationOptions howToTranslate) MAC_IMPORT(NavCompleteSave);
 
-pascal OSErr NavCreatePreview(AEDesc *theObject, OSType previewDataType, const void *previewData, Size previewDataSize);
+pascal OSErr NavCreatePreview(AEDesc *theObject, OSType previewDataType, const void *previewData, Size previewDataSize) MAC_IMPORT(NavCreatePreview);
 
-pascal OSErr NavCustomControl(NavContext context, NavCustomControlMessage selector, void *parms);
+pascal OSErr NavCustomControl(NavContext context, NavCustomControlMessage selector, void *parms) MAC_IMPORT(NavCustomControl);
 
 #ifdef __cplusplus
 }

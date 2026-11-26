@@ -71,55 +71,55 @@ typedef EParamBlock *EParamBlkPtr;
 #if TARGET_CPU_68K
 static __inline__ OSErr EWrite(EParamBlkPtr thePBptr, Boolean async);
 #else
-pascal OSErr EWrite(EParamBlkPtr thePBptr, Boolean async);
+pascal OSErr EWrite(EParamBlkPtr thePBptr, Boolean async) MAC_IMPORT(EWrite);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr EAttachPH(EParamBlkPtr thePBptr, Boolean async);
 #else
-pascal OSErr EAttachPH(EParamBlkPtr thePBptr, Boolean async);
+pascal OSErr EAttachPH(EParamBlkPtr thePBptr, Boolean async) MAC_IMPORT(EAttachPH);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr EDetachPH(EParamBlkPtr thePBptr, Boolean async);
 #else
-pascal OSErr EDetachPH(EParamBlkPtr thePBptr, Boolean async);
+pascal OSErr EDetachPH(EParamBlkPtr thePBptr, Boolean async) MAC_IMPORT(EDetachPH);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr ERead(EParamBlkPtr thePBptr, Boolean async);
 #else
-pascal OSErr ERead(EParamBlkPtr thePBptr, Boolean async);
+pascal OSErr ERead(EParamBlkPtr thePBptr, Boolean async) MAC_IMPORT(ERead);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr ERdCancel(EParamBlkPtr thePBptr, Boolean async);
 #else
-pascal OSErr ERdCancel(EParamBlkPtr thePBptr, Boolean async);
+pascal OSErr ERdCancel(EParamBlkPtr thePBptr, Boolean async) MAC_IMPORT(ERdCancel);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr EGetInfo(EParamBlkPtr thePBptr, Boolean async);
 #else
-pascal OSErr EGetInfo(EParamBlkPtr thePBptr, Boolean async);
+pascal OSErr EGetInfo(EParamBlkPtr thePBptr, Boolean async) MAC_IMPORT(EGetInfo);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr ESetGeneral(EParamBlkPtr thePBptr, Boolean async);
 #else
-pascal OSErr ESetGeneral(EParamBlkPtr thePBptr, Boolean async);
+pascal OSErr ESetGeneral(EParamBlkPtr thePBptr, Boolean async) MAC_IMPORT(ESetGeneral);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr EAddMulti(EParamBlkPtr thePBptr, Boolean async);
 #else
-pascal OSErr EAddMulti(EParamBlkPtr thePBptr, Boolean async);
+pascal OSErr EAddMulti(EParamBlkPtr thePBptr, Boolean async) MAC_IMPORT(EAddMulti);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr EDelMulti(EParamBlkPtr thePBptr, Boolean async);
 #else
-pascal OSErr EDelMulti(EParamBlkPtr thePBptr, Boolean async);
+pascal OSErr EDelMulti(EParamBlkPtr thePBptr, Boolean async) MAC_IMPORT(EDelMulti);
 #endif
 
 #if TARGET_CPU_68K

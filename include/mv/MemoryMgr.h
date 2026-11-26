@@ -187,7 +187,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) Ha
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal Handle NewEmptyHandle(void);
+MAC_SINCE(0x0070, "0.7") pascal Handle NewEmptyHandle(void) MAC_IMPORT(NewEmptyHandle);
 #endif
 enum { _NewEmptyHandleSys = 0xA566 };
 #if TARGET_CPU_68K
@@ -200,7 +200,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) Ha
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal Handle NewEmptyHandleSys(void);
+MAC_SINCE(0x0070, "0.7") pascal Handle NewEmptyHandleSys(void) MAC_IMPORT(NewEmptyHandleSys);
 #endif
 
 enum { _NewHandle = 0xA122 };
@@ -215,7 +215,7 @@ static __inline__ __attribute__((__always_inline__)) Handle NewHandle(Size size)
     return _ret;
 }
 #else
-pascal Handle NewHandle(Size size);
+pascal Handle NewHandle(Size size) MAC_IMPORT(NewHandle);
 #endif
 enum { _NewHandleClear = 0xA322 };
 #if TARGET_CPU_68K
@@ -229,7 +229,7 @@ static __inline__ __attribute__((__always_inline__)) Handle NewHandleClear(Size 
     return _ret;
 }
 #else
-pascal Handle NewHandleClear(Size size);
+pascal Handle NewHandleClear(Size size) MAC_IMPORT(NewHandleClear);
 #endif
 enum { _NewHandleSys = 0xA522 };
 #if TARGET_CPU_68K
@@ -243,7 +243,7 @@ static __inline__ __attribute__((__always_inline__)) Handle NewHandleSys(Size si
     return _ret;
 }
 #else
-pascal Handle NewHandleSys(Size size);
+pascal Handle NewHandleSys(Size size) MAC_IMPORT(NewHandleSys);
 #endif
 enum { _NewHandleSysClear = 0xA722 };
 #if TARGET_CPU_68K
@@ -257,7 +257,7 @@ static __inline__ __attribute__((__always_inline__)) Handle NewHandleSysClear(Si
     return _ret;
 }
 #else
-pascal Handle NewHandleSysClear(Size size);
+pascal Handle NewHandleSysClear(Size size) MAC_IMPORT(NewHandleSysClear);
 #endif
 
 enum { _RecoverHandle = 0xA128 };
@@ -272,7 +272,7 @@ static __inline__ __attribute__((__always_inline__)) Handle RecoverHandle(Ptr p)
     return _ret;
 }
 #else
-pascal Handle RecoverHandle(Ptr p);
+pascal Handle RecoverHandle(Ptr p) MAC_IMPORT(RecoverHandle);
 #endif
 enum { _RecoverHandleSys = 0xA528 };
 #if TARGET_CPU_68K
@@ -286,7 +286,7 @@ static __inline__ __attribute__((__always_inline__)) Handle RecoverHandleSys(Ptr
     return _ret;
 }
 #else
-pascal Handle RecoverHandleSys(Ptr p);
+pascal Handle RecoverHandleSys(Ptr p) MAC_IMPORT(RecoverHandleSys);
 #endif
 
 enum { _NewPtr = 0xA11E };
@@ -301,7 +301,7 @@ static __inline__ __attribute__((__always_inline__)) Ptr NewPtr(Size size) {
     return _ret;
 }
 #else
-pascal Ptr NewPtr(Size size);
+pascal Ptr NewPtr(Size size) MAC_IMPORT(NewPtr);
 #endif
 enum { _NewPtrClear = 0xA31E };
 #if TARGET_CPU_68K
@@ -315,7 +315,7 @@ static __inline__ __attribute__((__always_inline__)) Ptr NewPtrClear(Size size) 
     return _ret;
 }
 #else
-pascal Ptr NewPtrClear(Size size);
+pascal Ptr NewPtrClear(Size size) MAC_IMPORT(NewPtrClear);
 #endif
 enum { _NewPtrSys = 0xA51E };
 #if TARGET_CPU_68K
@@ -329,7 +329,7 @@ static __inline__ __attribute__((__always_inline__)) Ptr NewPtrSys(Size size) {
     return _ret;
 }
 #else
-pascal Ptr NewPtrSys(Size size);
+pascal Ptr NewPtrSys(Size size) MAC_IMPORT(NewPtrSys);
 #endif
 enum { _NewPtrSysClear = 0xA71E };
 #if TARGET_CPU_68K
@@ -343,7 +343,7 @@ static __inline__ __attribute__((__always_inline__)) Ptr NewPtrSysClear(Size siz
     return _ret;
 }
 #else
-pascal Ptr NewPtrSysClear(Size size);
+pascal Ptr NewPtrSysClear(Size size) MAC_IMPORT(NewPtrSysClear);
 #endif
 
 enum { _FreeMem = 0xA01C };
@@ -357,7 +357,7 @@ static __inline__ __attribute__((__always_inline__)) long FreeMem(void) {
     return _ret;
 }
 #else
-pascal long FreeMem(void);
+pascal long FreeMem(void) MAC_IMPORT(FreeMem);
 #endif
 enum { _FreeMemSys = 0xA41C };
 #if TARGET_CPU_68K
@@ -370,7 +370,7 @@ static __inline__ __attribute__((__always_inline__)) long FreeMemSys(void) {
     return _ret;
 }
 #else
-pascal long FreeMemSys(void);
+pascal long FreeMemSys(void) MAC_IMPORT(FreeMemSys);
 #endif
 
 enum { _MaxMem = 0xA11D };
@@ -386,7 +386,7 @@ static __inline__ __attribute__((__always_inline__)) Size MaxMem(Size *growp) {
     return _ret;
 }
 #else
-pascal Size MaxMem(Size *growp);
+pascal Size MaxMem(Size *growp) MAC_IMPORT(MaxMem);
 #endif
 enum { _MaxMemSys = 0xA51D };
 #if TARGET_CPU_68K
@@ -401,7 +401,7 @@ static __inline__ __attribute__((__always_inline__)) Size MaxMemSys(Size *growp)
     return _ret;
 }
 #else
-pascal Size MaxMemSys(Size *growp);
+pascal Size MaxMemSys(Size *growp) MAC_IMPORT(MaxMemSys);
 #endif
 
 enum { _CompactMem = 0xA04C };
@@ -416,7 +416,7 @@ static __inline__ __attribute__((__always_inline__)) Size CompactMem(Size sizene
     return _ret;
 }
 #else
-pascal Size CompactMem(Size sizeneeded);
+pascal Size CompactMem(Size sizeneeded) MAC_IMPORT(CompactMem);
 #endif
 enum { _CompactMemSys = 0xA44C };
 #if TARGET_CPU_68K
@@ -430,7 +430,7 @@ static __inline__ __attribute__((__always_inline__)) Size CompactMemSys(Size siz
     return _ret;
 }
 #else
-pascal Size CompactMemSys(Size sizeneeded);
+pascal Size CompactMemSys(Size sizeneeded) MAC_IMPORT(CompactMemSys);
 #endif
 
 enum { _ReserveMem = 0xA040 };
@@ -443,7 +443,7 @@ static __inline__ __attribute__((__always_inline__)) void ReserveMem(Size needed
         : "d1", "d2", "a0", "a1", "cc", "memory");
 }
 #else
-pascal void ReserveMem(Size needed);
+pascal void ReserveMem(Size needed) MAC_IMPORT(ReserveMem);
 #endif
 enum { _ReserveMemSys = 0xA440 };
 #if TARGET_CPU_68K
@@ -455,7 +455,7 @@ static __inline__ __attribute__((__always_inline__)) void ReserveMemSys(Size nee
         : "d1", "d2", "a0", "a1", "cc", "memory");
 }
 #else
-pascal void ReserveMemSys(Size needed);
+pascal void ReserveMemSys(Size needed) MAC_IMPORT(ReserveMemSys);
 #endif
 
 enum { _PurgeMem = 0xA04D };
@@ -468,7 +468,7 @@ static __inline__ __attribute__((__always_inline__)) void PurgeMem(Size needed) 
         : "d1", "d2", "a0", "a1", "cc", "memory");
 }
 #else
-pascal void PurgeMem(Size needed);
+pascal void PurgeMem(Size needed) MAC_IMPORT(PurgeMem);
 #endif
 enum { _PurgeMemSys = 0xA44D };
 #if TARGET_CPU_68K
@@ -480,7 +480,7 @@ static __inline__ __attribute__((__always_inline__)) void PurgeMemSys(Size neede
         : "d1", "d2", "a0", "a1", "cc", "memory");
 }
 #else
-pascal void PurgeMemSys(Size needed);
+pascal void PurgeMemSys(Size needed) MAC_IMPORT(PurgeMemSys);
 #endif
 
 enum { _MaxBlock = 0xA061 };
@@ -494,7 +494,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) Si
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal Size MaxBlock(void);
+MAC_SINCE(0x0070, "0.7") pascal Size MaxBlock(void) MAC_IMPORT(MaxBlock);
 #endif
 enum { _MaxBlockSys = 0xA461 };
 #if TARGET_CPU_68K
@@ -507,7 +507,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) Si
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal Size MaxBlockSys(void);
+MAC_SINCE(0x0070, "0.7") pascal Size MaxBlockSys(void) MAC_IMPORT(MaxBlockSys);
 #endif
 
 enum { _PurgeSpace = 0xA162 };
@@ -523,7 +523,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
     if (contigp) *contigp = _contigp;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PurgeSpace(Size *totalp, Size *contigp);
+MAC_SINCE(0x0070, "0.7") pascal void PurgeSpace(Size *totalp, Size *contigp) MAC_IMPORT(PurgeSpace);
 #endif
 enum { _PurgeSpaceSys = 0xA562 };
 #if TARGET_CPU_68K
@@ -538,7 +538,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
     if (contigp) *contigp = _contigp;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void PurgeSpaceSys(Size *totalp, Size *contigp);
+MAC_SINCE(0x0070, "0.7") pascal void PurgeSpaceSys(Size *totalp, Size *contigp) MAC_IMPORT(PurgeSpaceSys);
 #endif
 
 #define MemError() (*(INTEGER *)0x0220)
@@ -555,7 +555,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) Si
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal SignedByte HGetState(Handle h);
+MAC_SINCE(0x0070, "0.7") pascal SignedByte HGetState(Handle h) MAC_IMPORT(HGetState);
 #endif
 
 enum { _HSetState = 0xA06A };
@@ -569,7 +569,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void HSetState(Handle h, SignedByte flags);
+MAC_SINCE(0x0070, "0.7") pascal void HSetState(Handle h, SignedByte flags) MAC_IMPORT(HSetState);
 #endif
 
 enum { _HLock = 0xA029 };
@@ -582,7 +582,7 @@ static __inline__ __attribute__((__always_inline__)) void HLock(Handle h) {
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-pascal void HLock(Handle h);
+pascal void HLock(Handle h) MAC_IMPORT(HLock);
 #endif
 
 enum { _HUnlock = 0xA02A };
@@ -595,7 +595,7 @@ static __inline__ __attribute__((__always_inline__)) void HUnlock(Handle h) {
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-pascal void HUnlock(Handle h);
+pascal void HUnlock(Handle h) MAC_IMPORT(HUnlock);
 #endif
 
 enum { _HPurge = 0xA049 };
@@ -608,7 +608,7 @@ static __inline__ __attribute__((__always_inline__)) void HPurge(Handle h) {
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-pascal void HPurge(Handle h);
+pascal void HPurge(Handle h) MAC_IMPORT(HPurge);
 #endif
 
 enum { _HNoPurge = 0xA04A };
@@ -621,7 +621,7 @@ static __inline__ __attribute__((__always_inline__)) void HNoPurge(Handle h) {
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-pascal void HNoPurge(Handle h);
+pascal void HNoPurge(Handle h) MAC_IMPORT(HNoPurge);
 #endif
 
 enum { _HSetRBit = 0xA067 };
@@ -634,7 +634,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void HSetRBit(Handle h);
+MAC_SINCE(0x0070, "0.7") pascal void HSetRBit(Handle h) MAC_IMPORT(HSetRBit);
 #endif
 
 enum { _HClrRBit = 0xA068 };
@@ -647,11 +647,11 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void HClrRBit(Handle h);
+MAC_SINCE(0x0070, "0.7") pascal void HClrRBit(Handle h) MAC_IMPORT(HClrRBit);
 #endif
 
 enum { _InitApplZone = 0xA02C };
-pascal void InitApplZone(void) M68K_INLINE(0xA02C);
+pascal void InitApplZone(void) MAC_IMPORT(InitApplZone) M68K_INLINE(0xA02C);
 
 enum { _SetApplBase = 0xA057 };
 #if TARGET_CPU_68K
@@ -663,16 +663,16 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void SetApplBase(Ptr newbase);
+MAC_SINCE(0x0070, "0.7") pascal void SetApplBase(Ptr newbase) MAC_IMPORT(SetApplBase);
 #endif
 
 enum { _MoreMasters = 0xA036 };
-pascal void MoreMasters(void) M68K_INLINE(0xA036);
+pascal void MoreMasters(void) MAC_IMPORT(MoreMasters) M68K_INLINE(0xA036);
 
 #if TARGET_CPU_68K
 static __inline__ void InitZone(GrowZoneUPP pGrowZone, int16_t cMoreMasters, Ptr limitPtr, THz startPtr);
 #else
-pascal void InitZone(GrowZoneUPP pGrowZone, int16_t cMoreMasters, Ptr limitPtr, THz startPtr);
+pascal void InitZone(GrowZoneUPP pGrowZone, int16_t cMoreMasters, Ptr limitPtr, THz startPtr) MAC_IMPORT(InitZone);
 #endif
 
 enum { _GetZone = 0xA11A };
@@ -686,7 +686,7 @@ static __inline__ __attribute__((__always_inline__)) THz GetZone(void) {
     return _ret;
 }
 #else
-pascal THz GetZone(void);
+pascal THz GetZone(void) MAC_IMPORT(GetZone);
 #endif
 
 enum { _SetZone = 0xA01B };
@@ -699,7 +699,7 @@ static __inline__ __attribute__((__always_inline__)) void SetZone(THz hz) {
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-pascal void SetZone(THz hz);
+pascal void SetZone(THz hz) MAC_IMPORT(SetZone);
 #endif
 
 enum { _DisposeHandle = 0xA023 };
@@ -712,7 +712,7 @@ static __inline__ __attribute__((__always_inline__)) void DisposeHandle(Handle h
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-pascal void DisposeHandle(Handle h);
+pascal void DisposeHandle(Handle h) MAC_IMPORT(DisposeHandle);
 #endif
 #if OLDROUTINENAMES
 #define DisposHandle(h) DisposeHandle(h)
@@ -730,7 +730,7 @@ static __inline__ __attribute__((__always_inline__)) Size GetHandleSize(Handle h
     return _ret;
 }
 #else
-pascal Size GetHandleSize(Handle h);
+pascal Size GetHandleSize(Handle h) MAC_IMPORT(GetHandleSize);
 #endif
 
 enum { _SetHandleSize = 0xA024 };
@@ -744,7 +744,7 @@ static __inline__ __attribute__((__always_inline__)) void SetHandleSize(Handle h
         : "d1", "d2", "a1", "cc", "memory");
 }
 #else
-pascal void SetHandleSize(Handle h, Size newsize);
+pascal void SetHandleSize(Handle h, Size newsize) MAC_IMPORT(SetHandleSize);
 #endif
 
 enum { _HandleZone = 0xA126 };
@@ -759,7 +759,7 @@ static __inline__ __attribute__((__always_inline__)) THz HandleZone(Handle h) {
     return _ret;
 }
 #else
-pascal THz HandleZone(Handle h);
+pascal THz HandleZone(Handle h) MAC_IMPORT(HandleZone);
 #endif
 
 enum { _ReallocateHandle = 0xA027 };
@@ -773,7 +773,7 @@ static __inline__ __attribute__((__always_inline__)) void ReallocateHandle(Handl
         : "d1", "d2", "a1", "cc", "memory");
 }
 #else
-pascal void ReallocateHandle(Handle h, Size size);
+pascal void ReallocateHandle(Handle h, Size size) MAC_IMPORT(ReallocateHandle);
 #endif
 #if OLDROUTINENAMES
 #define ReallocHandle(h, size) ReallocateHandle(h, size)
@@ -789,7 +789,7 @@ static __inline__ __attribute__((__always_inline__)) void DisposePtr(Ptr p) {
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-pascal void DisposePtr(Ptr p);
+pascal void DisposePtr(Ptr p) MAC_IMPORT(DisposePtr);
 #endif
 #if OLDROUTINENAMES
 #define DisposPtr(p) DisposePtr(p)
@@ -807,7 +807,7 @@ static __inline__ __attribute__((__always_inline__)) Size GetPtrSize(Ptr p) {
     return _ret;
 }
 #else
-pascal Size GetPtrSize(Ptr p);
+pascal Size GetPtrSize(Ptr p) MAC_IMPORT(GetPtrSize);
 #endif
 
 enum { _SetPtrSize = 0xA020 };
@@ -821,7 +821,7 @@ static __inline__ __attribute__((__always_inline__)) void SetPtrSize(Ptr p, Size
         : "d1", "d2", "a1", "cc", "memory");
 }
 #else
-pascal void SetPtrSize(Ptr p, Size newsize);
+pascal void SetPtrSize(Ptr p, Size newsize) MAC_IMPORT(SetPtrSize);
 #endif
 
 enum { _PtrZone = 0xA148 };
@@ -836,7 +836,7 @@ static __inline__ __attribute__((__always_inline__)) THz PtrZone(Ptr p) {
     return _ret;
 }
 #else
-pascal THz PtrZone(Ptr p);
+pascal THz PtrZone(Ptr p) MAC_IMPORT(PtrZone);
 #endif
 
 enum { _BlockMove = 0xA02E };
@@ -851,7 +851,7 @@ static __inline__ __attribute__((__always_inline__)) void BlockMove(const void *
         : "d1", "d2", "cc", "memory");
 }
 #else
-pascal void BlockMove(const void *src, void *dst, Size cnt);
+pascal void BlockMove(const void *src, void *dst, Size cnt) MAC_IMPORT(BlockMove);
 #endif
 enum { _BlockMoveData = 0xA22E };
 #if TARGET_CPU_68K
@@ -865,11 +865,11 @@ static __inline__ __attribute__((__always_inline__)) void BlockMoveData(const vo
         : "d1", "d2", "cc", "memory");
 }
 #else
-pascal void BlockMoveData(const void *src, void *dst, Size cnt);
+pascal void BlockMoveData(const void *src, void *dst, Size cnt) MAC_IMPORT(BlockMoveData);
 #endif
 
 enum { _MaxApplZone = 0xA063 };
-MAC_SINCE(0x0070, "0.7") pascal void MaxApplZone(void) M68K_INLINE(0xA063);
+MAC_SINCE(0x0070, "0.7") pascal void MaxApplZone(void) MAC_IMPORT(MaxApplZone) M68K_INLINE(0xA063);
 
 enum { _MoveHHi = 0xA064 };
 #if TARGET_CPU_68K
@@ -881,7 +881,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void MoveHHi(Handle h);
+MAC_SINCE(0x0070, "0.7") pascal void MoveHHi(Handle h) MAC_IMPORT(MoveHHi);
 #endif
 
 enum { _SetApplLimit = 0xA02D };
@@ -894,7 +894,7 @@ static __inline__ __attribute__((__always_inline__)) void SetApplLimit(Ptr newli
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-pascal void SetApplLimit(Ptr newlimit);
+pascal void SetApplLimit(Ptr newlimit) MAC_IMPORT(SetApplLimit);
 #endif
 
 enum { _SetGrowZone = 0xA04B };
@@ -907,7 +907,7 @@ static __inline__ __attribute__((__always_inline__)) void SetGrowZone(GrowZoneUP
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-pascal void SetGrowZone(GrowZoneUPP newgz);
+pascal void SetGrowZone(GrowZoneUPP newgz) MAC_IMPORT(SetGrowZone);
 #endif
 
 enum { _EmptyHandle = 0xA02B };
@@ -920,19 +920,19 @@ static __inline__ __attribute__((__always_inline__)) void EmptyHandle(Handle h) 
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-pascal void EmptyHandle(Handle h);
+pascal void EmptyHandle(Handle h) MAC_IMPORT(EmptyHandle);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void HLockHi(Handle h);
 #else
-pascal void HLockHi(Handle h);
+pascal void HLockHi(Handle h) MAC_IMPORT(HLockHi);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ THz SystemZone(void);
 #else
-pascal THz SystemZone(void);
+pascal THz SystemZone(void) MAC_IMPORT(SystemZone);
 #endif
 
 #if TARGET_CPU_68K
@@ -945,7 +945,7 @@ static __inline__ __attribute__((__always_inline__)) THz ApplicationZone(void) {
     return _ret;
 }
 #else
-pascal THz ApplicationZone(void);
+pascal THz ApplicationZone(void) MAC_IMPORT(ApplicationZone);
 #endif
 
 enum { _StackSpace = 0xA065 };
@@ -959,61 +959,61 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) Si
     return _ret;
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal Size StackSpace(void);
+MAC_SINCE(0x0070, "0.7") pascal Size StackSpace(void) MAC_IMPORT(StackSpace);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ Ptr GetApplLimit(void);
 #else
-pascal Ptr GetApplLimit(void);
+pascal Ptr GetApplLimit(void) MAC_IMPORT(GetApplLimit);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ Ptr TopMem(void);
 #else
-pascal Ptr TopMem(void);
+pascal Ptr TopMem(void) MAC_IMPORT(TopMem);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ Handle GZSaveHnd(void);
 #else
-pascal Handle GZSaveHnd(void);
+pascal Handle GZSaveHnd(void) MAC_IMPORT(GZSaveHnd);
 #endif
 
 enum { _OSDispatch = 0xA88F };
 
 // temporary memory functions; see tempmem.c
-MAC_SINCE(0x0700, "7.0") pascal long TempFreeMem(void) M68K_INLINE(0x3F3C, 0x0018, 0xA88F);
+MAC_SINCE(0x0700, "7.0") pascal long TempFreeMem(void) MAC_IMPORT(TempFreeMem) M68K_INLINE(0x3F3C, 0x0018, 0xA88F);
 #if OLDROUTINENAMES
 #define MFFreeMem() TempFreeMem()
 #endif
 
-MAC_SINCE(0x0700, "7.0") pascal Size TempMaxMem(Size *grow) M68K_INLINE(0x3F3C, 0x0015, 0xA88F);
+MAC_SINCE(0x0700, "7.0") pascal Size TempMaxMem(Size *grow) MAC_IMPORT(TempMaxMem) M68K_INLINE(0x3F3C, 0x0015, 0xA88F);
 #if OLDROUTINENAMES
 #define MFMaxMem(grow) TempMaxMem(grow)
 #endif
 
-MAC_SINCE(0x0700, "7.0") pascal Ptr TempTopMem(void) M68K_INLINE(0x3F3C, 0x0016, 0xA88F);
+MAC_SINCE(0x0700, "7.0") pascal Ptr TempTopMem(void) MAC_IMPORT(TempTopMem) M68K_INLINE(0x3F3C, 0x0016, 0xA88F);
 #if OLDROUTINENAMES
 #define MFTopMem() TempTopMem()
 #endif
 
-MAC_SINCE(0x0700, "7.0") pascal Handle TempNewHandle(Size logical_size, OSErr *result_code) M68K_INLINE(0x3F3C, 0x001D, 0xA88F);
+MAC_SINCE(0x0700, "7.0") pascal Handle TempNewHandle(Size logical_size, OSErr *result_code) MAC_IMPORT(TempNewHandle) M68K_INLINE(0x3F3C, 0x001D, 0xA88F);
 #if OLDROUTINENAMES
 #define MFTempNewHandle(logical_size, result_code) TempNewHandle(logical_size, result_code)
 #endif
 
-MAC_SINCE(0x0700, "7.0") pascal void TempHLock(Handle h, OSErr *result_code) M68K_INLINE(0x3F3C, 0x001E, 0xA88F);
+MAC_SINCE(0x0700, "7.0") pascal void TempHLock(Handle h, OSErr *result_code) MAC_IMPORT(TempHLock) M68K_INLINE(0x3F3C, 0x001E, 0xA88F);
 #if OLDROUTINENAMES
 #define MFTempHLock(h, result_code) TempHLock(h, result_code)
 #endif
 
-MAC_SINCE(0x0700, "7.0") pascal void TempHUnlock(Handle h, OSErr *result_code) M68K_INLINE(0x3F3C, 0x001F, 0xA88F);
+MAC_SINCE(0x0700, "7.0") pascal void TempHUnlock(Handle h, OSErr *result_code) MAC_IMPORT(TempHUnlock) M68K_INLINE(0x3F3C, 0x001F, 0xA88F);
 #if OLDROUTINENAMES
 #define MFTempHUnlock(h, result_code) TempHUnlock(h, result_code)
 #endif
 
-MAC_SINCE(0x0700, "7.0") pascal void TempDisposeHandle(Handle h, OSErr *result_code) M68K_INLINE(0x3F3C, 0x0020, 0xA88F);
+MAC_SINCE(0x0700, "7.0") pascal void TempDisposeHandle(Handle h, OSErr *result_code) MAC_IMPORT(TempDisposeHandle) M68K_INLINE(0x3F3C, 0x0020, 0xA88F);
 #if OLDROUTINENAMES
 #define MFTempDisposHandle(h, result_code) TempDisposeHandle(h, result_code)
 #endif
@@ -1031,7 +1031,7 @@ MAC_SINCE(0x0710, "7.1") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0710, "7.1") pascal OSErr HoldMemory(void *address, unsigned long count);
+MAC_SINCE(0x0710, "7.1") pascal OSErr HoldMemory(void *address, unsigned long count) MAC_IMPORT(HoldMemory);
 #endif
 
 #if TARGET_CPU_68K
@@ -1046,7 +1046,7 @@ MAC_SINCE(0x0710, "7.1") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0710, "7.1") pascal OSErr UnholdMemory(void *address, unsigned long count);
+MAC_SINCE(0x0710, "7.1") pascal OSErr UnholdMemory(void *address, unsigned long count) MAC_IMPORT(UnholdMemory);
 #endif
 
 #if TARGET_CPU_68K
@@ -1061,7 +1061,7 @@ MAC_SINCE(0x0710, "7.1") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0710, "7.1") pascal OSErr LockMemory(void *address, unsigned long count);
+MAC_SINCE(0x0710, "7.1") pascal OSErr LockMemory(void *address, unsigned long count) MAC_IMPORT(LockMemory);
 #endif
 
 #if TARGET_CPU_68K
@@ -1076,7 +1076,7 @@ MAC_SINCE(0x0710, "7.1") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0710, "7.1") pascal OSErr LockMemoryContiguous(void *address, unsigned long count);
+MAC_SINCE(0x0710, "7.1") pascal OSErr LockMemoryContiguous(void *address, unsigned long count) MAC_IMPORT(LockMemoryContiguous);
 #endif
 
 #if TARGET_CPU_68K
@@ -1091,7 +1091,7 @@ MAC_SINCE(0x0710, "7.1") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0710, "7.1") pascal OSErr UnlockMemory(void *address, unsigned long count);
+MAC_SINCE(0x0710, "7.1") pascal OSErr UnlockMemory(void *address, unsigned long count) MAC_IMPORT(UnlockMemory);
 #endif
 
 typedef INTEGER PageState;
@@ -1113,14 +1113,14 @@ MAC_SINCE(0x0710, "7.1") static __inline__ __attribute__((__always_inline__)) lo
     return _ret;
 }
 #else
-MAC_SINCE(0x0710, "7.1") pascal long DebuggerGetMax(void);
+MAC_SINCE(0x0710, "7.1") pascal long DebuggerGetMax(void) MAC_IMPORT(DebuggerGetMax);
 #endif
 
-MAC_SINCE(0x0710, "7.1") pascal void DebuggerEnter(void) M68K_INLINE(0x7001, 0xA08D);
+MAC_SINCE(0x0710, "7.1") pascal void DebuggerEnter(void) MAC_IMPORT(DebuggerEnter) M68K_INLINE(0x7001, 0xA08D);
 
-MAC_SINCE(0x0710, "7.1") pascal void DebuggerExit(void) M68K_INLINE(0x7002, 0xA08D);
+MAC_SINCE(0x0710, "7.1") pascal void DebuggerExit(void) MAC_IMPORT(DebuggerExit) M68K_INLINE(0x7002, 0xA08D);
 
-MAC_SINCE(0x0710, "7.1") pascal void DebuggerPoll(void) M68K_INLINE(0x7003, 0xA08D);
+MAC_SINCE(0x0710, "7.1") pascal void DebuggerPoll(void) MAC_IMPORT(DebuggerPoll) M68K_INLINE(0x7003, 0xA08D);
 
 #if TARGET_CPU_68K
 MAC_SINCE(0x0710, "7.1") static __inline__ __attribute__((__always_inline__)) PageState GetPageState(const void *address) {
@@ -1133,7 +1133,7 @@ MAC_SINCE(0x0710, "7.1") static __inline__ __attribute__((__always_inline__)) Pa
     return _ret;
 }
 #else
-MAC_SINCE(0x0710, "7.1") pascal PageState GetPageState(const void *address);
+MAC_SINCE(0x0710, "7.1") pascal PageState GetPageState(const void *address) MAC_IMPORT(GetPageState);
 #endif
 
 #if TARGET_CPU_68K
@@ -1146,7 +1146,7 @@ MAC_SINCE(0x0710, "7.1") static __inline__ __attribute__((__always_inline__)) Bo
     return _ret;
 }
 #else
-MAC_SINCE(0x0710, "7.1") pascal Boolean PageFaultFatal(void);
+MAC_SINCE(0x0710, "7.1") pascal Boolean PageFaultFatal(void) MAC_IMPORT(PageFaultFatal);
 #endif
 
 #if TARGET_CPU_68K
@@ -1161,7 +1161,7 @@ MAC_SINCE(0x0710, "7.1") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0710, "7.1") pascal OSErr DebuggerLockMemory(void *address, unsigned long count);
+MAC_SINCE(0x0710, "7.1") pascal OSErr DebuggerLockMemory(void *address, unsigned long count) MAC_IMPORT(DebuggerLockMemory);
 #endif
 
 #if TARGET_CPU_68K
@@ -1176,32 +1176,32 @@ MAC_SINCE(0x0710, "7.1") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0710, "7.1") pascal OSErr DebuggerUnlockMemory(void *address, unsigned long count);
+MAC_SINCE(0x0710, "7.1") pascal OSErr DebuggerUnlockMemory(void *address, unsigned long count) MAC_IMPORT(DebuggerUnlockMemory);
 #endif
 
 // Memory (PowerPC)
 #if TARGET_CPU_68K
 static __inline__ void BlockZero(void *destPtr, Size byteCount);
 #else
-pascal void BlockZero(void *destPtr, Size byteCount);
+pascal void BlockZero(void *destPtr, Size byteCount) MAC_IMPORT(BlockZero);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void BlockZeroUncached(void *destPtr, Size byteCount);
 #else
-pascal void BlockZeroUncached(void *destPtr, Size byteCount);
+pascal void BlockZeroUncached(void *destPtr, Size byteCount) MAC_IMPORT(BlockZeroUncached);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void BlockMoveUncached(const void *srcPtr, void *destPtr, Size byteCount);
 #else
-pascal void BlockMoveUncached(const void *srcPtr, void *destPtr, Size byteCount);
+pascal void BlockMoveUncached(const void *srcPtr, void *destPtr, Size byteCount) MAC_IMPORT(BlockMoveUncached);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void BlockMoveDataUncached(const void *srcPtr, void *destPtr, Size byteCount);
 #else
-pascal void BlockMoveDataUncached(const void *srcPtr, void *destPtr, Size byteCount);
+pascal void BlockMoveDataUncached(const void *srcPtr, void *destPtr, Size byteCount) MAC_IMPORT(BlockMoveDataUncached);
 #endif
 
 typedef struct MemoryBlock MemoryBlock;
@@ -1233,7 +1233,7 @@ MAC_SINCE(0x0761, "7.6.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0761, "7.6.1") pascal OSErr DisposeZone(THz zone);
+MAC_SINCE(0x0761, "7.6.1") pascal OSErr DisposeZone(THz zone) MAC_IMPORT(DisposeZone);
 #endif
 
 enum { _InlineGetHandleSize = 0xA025 };
@@ -1248,7 +1248,7 @@ static __inline__ __attribute__((__always_inline__)) Size InlineGetHandleSize(Ha
     return _ret;
 }
 #else
-pascal Size InlineGetHandleSize(Handle h);
+pascal Size InlineGetHandleSize(Handle h) MAC_IMPORT(InlineGetHandleSize);
 #endif
 
 // _MemoryDispatch selector 5: A0 is the table and A1 the entry count,
@@ -1256,7 +1256,7 @@ pascal Size InlineGetHandleSize(Handle h);
 #if TARGET_CPU_68K
 MAC_SINCE(0x0710, "7.1") static __inline__ OSErr GetPhysical(LogicalToPhysicalTable *addresses, unsigned long *physicalEntryCount);
 #else
-MAC_SINCE(0x0710, "7.1") pascal OSErr GetPhysical(LogicalToPhysicalTable *addresses, unsigned long *physicalEntryCount);
+MAC_SINCE(0x0710, "7.1") pascal OSErr GetPhysical(LogicalToPhysicalTable *addresses, unsigned long *physicalEntryCount) MAC_IMPORT(GetPhysical);
 #endif
 
 // Virtual memory: control paging of a range (Mac OS 8.5)
@@ -1272,7 +1272,7 @@ MAC_SINCE(0x0710, "7.1") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0710, "7.1") pascal OSErr LockMemoryForOutput(void *address, unsigned long count);
+MAC_SINCE(0x0710, "7.1") pascal OSErr LockMemoryForOutput(void *address, unsigned long count) MAC_IMPORT(LockMemoryForOutput);
 #endif
 
 #if TARGET_CPU_68K
@@ -1287,7 +1287,7 @@ MAC_SINCE(0x0710, "7.1") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0710, "7.1") pascal OSErr MakeMemoryResident(void *address, unsigned long count);
+MAC_SINCE(0x0710, "7.1") pascal OSErr MakeMemoryResident(void *address, unsigned long count) MAC_IMPORT(MakeMemoryResident);
 #endif
 
 #if TARGET_CPU_68K
@@ -1302,7 +1302,7 @@ MAC_SINCE(0x0710, "7.1") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0710, "7.1") pascal OSErr ReleaseMemoryData(void *address, unsigned long count);
+MAC_SINCE(0x0710, "7.1") pascal OSErr ReleaseMemoryData(void *address, unsigned long count) MAC_IMPORT(ReleaseMemoryData);
 #endif
 
 #if TARGET_CPU_68K
@@ -1317,7 +1317,7 @@ MAC_SINCE(0x0710, "7.1") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0710, "7.1") pascal OSErr MakeMemoryNonResident(void *address, unsigned long count);
+MAC_SINCE(0x0710, "7.1") pascal OSErr MakeMemoryNonResident(void *address, unsigned long count) MAC_IMPORT(MakeMemoryNonResident);
 #endif
 
 #if TARGET_CPU_68K
@@ -1332,7 +1332,7 @@ MAC_SINCE(0x0710, "7.1") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0710, "7.1") pascal OSErr FlushMemory(void *address, unsigned long count);
+MAC_SINCE(0x0710, "7.1") pascal OSErr FlushMemory(void *address, unsigned long count) MAC_IMPORT(FlushMemory);
 #endif
 
 enum { _ReallocateHandleSys = 0xA427 };
@@ -1346,7 +1346,7 @@ static __inline__ __attribute__((__always_inline__)) void ReallocateHandleSys(Ha
         : "d1", "d2", "a1", "cc", "memory");
 }
 #else
-pascal void ReallocateHandleSys(Handle h, Size byteCount);
+pascal void ReallocateHandleSys(Handle h, Size byteCount) MAC_IMPORT(ReallocateHandleSys);
 #endif
 
 #if OLDROUTINENAMES

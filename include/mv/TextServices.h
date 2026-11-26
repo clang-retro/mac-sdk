@@ -126,74 +126,74 @@ enum {
 enum { _TSMDispatch = 0xAA54 };
 
 // Text Services Manager
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr NewTSMDocument(INTEGER numOfInterface, InterfaceTypeList supportedInterfaceTypes, TSMDocumentID *idocID, long refcon) M68K_INLINE(0x7000, 0xAA54);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr NewTSMDocument(INTEGER numOfInterface, InterfaceTypeList supportedInterfaceTypes, TSMDocumentID *idocID, long refcon) MAC_IMPORT(NewTSMDocument) M68K_INLINE(0x7000, 0xAA54);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr DeleteTSMDocument(TSMDocumentID idocID) M68K_INLINE(0x7001, 0xAA54);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr DeleteTSMDocument(TSMDocumentID idocID) MAC_IMPORT(DeleteTSMDocument) M68K_INLINE(0x7001, 0xAA54);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr ActivateTSMDocument(TSMDocumentID idocID) M68K_INLINE(0x7002, 0xAA54);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr ActivateTSMDocument(TSMDocumentID idocID) MAC_IMPORT(ActivateTSMDocument) M68K_INLINE(0x7002, 0xAA54);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr DeactivateTSMDocument(TSMDocumentID idocID) M68K_INLINE(0x7003, 0xAA54);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr DeactivateTSMDocument(TSMDocumentID idocID) MAC_IMPORT(DeactivateTSMDocument) M68K_INLINE(0x7003, 0xAA54);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr FixTSMDocument(TSMDocumentID idocID) M68K_INLINE(0x7007, 0xAA54);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr FixTSMDocument(TSMDocumentID idocID) MAC_IMPORT(FixTSMDocument) M68K_INLINE(0x7007, 0xAA54);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr GetServiceList(INTEGER numOfInterface, OSType *supportedInterfaceTypes, TextServiceListHandle *serviceInfo, long *seedValue) M68K_INLINE(0x7008, 0xAA54);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr GetServiceList(INTEGER numOfInterface, OSType *supportedInterfaceTypes, TextServiceListHandle *serviceInfo, long *seedValue) MAC_IMPORT(GetServiceList) M68K_INLINE(0x7008, 0xAA54);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr OpenTextService(TSMDocumentID idocID, Component aComponent, ComponentInstance *aComponentInstance) M68K_INLINE(0x7009, 0xAA54);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr OpenTextService(TSMDocumentID idocID, Component aComponent, ComponentInstance *aComponentInstance) MAC_IMPORT(OpenTextService) M68K_INLINE(0x7009, 0xAA54);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr CloseTextService(TSMDocumentID idocID, ComponentInstance aComponentInstance) M68K_INLINE(0x700A, 0xAA54);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr CloseTextService(TSMDocumentID idocID, ComponentInstance aComponentInstance) MAC_IMPORT(CloseTextService) M68K_INLINE(0x700A, 0xAA54);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr SendAEFromTSMComponent(const AppleEvent *theAppleEvent, AppleEvent *reply, AESendMode sendMode, AESendPriority sendPriority, long timeOutInTicks, AEIdleUPP idleProc, AEFilterUPP filterProc) M68K_INLINE(0x700B, 0xAA54);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr SendAEFromTSMComponent(const AppleEvent *theAppleEvent, AppleEvent *reply, AESendMode sendMode, AESendPriority sendPriority, long timeOutInTicks, AEIdleUPP idleProc, AEFilterUPP filterProc) MAC_IMPORT(SendAEFromTSMComponent) M68K_INLINE(0x700B, 0xAA54);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr SetDefaultInputMethod(Component ts, ScriptLanguageRecord *slRecordPtr) M68K_INLINE(0x700C, 0xAA54);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr SetDefaultInputMethod(Component ts, ScriptLanguageRecord *slRecordPtr) MAC_IMPORT(SetDefaultInputMethod) M68K_INLINE(0x700C, 0xAA54);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr GetDefaultInputMethod(Component *ts, ScriptLanguageRecord *slRecordPtr) M68K_INLINE(0x700D, 0xAA54);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr GetDefaultInputMethod(Component *ts, ScriptLanguageRecord *slRecordPtr) MAC_IMPORT(GetDefaultInputMethod) M68K_INLINE(0x700D, 0xAA54);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr SetTextServiceLanguage(ScriptLanguageRecord *slRecordPtr) M68K_INLINE(0x700E, 0xAA54);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr SetTextServiceLanguage(ScriptLanguageRecord *slRecordPtr) MAC_IMPORT(SetTextServiceLanguage) M68K_INLINE(0x700E, 0xAA54);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr GetTextServiceLanguage(ScriptLanguageRecord *slRecordPtr) M68K_INLINE(0x700F, 0xAA54);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr GetTextServiceLanguage(ScriptLanguageRecord *slRecordPtr) MAC_IMPORT(GetTextServiceLanguage) M68K_INLINE(0x700F, 0xAA54);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr UseInputWindow(TSMDocumentID idocID, Boolean useWindow) M68K_INLINE(0x7010, 0xAA54);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr UseInputWindow(TSMDocumentID idocID, Boolean useWindow) MAC_IMPORT(UseInputWindow) M68K_INLINE(0x7010, 0xAA54);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr NewServiceWindow(void *wStorage, const Rect *boundsRect, ConstStr255Param title, Boolean visible, INTEGER theProc, WindowPtr behind, Boolean goAwayFlag, ComponentInstance ts, WindowPtr *window) M68K_INLINE(0x7011, 0xAA54);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr NewServiceWindow(void *wStorage, const Rect *boundsRect, ConstStr255Param title, Boolean visible, INTEGER theProc, WindowPtr behind, Boolean goAwayFlag, ComponentInstance ts, WindowPtr *window) MAC_IMPORT(NewServiceWindow) M68K_INLINE(0x7011, 0xAA54);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr CloseServiceWindow(WindowPtr window) M68K_INLINE(0x7012, 0xAA54);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr CloseServiceWindow(WindowPtr window) MAC_IMPORT(CloseServiceWindow) M68K_INLINE(0x7012, 0xAA54);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr GetFrontServiceWindow(WindowPtr *window) M68K_INLINE(0x7013, 0xAA54);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr GetFrontServiceWindow(WindowPtr *window) MAC_IMPORT(GetFrontServiceWindow) M68K_INLINE(0x7013, 0xAA54);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal INTEGER FindServiceWindow(Point thePoint, WindowPtr *theWindow) M68K_INLINE(0x7017, 0xAA54);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal INTEGER FindServiceWindow(Point thePoint, WindowPtr *theWindow) MAC_IMPORT(FindServiceWindow) M68K_INLINE(0x7017, 0xAA54);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr InitTSMAwareApplication(void) M68K_INLINE(0x7014, 0xAA54);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr InitTSMAwareApplication(void) MAC_IMPORT(InitTSMAwareApplication) M68K_INLINE(0x7014, 0xAA54);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr CloseTSMAwareApplication(void) M68K_INLINE(0x7015, 0xAA54);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal OSErr CloseTSMAwareApplication(void) MAC_IMPORT(CloseTSMAwareApplication) M68K_INLINE(0x7015, 0xAA54);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal Boolean TSMEvent(EventRecord *event) M68K_INLINE(0x7004, 0xAA54);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal Boolean TSMEvent(EventRecord *event) MAC_IMPORT(TSMEvent) M68K_INLINE(0x7004, 0xAA54);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal Boolean TSMMenuSelect(long menuResult) M68K_INLINE(0x7005, 0xAA54);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal Boolean TSMMenuSelect(long menuResult) MAC_IMPORT(TSMMenuSelect) M68K_INLINE(0x7005, 0xAA54);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal Boolean SetTSMCursor(Point mousePos) M68K_INLINE(0x7006, 0xAA54);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal Boolean SetTSMCursor(Point mousePos) MAC_IMPORT(SetTSMCursor) M68K_INLINE(0x7006, 0xAA54);
 
 // Calls into a text service component (for input method writers)
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal ComponentResult InitiateTextService(ComponentInstance ts) M68K_INLINE(0x2F3C, 0x0000, 0x0002, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal ComponentResult InitiateTextService(ComponentInstance ts) MAC_IMPORT(InitiateTextService) M68K_INLINE(0x2F3C, 0x0000, 0x0002, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal ComponentResult TerminateTextService(ComponentInstance ts) M68K_INLINE(0x2F3C, 0x0000, 0x0003, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal ComponentResult TerminateTextService(ComponentInstance ts) MAC_IMPORT(TerminateTextService) M68K_INLINE(0x2F3C, 0x0000, 0x0003, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal ComponentResult ActivateTextService(ComponentInstance ts) M68K_INLINE(0x2F3C, 0x0000, 0x0004, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal ComponentResult ActivateTextService(ComponentInstance ts) MAC_IMPORT(ActivateTextService) M68K_INLINE(0x2F3C, 0x0000, 0x0004, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal ComponentResult DeactivateTextService(ComponentInstance ts) M68K_INLINE(0x2F3C, 0x0000, 0x0005, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal ComponentResult DeactivateTextService(ComponentInstance ts) MAC_IMPORT(DeactivateTextService) M68K_INLINE(0x2F3C, 0x0000, 0x0005, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal ComponentResult TextServiceEvent(ComponentInstance ts, INTEGER numOfEvents, EventRecord *event) M68K_INLINE(0x2F3C, 0x0006, 0x0006, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal ComponentResult TextServiceEvent(ComponentInstance ts, INTEGER numOfEvents, EventRecord *event) MAC_IMPORT(TextServiceEvent) M68K_INLINE(0x2F3C, 0x0006, 0x0006, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal ComponentResult GetTextServiceMenu(ComponentInstance ts, MenuHandle *serviceMenu) M68K_INLINE(0x2F3C, 0x0004, 0x0007, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal ComponentResult GetTextServiceMenu(ComponentInstance ts, MenuHandle *serviceMenu) MAC_IMPORT(GetTextServiceMenu) M68K_INLINE(0x2F3C, 0x0004, 0x0007, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal ComponentResult TextServiceMenuSelect(ComponentInstance ts, MenuHandle serviceMenu, INTEGER item) M68K_INLINE(0x2F3C, 0x0006, 0x0008, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal ComponentResult TextServiceMenuSelect(ComponentInstance ts, MenuHandle serviceMenu, INTEGER item) MAC_IMPORT(TextServiceMenuSelect) M68K_INLINE(0x2F3C, 0x0006, 0x0008, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal ComponentResult FixTextService(ComponentInstance ts) M68K_INLINE(0x2F3C, 0x0000, 0x0009, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal ComponentResult FixTextService(ComponentInstance ts) MAC_IMPORT(FixTextService) M68K_INLINE(0x2F3C, 0x0000, 0x0009, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal ComponentResult SetTextServiceCursor(ComponentInstance ts, Point mousePos) M68K_INLINE(0x2F3C, 0x0004, 0x000A, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal ComponentResult SetTextServiceCursor(ComponentInstance ts, Point mousePos) MAC_IMPORT(SetTextServiceCursor) M68K_INLINE(0x2F3C, 0x0004, 0x000A, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal ComponentResult HidePaletteWindows(ComponentInstance ts) M68K_INLINE(0x2F3C, 0x0000, 0x000B, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'tsmv'") MAC_COLOR_QD pascal ComponentResult HidePaletteWindows(ComponentInstance ts) MAC_IMPORT(HidePaletteWindows) M68K_INLINE(0x2F3C, 0x0000, 0x000B, 0x7000, 0xA82A);
 
-pascal OSErr GetScriptLanguageSupport(ScriptLanguageSupportHandle *scriptHdl);
+pascal OSErr GetScriptLanguageSupport(ScriptLanguageSupportHandle *scriptHdl) MAC_IMPORT(GetScriptLanguageSupport);
 
 #ifdef __cplusplus
 }

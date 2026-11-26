@@ -250,7 +250,43 @@ GLUE = [0x81820000, 0x90410014, 0x800C0000, 0x804C0004, 0x7C0903A6,
         0x4E800420]
 
 
-def collect_garbage(objs, globals_, roots, gc):
+IMPORT_PREFIX = "__imp_"
+
+
+def import_name(name):
+    """Give the library name of a Toolbox reference, or None.
+
+    On PowerPC the Mac OS headers give each Toolbox function the
+    assembler name __imp_X (.__imp_X for its code). Thus a program
+    function with the same C name (a Win32 ShowWindow, for example)
+    does not replace the Toolbox function X.
+    """
+    bare = name[1:] if name.startswith(".") else name
+    if bare.startswith(IMPORT_PREFIX):
+        return bare[len(IMPORT_PREFIX):]
+    return None
+
+
+def make_import_target(globals_, imports):
+    """Give a function that maps a Toolbox reference to a program global.
+
+    A reference to __imp_X goes to a program definition of __imp_X if
+    there is one. Else it goes to the import X if a library exports X.
+    Else it goes to a program definition of X (a function that the SDK
+    supplies in place of the import). The function gives that global
+    name, or None when the reference goes to an import or to nothing.
+    """
+    def import_target(name):
+        """Give the global name that name resolves to, or None."""
+        lib = import_name(name)
+        if lib is None or name in globals_ or lib in imports.where:
+            return None
+        alt = ("." if name.startswith(".") else "") + lib
+        return alt if alt in globals_ else None
+    return import_target
+
+
+def collect_garbage(objs, globals_, roots, gc, import_target):
     """Mark the csects the program reaches; with gc, drop the others.
 
     Each object's csects are kept in its csect list only when live.
@@ -280,6 +316,8 @@ def collect_garbage(objs, globals_, roots, gc):
                 mark(s.csect)
             elif s.name in globals_:
                 mark(globals_[s.name][0])
+            elif import_target(s.name) in globals_:
+                mark(globals_[import_target(s.name)][0])
             elif s.csect is not None:
                 mark(s.csect)
     for o in objs:
@@ -327,7 +365,8 @@ def link(objs, imports, entry="main", gc=True):
     roots = [cs for cs, _ in inits + finis]
     if entry in globals_:
         roots.append(globals_[entry][0])
-    collect_garbage(objs, globals_, roots, gc)
+    import_target = make_import_target(globals_, imports)
+    collect_garbage(objs, globals_, roots, gc, import_target)
     tables = Csect(None, None, "__array_tables", 0,
                    4 * (len(inits) + len(finis)), XTY_SD, XMC_RW, 2, None)
     ni, nf = 4 * len(inits), 4 * (len(inits) + len(finis))
@@ -378,13 +417,14 @@ def link(objs, imports, entry="main", gc=True):
         if s.csect is not None and (s.sclass == C_HIDEXT or
                                     s.name not in globals_):
             return ("csect", s.csect, s.value - s.csect.addr)
-        name = s.name
+        name = import_target(s.name) or s.name
         if name in globals_:
             cs, off, _ = globals_[name]
             return ("csect", cs, off)
         if name.startswith(".") and name[1:] in globals_:
             raise LinkError(f"{o.path}: {name} has no code entry point")
         bare = name[1:] if name.startswith(".") else name
+        bare = import_name(bare) or bare
         idx = imports.get(bare)
         if idx is None:
             if s.sclass == C_WEAKEXT:

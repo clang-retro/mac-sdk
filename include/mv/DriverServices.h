@@ -55,7 +55,7 @@ enum {
 
 // Callable at any level.  Many Driver Services calls, the memory pool
 // and PrepareMemoryForIO among them, are legal only at kTaskLevel.
-pascal ExecutionLevel CurrentExecutionLevel(void);
+pascal ExecutionLevel CurrentExecutionLevel(void) MAC_IMPORT(CurrentExecutionLevel);
 
 // Positive values are milliseconds, negative values are negated
 // microseconds, as with the Time Manager.  The two forms are
@@ -92,26 +92,26 @@ struct Nanoseconds {
 #pragma options align=reset
 
 // Time since startup.  Callable at any level.
-pascal AbsoluteTime UpTime(void);
+pascal AbsoluteTime UpTime(void) MAC_IMPORT(UpTime);
 
 // Returns left minus right, and zero if that is negative, so the later
 // time goes on the left: AbsoluteDeltaToDuration(UpTime(), start).
 // This is the reverse of what the book's note on the routine suggests;
 // the order given here is the one observed under Mac OS 9.2.2.
-pascal Duration AbsoluteDeltaToDuration(AbsoluteTime leftAbsoluteTime, AbsoluteTime rightAbsoluteTime);
+pascal Duration AbsoluteDeltaToDuration(AbsoluteTime leftAbsoluteTime, AbsoluteTime rightAbsoluteTime) MAC_IMPORT(AbsoluteDeltaToDuration);
 
-pascal AbsoluteTime DurationToAbsolute(Duration duration);
+pascal AbsoluteTime DurationToAbsolute(Duration duration) MAC_IMPORT(DurationToAbsolute);
 
-pascal AbsoluteTime AddDurationToAbsolute(Duration duration, AbsoluteTime absoluteTime);
+pascal AbsoluteTime AddDurationToAbsolute(Duration duration, AbsoluteTime absoluteTime) MAC_IMPORT(AddDurationToAbsolute);
 
 // Blocks, so task level only.  The delay can run long but not short.
-pascal OSStatus DelayFor(Duration expirationTime);
+pascal OSStatus DelayFor(Duration expirationTime) MAC_IMPORT(DelayFor);
 
 // Busy-waits, which makes it callable at any level.  The argument is
 // the length of the delay, not a deadline: convert with
 // DurationToAbsolute.  Passing UpTime() plus a delay spins for the
 // machine's whole uptime.
-pascal OSStatus DelayForHardware(AbsoluteTime absoluteTime);
+pascal OSStatus DelayForHardware(AbsoluteTime absoluteTime) MAC_IMPORT(DelayForHardware);
 
 typedef KernelID TimerID;
 
@@ -121,15 +121,15 @@ typedef OSStatus (*SecondaryInterruptHandler2)(void *p1, void *p2);
 // absolute time, unlike DelayForHardware's argument) is reached.  The
 // handler gets p1, and the program counter at expiry as p2.  Callable
 // at any level.
-pascal OSStatus SetInterruptTimer(const AbsoluteTime *expirationTime, SecondaryInterruptHandler2 handler, void *p1, TimerID *timer);
+pascal OSStatus SetInterruptTimer(const AbsoluteTime *expirationTime, SecondaryInterruptHandler2 handler, void *p1, TimerID *timer) MAC_IMPORT(SetInterruptTimer);
 
 // Fails if the timer has already fired or been cancelled, which is how
 // a caller learns that the handler has run or is about to.
-pascal OSStatus CancelTimer(TimerID timer, AbsoluteTime *timeRemaining);
+pascal OSStatus CancelTimer(TimerID timer, AbsoluteTime *timeRemaining) MAC_IMPORT(CancelTimer);
 
 // Orders accesses to noncached (memory-mapped I/O) space against the
 // instructions around them.
-pascal void SynchronizeIO(void);
+pascal void SynchronizeIO(void) MAC_IMPORT(SynchronizeIO);
 
 typedef KernelID InterruptSetID;
 
@@ -188,25 +188,25 @@ typedef InterruptSourceState (*InterruptDisabler)(InterruptSetMember ISTmember, 
 // Task level only.  A nil function leaves whatever is installed in
 // place, so a driver can take over the handler while keeping the
 // platform's enabler and disabler.
-pascal OSStatus InstallInterruptFunctions(InterruptSetID setID, InterruptMemberNumber member, void *refCon, InterruptHandler handlerFunction, InterruptEnabler enableFunction, InterruptDisabler disableFunction);
+pascal OSStatus InstallInterruptFunctions(InterruptSetID setID, InterruptMemberNumber member, void *refCon, InterruptHandler handlerFunction, InterruptEnabler enableFunction, InterruptDisabler disableFunction) MAC_IMPORT(InstallInterruptFunctions);
 
 // Installing replaces the member's handler, and PCI interrupt lines are
 // shared; reading the old one first lets a driver pass on interrupts
 // that are not its own.
-pascal OSStatus GetInterruptFunctions(InterruptSetID setID, InterruptMemberNumber member, void **refCon, InterruptHandler *handlerFunction, InterruptEnabler *enableFunction, InterruptDisabler *disableFunction);
+pascal OSStatus GetInterruptFunctions(InterruptSetID setID, InterruptMemberNumber member, void **refCon, InterruptHandler *handlerFunction, InterruptEnabler *enableFunction, InterruptDisabler *disableFunction) MAC_IMPORT(GetInterruptFunctions);
 
 // Resident (never paged) memory from the system pool.  Task level only.
-pascal LogicalAddress PoolAllocateResident(ByteCount byteSize, Boolean clear);
+pascal LogicalAddress PoolAllocateResident(ByteCount byteSize, Boolean clear) MAC_IMPORT(PoolAllocateResident);
 
-pascal OSStatus PoolDeallocate(LogicalAddress address);
+pascal OSStatus PoolDeallocate(LogicalAddress address) MAC_IMPORT(PoolDeallocate);
 
 // Resident and physically contiguous.  Task level only, and large
 // requests made after startup are unlikely to succeed.
-pascal LogicalAddress MemAllocatePhysicallyContiguous(ByteCount byteSize, Boolean clear);
+pascal LogicalAddress MemAllocatePhysicallyContiguous(ByteCount byteSize, Boolean clear) MAC_IMPORT(MemAllocatePhysicallyContiguous);
 
-pascal OSStatus MemDeallocatePhysicallyContiguous(LogicalAddress address);
+pascal OSStatus MemDeallocatePhysicallyContiguous(LogicalAddress address) MAC_IMPORT(MemDeallocatePhysicallyContiguous);
 
-pascal ByteCount GetLogicalPageSize(void);
+pascal ByteCount GetLogicalPageSize(void) MAC_IMPORT(GetLogicalPageSize);
 
 typedef struct AddressRange AddressRange;
 #pragma options align=power
@@ -275,7 +275,7 @@ union {
 // Locks a buffer down, settles the caches, and returns its physical
 // addresses for a bus-master transfer; CheckpointIO undoes it.  Task
 // level only.
-pascal OSStatus PrepareMemoryForIO(IOPreparationTable *theIOPreparationTable);
+pascal OSStatus PrepareMemoryForIO(IOPreparationTable *theIOPreparationTable) MAC_IMPORT(PrepareMemoryForIO);
 
 typedef OptionBits IOCheckpointOptions;
 
@@ -285,7 +285,7 @@ enum {
     kMoreIOTransfers = 4, /* keep the preparation for another transfer */
 };
 
-pascal OSStatus CheckpointIO(IOPreparationID theIOPreparation, IOCheckpointOptions theOptions);
+pascal OSStatus CheckpointIO(IOPreparationID theIOPreparation, IOCheckpointOptions theOptions) MAC_IMPORT(CheckpointIO);
 
 typedef UInt32 DriverDescVersion;
 

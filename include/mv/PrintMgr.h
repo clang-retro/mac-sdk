@@ -185,55 +185,55 @@ typedef TPrDlg *TPPrDlg;
 
 enum { _PrGlue = 0xA8FD };
 
-MAC_SINCE(0x0200, "2.0") pascal INTEGER PrError(void) M68K_INLINE(0x2F3C, 0xBA00, 0x0000, 0xA8FD);
+MAC_SINCE(0x0200, "2.0") pascal INTEGER PrError(void) MAC_IMPORT(PrError) M68K_INLINE(0x2F3C, 0xBA00, 0x0000, 0xA8FD);
 
-MAC_SINCE(0x0200, "2.0") pascal void PrSetError(INTEGER iErr) M68K_INLINE(0x2F3C, 0xC000, 0x0200, 0xA8FD);
+MAC_SINCE(0x0200, "2.0") pascal void PrSetError(INTEGER iErr) MAC_IMPORT(PrSetError) M68K_INLINE(0x2F3C, 0xC000, 0x0200, 0xA8FD);
 
-MAC_SINCE(0x0200, "2.0") pascal void PrOpen(void) M68K_INLINE(0x2F3C, 0xC800, 0x0000, 0xA8FD);
+MAC_SINCE(0x0200, "2.0") pascal void PrOpen(void) MAC_IMPORT(PrOpen) M68K_INLINE(0x2F3C, 0xC800, 0x0000, 0xA8FD);
 
-MAC_SINCE(0x0200, "2.0") pascal void PrClose(void) M68K_INLINE(0x2F3C, 0xD000, 0x0000, 0xA8FD);
+MAC_SINCE(0x0200, "2.0") pascal void PrClose(void) MAC_IMPORT(PrClose) M68K_INLINE(0x2F3C, 0xD000, 0x0000, 0xA8FD);
 
-MAC_SINCE(0x0200, "2.0") pascal void PrDrvrOpen(void) M68K_INLINE(0x2F3C, 0x8000, 0x0000, 0xA8FD);
+MAC_SINCE(0x0200, "2.0") pascal void PrDrvrOpen(void) MAC_IMPORT(PrDrvrOpen) M68K_INLINE(0x2F3C, 0x8000, 0x0000, 0xA8FD);
 
-MAC_SINCE(0x0200, "2.0") pascal void PrDrvrClose(void) M68K_INLINE(0x2F3C, 0x8800, 0x0000, 0xA8FD);
+MAC_SINCE(0x0200, "2.0") pascal void PrDrvrClose(void) MAC_IMPORT(PrDrvrClose) M68K_INLINE(0x2F3C, 0x8800, 0x0000, 0xA8FD);
 
-MAC_SINCE(0x0200, "2.0") pascal void PrCtlCall(INTEGER iWhichCtl, LONGINT lParam1, LONGINT lParam2, LONGINT lParam3) M68K_INLINE(0x2F3C, 0xA000, 0x0E00, 0xA8FD);
+MAC_SINCE(0x0200, "2.0") pascal void PrCtlCall(INTEGER iWhichCtl, LONGINT lParam1, LONGINT lParam2, LONGINT lParam3) MAC_IMPORT(PrCtlCall) M68K_INLINE(0x2F3C, 0xA000, 0x0E00, 0xA8FD);
 
-MAC_SINCE(0x0200, "2.0") pascal Handle PrDrvrDCE(void) M68K_INLINE(0x2F3C, 0x9400, 0x0000, 0xA8FD);
+MAC_SINCE(0x0200, "2.0") pascal Handle PrDrvrDCE(void) MAC_IMPORT(PrDrvrDCE) M68K_INLINE(0x2F3C, 0x9400, 0x0000, 0xA8FD);
 
-MAC_SINCE(0x0200, "2.0") pascal INTEGER PrDrvrVers(void) M68K_INLINE(0x2F3C, 0x9A00, 0x0000, 0xA8FD);
+MAC_SINCE(0x0200, "2.0") pascal INTEGER PrDrvrVers(void) MAC_IMPORT(PrDrvrVers) M68K_INLINE(0x2F3C, 0x9A00, 0x0000, 0xA8FD);
 
-MAC_SINCE(0x0200, "2.0") pascal TPPrDlg PrJobInit(THPrint hPrint) M68K_INLINE(0x2F3C, 0x4404, 0x0410, 0xA8FD);
+MAC_SINCE(0x0200, "2.0") pascal TPPrDlg PrJobInit(THPrint hPrint) MAC_IMPORT(PrJobInit) M68K_INLINE(0x2F3C, 0x4404, 0x0410, 0xA8FD);
 
-MAC_SINCE(0x0200, "2.0") pascal TPPrDlg PrStlInit(THPrint hPrint) M68K_INLINE(0x2F3C, 0x3C04, 0x040C, 0xA8FD);
+MAC_SINCE(0x0200, "2.0") pascal TPPrDlg PrStlInit(THPrint hPrint) MAC_IMPORT(PrStlInit) M68K_INLINE(0x2F3C, 0x3C04, 0x040C, 0xA8FD);
 
-MAC_SINCE(0x0200, "2.0") pascal Boolean PrDlgMain(THPrint hPrint, ProcPtr initfptr) M68K_INLINE(0x2F3C, 0x4A04, 0x0894, 0xA8FD);
+MAC_SINCE(0x0200, "2.0") pascal Boolean PrDlgMain(THPrint hPrint, ProcPtr initfptr) MAC_IMPORT(PrDlgMain) M68K_INLINE(0x2F3C, 0x4A04, 0x0894, 0xA8FD);
 
-MAC_SINCE(0x0200, "2.0") pascal void PrGeneral(Ptr pData) M68K_INLINE(0x2F3C, 0x7007, 0x0480, 0xA8FD);
+MAC_SINCE(0x0200, "2.0") pascal void PrGeneral(Ptr pData) MAC_IMPORT(PrGeneral) M68K_INLINE(0x2F3C, 0x7007, 0x0480, 0xA8FD);
 
-MAC_SINCE(0x0200, "2.0") pascal TPPrPort PrOpenDoc(THPrint hPrint, TPPrPort port, Ptr pIOBuf) M68K_INLINE(0x2F3C, 0x0400, 0x0C00, 0xA8FD);
+MAC_SINCE(0x0200, "2.0") pascal TPPrPort PrOpenDoc(THPrint hPrint, TPPrPort port, Ptr pIOBuf) MAC_IMPORT(PrOpenDoc) M68K_INLINE(0x2F3C, 0x0400, 0x0C00, 0xA8FD);
 
-MAC_SINCE(0x0200, "2.0") pascal void PrOpenPage(TPPrPort port, TPRect pPageFrame) M68K_INLINE(0x2F3C, 0x1000, 0x0808, 0xA8FD);
+MAC_SINCE(0x0200, "2.0") pascal void PrOpenPage(TPPrPort port, TPRect pPageFrame) MAC_IMPORT(PrOpenPage) M68K_INLINE(0x2F3C, 0x1000, 0x0808, 0xA8FD);
 
-MAC_SINCE(0x0200, "2.0") pascal void PrClosePage(TPPrPort pPrPort) M68K_INLINE(0x2F3C, 0x1800, 0x040C, 0xA8FD);
+MAC_SINCE(0x0200, "2.0") pascal void PrClosePage(TPPrPort pPrPort) MAC_IMPORT(PrClosePage) M68K_INLINE(0x2F3C, 0x1800, 0x040C, 0xA8FD);
 
-MAC_SINCE(0x0200, "2.0") pascal void PrCloseDoc(TPPrPort port) M68K_INLINE(0x2F3C, 0x0800, 0x0484, 0xA8FD);
+MAC_SINCE(0x0200, "2.0") pascal void PrCloseDoc(TPPrPort port) MAC_IMPORT(PrCloseDoc) M68K_INLINE(0x2F3C, 0x0800, 0x0484, 0xA8FD);
 
-MAC_SINCE(0x0200, "2.0") pascal void PrPicFile(THPrint hPrint, TPPrPort pPrPort, Ptr pIOBuf, Ptr pDevBuf, TPrStatus *prStatus) M68K_INLINE(0x2F3C, 0x6005, 0x1480, 0xA8FD);
+MAC_SINCE(0x0200, "2.0") pascal void PrPicFile(THPrint hPrint, TPPrPort pPrPort, Ptr pIOBuf, Ptr pDevBuf, TPrStatus *prStatus) MAC_IMPORT(PrPicFile) M68K_INLINE(0x2F3C, 0x6005, 0x1480, 0xA8FD);
 
-MAC_SINCE(0x0200, "2.0") pascal void PrintDefault(THPrint hPrint) M68K_INLINE(0x2F3C, 0x2004, 0x0480, 0xA8FD);
+MAC_SINCE(0x0200, "2.0") pascal void PrintDefault(THPrint hPrint) MAC_IMPORT(PrintDefault) M68K_INLINE(0x2F3C, 0x2004, 0x0480, 0xA8FD);
 
-MAC_SINCE(0x0200, "2.0") pascal Boolean PrValidate(THPrint hPrint) M68K_INLINE(0x2F3C, 0x5204, 0x0498, 0xA8FD);
+MAC_SINCE(0x0200, "2.0") pascal Boolean PrValidate(THPrint hPrint) MAC_IMPORT(PrValidate) M68K_INLINE(0x2F3C, 0x5204, 0x0498, 0xA8FD);
 
-MAC_SINCE(0x0200, "2.0") pascal Boolean PrStlDialog(THPrint hPrint) M68K_INLINE(0x2F3C, 0x2A04, 0x0484, 0xA8FD);
+MAC_SINCE(0x0200, "2.0") pascal Boolean PrStlDialog(THPrint hPrint) MAC_IMPORT(PrStlDialog) M68K_INLINE(0x2F3C, 0x2A04, 0x0484, 0xA8FD);
 
-MAC_SINCE(0x0200, "2.0") pascal Boolean PrJobDialog(THPrint hPrint) M68K_INLINE(0x2F3C, 0x3204, 0x0488, 0xA8FD);
+MAC_SINCE(0x0200, "2.0") pascal Boolean PrJobDialog(THPrint hPrint) MAC_IMPORT(PrJobDialog) M68K_INLINE(0x2F3C, 0x3204, 0x0488, 0xA8FD);
 
-MAC_SINCE(0x0200, "2.0") pascal void PrJobMerge(THPrint hPrintSrc, THPrint hPrintDst) M68K_INLINE(0x2F3C, 0x5804, 0x089C, 0xA8FD);
+MAC_SINCE(0x0200, "2.0") pascal void PrJobMerge(THPrint hPrintSrc, THPrint hPrintDst) MAC_IMPORT(PrJobMerge) M68K_INLINE(0x2F3C, 0x5804, 0x089C, 0xA8FD);
 
-MAC_SINCE(0x0200, "2.0") pascal void PrPurge(void) M68K_INLINE(0x2F3C, 0xA800, 0x0000, 0xA8FD);
+MAC_SINCE(0x0200, "2.0") pascal void PrPurge(void) MAC_IMPORT(PrPurge) M68K_INLINE(0x2F3C, 0xA800, 0x0000, 0xA8FD);
 
-MAC_SINCE(0x0200, "2.0") pascal void PrNoPurge(void) M68K_INLINE(0x2F3C, 0xB000, 0x0000, 0xA8FD);
+MAC_SINCE(0x0200, "2.0") pascal void PrNoPurge(void) MAC_IMPORT(PrNoPurge) M68K_INLINE(0x2F3C, 0xB000, 0x0000, 0xA8FD);
 
 #ifdef __cplusplus
 }

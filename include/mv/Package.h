@@ -30,10 +30,10 @@ enum {
 #define LMSetAppPacks(val) BlockMoveData((const void *)(val), (void *)0x00000AB8, sizeof(Handle[8]))
 
 enum { _InitPack = 0xA9E5 };
-pascal void InitPack(INTEGER packid) M68K_INLINE(0xA9E5);
+pascal void InitPack(INTEGER packid) MAC_IMPORT(InitPack) M68K_INLINE(0xA9E5);
 
 enum { _InitAllPacks = 0xA9E6 };
-pascal void InitAllPacks(void) M68K_INLINE(0xA9E6);
+pascal void InitAllPacks(void) MAC_IMPORT(InitAllPacks) M68K_INLINE(0xA9E6);
 
 #ifdef __cplusplus
 }

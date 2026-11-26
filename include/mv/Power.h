@@ -62,15 +62,15 @@ enum {
 };
 
 // Power Manager
-MAC_SINCE(0x0921, "9.2.1") pascal void AOn(void) M68K_INLINE(0x7004, 0xA685);
+MAC_SINCE(0x0921, "9.2.1") pascal void AOn(void) MAC_IMPORT(AOn) M68K_INLINE(0x7004, 0xA685);
 
-MAC_SINCE(0x0921, "9.2.1") pascal void AOnIgnoreModem(void) M68K_INLINE(0x7005, 0xA685);
+MAC_SINCE(0x0921, "9.2.1") pascal void AOnIgnoreModem(void) MAC_IMPORT(AOnIgnoreModem) M68K_INLINE(0x7005, 0xA685);
 
-MAC_SINCE(0x0921, "9.2.1") pascal void BOn(void) M68K_INLINE(0x7000, 0xA685);
+MAC_SINCE(0x0921, "9.2.1") pascal void BOn(void) MAC_IMPORT(BOn) M68K_INLINE(0x7000, 0xA685);
 
-MAC_SINCE(0x0921, "9.2.1") pascal void AOff(void) M68K_INLINE(0x7084, 0xA685);
+MAC_SINCE(0x0921, "9.2.1") pascal void AOff(void) MAC_IMPORT(AOff) M68K_INLINE(0x7084, 0xA685);
 
-MAC_SINCE(0x0921, "9.2.1") pascal void BOff(void) M68K_INLINE(0x7080, 0xA685);
+MAC_SINCE(0x0921, "9.2.1") pascal void BOff(void) MAC_IMPORT(BOff) M68K_INLINE(0x7080, 0xA685);
 
 #if TARGET_CPU_68K
 MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) long GetCPUSpeed(void) {
@@ -82,7 +82,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal long GetCPUSpeed(void);
+MAC_SINCE(0x0921, "9.2.1") pascal long GetCPUSpeed(void) MAC_IMPORT(GetCPUSpeed);
 #endif
 
 enum { _IdleUpdate = 0xA285 };
@@ -96,12 +96,12 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal long IdleUpdate(void);
+MAC_SINCE(0x0921, "9.2.1") pascal long IdleUpdate(void) MAC_IMPORT(IdleUpdate);
 #endif
 
-MAC_SINCE(0x0921, "9.2.1") pascal void EnableIdle(void) M68K_INLINE(0x7000, 0xA485);
+MAC_SINCE(0x0921, "9.2.1") pascal void EnableIdle(void) MAC_IMPORT(EnableIdle) M68K_INLINE(0x7000, 0xA485);
 
-MAC_SINCE(0x0921, "9.2.1") pascal void DisableIdle(void) M68K_INLINE(0x7001, 0xA485);
+MAC_SINCE(0x0921, "9.2.1") pascal void DisableIdle(void) MAC_IMPORT(DisableIdle) M68K_INLINE(0x7001, 0xA485);
 
 enum { _SleepQInstall = 0xA28A };
 #if TARGET_CPU_68K
@@ -113,7 +113,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal void SleepQInstall(SleepQRecPtr qRecPtr);
+MAC_SINCE(0x0921, "9.2.1") pascal void SleepQInstall(SleepQRecPtr qRecPtr) MAC_IMPORT(SleepQInstall);
 #endif
 
 enum { _SleepQRemove = 0xA48A };
@@ -126,7 +126,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal void SleepQRemove(SleepQRecPtr qRecPtr);
+MAC_SINCE(0x0921, "9.2.1") pascal void SleepQRemove(SleepQRecPtr qRecPtr) MAC_IMPORT(SleepQRemove);
 #endif
 
 #if TARGET_CPU_68K
@@ -138,7 +138,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
         : "d1", "d2", "a0", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetTimeout(INTEGER count);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetTimeout(INTEGER count) MAC_IMPORT(SetTimeout);
 #endif
 
 #if TARGET_CPU_68K
@@ -151,38 +151,38 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     if (count) *count = _count;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void GetTimeout(INTEGER *count);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void GetTimeout(INTEGER *count) MAC_IMPORT(GetTimeout);
 #endif
 
 // Power Manager extras (PowerPC)
 #if TARGET_CPU_68K
 static __inline__ OSErr BatteryStatus(Byte *status, Byte *power);
 #else
-pascal OSErr BatteryStatus(Byte *status, Byte *power);
+pascal OSErr BatteryStatus(Byte *status, Byte *power) MAC_IMPORT(BatteryStatus);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr ModemStatus(Byte *status);
 #else
-pascal OSErr ModemStatus(Byte *status);
+pascal OSErr ModemStatus(Byte *status) MAC_IMPORT(ModemStatus);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr GetWUTime(long *wTime, Byte *wFlag);
 #else
-pascal OSErr GetWUTime(long *wTime, Byte *wFlag);
+pascal OSErr GetWUTime(long *wTime, Byte *wFlag) MAC_IMPORT(GetWUTime);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr SetWUTime(long wTime);
 #else
-pascal OSErr SetWUTime(long wTime);
+pascal OSErr SetWUTime(long wTime) MAC_IMPORT(SetWUTime);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr DisableWUTime(void);
 #else
-pascal OSErr DisableWUTime(void);
+pascal OSErr DisableWUTime(void) MAC_IMPORT(DisableWUTime);
 #endif
 
 // Power Manager 2 (PowerBooks, System 7.5 and later).
@@ -315,7 +315,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal INTEGER PMSelectorCount(void);
+MAC_SINCE(0x0921, "9.2.1") pascal INTEGER PMSelectorCount(void) MAC_IMPORT(PMSelectorCount);
 #endif
 
 #if TARGET_CPU_68K
@@ -328,7 +328,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal UInt32 PMFeatures(void);
+MAC_SINCE(0x0921, "9.2.1") pascal UInt32 PMFeatures(void) MAC_IMPORT(PMFeatures);
 #endif
 
 #if TARGET_CPU_68K
@@ -341,7 +341,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal UInt8 GetSleepTimeout(void);
+MAC_SINCE(0x0921, "9.2.1") pascal UInt8 GetSleepTimeout(void) MAC_IMPORT(GetSleepTimeout);
 #endif
 
 #if TARGET_CPU_68K
@@ -354,7 +354,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal UInt8 GetHardDiskTimeout(void);
+MAC_SINCE(0x0921, "9.2.1") pascal UInt8 GetHardDiskTimeout(void) MAC_IMPORT(GetHardDiskTimeout);
 #endif
 
 #if TARGET_CPU_68K
@@ -367,10 +367,10 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal Boolean HardDiskPowered(void);
+MAC_SINCE(0x0921, "9.2.1") pascal Boolean HardDiskPowered(void) MAC_IMPORT(HardDiskPowered);
 #endif
 
-MAC_SINCE(0x0921, "9.2.1") pascal void SpinDownHardDisk(void) M68K_INLINE(0x7007, 0xA09E);
+MAC_SINCE(0x0921, "9.2.1") pascal void SpinDownHardDisk(void) MAC_IMPORT(SpinDownHardDisk) M68K_INLINE(0x7007, 0xA09E);
 
 #if TARGET_CPU_68K
 MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) Boolean IsSpindownDisabled(void) {
@@ -382,7 +382,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal Boolean IsSpindownDisabled(void);
+MAC_SINCE(0x0921, "9.2.1") pascal Boolean IsSpindownDisabled(void) MAC_IMPORT(IsSpindownDisabled);
 #endif
 
 #if TARGET_CPU_68K
@@ -396,7 +396,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal OSErr HardDiskQInstall(HDQueueElement *theElement);
+MAC_SINCE(0x0921, "9.2.1") pascal OSErr HardDiskQInstall(HDQueueElement *theElement) MAC_IMPORT(HardDiskQInstall);
 #endif
 
 #if TARGET_CPU_68K
@@ -410,7 +410,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal OSErr HardDiskQRemove(HDQueueElement *theElement);
+MAC_SINCE(0x0921, "9.2.1") pascal OSErr HardDiskQRemove(HDQueueElement *theElement) MAC_IMPORT(HardDiskQRemove);
 #endif
 
 #if TARGET_CPU_68K
@@ -423,7 +423,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal UInt32 GetIntModemInfo(void);
+MAC_SINCE(0x0921, "9.2.1") pascal UInt32 GetIntModemInfo(void) MAC_IMPORT(GetIntModemInfo);
 #endif
 
 #if TARGET_CPU_68K
@@ -436,7 +436,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal INTEGER MaximumProcessorSpeed(void);
+MAC_SINCE(0x0921, "9.2.1") pascal INTEGER MaximumProcessorSpeed(void) MAC_IMPORT(MaximumProcessorSpeed);
 #endif
 
 #if TARGET_CPU_68K
@@ -449,7 +449,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal INTEGER CurrentProcessorSpeed(void);
+MAC_SINCE(0x0921, "9.2.1") pascal INTEGER CurrentProcessorSpeed(void) MAC_IMPORT(CurrentProcessorSpeed);
 #endif
 
 #if TARGET_CPU_68K
@@ -462,7 +462,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal Boolean FullProcessorSpeed(void);
+MAC_SINCE(0x0921, "9.2.1") pascal Boolean FullProcessorSpeed(void) MAC_IMPORT(FullProcessorSpeed);
 #endif
 
 #if TARGET_CPU_68K
@@ -475,7 +475,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal INTEGER GetSCSIDiskModeAddress(void);
+MAC_SINCE(0x0921, "9.2.1") pascal INTEGER GetSCSIDiskModeAddress(void) MAC_IMPORT(GetSCSIDiskModeAddress);
 #endif
 
 #if TARGET_CPU_68K
@@ -487,7 +487,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal void GetWakeupTimer(WakeupTime *theTime);
+MAC_SINCE(0x0921, "9.2.1") pascal void GetWakeupTimer(WakeupTime *theTime) MAC_IMPORT(GetWakeupTimer);
 #endif
 
 #if TARGET_CPU_68K
@@ -499,7 +499,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal void SetWakeupTimer(WakeupTime *theTime);
+MAC_SINCE(0x0921, "9.2.1") pascal void SetWakeupTimer(WakeupTime *theTime) MAC_IMPORT(SetWakeupTimer);
 #endif
 
 #if TARGET_CPU_68K
@@ -512,7 +512,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal Boolean IsProcessorCyclingEnabled(void);
+MAC_SINCE(0x0921, "9.2.1") pascal Boolean IsProcessorCyclingEnabled(void) MAC_IMPORT(IsProcessorCyclingEnabled);
 #endif
 
 #if TARGET_CPU_68K
@@ -525,7 +525,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal INTEGER BatteryCount(void);
+MAC_SINCE(0x0921, "9.2.1") pascal INTEGER BatteryCount(void) MAC_IMPORT(BatteryCount);
 #endif
 
 #if TARGET_CPU_68K
@@ -538,7 +538,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal UInt8 GetDimmingTimeout(void);
+MAC_SINCE(0x0921, "9.2.1") pascal UInt8 GetDimmingTimeout(void) MAC_IMPORT(GetDimmingTimeout);
 #endif
 
 #if TARGET_CPU_68K
@@ -551,7 +551,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal Boolean IsDimmingControlDisabled(void);
+MAC_SINCE(0x0921, "9.2.1") pascal Boolean IsDimmingControlDisabled(void) MAC_IMPORT(IsDimmingControlDisabled);
 #endif
 
 #if TARGET_CPU_68K
@@ -564,7 +564,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal Boolean IsAutoSlpControlDisabled(void);
+MAC_SINCE(0x0921, "9.2.1") pascal Boolean IsAutoSlpControlDisabled(void) MAC_IMPORT(IsAutoSlpControlDisabled);
 #endif
 
 #if TARGET_CPU_68K
@@ -578,7 +578,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal OSErr PMgrStateQInstall(PMgrQueueElement *theElement);
+MAC_SINCE(0x0921, "9.2.1") pascal OSErr PMgrStateQInstall(PMgrQueueElement *theElement) MAC_IMPORT(PMgrStateQInstall);
 #endif
 
 #if TARGET_CPU_68K
@@ -592,7 +592,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal OSErr PMgrStateQRemove(PMgrQueueElement *theElement);
+MAC_SINCE(0x0921, "9.2.1") pascal OSErr PMgrStateQRemove(PMgrQueueElement *theElement) MAC_IMPORT(PMgrStateQRemove);
 #endif
 
 #if TARGET_CPU_68K
@@ -605,7 +605,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal OSErr DelaySystemIdle(void);
+MAC_SINCE(0x0921, "9.2.1") pascal OSErr DelaySystemIdle(void) MAC_IMPORT(DelaySystemIdle);
 #endif
 
 #if TARGET_CPU_68K
@@ -619,7 +619,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal OSErr GetStartupTimer(StartupTime *theTime);
+MAC_SINCE(0x0921, "9.2.1") pascal OSErr GetStartupTimer(StartupTime *theTime) MAC_IMPORT(GetStartupTimer);
 #endif
 
 #if TARGET_CPU_68K
@@ -633,7 +633,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal OSErr SetStartupTimer(StartupTime *theTime);
+MAC_SINCE(0x0921, "9.2.1") pascal OSErr SetStartupTimer(StartupTime *theTime) MAC_IMPORT(SetStartupTimer);
 #endif
 
 #if TARGET_CPU_68K
@@ -647,7 +647,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal OSErr GetLastActivity(ActivityInfo *theActivity);
+MAC_SINCE(0x0921, "9.2.1") pascal OSErr GetLastActivity(ActivityInfo *theActivity) MAC_IMPORT(GetLastActivity);
 #endif
 
 #if TARGET_CPU_68K
@@ -661,7 +661,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal OSErr GetSoundMixerState(SoundMixerByte *theSoundMixerByte);
+MAC_SINCE(0x0921, "9.2.1") pascal OSErr GetSoundMixerState(SoundMixerByte *theSoundMixerByte) MAC_IMPORT(GetSoundMixerState);
 #endif
 
 #if TARGET_CPU_68K
@@ -675,7 +675,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal OSErr SetSoundMixerState(SoundMixerByte *theSoundMixerByte);
+MAC_SINCE(0x0921, "9.2.1") pascal OSErr SetSoundMixerState(SoundMixerByte *theSoundMixerByte) MAC_IMPORT(SetSoundMixerState);
 #endif
 
 #if TARGET_CPU_68K
@@ -688,7 +688,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal Boolean GetDimSuspendState(void);
+MAC_SINCE(0x0921, "9.2.1") pascal Boolean GetDimSuspendState(void) MAC_IMPORT(GetDimSuspendState);
 #endif
 
 #if TARGET_CPU_68K
@@ -700,7 +700,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
         : "d1", "d2", "a0", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal void SetSleepTimeout(UInt8 timeout);
+MAC_SINCE(0x0921, "9.2.1") pascal void SetSleepTimeout(UInt8 timeout) MAC_IMPORT(SetSleepTimeout);
 #endif
 
 #if TARGET_CPU_68K
@@ -712,7 +712,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
         : "d1", "d2", "a0", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal void SetHardDiskTimeout(UInt8 timeout);
+MAC_SINCE(0x0921, "9.2.1") pascal void SetHardDiskTimeout(UInt8 timeout) MAC_IMPORT(SetHardDiskTimeout);
 #endif
 
 #if TARGET_CPU_68K
@@ -724,7 +724,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
         : "d1", "d2", "a0", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal void SetSpindownDisable(Boolean setDisable);
+MAC_SINCE(0x0921, "9.2.1") pascal void SetSpindownDisable(Boolean setDisable) MAC_IMPORT(SetSpindownDisable);
 #endif
 
 #if TARGET_CPU_68K
@@ -736,7 +736,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
         : "d1", "d2", "a0", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal void AutoSleepControl(Boolean enableSleep);
+MAC_SINCE(0x0921, "9.2.1") pascal void AutoSleepControl(Boolean enableSleep) MAC_IMPORT(AutoSleepControl);
 #endif
 
 #if TARGET_CPU_68K
@@ -748,7 +748,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
         : "d1", "d2", "a0", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal void SetIntModemState(INTEGER theState);
+MAC_SINCE(0x0921, "9.2.1") pascal void SetIntModemState(INTEGER theState) MAC_IMPORT(SetIntModemState);
 #endif
 
 #if TARGET_CPU_68K
@@ -762,7 +762,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal Boolean SetProcessorSpeed(Boolean fullSpeed);
+MAC_SINCE(0x0921, "9.2.1") pascal Boolean SetProcessorSpeed(Boolean fullSpeed) MAC_IMPORT(SetProcessorSpeed);
 #endif
 
 #if TARGET_CPU_68K
@@ -774,7 +774,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
         : "d1", "d2", "a0", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal void SetSCSIDiskModeAddress(INTEGER scsiAddress);
+MAC_SINCE(0x0921, "9.2.1") pascal void SetSCSIDiskModeAddress(INTEGER scsiAddress) MAC_IMPORT(SetSCSIDiskModeAddress);
 #endif
 
 #if TARGET_CPU_68K
@@ -786,7 +786,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
         : "d1", "d2", "a0", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal void EnableProcessorCycling(Boolean enable);
+MAC_SINCE(0x0921, "9.2.1") pascal void EnableProcessorCycling(Boolean enable) MAC_IMPORT(EnableProcessorCycling);
 #endif
 
 #if TARGET_CPU_68K
@@ -798,7 +798,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
         : "d1", "d2", "a0", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal void SetDimmingTimeout(UInt8 timeout);
+MAC_SINCE(0x0921, "9.2.1") pascal void SetDimmingTimeout(UInt8 timeout) MAC_IMPORT(SetDimmingTimeout);
 #endif
 
 #if TARGET_CPU_68K
@@ -810,7 +810,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
         : "d1", "d2", "a0", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal void DimmingControl(Boolean enableSleep);
+MAC_SINCE(0x0921, "9.2.1") pascal void DimmingControl(Boolean enableSleep) MAC_IMPORT(DimmingControl);
 #endif
 
 #if TARGET_CPU_68K
@@ -824,7 +824,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal OSErr UpdateSystemActivity(UInt8 activity);
+MAC_SINCE(0x0921, "9.2.1") pascal OSErr UpdateSystemActivity(UInt8 activity) MAC_IMPORT(UpdateSystemActivity);
 #endif
 
 #if TARGET_CPU_68K
@@ -836,11 +836,11 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
         : "d1", "d2", "a0", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal void SetDimSuspendState(Boolean dimSuspendState);
+MAC_SINCE(0x0921, "9.2.1") pascal void SetDimSuspendState(Boolean dimSuspendState) MAC_IMPORT(SetDimSuspendState);
 #endif
 
 #if !TARGET_CPU_68K
-pascal void GetScaledBatteryInfo(INTEGER whichBattery, BatteryInfo *theInfo);
+pascal void GetScaledBatteryInfo(INTEGER whichBattery, BatteryInfo *theInfo) MAC_IMPORT(GetScaledBatteryInfo);
 #endif
 
 #if TARGET_CPU_68K
@@ -854,7 +854,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal Fixed GetBatteryVoltage(INTEGER whichBattery);
+MAC_SINCE(0x0921, "9.2.1") pascal Fixed GetBatteryVoltage(INTEGER whichBattery) MAC_IMPORT(GetBatteryVoltage);
 #endif
 
 #if TARGET_CPU_68K
@@ -867,7 +867,7 @@ MAC_SINCE(0x0921, "9.2.1") static __inline__ __attribute__((__always_inline__)) 
         : "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0921, "9.2.1") pascal void GetBatteryTimes(INTEGER whichBattery, BatteryTimeRec *theTimes);
+MAC_SINCE(0x0921, "9.2.1") pascal void GetBatteryTimes(INTEGER whichBattery, BatteryTimeRec *theTimes) MAC_IMPORT(GetBatteryTimes);
 #endif
 
 #if TARGET_CPU_68K

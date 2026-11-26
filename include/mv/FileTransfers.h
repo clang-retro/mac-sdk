@@ -228,7 +228,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (FTErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal FTErr InitFT(void);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal FTErr InitFT(void) MAC_IMPORT(InitFT);
 #endif
 
 #if TARGET_CPU_68K
@@ -242,7 +242,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     { union { long l; long r; } _u; _u.l = _ret; return _u.r; }
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal long FTGetRefCon(FTHandle hFT);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal long FTGetRefCon(FTHandle hFT) MAC_IMPORT(FTGetRefCon);
 #endif
 
 #if TARGET_CPU_68K
@@ -256,7 +256,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTSetRefCon(FTHandle hFT, long refCon);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTSetRefCon(FTHandle hFT, long refCon) MAC_IMPORT(FTSetRefCon);
 #endif
 
 #if TARGET_CPU_68K
@@ -270,7 +270,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     { union { long l; long r; } _u; _u.l = _ret; return _u.r; }
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal long FTGetUserData(FTHandle hFT);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal long FTGetUserData(FTHandle hFT) MAC_IMPORT(FTGetUserData);
 #endif
 
 #if TARGET_CPU_68K
@@ -284,7 +284,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTSetUserData(FTHandle hFT, long userData);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTSetUserData(FTHandle hFT, long userData) MAC_IMPORT(FTSetUserData);
 #endif
 
 #if TARGET_CPU_68K
@@ -298,7 +298,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTGetToolName(INTEGER procID, Str255 name);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTGetToolName(INTEGER procID, Str255 name) MAC_IMPORT(FTGetToolName);
 #endif
 
 #if TARGET_CPU_68K
@@ -312,7 +312,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (INTEGER)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal INTEGER FTGetProcID(ConstStr255Param name);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal INTEGER FTGetProcID(ConstStr255Param name) MAC_IMPORT(FTGetProcID);
 #endif
 
 #if TARGET_CPU_68K
@@ -326,7 +326,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     { union { long l; FTHandle r; } _u; _u.l = _ret; return _u.r; }
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal FTHandle FTNew(INTEGER procID, FTFlags flags, FileTransferSendProcUPP sendProc, FileTransferReceiveProcUPP recvProc, FileTransferReadProcUPP readProc, FileTransferWriteProcUPP writeProc, FileTransferEnvironsProcUPP environsProc, WindowPtr owner, long refCon, long userData);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal FTHandle FTNew(INTEGER procID, FTFlags flags, FileTransferSendProcUPP sendProc, FileTransferReceiveProcUPP recvProc, FileTransferReadProcUPP readProc, FileTransferWriteProcUPP writeProc, FileTransferEnvironsProcUPP environsProc, WindowPtr owner, long refCon, long userData) MAC_IMPORT(FTNew);
 #endif
 
 #if TARGET_CPU_68K
@@ -340,7 +340,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTDispose(FTHandle hFT);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTDispose(FTHandle hFT) MAC_IMPORT(FTDispose);
 #endif
 
 #if TARGET_CPU_68K
@@ -354,7 +354,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (FTErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal FTErr FTStart(FTHandle hFT, FTDirection direction, const SFReply *fileInfo);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal FTErr FTStart(FTHandle hFT, FTDirection direction, const SFReply *fileInfo) MAC_IMPORT(FTStart);
 #endif
 
 #if TARGET_CPU_68K
@@ -368,7 +368,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (FTErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal FTErr FTAbort(FTHandle hFT);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal FTErr FTAbort(FTHandle hFT) MAC_IMPORT(FTAbort);
 #endif
 
 #if TARGET_CPU_68K
@@ -382,7 +382,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (FTErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal FTErr FTSend(FTHandle hFT, INTEGER numFiles, FSSpecArrayPtr pFSSpec, FileTransferNotificationUPP notifyProc);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal FTErr FTSend(FTHandle hFT, INTEGER numFiles, FSSpecArrayPtr pFSSpec, FileTransferNotificationUPP notifyProc) MAC_IMPORT(FTSend);
 #endif
 
 #if TARGET_CPU_68K
@@ -396,7 +396,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (FTErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal FTErr FTReceive(FTHandle hFT, FSSpecPtr pFSSpec, FileTransferNotificationUPP notifyProc);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal FTErr FTReceive(FTHandle hFT, FSSpecPtr pFSSpec, FileTransferNotificationUPP notifyProc) MAC_IMPORT(FTReceive);
 #endif
 
 #if TARGET_CPU_68K
@@ -410,7 +410,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTExec(FTHandle hFT);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTExec(FTHandle hFT) MAC_IMPORT(FTExec);
 #endif
 
 #if TARGET_CPU_68K
@@ -424,7 +424,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTActivate(FTHandle hFT, Boolean activate);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTActivate(FTHandle hFT, Boolean activate) MAC_IMPORT(FTActivate);
 #endif
 
 #if TARGET_CPU_68K
@@ -438,7 +438,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTResume(FTHandle hFT, Boolean resume);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTResume(FTHandle hFT, Boolean resume) MAC_IMPORT(FTResume);
 #endif
 
 #if TARGET_CPU_68K
@@ -452,7 +452,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (Boolean)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Boolean FTMenu(FTHandle hFT, INTEGER menuID, INTEGER item);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Boolean FTMenu(FTHandle hFT, INTEGER menuID, INTEGER item) MAC_IMPORT(FTMenu);
 #endif
 
 #if TARGET_CPU_68K
@@ -466,7 +466,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (INTEGER)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal INTEGER FTChoose(FTHandle *hFT, Point where, FileTransferChooseIdleUPP idle);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal INTEGER FTChoose(FTHandle *hFT, Point where, FileTransferChooseIdleUPP idle) MAC_IMPORT(FTChoose);
 #endif
 
 #if TARGET_CPU_68K
@@ -480,7 +480,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTEvent(FTHandle hFT, const EventRecord *theEvent);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTEvent(FTHandle hFT, const EventRecord *theEvent) MAC_IMPORT(FTEvent);
 #endif
 
 #if TARGET_CPU_68K
@@ -494,7 +494,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (Boolean)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Boolean FTValidate(FTHandle hFT);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Boolean FTValidate(FTHandle hFT) MAC_IMPORT(FTValidate);
 #endif
 
 #if TARGET_CPU_68K
@@ -508,7 +508,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTDefault(Ptr *theConfig, INTEGER procID, Boolean allocate);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTDefault(Ptr *theConfig, INTEGER procID, Boolean allocate) MAC_IMPORT(FTDefault);
 #endif
 
 #if TARGET_CPU_68K
@@ -522,7 +522,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     { union { long l; Handle r; } _u; _u.l = _ret; return _u.r; }
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Handle FTSetupPreflight(INTEGER procID, long *magicCookie);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Handle FTSetupPreflight(INTEGER procID, long *magicCookie) MAC_IMPORT(FTSetupPreflight);
 #endif
 
 #if TARGET_CPU_68K
@@ -536,7 +536,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTSetupSetup(INTEGER procID, const void *theConfig, INTEGER count, DialogPtr theDialog, long *magicCookie);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTSetupSetup(INTEGER procID, const void *theConfig, INTEGER count, DialogPtr theDialog, long *magicCookie) MAC_IMPORT(FTSetupSetup);
 #endif
 
 #if TARGET_CPU_68K
@@ -550,7 +550,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTSetupItem(INTEGER procID, const void *theConfig, INTEGER count, DialogPtr theDialog, INTEGER *theItem, long *magicCookie);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTSetupItem(INTEGER procID, const void *theConfig, INTEGER count, DialogPtr theDialog, INTEGER *theItem, long *magicCookie) MAC_IMPORT(FTSetupItem);
 #endif
 
 #if TARGET_CPU_68K
@@ -564,7 +564,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (Boolean)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Boolean FTSetupFilter(INTEGER procID, const void *theConfig, INTEGER count, DialogPtr theDialog, EventRecord *theEvent, INTEGER *theItem, long *magicCookie);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Boolean FTSetupFilter(INTEGER procID, const void *theConfig, INTEGER count, DialogPtr theDialog, EventRecord *theEvent, INTEGER *theItem, long *magicCookie) MAC_IMPORT(FTSetupFilter);
 #endif
 
 #if TARGET_CPU_68K
@@ -578,7 +578,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTSetupXCleanup(INTEGER procID, const void *theConfig, INTEGER count, DialogPtr theDialog, Boolean OKed, long *magicCookie);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTSetupXCleanup(INTEGER procID, const void *theConfig, INTEGER count, DialogPtr theDialog, Boolean OKed, long *magicCookie) MAC_IMPORT(FTSetupXCleanup);
 #endif
 
 #if TARGET_CPU_68K
@@ -592,7 +592,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTSetupPostflight(INTEGER procID);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTSetupPostflight(INTEGER procID) MAC_IMPORT(FTSetupPostflight);
 #endif
 
 #if TARGET_CPU_68K
@@ -606,7 +606,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     { union { long l; Ptr r; } _u; _u.l = _ret; return _u.r; }
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Ptr FTGetConfig(FTHandle hFT);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Ptr FTGetConfig(FTHandle hFT) MAC_IMPORT(FTGetConfig);
 #endif
 
 #if TARGET_CPU_68K
@@ -620,7 +620,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (INTEGER)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal INTEGER FTSetConfig(FTHandle hFT, const void *thePtr);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal INTEGER FTSetConfig(FTHandle hFT, const void *thePtr) MAC_IMPORT(FTSetConfig);
 #endif
 
 #if TARGET_CPU_68K
@@ -634,7 +634,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (OSErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal OSErr FTIntlToEnglish(FTHandle hFT, const void *inputPtr, Ptr *outputPtr, INTEGER language);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal OSErr FTIntlToEnglish(FTHandle hFT, const void *inputPtr, Ptr *outputPtr, INTEGER language) MAC_IMPORT(FTIntlToEnglish);
 #endif
 
 #if TARGET_CPU_68K
@@ -648,7 +648,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (OSErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal OSErr FTEnglishToIntl(FTHandle hFT, const void *inputPtr, Ptr *outputPtr, INTEGER language);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal OSErr FTEnglishToIntl(FTHandle hFT, const void *inputPtr, Ptr *outputPtr, INTEGER language) MAC_IMPORT(FTEnglishToIntl);
 #endif
 
 #if TARGET_CPU_68K
@@ -662,7 +662,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     { union { long l; Handle r; } _u; _u.l = _ret; return _u.r; }
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Handle FTGetVersion(FTHandle hFT);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Handle FTGetVersion(FTHandle hFT) MAC_IMPORT(FTGetVersion);
 #endif
 
 #if TARGET_CPU_68K
@@ -676,7 +676,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (INTEGER)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal INTEGER FTGetFTVersion(void);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal INTEGER FTGetFTVersion(void) MAC_IMPORT(FTGetFTVersion);
 #endif
 
 #if TARGET_CPU_68K
@@ -690,7 +690,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTGetErrorString(FTHandle hFT, INTEGER id, Str255 errMsg);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void FTGetErrorString(FTHandle hFT, INTEGER id, Str255 errMsg) MAC_IMPORT(FTGetErrorString);
 #endif
 
 #ifdef __cplusplus

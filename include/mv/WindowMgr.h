@@ -259,190 +259,190 @@ typedef WindowDefProcPtr WindowDefUPP;
 #if TARGET_CPU_68K
 #define GetGrayRgn() (LMGetGrayRgn())
 #else
-pascal RgnHandle GetGrayRgn(void);
+pascal RgnHandle GetGrayRgn(void) MAC_IMPORT(GetGrayRgn);
 #endif
 
 enum { _SetWTitle = 0xA91A };
-pascal void SetWTitle(WindowPtr w, ConstStringPtr t) M68K_INLINE(0xA91A);
+pascal void SetWTitle(WindowPtr w, ConstStringPtr t) MAC_IMPORT(SetWTitle) M68K_INLINE(0xA91A);
 
 enum { _GetWTitle = 0xA919 };
-pascal void GetWTitle(WindowPtr w, StringPtr t) M68K_INLINE(0xA919);
+pascal void GetWTitle(WindowPtr w, StringPtr t) MAC_IMPORT(GetWTitle) M68K_INLINE(0xA919);
 
 enum { _FrontWindow = 0xA924 };
-pascal WindowPtr FrontWindow(void) M68K_INLINE(0xA924);
+pascal WindowPtr FrontWindow(void) MAC_IMPORT(FrontWindow) M68K_INLINE(0xA924);
 
 enum { _HiliteWindow = 0xA91C };
-pascal void HiliteWindow(WindowPtr w, Boolean flag) M68K_INLINE(0xA91C);
+pascal void HiliteWindow(WindowPtr w, Boolean flag) MAC_IMPORT(HiliteWindow) M68K_INLINE(0xA91C);
 
 enum { _BringToFront = 0xA920 };
-pascal void BringToFront(WindowPtr w) M68K_INLINE(0xA920);
+pascal void BringToFront(WindowPtr w) MAC_IMPORT(BringToFront) M68K_INLINE(0xA920);
 
 enum { _SelectWindow = 0xA91F };
-pascal void SelectWindow(WindowPtr w) M68K_INLINE(0xA91F);
+pascal void SelectWindow(WindowPtr w) MAC_IMPORT(SelectWindow) M68K_INLINE(0xA91F);
 
 enum { _ShowHide = 0xA908 };
-pascal void ShowHide(WindowPtr w, Boolean flag) M68K_INLINE(0xA908);
+pascal void ShowHide(WindowPtr w, Boolean flag) MAC_IMPORT(ShowHide) M68K_INLINE(0xA908);
 
 enum { _HideWindow = 0xA916 };
-pascal void HideWindow(WindowPtr w) M68K_INLINE(0xA916);
+pascal void HideWindow(WindowPtr w) MAC_IMPORT(HideWindow) M68K_INLINE(0xA916);
 
 enum { _ShowWindow = 0xA915 };
-pascal void ShowWindow(WindowPtr w) M68K_INLINE(0xA915);
+pascal void ShowWindow(WindowPtr w) MAC_IMPORT(ShowWindow) M68K_INLINE(0xA915);
 
 enum { _SendBehind = 0xA921 };
-pascal void SendBehind(WindowPtr w, WindowPtr behind) M68K_INLINE(0xA921);
+pascal void SendBehind(WindowPtr w, WindowPtr behind) MAC_IMPORT(SendBehind) M68K_INLINE(0xA921);
 
 enum { _DrawGrowIcon = 0xA904 };
-pascal void DrawGrowIcon(WindowPtr w) M68K_INLINE(0xA904);
+pascal void DrawGrowIcon(WindowPtr w) MAC_IMPORT(DrawGrowIcon) M68K_INLINE(0xA904);
 
 enum { _InitWindows = 0xA912 };
-pascal void InitWindows(void) M68K_INLINE(0xA912);
+pascal void InitWindows(void) MAC_IMPORT(InitWindows) M68K_INLINE(0xA912);
 
 enum { _GetWMgrPort = 0xA910 };
-pascal void GetWMgrPort(GrafPtr *wp) M68K_INLINE(0xA910);
+pascal void GetWMgrPort(GrafPtr *wp) MAC_IMPORT(GetWMgrPort) M68K_INLINE(0xA910);
 
 enum { _NewWindow = 0xA913 };
-pascal WindowPtr NewWindow(void *wst, const Rect *r, ConstStringPtr title, Boolean vis, INTEGER procid, WindowPtr behind, Boolean gaflag, LONGINT rc) M68K_INLINE(0xA913);
+pascal WindowPtr NewWindow(void *wst, const Rect *r, ConstStringPtr title, Boolean vis, INTEGER procid, WindowPtr behind, Boolean gaflag, LONGINT rc) MAC_IMPORT(NewWindow) M68K_INLINE(0xA913);
 
 enum { _GetNewWindow = 0xA9BD };
-pascal WindowPtr GetNewWindow(INTEGER wid, void *wst, WindowPtr behind) M68K_INLINE(0xA9BD);
+pascal WindowPtr GetNewWindow(INTEGER wid, void *wst, WindowPtr behind) MAC_IMPORT(GetNewWindow) M68K_INLINE(0xA9BD);
 
 enum { _CloseWindow = 0xA92D };
-pascal void CloseWindow(WindowPtr w) M68K_INLINE(0xA92D);
+pascal void CloseWindow(WindowPtr w) MAC_IMPORT(CloseWindow) M68K_INLINE(0xA92D);
 
 enum { _NewCWindow = 0xAA45 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal WindowPtr NewCWindow(void *storage, const Rect *arg1, ConstStringPtr arg2, Boolean arg3, INTEGER arg4, WindowPtr arg5, Boolean arg6, LONGINT arg7) M68K_INLINE(0xAA45);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal WindowPtr NewCWindow(void *storage, const Rect *arg1, ConstStringPtr arg2, Boolean arg3, INTEGER arg4, WindowPtr arg5, Boolean arg6, LONGINT arg7) MAC_IMPORT(NewCWindow) M68K_INLINE(0xAA45);
 
 enum { _GetNewCWindow = 0xAA46 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal WindowPtr GetNewCWindow(INTEGER arg0, void *arg1, WindowPtr arg2) M68K_INLINE(0xAA46);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal WindowPtr GetNewCWindow(INTEGER arg0, void *arg1, WindowPtr arg2) MAC_IMPORT(GetNewCWindow) M68K_INLINE(0xAA46);
 
 enum { _DisposeWindow = 0xA914 };
-pascal void DisposeWindow(WindowPtr w) M68K_INLINE(0xA914);
+pascal void DisposeWindow(WindowPtr w) MAC_IMPORT(DisposeWindow) M68K_INLINE(0xA914);
 
 enum { _SetWRefCon = 0xA918 };
-pascal void SetWRefCon(WindowPtr w, LONGINT data) M68K_INLINE(0xA918);
+pascal void SetWRefCon(WindowPtr w, LONGINT data) MAC_IMPORT(SetWRefCon) M68K_INLINE(0xA918);
 
 enum { _GetWRefCon = 0xA917 };
-pascal LONGINT GetWRefCon(WindowPtr w) M68K_INLINE(0xA917);
+pascal LONGINT GetWRefCon(WindowPtr w) MAC_IMPORT(GetWRefCon) M68K_INLINE(0xA917);
 
 enum { _SetWindowPic = 0xA92E };
-pascal void SetWindowPic(WindowPtr w, PicHandle p) M68K_INLINE(0xA92E);
+pascal void SetWindowPic(WindowPtr w, PicHandle p) MAC_IMPORT(SetWindowPic) M68K_INLINE(0xA92E);
 
 enum { _GetWindowPic = 0xA92F };
-pascal PicHandle GetWindowPic(WindowPtr w) M68K_INLINE(0xA92F);
+pascal PicHandle GetWindowPic(WindowPtr w) MAC_IMPORT(GetWindowPic) M68K_INLINE(0xA92F);
 
 enum { _PinRect = 0xA94E };
-pascal LONGINT PinRect(const Rect *r, Point p) M68K_INLINE(0xA94E);
+pascal LONGINT PinRect(const Rect *r, Point p) MAC_IMPORT(PinRect) M68K_INLINE(0xA94E);
 
 enum { _DragTheRgn = 0xA926 };
-pascal LONGINT DragTheRgn(RgnHandle rgn, Point startp, const Rect *limit, const Rect *slop, INTEGER axis, ProcPtr proc) M68K_INLINE(0xA926);
+pascal LONGINT DragTheRgn(RgnHandle rgn, Point startp, const Rect *limit, const Rect *slop, INTEGER axis, ProcPtr proc) MAC_IMPORT(DragTheRgn) M68K_INLINE(0xA926);
 
 enum { _DragGrayRgn = 0xA905 };
-pascal LONGINT DragGrayRgn(RgnHandle rgn, Point startp, const Rect *limit, const Rect *slop, INTEGER axis, ProcPtr proc) M68K_INLINE(0xA905);
+pascal LONGINT DragGrayRgn(RgnHandle rgn, Point startp, const Rect *limit, const Rect *slop, INTEGER axis, ProcPtr proc) MAC_IMPORT(DragGrayRgn) M68K_INLINE(0xA905);
 
 enum { _ClipAbove = 0xA90B };
-pascal void ClipAbove(WindowPeek w) M68K_INLINE(0xA90B);
+pascal void ClipAbove(WindowPeek w) MAC_IMPORT(ClipAbove) M68K_INLINE(0xA90B);
 
 enum { _CheckUpdate = 0xA911 };
-pascal Boolean CheckUpdate(EventRecord *ev) M68K_INLINE(0xA911);
+pascal Boolean CheckUpdate(EventRecord *ev) MAC_IMPORT(CheckUpdate) M68K_INLINE(0xA911);
 
 enum { _SaveOld = 0xA90E };
-pascal void SaveOld(WindowPeek w) M68K_INLINE(0xA90E);
+pascal void SaveOld(WindowPeek w) MAC_IMPORT(SaveOld) M68K_INLINE(0xA90E);
 
 enum { _PaintOne = 0xA90C };
-pascal void PaintOne(WindowPeek w, RgnHandle clobbered) M68K_INLINE(0xA90C);
+pascal void PaintOne(WindowPeek w, RgnHandle clobbered) MAC_IMPORT(PaintOne) M68K_INLINE(0xA90C);
 
 enum { _PaintBehind = 0xA90D };
-pascal void PaintBehind(WindowPeek w, RgnHandle clobbered) M68K_INLINE(0xA90D);
+pascal void PaintBehind(WindowPeek w, RgnHandle clobbered) MAC_IMPORT(PaintBehind) M68K_INLINE(0xA90D);
 
 enum { _CalcVis = 0xA909 };
-pascal void CalcVis(WindowPeek w) M68K_INLINE(0xA909);
+pascal void CalcVis(WindowPeek w) MAC_IMPORT(CalcVis) M68K_INLINE(0xA909);
 
 enum { _CalcVisBehind = 0xA90A };
-pascal void CalcVisBehind(WindowPeek w, RgnHandle clobbered) M68K_INLINE(0xA90A);
+pascal void CalcVisBehind(WindowPeek w, RgnHandle clobbered) MAC_IMPORT(CalcVisBehind) M68K_INLINE(0xA90A);
 
 enum { _DrawNew = 0xA90F };
-pascal void DrawNew(WindowPeek w, Boolean flag) M68K_INLINE(0xA90F);
+pascal void DrawNew(WindowPeek w, Boolean flag) MAC_IMPORT(DrawNew) M68K_INLINE(0xA90F);
 
 enum { _GetWVariant = 0xA80A };
-MAC_SINCE(0x0200, "2.0") pascal INTEGER GetWVariant(WindowPtr w) M68K_INLINE(0xA80A);
+MAC_SINCE(0x0200, "2.0") pascal INTEGER GetWVariant(WindowPtr w) MAC_IMPORT(GetWVariant) M68K_INLINE(0xA80A);
 
 enum { _FindWindow = 0xA92C };
-pascal INTEGER FindWindow(Point p, WindowPtr *wpp) M68K_INLINE(0xA92C);
+pascal INTEGER FindWindow(Point p, WindowPtr *wpp) MAC_IMPORT(FindWindow) M68K_INLINE(0xA92C);
 
 enum { _TrackBox = 0xA83B };
-MAC_SINCE(0x0070, "0.7") pascal Boolean TrackBox(WindowPtr wp, Point pt, INTEGER part) M68K_INLINE(0xA83B);
+MAC_SINCE(0x0070, "0.7") pascal Boolean TrackBox(WindowPtr wp, Point pt, INTEGER part) MAC_IMPORT(TrackBox) M68K_INLINE(0xA83B);
 
 enum { _TrackGoAway = 0xA91E };
-pascal Boolean TrackGoAway(WindowPtr w, Point p) M68K_INLINE(0xA91E);
+pascal Boolean TrackGoAway(WindowPtr w, Point p) MAC_IMPORT(TrackGoAway) M68K_INLINE(0xA91E);
 
 enum { _ZoomWindow = 0xA83A };
-MAC_SINCE(0x0070, "0.7") pascal void ZoomWindow(WindowPtr wp, INTEGER part, Boolean front) M68K_INLINE(0xA83A);
+MAC_SINCE(0x0070, "0.7") pascal void ZoomWindow(WindowPtr wp, INTEGER part, Boolean front) MAC_IMPORT(ZoomWindow) M68K_INLINE(0xA83A);
 
 enum { _MoveWindow = 0xA91B };
-pascal void MoveWindow(WindowPtr wp, INTEGER h, INTEGER v, Boolean front) M68K_INLINE(0xA91B);
+pascal void MoveWindow(WindowPtr wp, INTEGER h, INTEGER v, Boolean front) MAC_IMPORT(MoveWindow) M68K_INLINE(0xA91B);
 
 enum { _DragWindow = 0xA925 };
-pascal void DragWindow(WindowPtr wp, Point p, const Rect *rp) M68K_INLINE(0xA925);
+pascal void DragWindow(WindowPtr wp, Point p, const Rect *rp) MAC_IMPORT(DragWindow) M68K_INLINE(0xA925);
 
 enum { _GrowWindow = 0xA92B };
-pascal LONGINT GrowWindow(WindowPtr w, Point startp, const Rect *rp) M68K_INLINE(0xA92B);
+pascal LONGINT GrowWindow(WindowPtr w, Point startp, const Rect *rp) MAC_IMPORT(GrowWindow) M68K_INLINE(0xA92B);
 
 enum { _SizeWindow = 0xA91D };
-pascal void SizeWindow(WindowPtr w, INTEGER width, INTEGER height, Boolean flag) M68K_INLINE(0xA91D);
+pascal void SizeWindow(WindowPtr w, INTEGER width, INTEGER height, Boolean flag) MAC_IMPORT(SizeWindow) M68K_INLINE(0xA91D);
 
 enum { _InvalRect = 0xA928 };
-pascal void InvalRect(const Rect *r) M68K_INLINE(0xA928);
+pascal void InvalRect(const Rect *r) MAC_IMPORT(InvalRect) M68K_INLINE(0xA928);
 
 enum { _InvalRgn = 0xA927 };
-pascal void InvalRgn(RgnHandle r) M68K_INLINE(0xA927);
+pascal void InvalRgn(RgnHandle r) MAC_IMPORT(InvalRgn) M68K_INLINE(0xA927);
 
 enum { _ValidRect = 0xA92A };
-pascal void ValidRect(const Rect *r) M68K_INLINE(0xA92A);
+pascal void ValidRect(const Rect *r) MAC_IMPORT(ValidRect) M68K_INLINE(0xA92A);
 
 enum { _ValidRgn = 0xA929 };
-pascal void ValidRgn(RgnHandle r) M68K_INLINE(0xA929);
+pascal void ValidRgn(RgnHandle r) MAC_IMPORT(ValidRgn) M68K_INLINE(0xA929);
 
 enum { _BeginUpdate = 0xA922 };
-pascal void BeginUpdate(WindowPtr w) M68K_INLINE(0xA922);
+pascal void BeginUpdate(WindowPtr w) MAC_IMPORT(BeginUpdate) M68K_INLINE(0xA922);
 
 enum { _EndUpdate = 0xA923 };
-pascal void EndUpdate(WindowPtr w) M68K_INLINE(0xA923);
+pascal void EndUpdate(WindowPtr w) MAC_IMPORT(EndUpdate) M68K_INLINE(0xA923);
 
 enum { _SetWinColor = 0xAA41 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetWinColor(WindowPtr w, CTabHandle new_w_ctab) M68K_INLINE(0xAA41);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetWinColor(WindowPtr w, CTabHandle new_w_ctab) MAC_IMPORT(SetWinColor) M68K_INLINE(0xAA41);
 
 enum { _SetDeskCPat = 0xAA47 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetDeskCPat(PixPatHandle arg0) M68K_INLINE(0xAA47);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetDeskCPat(PixPatHandle arg0) MAC_IMPORT(SetDeskCPat) M68K_INLINE(0xAA47);
 
 enum { _GetAuxWin = 0xAA42 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal Boolean GetAuxWin(WindowPtr arg0, AuxWinHandle *arg1) M68K_INLINE(0xAA42);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal Boolean GetAuxWin(WindowPtr arg0, AuxWinHandle *arg1) MAC_IMPORT(GetAuxWin) M68K_INLINE(0xAA42);
 
 typedef WindowPtr WindowRef;
 
 #if !TARGET_API_MAC_CARBON
 #define GetWindowKind(win) (((WindowPeek)(win))->windowKind)
 #else
-pascal INTEGER GetWindowKind(WindowRef win);
+pascal INTEGER GetWindowKind(WindowRef win) MAC_IMPORT(GetWindowKind);
 #endif
 
 #if !TARGET_API_MAC_CARBON
 #define SetPortWindowPort(win) (SetPort(win))
 #else
-pascal void SetPortWindowPort(WindowRef win);
+pascal void SetPortWindowPort(WindowRef win) MAC_IMPORT(SetPortWindowPort);
 #endif
 
 #if !TARGET_API_MAC_CARBON
 #define GetWindowPortBounds(window, bounds) (*(bounds) = (window)->portRect)
 #else
-pascal void GetWindowPortBounds(WindowRef window, Rect *bounds);
+pascal void GetWindowPortBounds(WindowRef window, Rect *bounds) MAC_IMPORT(GetWindowPortBounds);
 #endif
 
 #if TARGET_API_MAC_CARBON
 #if TARGET_CPU_68K
 static __inline__ CGrafPtr GetWindowPort(WindowRef w);
 #else
-pascal CGrafPtr GetWindowPort(WindowRef w);
+pascal CGrafPtr GetWindowPort(WindowRef w) MAC_IMPORT(GetWindowPort);
 #endif
 #endif
 
@@ -450,7 +450,7 @@ pascal CGrafPtr GetWindowPort(WindowRef w);
 #if TARGET_CPU_68K
 static __inline__ void InvalWindowRect(WindowRef w, const Rect *r);
 #else
-pascal void InvalWindowRect(WindowRef w, const Rect *r);
+pascal void InvalWindowRect(WindowRef w, const Rect *r) MAC_IMPORT(InvalWindowRect);
 #endif
 #endif
 
@@ -618,209 +618,209 @@ enum {
 enum { _AppearanceDispatch = 0xAA74 };
 
 // Window Manager 8: collapsing (window shade) and regions, from the Appearance Manager
-MAC_SINCE(0x0810, "8.1") pascal Boolean IsWindowCollapsable(WindowRef inWindow) M68K_INLINE(0x700F, 0xAA74);
+MAC_SINCE(0x0810, "8.1") pascal Boolean IsWindowCollapsable(WindowRef inWindow) MAC_IMPORT(IsWindowCollapsable) M68K_INLINE(0x700F, 0xAA74);
 
-MAC_SINCE(0x0810, "8.1") pascal Boolean IsWindowCollapsed(WindowRef inWindow) M68K_INLINE(0x7010, 0xAA74);
+MAC_SINCE(0x0810, "8.1") pascal Boolean IsWindowCollapsed(WindowRef inWindow) MAC_IMPORT(IsWindowCollapsed) M68K_INLINE(0x7010, 0xAA74);
 
-MAC_SINCE(0x0810, "8.1") pascal OSStatus CollapseWindow(WindowRef inWindow, Boolean inCollapseIt) M68K_INLINE(0x7011, 0xAA74);
+MAC_SINCE(0x0810, "8.1") pascal OSStatus CollapseWindow(WindowRef inWindow, Boolean inCollapseIt) MAC_IMPORT(CollapseWindow) M68K_INLINE(0x7011, 0xAA74);
 
-MAC_SINCE(0x0810, "8.1") pascal OSStatus CollapseAllWindows(Boolean inCollapseEm) M68K_INLINE(0x7012, 0xAA74);
+MAC_SINCE(0x0810, "8.1") pascal OSStatus CollapseAllWindows(Boolean inCollapseEm) MAC_IMPORT(CollapseAllWindows) M68K_INLINE(0x7012, 0xAA74);
 
-MAC_SINCE(0x0810, "8.1") pascal OSStatus GetWindowFeatures(WindowRef inWindow, UInt32 *outFeatures) M68K_INLINE(0x7013, 0xAA74);
+MAC_SINCE(0x0810, "8.1") pascal OSStatus GetWindowFeatures(WindowRef inWindow, UInt32 *outFeatures) MAC_IMPORT(GetWindowFeatures) M68K_INLINE(0x7013, 0xAA74);
 
-MAC_SINCE(0x0810, "8.1") pascal OSStatus GetWindowRegion(WindowRef inWindow, WindowRegionCode inRegionCode, RgnHandle ioWinRgn) M68K_INLINE(0x7014, 0xAA74);
+MAC_SINCE(0x0810, "8.1") pascal OSStatus GetWindowRegion(WindowRef inWindow, WindowRegionCode inRegionCode, RgnHandle ioWinRgn) MAC_IMPORT(GetWindowRegion) M68K_INLINE(0x7014, 0xAA74);
 
 // Window Manager 2.0 (Mac OS 8.5, WindowsLib)
 #if !TARGET_CPU_68K
-pascal OSStatus CreateNewWindow(WindowClass windowClass, WindowAttributes attributes, const Rect *contentBounds, WindowRef *outWindow);
+pascal OSStatus CreateNewWindow(WindowClass windowClass, WindowAttributes attributes, const Rect *contentBounds, WindowRef *outWindow) MAC_IMPORT(CreateNewWindow);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus CreateWindowFromResource(SInt16 resID, WindowRef *outWindow);
+pascal OSStatus CreateWindowFromResource(SInt16 resID, WindowRef *outWindow) MAC_IMPORT(CreateWindowFromResource);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus StoreWindowIntoCollection(WindowRef window, Collection collection);
+pascal OSStatus StoreWindowIntoCollection(WindowRef window, Collection collection) MAC_IMPORT(StoreWindowIntoCollection);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus CreateWindowFromCollection(Collection collection, WindowRef *outWindow);
+pascal OSStatus CreateWindowFromCollection(Collection collection, WindowRef *outWindow) MAC_IMPORT(CreateWindowFromCollection);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetWindowOwnerCount(WindowRef window, UInt32 *outCount);
+pascal OSStatus GetWindowOwnerCount(WindowRef window, UInt32 *outCount) MAC_IMPORT(GetWindowOwnerCount);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus CloneWindow(WindowRef window);
+pascal OSStatus CloneWindow(WindowRef window) MAC_IMPORT(CloneWindow);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetWindowClass(WindowRef window, WindowClass *outClass);
+pascal OSStatus GetWindowClass(WindowRef window, WindowClass *outClass) MAC_IMPORT(GetWindowClass);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetWindowAttributes(WindowRef window, WindowAttributes *outAttributes);
+pascal OSStatus GetWindowAttributes(WindowRef window, WindowAttributes *outAttributes) MAC_IMPORT(GetWindowAttributes);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus SetWindowContentColor(WindowRef window, const RGBColor *color);
+pascal OSStatus SetWindowContentColor(WindowRef window, const RGBColor *color) MAC_IMPORT(SetWindowContentColor);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetWindowContentColor(WindowRef window, RGBColor *color);
+pascal OSStatus GetWindowContentColor(WindowRef window, RGBColor *color) MAC_IMPORT(GetWindowContentColor);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetWindowContentPattern(WindowRef window, PixPatHandle outPixPat);
+pascal OSStatus GetWindowContentPattern(WindowRef window, PixPatHandle outPixPat) MAC_IMPORT(GetWindowContentPattern);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus SetWindowContentPattern(WindowRef window, PixPatHandle pixPat);
+pascal OSStatus SetWindowContentPattern(WindowRef window, PixPatHandle pixPat) MAC_IMPORT(SetWindowContentPattern);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus InvalWindowRgn(WindowRef window, RgnHandle region);
+pascal OSStatus InvalWindowRgn(WindowRef window, RgnHandle region) MAC_IMPORT(InvalWindowRgn);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus ValidWindowRgn(WindowRef window, RgnHandle region);
+pascal OSStatus ValidWindowRgn(WindowRef window, RgnHandle region) MAC_IMPORT(ValidWindowRgn);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus ValidWindowRect(WindowRef window, const Rect *bounds);
+pascal OSStatus ValidWindowRect(WindowRef window, const Rect *bounds) MAC_IMPORT(ValidWindowRect);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus SetWindowProxyFSSpec(WindowRef window, const FSSpec *inFile);
+pascal OSStatus SetWindowProxyFSSpec(WindowRef window, const FSSpec *inFile) MAC_IMPORT(SetWindowProxyFSSpec);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetWindowProxyFSSpec(WindowRef window, FSSpec *outFile);
+pascal OSStatus GetWindowProxyFSSpec(WindowRef window, FSSpec *outFile) MAC_IMPORT(GetWindowProxyFSSpec);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus SetWindowProxyAlias(WindowRef window, AliasHandle alias);
+pascal OSStatus SetWindowProxyAlias(WindowRef window, AliasHandle alias) MAC_IMPORT(SetWindowProxyAlias);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetWindowProxyAlias(WindowRef window, AliasHandle *alias);
+pascal OSStatus GetWindowProxyAlias(WindowRef window, AliasHandle *alias) MAC_IMPORT(GetWindowProxyAlias);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus SetWindowProxyCreatorAndType(WindowRef window, OSType fileCreator, OSType fileType, SInt16 vRefNum);
+pascal OSStatus SetWindowProxyCreatorAndType(WindowRef window, OSType fileCreator, OSType fileType, SInt16 vRefNum) MAC_IMPORT(SetWindowProxyCreatorAndType);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetWindowProxyIcon(WindowRef window, IconRef *outIcon);
+pascal OSStatus GetWindowProxyIcon(WindowRef window, IconRef *outIcon) MAC_IMPORT(GetWindowProxyIcon);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus SetWindowProxyIcon(WindowRef window, IconRef icon);
+pascal OSStatus SetWindowProxyIcon(WindowRef window, IconRef icon) MAC_IMPORT(SetWindowProxyIcon);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus RemoveWindowProxy(WindowRef window);
+pascal OSStatus RemoveWindowProxy(WindowRef window) MAC_IMPORT(RemoveWindowProxy);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TrackWindowProxyDrag(WindowRef window, Point startPt);
+pascal OSStatus TrackWindowProxyDrag(WindowRef window, Point startPt) MAC_IMPORT(TrackWindowProxyDrag);
 #endif
 
 #if !TARGET_CPU_68K
-pascal Boolean IsWindowModified(WindowRef window);
+pascal Boolean IsWindowModified(WindowRef window) MAC_IMPORT(IsWindowModified);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus SetWindowModified(WindowRef window, Boolean modified);
+pascal OSStatus SetWindowModified(WindowRef window, Boolean modified) MAC_IMPORT(SetWindowModified);
 #endif
 
 #if !TARGET_CPU_68K
-pascal Boolean IsWindowPathSelectClick(WindowRef window, const EventRecord *event);
+pascal Boolean IsWindowPathSelectClick(WindowRef window, const EventRecord *event) MAC_IMPORT(IsWindowPathSelectClick);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus WindowPathSelect(WindowRef window, MenuHandle menu, SInt32 *outMenuResult);
+pascal OSStatus WindowPathSelect(WindowRef window, MenuHandle menu, SInt32 *outMenuResult) MAC_IMPORT(WindowPathSelect);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus HiliteWindowFrameForDrag(WindowRef window, Boolean hilited);
+pascal OSStatus HiliteWindowFrameForDrag(WindowRef window, Boolean hilited) MAC_IMPORT(HiliteWindowFrameForDrag);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TransitionWindow(WindowRef window, WindowTransitionEffect effect, WindowTransitionAction action, const Rect *rect);
+pascal OSStatus TransitionWindow(WindowRef window, WindowTransitionEffect effect, WindowTransitionAction action, const Rect *rect) MAC_IMPORT(TransitionWindow);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus MoveWindowStructure(WindowRef window, INTEGER hGlobal, INTEGER vGlobal);
+pascal OSStatus MoveWindowStructure(WindowRef window, INTEGER hGlobal, INTEGER vGlobal) MAC_IMPORT(MoveWindowStructure);
 #endif
 
 #if !TARGET_CPU_68K
-pascal Boolean IsWindowInStandardState(WindowRef window, Point *idealSize, Rect *idealStandardState);
+pascal Boolean IsWindowInStandardState(WindowRef window, Point *idealSize, Rect *idealStandardState) MAC_IMPORT(IsWindowInStandardState);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus ZoomWindowIdeal(WindowRef window, SInt16 partCode, Point *ioIdealSize);
+pascal OSStatus ZoomWindowIdeal(WindowRef window, SInt16 partCode, Point *ioIdealSize) MAC_IMPORT(ZoomWindowIdeal);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetWindowIdealUserState(WindowRef window, Rect *userState);
+pascal OSStatus GetWindowIdealUserState(WindowRef window, Rect *userState) MAC_IMPORT(GetWindowIdealUserState);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus SetWindowIdealUserState(WindowRef window, Rect *userState);
+pascal OSStatus SetWindowIdealUserState(WindowRef window, Rect *userState) MAC_IMPORT(SetWindowIdealUserState);
 #endif
 
 #if !TARGET_CPU_68K
-pascal Boolean ResizeWindow(WindowRef window, Point startPoint, const Rect *sizeConstraints, Rect *newContentRect);
+pascal Boolean ResizeWindow(WindowRef window, Point startPoint, const Rect *sizeConstraints, Rect *newContentRect) MAC_IMPORT(ResizeWindow);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetWindowBounds(WindowRef window, WindowRegionCode regionCode, Rect *globalBounds);
+pascal OSStatus GetWindowBounds(WindowRef window, WindowRegionCode regionCode, Rect *globalBounds) MAC_IMPORT(GetWindowBounds);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus SetWindowBounds(WindowRef window, WindowRegionCode regionCode, const Rect *globalBounds);
+pascal OSStatus SetWindowBounds(WindowRef window, WindowRegionCode regionCode, const Rect *globalBounds) MAC_IMPORT(SetWindowBounds);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus RepositionWindow(WindowRef window, WindowRef parentWindow, WindowPositionMethod method);
+pascal OSStatus RepositionWindow(WindowRef window, WindowRef parentWindow, WindowPositionMethod method) MAC_IMPORT(RepositionWindow);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetWindowProperty(WindowRef window, PropertyCreator propertyCreator, PropertyTag propertyTag, UInt32 bufferSize, UInt32 *actualSize, void *propertyBuffer);
+pascal OSStatus GetWindowProperty(WindowRef window, PropertyCreator propertyCreator, PropertyTag propertyTag, UInt32 bufferSize, UInt32 *actualSize, void *propertyBuffer) MAC_IMPORT(GetWindowProperty);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetWindowPropertySize(WindowRef window, PropertyCreator creator, PropertyTag tag, UInt32 *size);
+pascal OSStatus GetWindowPropertySize(WindowRef window, PropertyCreator creator, PropertyTag tag, UInt32 *size) MAC_IMPORT(GetWindowPropertySize);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus SetWindowProperty(WindowRef window, PropertyCreator propertyCreator, PropertyTag propertyTag, UInt32 propertySize, void *propertyBuffer);
+pascal OSStatus SetWindowProperty(WindowRef window, PropertyCreator propertyCreator, PropertyTag propertyTag, UInt32 propertySize, void *propertyBuffer) MAC_IMPORT(SetWindowProperty);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus RemoveWindowProperty(WindowRef window, PropertyCreator propertyCreator, PropertyTag propertyTag);
+pascal OSStatus RemoveWindowProperty(WindowRef window, PropertyCreator propertyCreator, PropertyTag propertyTag) MAC_IMPORT(RemoveWindowProperty);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus InitFloatingWindows(void);
+pascal OSStatus InitFloatingWindows(void) MAC_IMPORT(InitFloatingWindows);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus ShowFloatingWindows(void);
+pascal OSStatus ShowFloatingWindows(void) MAC_IMPORT(ShowFloatingWindows);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus HideFloatingWindows(void);
+pascal OSStatus HideFloatingWindows(void) MAC_IMPORT(HideFloatingWindows);
 #endif
 
 #if !TARGET_CPU_68K
-pascal Boolean AreFloatingWindowsVisible(void);
+pascal Boolean AreFloatingWindowsVisible(void) MAC_IMPORT(AreFloatingWindowsVisible);
 #endif
 
 #if !TARGET_CPU_68K
-pascal WindowRef FrontNonFloatingWindow(void);
+pascal WindowRef FrontNonFloatingWindow(void) MAC_IMPORT(FrontNonFloatingWindow);
 #endif
 
 #if TARGET_CPU_68K

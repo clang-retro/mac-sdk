@@ -234,7 +234,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr HandToHand(Handle *h)
     return _ret;
 }
 #else
-pascal OSErr HandToHand(Handle *h);
+pascal OSErr HandToHand(Handle *h) MAC_IMPORT(HandToHand);
 #endif
 
 enum { _PtrToHand = 0xA9E3 };
@@ -252,7 +252,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PtrToHand(const void 
     return _ret;
 }
 #else
-pascal OSErr PtrToHand(const void *p, Handle *h, LONGINT s);
+pascal OSErr PtrToHand(const void *p, Handle *h, LONGINT s) MAC_IMPORT(PtrToHand);
 #endif
 
 enum { _PtrToXHand = 0xA9E2 };
@@ -269,7 +269,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PtrToXHand(const void
     return _ret;
 }
 #else
-pascal OSErr PtrToXHand(const void *p, Handle h, LONGINT s);
+pascal OSErr PtrToXHand(const void *p, Handle h, LONGINT s) MAC_IMPORT(PtrToXHand);
 #endif
 
 enum { _HandAndHand = 0xA9E4 };
@@ -285,7 +285,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr HandAndHand(Handle h1
     return _ret;
 }
 #else
-pascal OSErr HandAndHand(Handle h1, Handle h2);
+pascal OSErr HandAndHand(Handle h1, Handle h2) MAC_IMPORT(HandAndHand);
 #endif
 
 enum { _PtrAndHand = 0xA9EF };
@@ -302,27 +302,27 @@ static __inline__ __attribute__((__always_inline__)) OSErr PtrAndHand(const void
     return _ret;
 }
 #else
-pascal OSErr PtrAndHand(const void *p, Handle h, LONGINT s1);
+pascal OSErr PtrAndHand(const void *p, Handle h, LONGINT s1) MAC_IMPORT(PtrAndHand);
 #endif
 
 
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ INTEGER RelString(ConstStringPtr s1, ConstStringPtr s2, Boolean casesig, Boolean diacsig);
 #else
-MAC_SINCE(0x0070, "0.7") pascal INTEGER RelString(ConstStringPtr s1, ConstStringPtr s2, Boolean casesig, Boolean diacsig);
+MAC_SINCE(0x0070, "0.7") pascal INTEGER RelString(ConstStringPtr s1, ConstStringPtr s2, Boolean casesig, Boolean diacsig) MAC_IMPORT(RelString);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ Boolean EqualString(ConstStringPtr s1, ConstStringPtr s2, Boolean casesig, Boolean diacsig);
 #else
-pascal Boolean EqualString(ConstStringPtr s1, ConstStringPtr s2, Boolean casesig, Boolean diacsig);
+pascal Boolean EqualString(ConstStringPtr s1, ConstStringPtr s2, Boolean casesig, Boolean diacsig) MAC_IMPORT(EqualString);
 #endif
 
 
 #if TARGET_CPU_68K
 MAC_SINCE(0x0070, "0.7") static __inline__ void UpperString(StringPtr s, Boolean diac);
 #else
-MAC_SINCE(0x0070, "0.7") pascal void UpperString(StringPtr s, Boolean diac);
+MAC_SINCE(0x0070, "0.7") pascal void UpperString(StringPtr s, Boolean diac) MAC_IMPORT(UpperString);
 #endif
 
 #define GetDateTime(mactimepointer) (*(mactimepointer) = *(ULONGINT*)0x020C)
@@ -339,7 +339,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr ReadDateTime(ULONGINT
     return _ret;
 }
 #else
-pascal OSErr ReadDateTime(ULONGINT *secs);
+pascal OSErr ReadDateTime(ULONGINT *secs) MAC_IMPORT(ReadDateTime);
 #endif
 
 enum { _SetDateTime = 0xA03A };
@@ -354,7 +354,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr SetDateTime(ULONGINT 
     return _ret;
 }
 #else
-pascal OSErr SetDateTime(ULONGINT mactime);
+pascal OSErr SetDateTime(ULONGINT mactime) MAC_IMPORT(SetDateTime);
 #endif
 
 enum { _DateToSeconds = 0xA9C7 };
@@ -369,7 +369,7 @@ static __inline__ __attribute__((__always_inline__)) void DateToSeconds(DateTime
     if (s) *s = _s;
 }
 #else
-pascal void DateToSeconds(DateTimeRec *d, ULONGINT *s);
+pascal void DateToSeconds(DateTimeRec *d, ULONGINT *s) MAC_IMPORT(DateToSeconds);
 #endif
 
 enum { _SecondsToDate = 0xA9C6 };
@@ -383,7 +383,7 @@ static __inline__ __attribute__((__always_inline__)) void SecondsToDate(ULONGINT
         : "d1", "d2", "a1", "cc", "memory");
 }
 #else
-pascal void SecondsToDate(ULONGINT mactime, DateTimeRec *d);
+pascal void SecondsToDate(ULONGINT mactime, DateTimeRec *d) MAC_IMPORT(SecondsToDate);
 #endif
 #if OLDROUTINENAMES
 #define Secs2Date(mactime, d) SecondsToDate(mactime, d)
@@ -392,13 +392,13 @@ pascal void SecondsToDate(ULONGINT mactime, DateTimeRec *d);
 #if TARGET_CPU_68K
 static __inline__ void GetTime(DateTimeRec *d);
 #else
-pascal void GetTime(DateTimeRec *d);
+pascal void GetTime(DateTimeRec *d) MAC_IMPORT(GetTime);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void SetTime(DateTimeRec *d);
 #else
-pascal void SetTime(DateTimeRec *d);
+pascal void SetTime(DateTimeRec *d) MAC_IMPORT(SetTime);
 #endif
 
 enum { _InitUtil = 0xA03F };
@@ -412,13 +412,13 @@ static __inline__ __attribute__((__always_inline__)) OSErr InitUtil(void) {
     return _ret;
 }
 #else
-pascal OSErr InitUtil(void);
+pascal OSErr InitUtil(void) MAC_IMPORT(InitUtil);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ SysPPtr GetSysPPtr(void);
 #else
-pascal SysPPtr GetSysPPtr(void);
+pascal SysPPtr GetSysPPtr(void) MAC_IMPORT(GetSysPPtr);
 #endif
 
 enum { _WriteParam = 0xA038 };
@@ -432,7 +432,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr WriteParam(void) {
     return _ret;
 }
 #else
-pascal OSErr WriteParam(void);
+pascal OSErr WriteParam(void) MAC_IMPORT(WriteParam);
 #endif
 
 enum { _Enqueue = 0xA96F };
@@ -446,7 +446,7 @@ static __inline__ __attribute__((__always_inline__)) void Enqueue(QElemPtr e, QH
         : "d0", "d1", "d2", "cc", "memory");
 }
 #else
-pascal void Enqueue(QElemPtr e, QHdrPtr h);
+pascal void Enqueue(QElemPtr e, QHdrPtr h) MAC_IMPORT(Enqueue);
 #endif
 
 enum { _Dequeue = 0xA96E };
@@ -462,7 +462,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr Dequeue(QElemPtr e, Q
     return _ret;
 }
 #else
-pascal OSErr Dequeue(QElemPtr e, QHdrPtr h);
+pascal OSErr Dequeue(QElemPtr e, QHdrPtr h) MAC_IMPORT(Dequeue);
 #endif
 
 // extern LONGINT GetTrapAddress(INTEGER n); // 68K in emustubs, not supported on ppc
@@ -471,13 +471,13 @@ pascal OSErr Dequeue(QElemPtr e, QHdrPtr h);
 #if TARGET_CPU_68K
 static __inline__ ProcPtr NGetTrapAddress(uint16_t n, TrapType ttype);
 #else
-pascal ProcPtr NGetTrapAddress(uint16_t n, TrapType ttype);
+pascal ProcPtr NGetTrapAddress(uint16_t n, TrapType ttype) MAC_IMPORT(NGetTrapAddress);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void NSetTrapAddress(ProcPtr addr, uint16_t n, TrapType ttype);
 #else
-pascal void NSetTrapAddress(ProcPtr addr, uint16_t n, TrapType ttype);
+pascal void NSetTrapAddress(ProcPtr addr, uint16_t n, TrapType ttype) MAC_IMPORT(NSetTrapAddress);
 #endif
 
 enum { _GetTrapAddress = 0xA146 };
@@ -492,7 +492,7 @@ static __inline__ __attribute__((__always_inline__)) ProcPtr GetTrapAddress(uint
     return _ret;
 }
 #else
-pascal ProcPtr GetTrapAddress(uint16_t n);
+pascal ProcPtr GetTrapAddress(uint16_t n) MAC_IMPORT(GetTrapAddress);
 #endif
 enum { _INVALID_GetTrapAddress = 0xA546 };
 #if TARGET_CPU_68K
@@ -506,7 +506,7 @@ static __inline__ __attribute__((__always_inline__)) ProcPtr INVALID_GetTrapAddr
     return _ret;
 }
 #else
-pascal ProcPtr INVALID_GetTrapAddress(uint16_t n);
+pascal ProcPtr INVALID_GetTrapAddress(uint16_t n) MAC_IMPORT(INVALID_GetTrapAddress);
 #endif
 enum { _GetOSTrapAddress = 0xA346 };
 #if TARGET_CPU_68K
@@ -520,7 +520,7 @@ static __inline__ __attribute__((__always_inline__)) ProcPtr GetOSTrapAddress(ui
     return _ret;
 }
 #else
-pascal ProcPtr GetOSTrapAddress(uint16_t n);
+pascal ProcPtr GetOSTrapAddress(uint16_t n) MAC_IMPORT(GetOSTrapAddress);
 #endif
 enum { _GetToolTrapAddress = 0xA746 };
 #if TARGET_CPU_68K
@@ -534,7 +534,7 @@ static __inline__ __attribute__((__always_inline__)) ProcPtr GetToolTrapAddress(
     return _ret;
 }
 #else
-pascal ProcPtr GetToolTrapAddress(uint16_t n);
+pascal ProcPtr GetToolTrapAddress(uint16_t n) MAC_IMPORT(GetToolTrapAddress);
 #endif
 
 enum { _SetTrapAddress = 0xA047 };
@@ -548,7 +548,7 @@ static __inline__ __attribute__((__always_inline__)) void SetTrapAddress(ProcPtr
         : "d1", "d2", "a1", "cc", "memory");
 }
 #else
-pascal void SetTrapAddress(ProcPtr addr, uint16_t n);
+pascal void SetTrapAddress(ProcPtr addr, uint16_t n) MAC_IMPORT(SetTrapAddress);
 #endif
 enum { _INVALID_SetTrapAddress = 0xA447 };
 #if TARGET_CPU_68K
@@ -561,7 +561,7 @@ static __inline__ __attribute__((__always_inline__)) void INVALID_SetTrapAddress
         : "d1", "d2", "a1", "cc", "memory");
 }
 #else
-pascal void INVALID_SetTrapAddress(ProcPtr addr, uint16_t n);
+pascal void INVALID_SetTrapAddress(ProcPtr addr, uint16_t n) MAC_IMPORT(INVALID_SetTrapAddress);
 #endif
 enum { _SetOSTrapAddress = 0xA247 };
 #if TARGET_CPU_68K
@@ -574,7 +574,7 @@ static __inline__ __attribute__((__always_inline__)) void SetOSTrapAddress(ProcP
         : "d1", "d2", "a1", "cc", "memory");
 }
 #else
-pascal void SetOSTrapAddress(ProcPtr addr, uint16_t n);
+pascal void SetOSTrapAddress(ProcPtr addr, uint16_t n) MAC_IMPORT(SetOSTrapAddress);
 #endif
 enum { _SetToolTrapAddress = 0xA647 };
 #if TARGET_CPU_68K
@@ -587,7 +587,7 @@ static __inline__ __attribute__((__always_inline__)) void SetToolTrapAddress(Pro
         : "d1", "d2", "a1", "cc", "memory");
 }
 #else
-pascal void SetToolTrapAddress(ProcPtr addr, uint16_t n);
+pascal void SetToolTrapAddress(ProcPtr addr, uint16_t n) MAC_IMPORT(SetToolTrapAddress);
 #endif
 
 #define GetToolboxTrapAddress(n) (GetToolTrapAddress(n))
@@ -610,16 +610,16 @@ static __inline__ __attribute__((__always_inline__)) void Delay(LONGINT n, LONGI
     if (ftp) *ftp = _ftp;
 }
 #else
-pascal void Delay(LONGINT n, LONGINT *ftp);
+pascal void Delay(LONGINT n, LONGINT *ftp) MAC_IMPORT(Delay);
 #endif
 
 enum { _SysBeep = 0xA9C8 };
-pascal void SysBeep(INTEGER i) M68K_INLINE(0xA9C8);
+pascal void SysBeep(INTEGER i) MAC_IMPORT(SysBeep) M68K_INLINE(0xA9C8);
 
 #if TARGET_CPU_68K
 static __inline__ void Environs(INTEGER *rom, INTEGER *machine);
 #else
-pascal void Environs(INTEGER *rom, INTEGER *machine);
+pascal void Environs(INTEGER *rom, INTEGER *machine) MAC_IMPORT(Environs);
 #endif
 
 enum { _SysEnvirons = 0xA090 };
@@ -635,31 +635,31 @@ MAC_SINCE(0x0200, "2.0") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0200, "2.0") pascal OSErr SysEnvirons(INTEGER vers, SysEnvRecPtr p);
+MAC_SINCE(0x0200, "2.0") pascal OSErr SysEnvirons(INTEGER vers, SysEnvRecPtr p) MAC_IMPORT(SysEnvirons);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void Restart(void);
 #else
-pascal void Restart(void);
+pascal void Restart(void) MAC_IMPORT(Restart);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void SetUpA5(void);
 #else
-pascal void SetUpA5(void);
+pascal void SetUpA5(void) MAC_IMPORT(SetUpA5);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void RestoreA5(void);
 #else
-pascal void RestoreA5(void);
+pascal void RestoreA5(void) MAC_IMPORT(RestoreA5);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ Byte GetMMUMode(void);
 #else
-pascal Byte GetMMUMode(void);
+pascal Byte GetMMUMode(void) MAC_IMPORT(GetMMUMode);
 #endif
 
 enum { _SwapMMUMode = 0xA05D };
@@ -674,7 +674,7 @@ MAC_SINCE(0x0700, "7.0") static __inline__ __attribute__((__always_inline__)) vo
     if (bp) *bp = _bp;
 }
 #else
-MAC_SINCE(0x0700, "7.0") pascal void SwapMMUMode(Byte *bp);
+MAC_SINCE(0x0700, "7.0") pascal void SwapMMUMode(Byte *bp) MAC_IMPORT(SwapMMUMode);
 #endif
 
 enum { _StripAddress = 0xA055 };
@@ -689,19 +689,19 @@ MAC_SINCE(0x0200, "2.0") static __inline__ __attribute__((__always_inline__)) Pt
     return _ret;
 }
 #else
-MAC_SINCE(0x0200, "2.0") pascal Ptr StripAddress(Ptr p);
+MAC_SINCE(0x0200, "2.0") pascal Ptr StripAddress(Ptr p) MAC_IMPORT(StripAddress);
 #endif
 
 enum { _DebugStr = 0xABFF };
-MAC_SINCE(0x0700, "7.0") pascal void DebugStr(ConstStringPtr p) M68K_INLINE(0xABFF);
+MAC_SINCE(0x0700, "7.0") pascal void DebugStr(ConstStringPtr p) MAC_IMPORT(DebugStr) M68K_INLINE(0xABFF);
 
 enum { _Debugger = 0xA9FF };
-MAC_SINCE(0x0500, "5.0") pascal void Debugger(void) M68K_INLINE(0xA9FF);
+MAC_SINCE(0x0500, "5.0") pascal void Debugger(void) MAC_IMPORT(Debugger) M68K_INLINE(0xA9FF);
 
-pascal void MakeDataExecutable(void *ptr, unsigned long sz);
+pascal void MakeDataExecutable(void *ptr, unsigned long sz) MAC_IMPORT(MakeDataExecutable);
 
 enum { _FlushCodeCache = 0xA0BD };
-MAC_SINCE(0x0700, "7.0") pascal void FlushCodeCache(void) M68K_INLINE(0xA0BD);
+MAC_SINCE(0x0700, "7.0") pascal void FlushCodeCache(void) MAC_IMPORT(FlushCodeCache) M68K_INLINE(0xA0BD);
 
 enum { _HWPriv = 0xA198 };
 #if TARGET_CPU_68K
@@ -714,7 +714,7 @@ MAC_SINCE(0x0700, "7.0") static __inline__ __attribute__((__always_inline__)) vo
         : "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0700, "7.0") pascal void HWPriv(LONGINT d0, LONGINT a0);
+MAC_SINCE(0x0700, "7.0") pascal void HWPriv(LONGINT d0, LONGINT a0) MAC_IMPORT(HWPriv);
 #endif
 
 #if TARGET_CPU_68K
@@ -727,7 +727,7 @@ static __inline__ __attribute__((__always_inline__)) LONGINT SetCurrentA5(void) 
     return _ret;
 }
 #else
-pascal LONGINT SetCurrentA5(void);
+pascal LONGINT SetCurrentA5(void) MAC_IMPORT(SetCurrentA5);
 #endif
 
 #if TARGET_CPU_68K
@@ -741,31 +741,31 @@ static __inline__ __attribute__((__always_inline__)) LONGINT SetA5(LONGINT a5) {
     return _ret;
 }
 #else
-pascal LONGINT SetA5(LONGINT a5);
+pascal LONGINT SetA5(LONGINT a5) MAC_IMPORT(SetA5);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void c2pstrcpy(Str255 dst, const char *src);
 #else
-pascal void c2pstrcpy(Str255 dst, const char *src);
+pascal void c2pstrcpy(Str255 dst, const char *src) MAC_IMPORT(c2pstrcpy);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void p2cstrcpy(char *dst, ConstStr255Param src);
 #else
-pascal void p2cstrcpy(char *dst, ConstStr255Param src);
+pascal void p2cstrcpy(char *dst, ConstStr255Param src) MAC_IMPORT(p2cstrcpy);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void CopyCStringToPascal(const char *src, Str255 dst);
 #else
-pascal void CopyCStringToPascal(const char *src, Str255 dst);
+pascal void CopyCStringToPascal(const char *src, Str255 dst) MAC_IMPORT(CopyCStringToPascal);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void CopyPascalStringToC(ConstStr255Param src, char *dst);
 #else
-pascal void CopyPascalStringToC(ConstStr255Param src, char *dst);
+pascal void CopyPascalStringToC(ConstStr255Param src, char *dst) MAC_IMPORT(CopyPascalStringToC);
 #endif
 
 typedef union MachineLocationDelta MachineLocationDelta;
@@ -811,7 +811,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void ReadLocation(MachineLocation *loc);
+MAC_SINCE(0x0070, "0.7") pascal void ReadLocation(MachineLocation *loc) MAC_IMPORT(ReadLocation);
 #endif
 
 #if TARGET_CPU_68K
@@ -823,7 +823,7 @@ MAC_SINCE(0x0070, "0.7") static __inline__ __attribute__((__always_inline__)) vo
         : "d0", "d1", "d2", "a1", "cc", "memory");
 }
 #else
-MAC_SINCE(0x0070, "0.7") pascal void WriteLocation(const MachineLocation *loc);
+MAC_SINCE(0x0070, "0.7") pascal void WriteLocation(const MachineLocation *loc) MAC_IMPORT(WriteLocation);
 #endif
 
 enum { _DTInstall = 0xA082 };
@@ -838,7 +838,7 @@ MAC_SINCE(0x0700, "7.0") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0700, "7.0") pascal OSErr DTInstall(DeferredTaskPtr dtTaskPtr);
+MAC_SINCE(0x0700, "7.0") pascal OSErr DTInstall(DeferredTaskPtr dtTaskPtr) MAC_IMPORT(DTInstall);
 #endif
 
 enum { _DeferUserFn = 0xA08F };
@@ -854,14 +854,14 @@ MAC_SINCE(0x0700, "7.0") static __inline__ __attribute__((__always_inline__)) OS
     return _ret;
 }
 #else
-MAC_SINCE(0x0700, "7.0") pascal OSErr DeferUserFn(UserFnUPP userFunction, void *argument);
+MAC_SINCE(0x0700, "7.0") pascal OSErr DeferUserFn(UserFnUPP userFunction, void *argument) MAC_IMPORT(DeferUserFn);
 #endif
 
-pascal void SysBreak(void) M68K_INLINE(0x303C, 0xFE16, 0xA9C9);
+pascal void SysBreak(void) MAC_IMPORT(SysBreak) M68K_INLINE(0x303C, 0xFE16, 0xA9C9);
 
-pascal void SysBreakStr(ConstStr255Param debuggerMsg) M68K_INLINE(0x303C, 0xFE15, 0xA9C9);
+pascal void SysBreakStr(ConstStr255Param debuggerMsg) MAC_IMPORT(SysBreakStr) M68K_INLINE(0x303C, 0xFE15, 0xA9C9);
 
-pascal void SysBreakFunc(ConstStr255Param debuggerMsg) M68K_INLINE(0x303C, 0xFE14, 0xA9C9);
+pascal void SysBreakFunc(ConstStr255Param debuggerMsg) MAC_IMPORT(SysBreakFunc) M68K_INLINE(0x303C, 0xFE14, 0xA9C9);
 
 enum { _AttachVBL = 0xA071 };
 #if TARGET_CPU_68K
@@ -875,7 +875,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr AttachVBL(INTEGER netValue);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr AttachVBL(INTEGER netValue) MAC_IMPORT(AttachVBL);
 #endif
 
 enum { _DoVBLTask = 0xA072 };
@@ -890,7 +890,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr DoVBLTask(INTEGER netValue);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr DoVBLTask(INTEGER netValue) MAC_IMPORT(DoVBLTask);
 #endif
 
 #if TARGET_CPU_68K
@@ -903,27 +903,27 @@ MAC_SINCE(0x0710, "7.1") static __inline__ __attribute__((__always_inline__)) St
     return _ret;
 }
 #else
-MAC_SINCE(0x0710, "7.1") pascal StatusRegisterContents EnterSupervisorMode(void);
+MAC_SINCE(0x0710, "7.1") pascal StatusRegisterContents EnterSupervisorMode(void) MAC_IMPORT(EnterSupervisorMode);
 #endif
 
 // Enters the 68k debugger; on 68k this is Debugger.
 #if TARGET_CPU_68K
 static __inline__ void Debugger68k(void);
 #else
-pascal void Debugger68k(void);
+pascal void Debugger68k(void) MAC_IMPORT(Debugger68k);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void DebugStr68k(ConstStr255Param debuggerMsg);
 #else
-pascal void DebugStr68k(ConstStr255Param debuggerMsg);
+pascal void DebugStr68k(ConstStr255Param debuggerMsg) MAC_IMPORT(DebugStr68k);
 #endif
 
 // The address of a trap's entry in the dispatch tables in low memory.
 #if TARGET_CPU_68K
 static __inline__ UniversalProcPtr* GetTrapVector(uint16_t trapNumber);
 #else
-pascal UniversalProcPtr* GetTrapVector(uint16_t trapNumber);
+pascal UniversalProcPtr* GetTrapVector(uint16_t trapNumber) MAC_IMPORT(GetTrapVector);
 #endif
 
 // PowerPC exceptions (MachineExceptions.h). The handler gets the
@@ -933,7 +933,7 @@ typedef struct ExceptionInformation ExceptionInformation;
 typedef OSStatus (*ExceptionHandler)(ExceptionInformation *theException);
 
 // PowerPC only.
-pascal ExceptionHandler InstallExceptionHandler(ExceptionHandler theHandler);
+pascal ExceptionHandler InstallExceptionHandler(ExceptionHandler theHandler) MAC_IMPORT(InstallExceptionHandler);
 
 // Converts a 24-bit address to a 32-bit one (MPW 3.2 interfaces).
 enum { _Translate24To32 = 0xA091 };
@@ -948,7 +948,7 @@ MAC_SINCE(0x0700, "7.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0700, "7.0") MAC_COLOR_QD pascal Ptr Translate24To32(void *addr24);
+MAC_SINCE(0x0700, "7.0") MAC_COLOR_QD pascal Ptr Translate24To32(void *addr24) MAC_IMPORT(Translate24To32);
 #endif
 
 /* clang-dos SDK: true when the trap is implemented on this Mac. Works on

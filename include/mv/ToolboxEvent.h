@@ -47,48 +47,48 @@ extern "C" {
 #define LMSetJournalRef(val) ((*(INTEGER *)0x000008E8) = (val))
 
 enum { _KeyTranslate = 0xA9C3 };
-MAC_SINCE(0x0200, "2.0") pascal unsigned long KeyTranslate(Ptr mapp, uint16_t code, unsigned long *state) M68K_INLINE(0xA9C3);
+MAC_SINCE(0x0200, "2.0") pascal unsigned long KeyTranslate(Ptr mapp, uint16_t code, unsigned long *state) MAC_IMPORT(KeyTranslate) M68K_INLINE(0xA9C3);
 #if OLDROUTINENAMES
 #define KeyTrans(mapp, code, state) KeyTranslate(mapp, code, state)
 #endif
 
 enum { _GetNextEvent = 0xA970 };
-pascal Boolean GetNextEvent(INTEGER em, EventRecord *evt) M68K_INLINE(0xA970);
+pascal Boolean GetNextEvent(INTEGER em, EventRecord *evt) MAC_IMPORT(GetNextEvent) M68K_INLINE(0xA970);
 
 enum { _WaitNextEvent = 0xA860 };
-MAC_SINCE(0x0600, "6.0") pascal Boolean WaitNextEvent(INTEGER mask, EventRecord *evp, LONGINT sleep, RgnHandle mousergn) M68K_INLINE(0xA860);
+MAC_SINCE(0x0600, "6.0") pascal Boolean WaitNextEvent(INTEGER mask, EventRecord *evp, LONGINT sleep, RgnHandle mousergn) MAC_IMPORT(WaitNextEvent) M68K_INLINE(0xA860);
 
 enum { _EventAvail = 0xA971 };
-pascal Boolean EventAvail(INTEGER em, EventRecord *evt) M68K_INLINE(0xA971);
+pascal Boolean EventAvail(INTEGER em, EventRecord *evt) MAC_IMPORT(EventAvail) M68K_INLINE(0xA971);
 
 enum { _GetMouse = 0xA972 };
-pascal void GetMouse(Point *p) M68K_INLINE(0xA972);
+pascal void GetMouse(Point *p) MAC_IMPORT(GetMouse) M68K_INLINE(0xA972);
 
 enum { _Button = 0xA974 };
-pascal Boolean Button(void) M68K_INLINE(0xA974);
+pascal Boolean Button(void) MAC_IMPORT(Button) M68K_INLINE(0xA974);
 
 enum { _StillDown = 0xA973 };
-pascal Boolean StillDown(void) M68K_INLINE(0xA973);
+pascal Boolean StillDown(void) MAC_IMPORT(StillDown) M68K_INLINE(0xA973);
 
 enum { _WaitMouseUp = 0xA977 };
-pascal Boolean WaitMouseUp(void) M68K_INLINE(0xA977);
+pascal Boolean WaitMouseUp(void) MAC_IMPORT(WaitMouseUp) M68K_INLINE(0xA977);
 
 enum { _GetKeys = 0xA976 };
-pascal void GetKeys(uint8_t *keys) M68K_INLINE(0xA976);
+pascal void GetKeys(uint8_t *keys) MAC_IMPORT(GetKeys) M68K_INLINE(0xA976);
 
 enum { _TickCount = 0xA975 };
-pascal ULONGINT TickCount(void) M68K_INLINE(0xA975);
+pascal ULONGINT TickCount(void) MAC_IMPORT(TickCount) M68K_INLINE(0xA975);
 
 #if TARGET_CPU_68K
 static __inline__ LONGINT GetDblTime(void);
 #else
-pascal LONGINT GetDblTime(void);
+pascal LONGINT GetDblTime(void) MAC_IMPORT(GetDblTime);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ LONGINT GetCaretTime(void);
 #else
-pascal LONGINT GetCaretTime(void);
+pascal LONGINT GetCaretTime(void) MAC_IMPORT(GetCaretTime);
 #endif
 
 #if TARGET_CPU_68K
