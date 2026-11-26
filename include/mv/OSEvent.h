@@ -42,6 +42,9 @@ enum {
     RESUME = 1 << 0,
     CONVERTCLIPBOARD = 1 << 1,
     mouseMovedMessage = 250,
+    suspendResumeMessage = 1,
+    resumeFlag = 1,
+    convertClipboardFlag = 2,
 };
 
 typedef enum {

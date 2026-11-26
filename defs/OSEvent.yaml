@@ -46,6 +46,12 @@
         value: 1 << 1
       - name: mouseMovedMessage
         value: 0xFA
+      - name: suspendResumeMessage
+        value: 0x01
+      - name: resumeFlag
+        value: 1
+      - name: convertClipboardFlag
+        value: 2
 
 # ####
 

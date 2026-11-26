@@ -50,6 +50,7 @@
 #include "mv/CommTool.h"
 #include "mv/Connections.h"
 #include "mv/ContextualMenus.h"
+#include "mv/ControlStrip.h"
 #include "mv/CursorDevices.h"
 #include "mv/DatabaseAccess.h"
 #include "mv/Dictionary.h"

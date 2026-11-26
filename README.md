@@ -58,8 +58,9 @@ control data calls with the Appearance control definitions
 (`<Controls.h>`, `<ControlDefinitions.h>`), the Menu, Dialog and Window
 Manager additions (menu command IDs, `MenuEvent`, `StandardAlert`,
 `AutoSizeDialog`, window collapsing), the Collection Manager
-(`<Collections.h>`) and the Contextual Menu Manager
-(`<ContextualMenu.h>`).
+(`<Collections.h>`), the Contextual Menu Manager
+(`<ContextualMenu.h>`) and the calls that show and hide the Control
+Strip (`<ControlStrip.h>`).
 
 - What Mac OS 8.0 and 8.1 ran on 68k Macs has its trap and selector,
   read from the 68k glue in 8.1's AppearanceLib and 9.2.1's
@@ -296,8 +297,8 @@ The linkers it runs are in `tools/link/` and can be used on their own:
   the TOC. It finds which shared library exports each name in
   `imports.json` (from Retro68's import libraries, by `gen-imports.py`;
   `macos-exports.py` makes one from a real System Folder and ROM).
-  InterfaceLib wins a name that other libraries also export; CarbonLib
-  and `Apple;Carbon;Networking` are imported weakly. On PowerPC the
+  InterfaceLib wins a name that other libraries also export; CarbonLib,
+  `Apple;Carbon;Networking` and ControlStripLib are imported weakly. On PowerPC the
   headers give each Toolbox call the symbol `__imp_` and its name
   (`MAC_IMPORT`). Thus a program function with the same name, such as
   a Win32 `ShowWindow`, does not replace the Toolbox call. The linker
