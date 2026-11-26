@@ -338,6 +338,11 @@ you use yourself, as `tests/runtime.c` does. Soft float is large on 68k
 and counts towards the 32 KB limit: `tests/runtime.c`, which uses float
 and double arithmetic and conversions, links to 20 KB.
 
+On 68k, the `float` helpers (`__addsf3`, `__mulsf3`, `__divsf3`, the
+comparisons and the `int` conversions) are in 68000 assembly in
+`runtime/softfloat-m68k.S`. They are 1.3 to 8 times faster than the
+helpers of compiler-rt. See [docs/softfloat.md](docs/softfloat.md).
+
 `tests/runtime.c` checks each helper, and `tests/fixmath.c` the FixMath
 glue; `tests/run.sh` runs their 68k builds as a 68000 and a 68020 in
 `tools/sim68k.py`.
@@ -501,7 +506,8 @@ definition gives one, checks the argument-block calls against the ROM,
 and links every example into a fat application. With `LLVM_SRC` set it
 also builds the runtime library and runs its test, and with
 `PICOLIBC_SRC` set as well it builds the C library and runs its tests
-(`tests/libc.c`, `tests/console.c`, `tests/thread.c` and `tests/net.c`).
+(`tests/libc.c`, `tests/console.c`, `tests/thread.c`, `tests/net.c` and
+the soft float test, `tests/softfloat68k.c`).
 With `GCC_SRC` set too, it builds the C++ library and runs
 `tests/cxx.cpp`.
 

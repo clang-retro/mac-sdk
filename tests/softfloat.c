@@ -1,0 +1,151 @@
+/* softfloat.c - compares the soft float of runtime/softfloat.c with the
+ * host's float arithmetic, which must be IEEE 754 binary32 with
+ * rounding to nearest (x86-64 SSE, AArch64).
+ *
+ *   cc -O2 -ffp-contract=off -o sftest tests/softfloat.c && ./sftest [N]
+ *   ./sftest --vectors N > softfloat-vectors.h
+ *
+ * The second form writes test vectors from the reference for
+ * tests/softfloat68k.c, which checks runtime/softfloat-m68k.S in the
+ * simulator.
+ *
+ * It tries the special values against each other, then N random pairs
+ * (default 20000000) of several kinds: any bits, near exponents,
+ * subnormal numbers, and sums that cancel. A NaN result matches any
+ * NaN. It prints "softfloat: ok" or the first failures.
+ *
+ * Part of mac-sdk.
+ * SPDX-License-Identifier: AGPL-3.0-only
+ */
+#define SF_NAME(n) sf_##n
+#include "../runtime/softfloat.c"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+static int failures;
+
+/* A state of the random generator (xorshift32). */
+static uint32_t rng = 2463534242u;
+
+/* Gives 32 random bits. */
+static uint32_t rnd(void) {
+  rng ^= rng << 13;
+  rng ^= rng >> 17;
+  rng ^= rng << 5;
+  return rng;
+}
+
+/* Gives 1 when the bits u are a NaN. */
+static int is_nan(uint32_t u) { return (u & 0x7FFFFFFFu) > 0x7F800000u; }
+
+/* Records a failure when got is not want; a NaN matches any NaN. */
+static void check(const char *op, uint32_t a, uint32_t b, uint32_t got, uint32_t want) {
+  if (got == want || (is_nan(got) && is_nan(want))) return;
+  if (failures++ < 20)
+    printf("FAIL %s(%08x, %08x): %08x, not %08x\n", op, (unsigned)a, (unsigned)b, (unsigned)got,
+           (unsigned)want);
+}
+
+/* Gives the sign of a comparison result: -1, 0 or 1. */
+static int sgn(int v) { return v < 0 ? -1 : v > 0; }
+
+/* Checks every function on the pair a, b. */
+static void try_pair(uint32_t a, uint32_t b) {
+  volatile float fa = float_of(a), fb = float_of(b);
+  int un = is_nan(a) || is_nan(b);
+  int want;
+  check("add", a, b, bits_of(sf_addsf3(fa, fb)), bits_of(fa + fb));
+  check("sub", a, b, bits_of(sf_subsf3(fa, fb)), bits_of(fa - fb));
+  check("mul", a, b, bits_of(sf_mulsf3(fa, fb)), bits_of(fa * fb));
+  check("div", a, b, bits_of(sf_divsf3(fa, fb)), bits_of(fa / fb));
+  want = un ? 1 : (fa < fb ? -1 : fa > fb);
+  check("le", a, b, (uint32_t)sgn(sf_lesf2(fa, fb)), (uint32_t)want);
+  check("eq", a, b, (uint32_t)(sf_eqsf2(fa, fb) != 0), (uint32_t)!(fa == fb));
+  want = un ? -1 : (fa < fb ? -1 : fa > fb);
+  check("ge", a, b, (uint32_t)sgn(sf_gesf2(fa, fb)), (uint32_t)want);
+  check("unord", a, b, (uint32_t)(sf_unordsf2(fa, fb) != 0), (uint32_t)un);
+  if (!is_nan(a) && fa > -2147483648.0f && fa < 2147483648.0f)
+    check("fix", a, 0, (uint32_t)sf_fixsfsi(fa), (uint32_t)(int32_t)fa);
+  check("float", a, 0, bits_of(sf_floatsisf((int32_t)a)), bits_of((float)(int32_t)a));
+}
+
+/* Gives a random float of a kind k. */
+static uint32_t random_float(int k, uint32_t near) {
+  uint32_t r = rnd();
+  switch (k) {
+    case 0: return r;                                                 /* any bits */
+    case 1: return (near & 0xFF800000u) ^ (r & 0x807FFFFFu) ^ ((r >> 9 & 3) << 23); /* near exponent */
+    case 2: return r & 0x807FFFFFu;                                    /* subnormal */
+    case 3: return (r & 0x80FFFFFFu) | 0x00800000u;                    /* small normal */
+    default: return near ^ (r & 0x8000000Fu);                         /* nearly equal */
+  }
+}
+
+/* The special values that the tests try against each other. */
+static const uint32_t special[] = {0, 0x80000000u, 1, 0x80000001u, 0x007FFFFFu, 0x00800000u,
+                                   0x3F800000u, 0xBF800000u, 0x3F800001u, 0x7F7FFFFFu, 0xFF7FFFFFu,
+                                   0x7F800000u, 0xFF800000u, 0x7FC00000u, 0x7F800001u, 0xFFC00001u,
+                                   0x4B000000u, 0x4F000000u, 0xCF000000u, 0x4EFFFFFFu, 0x34000000u,
+                                   0x33800000u, 0x3F000000u, 0x00400000u};
+#define NSPECIAL (sizeof special / sizeof *special)
+
+/* Writes one vector: the operation, the operands and the result of the
+ * reference. */
+static void vector(int op, uint32_t a, uint32_t b) {
+  uint32_t r;
+  float fa = float_of(a), fb = float_of(b);
+  switch (op) {
+    case 0: r = bits_of(sf_addsf3(fa, fb)); break;
+    case 1: r = bits_of(sf_subsf3(fa, fb)); break;
+    case 2: r = bits_of(sf_mulsf3(fa, fb)); break;
+    case 3: r = bits_of(sf_divsf3(fa, fb)); break;
+    case 4: r = (uint32_t)sgn(sf_lesf2(fa, fb)); break;
+    case 5: r = (uint32_t)sgn(sf_gesf2(fa, fb)); break;
+    case 6: r = (uint32_t)(sf_unordsf2(fa, fb) != 0); break;
+    case 7: r = (uint32_t)sf_fixsfsi(fa); break;
+    default: r = bits_of(sf_floatsisf((int32_t)a)); break;
+  }
+  printf("  {%d, 0x%08xu, 0x%08xu, 0x%08xu},\n", op, (unsigned)a, (unsigned)b, (unsigned)r);
+}
+
+/* Writes the special values against each other for each operation, and
+ * n random pairs. */
+static void vectors(long n) {
+  size_t x, y;
+  long i;
+  int op;
+  printf("/* Generated by tests/softfloat.c --vectors. */\n");
+  printf("static const struct sf_vector { int op; uint32_t a, b, r; } sf_vectors[] = {\n");
+  for (op = 0; op < 9; op++)
+    for (x = 0; x < NSPECIAL; x++)
+      for (y = 0; y < NSPECIAL; y++)
+        if (op < 7 || y == 0) vector(op, special[x], special[y]);
+  for (i = 0; i < n; i++) {
+    uint32_t a = random_float((int)(i % 5) == 4 ? 0 : (int)(i % 5), 0);
+    uint32_t b = random_float((int)((i / 5) % 5), a);
+    vector((int)(i % 9), a, b);
+  }
+  printf("};\n");
+}
+
+/* Runs the tests, or writes vectors. */
+int main(int argc, char **argv) {
+  long n, i;
+  size_t x, y, ns = NSPECIAL;
+  if (argc > 2 && strcmp(argv[1], "--vectors") == 0) {
+    vectors(atol(argv[2]));
+    return 0;
+  }
+  n = argc > 1 ? atol(argv[1]) : 20000000L;
+  for (x = 0; x < ns; x++)
+    for (y = 0; y < ns; y++) try_pair(special[x], special[y]);
+  for (i = 0; i < n; i++) {
+    uint32_t a = random_float((int)(i % 5) == 4 ? 0 : (int)(i % 5), 0);
+    uint32_t b = random_float((int)((i / 5) % 5), a);
+    try_pair(a, b);
+  }
+  printf("softfloat: %s (%d failures)\n", failures ? "FAIL" : "ok", failures);
+  return failures != 0;
+}

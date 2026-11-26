@@ -167,6 +167,30 @@ if [ -n "$LLVM_SRC" ] && [ -n "$PICOLIBC_SRC" ]; then
     echo "libc: linked (install unicorn to run it)"
   fi
 fi
+# The soft float of the 68k runtime: test the reference, runtime/softfloat.c,
+# against the host's IEEE 754 arithmetic, write vectors from it, and check
+# runtime/softfloat-m68k.S (in libmacrt.a) against them as a 68000 and a
+# 68020.
+if [ -n "$LLVM_SRC" ] && [ -n "$PICOLIBC_SRC" ]; then
+  ${HOSTCC:-cc} -O2 -ffp-contract=off -o "$APPS/softfloat" tests/softfloat.c
+  "$APPS/softfloat" 2000000
+  "$APPS/softfloat" --vectors 3000 >"$APPS/softfloat-vectors.h"
+  CLANG="$CLANG" python3 tools/macapp.py --cpu 68k --lib "$APPS/lib" \
+    -o "$APPS/softfloat-68k.bin" -- -Wall -Werror -I"$APPS" \
+    tests/softfloat68k.c >/dev/null
+  if python3 -c "import unicorn" 2>/dev/null; then
+    for c in 68000 68020; do
+      python3 tools/sim68k.py --cpu $c --os --files --exit-anywhere \
+        --mem 8 --steps 2000000000 "$APPS/softfloat-68k.bin" >"$APPS/sim.txt" ||
+        { cat "$APPS/sim.txt"; exit 1; }
+      grep -q "^all ok" "$APPS/sim.txt" ||
+        { echo "softfloat on a $c:"; cat "$APPS/sim.txt"; exit 1; }
+    done
+    echo "softfloat: ok"
+  else
+    echo "softfloat: linked (install unicorn to run it)"
+  fi
+fi
 # The C++ library, when GCC_SRC names an unpacked GCC 15.2.0 release too:
 # build libstdc++ and libunwind, link tests/cxx.cpp and tests/cxxthread.cpp
 # for both CPUs, and run the 68k builds as a 68000 and a 68020 and the
