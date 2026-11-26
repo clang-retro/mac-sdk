@@ -1,8 +1,9 @@
 #!/bin/sh
 # Build the runtime library, libmacrt.a, for 68k and PowerPC: compiler-rt's
 # builtins (32-bit multiply and divide for the 68000, 64-bit arithmetic,
-# soft float on 68k, conversions), the memory and string functions in
-# string.c, and the atomic operations in atomic.c.
+# soft float on 68k, conversions), single-precision soft float for the
+# 68000 in softfloat-m68k.S, the memory and string functions in string.c, and
+# the atomic operations in atomic.c.
 #
 #   CLANG=... LLVM_SRC=... runtime/build.sh [OUT]
 #
@@ -50,17 +51,25 @@ for cpu in m68k ppc; do
     # x87 long double); they fail to compile and are left out.
     $cc -c "$f" -o "$work/$cpu/$n.o" 2>/dev/null || rm -f "$work/$cpu/$n.o"
   done
-  # The 68000's 32-bit multiply is in assembly.
+  # The 68000's 32-bit multiply is in assembly. Single-precision soft
+  # float is softfloat-m68k.S, in assembly for the 68000, in place of
+  # compiler-rt's (which calls __muldi3 and __mulsi3). softfloat.c is
+  # its reference; tests/softfloat.c tests it on the host.
   if [ $cpu = m68k ]; then
     for f in "$builtins"/m68k/*.S; do
       $cc -c "$f" -o "$work/$cpu/$(basename "$f" .S).o"
     done
+    for n in addsf3 subsf3 mulsf3 divsf3 comparesf2 fixsfsi floatsisf; do
+      [ -f "$work/$cpu/$n.o" ] || { echo "$cpu: $n.c did not compile" >&2; exit 1; }
+      rm -f "$work/$cpu/$n.o"
+    done
+    $cc -c "$here/softfloat-m68k.S" -o "$work/$cpu/softfloat.o"
   fi
   # The ones clang calls for plain C must be there.
   need="divdi3 udivdi3 moddi3 umoddi3 fixdfdi floatdidf fixunsdfsi"
   [ $cpu = m68k ] && need="$need mulsi3 divsi3 udivsi3 modsi3 umodsi3 muldi3
-    addsf3 subsf3 mulsf3 divsf3 adddf3 subdf3 muldf3 divdf3 comparesf2
-    comparedf2 fixdfsi floatsidf fixsfsi floatsisf extendsfdf2 truncdfsf2"
+    softfloat adddf3 subdf3 muldf3 divdf3 comparedf2 fixdfsi floatsidf
+    extendsfdf2 truncdfsf2"
   for n in $need; do
     [ -f "$work/$cpu/$n.o" ] || { echo "$cpu: $n.c did not compile" >&2; exit 1; }
   done
