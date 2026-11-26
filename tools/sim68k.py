@@ -112,12 +112,17 @@ TRAPS = {
     0xA972: ("GetMouse", 4, 0), 0xA860: ("WaitNextEvent", 14, 2),
     0xA93D: ("MenuSelect", 4, 4), 0xA938: ("HiliteMenu", 2, 0),
     0xA8EC: ("CopyBits", 22, 0), 0xA971: ("EventAvail", 6, 2),
+    # The Apple and File menus that a program puts in the menu bar.
+    0xA931: ("NewMenu", 6, 4), 0xA933: ("AppendMenu", 8, 0),
+    0xA935: ("InsertMenu", 6, 0), 0xA937: ("DrawMenuBar", 0, 0),
+    0xA94D: ("AppendResMenu", 8, 0),
 }
 QUIET = {"SystemTask", "EraseRect", "MoveTo", "TickCount",   # not printed
          "HideWindow", "SetWTitle", "GetWRefCon", "ForeColor", "BackColor",
          "GetPort", "GlobalToLocal", "LocalToGlobal", "GetMouse",
          "WaitNextEvent", "MenuSelect", "HiliteMenu", "CopyBits",
-         "EventAvail"}
+         "EventAvail", "AppendMenu", "InsertMenu", "DrawMenuBar",
+         "AppendResMenu"}
 
 
 def key_events(text):
@@ -1427,6 +1432,8 @@ def main():
             uc.mem_write(sp, b"\x01\x00")
         elif name == "NewRgn":
             uc.mem_write(sp, struct.pack(">I", 0x40000))
+        elif name == "NewMenu":
+            uc.mem_write(sp, struct.pack(">I", 0x50000))
         elif name == "TickCount":               # one tick per call
             state["ticks"] += 1
             uc.mem_write(sp, struct.pack(">I", state["ticks"]))
