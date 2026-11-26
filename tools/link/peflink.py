@@ -33,7 +33,7 @@ import struct
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from macres import cfrg, macbinary, resource_fork, size_res  # noqa: E402
+from macres import cfrg, file_type, macbinary, resource_fork, size_res  # noqa: E402
 import archive  # noqa: E402
 
 # ---------------------------------------------------------------- XCOFF
@@ -754,6 +754,11 @@ def main():
     ap.add_argument("--creator", default="????")
     ap.add_argument("--size", type=int, default=2048,
                     help="memory partition in KiB")
+    ap.add_argument("--type", default="APPL",
+                    help="file type (default APPL)")
+    ap.add_argument("--background-only", action="store_true",
+                    help="set onlyBackground in the SIZE resource (an "
+                    "application without a user interface)")
     ap.add_argument("--pef", help="also write the bare PEF container")
     ap.add_argument("--entry", default="main",
                     help="the function the Code Fragment Manager calls")
@@ -770,12 +775,12 @@ def main():
         sys.exit(f"peflink: error: {e}")
 
     name = a.name or os.path.splitext(os.path.basename(a.output))[0]
-    creator = a.creator.encode("mac_roman")[:4].ljust(4)
+    creator = file_type(a.creator)
     rsrc = resource_fork([(b"cfrg", 0, cfrg(name)),
-                          (b"SIZE", -1, size_res(a.size))])
+                          (b"SIZE", -1, size_res(a.size, a.background_only))])
     if a.pef:
         open(a.pef, "wb").write(pef)
-    open(a.output, "wb").write(macbinary(name, b"APPL", creator, pef, rsrc))
+    open(a.output, "wb").write(macbinary(name, file_type(a.type), creator, pef, rsrc))
     libs = sorted({l for (l, _, _, _) in imports.order})
     print(f"peflink: {a.output}: code {len(img['code'])}, data "
           f"{img['data_size']}, {len(imports.order)} imports from "

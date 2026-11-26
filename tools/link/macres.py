@@ -21,11 +21,22 @@ def cfrg(name):
     return head + member + bytes(size - len(member))
 
 
-def size_res(kb):
-    # canBackground, doesActivateOnFGSwitch, is32BitCompatible,
-    # isHighLevelEventAware
+def size_res(kb, background_only=False):
+    """Make a 'SIZE' resource: the flags and a partition of kb KiB.
+
+    The flags are canBackground, doesActivateOnFGSwitch, is32BitCompatible
+    and isHighLevelEventAware. With background_only, onlyBackground is
+    set too: the application has no user interface (a faceless
+    background application)."""
     flags = 0x1000 | 0x0800 | 0x0080 | 0x0040
+    if background_only:
+        flags |= 0x0400
     return struct.pack(">HII", flags, kb * 1024, kb * 1024)
+
+
+def file_type(text):
+    """Give a four-character code (a file type or a creator) as 4 bytes."""
+    return text.encode("mac_roman")[:4].ljust(4)
 
 
 def resource_fork(resources):

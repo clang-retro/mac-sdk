@@ -273,6 +273,13 @@ partition in KB) set the Finder name, the creator code and the `SIZE`
 resource; `--carbon` imports from CarbonLib first on PowerPC;
 `--console window` puts the C library's `stdin`, `stdout` and `stderr`
 in a window instead of files (see The C library).
+`--type` sets the file type (for example `APPC` for a control panel
+that is an application, or `appe` for a program that the system starts
+from the Extensions folder). `--background-only` sets `onlyBackground`
+in the `SIZE` resource, for a faceless background application.
+`--code-resource TYPE,ID` (68k, with `--no-libc`) makes a file with one
+code resource in place of an application: for example a screen saver
+module, an `INIT` or a `WDEF`. See `codelink.py` below.
 When a 68k program's data is out of the 16-bit PC-relative reach (a
 program over about 32 KB), `tools/macapp.py` compiles it again with
 `-mcmodel=large`, and says so; `--large` does that from the start. The
@@ -291,6 +298,17 @@ The linkers it runs are in `tools/link/` and can be used on their own:
   32 KB; code compiled with `-mcmodel=large` uses 32-bit addresses,
   which `start.S` relocates, and can be any size. Calls are 32-bit
   either way.
+- With `--code-resource TYPE,ID`, `codelink.py` writes the image as one
+  resource of that type and ID, with `start-coderes.S` first in place
+  of `start.S`. The owner of the resource calls its first byte. The
+  handle can move between two calls, so each call compares the load
+  address with the address of the last relocation, and when they are
+  different, adds the difference to each pointer of the table and
+  flushes the cache. Then it jumps to `main` with the caller's stack
+  and registers: `main` gets the caller's arguments as they are (for a
+  Pascal caller, give `main` in assembly, or a C function behind a small
+  assembly entry). A code resource has no A5 world: do not use the
+  QuickDraw globals (`qd`).
 - `peflink.py` links the XCOFF objects that `powerpc-apple-macos9`
   makes into a PEF application (a `cfrg` 0 resource, the PEF container
   in the data fork). Each imported call gets a glue stub that restores

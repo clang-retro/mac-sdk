@@ -2,7 +2,8 @@
 """Compile C sources and link them into a classic Mac OS application.
 
     python3 tools/macapp.py -o Hello.bin [--cpu fat|68k|ppc] [--name Hello]
-        [--creator ????] [--size KB] [--carbon] [--no-runtime] [--no-libc]
+        [--creator ????] [--type APPL] [--size KB] [--background-only]
+        [--code-resource TYPE,ID] [--carbon] [--no-runtime] [--no-libc]
         [--lib DIR] [--large] [--console file|window]
         [-- clang flags] hello.c ...
 
@@ -27,6 +28,13 @@ __crt_main, which calls exit(main(argc, argv)). The console (stdin,
 stdout and stderr) is a pair of files next to the program, or with
 --console window a window (libmacconsole.a). The output is MacBinary
 II, for hfsutils' "hcopy -m".
+
+--type sets the file type, and --background-only makes a faceless
+background application. With --code-resource TYPE,ID (68k only), the
+output is a file with one code resource in place of an application:
+tools/link/start-coderes.S comes first, relocates the image where it is
+loaded, and jumps to main with the caller's stack. Use --no-libc for a
+code resource: it has no A5 world and no C library start-up.
 
 68k code reaches its data PC-relative, within 32 KB, unless compiled
 with -mcmodel=large, which uses 32-bit addresses (start.S relocates
@@ -135,7 +143,16 @@ def build(cpu, a, clang, tmp, large=False):
     objs += [os.path.join(libdir, n) for n in libs
              if os.path.exists(os.path.join(libdir, n))]
     out = os.path.join(tmp, f"{cpu}.bin") if a.cpu == "fat" else a.output
-    args = ["-o", out, "--name", a.name, "--size", str(a.size)]
+    args = ["-o", out, "--name", a.name, "--size", str(a.size),
+            "--type", a.type] + \
+        (["--background-only"] if a.background_only else [])
+    if cpu == "68k" and a.code_resource:
+        # A code resource: start-coderes.S in place of start.S, and the
+        # program gives main.
+        objs[0] = os.path.join(tmp, "start-coderes.o")
+        run(clang + [f"--target={target}", "-c",
+                     os.path.join(LINK, "start-coderes.S"), "-o", objs[0]])
+        args += ["--code-resource", a.code_resource]
     if cpu == "68k":
         if not link_68k([sys.executable, os.path.join(LINK, "codelink.py"),
                          "--creator", a.creator] + args + objs):
@@ -180,6 +197,14 @@ def main():
     ap.add_argument("--console", choices=["file", "window"], default="file",
                     help="the C library's console: files next to the "
                     "program, or a window")
+    ap.add_argument("--type", default="APPL",
+                    help="file type (default APPL)")
+    ap.add_argument("--background-only", action="store_true",
+                    help="a faceless background application "
+                    "(onlyBackground in the SIZE resource)")
+    ap.add_argument("--code-resource", metavar="TYPE,ID",
+                    help="68k: make one code resource of this type and ID "
+                    "instead of an application (see start-coderes.S)")
     ap.add_argument("--large", action="store_true",
                     help="68k: compile with -mcmodel=large from the start")
     ap.add_argument("--carbon", action="store_true",
@@ -187,6 +212,8 @@ def main():
     a = ap.parse_args(argv)
     a.cflags = cflags
     a.name = a.name or os.path.splitext(os.path.basename(a.output))[0]
+    if a.code_resource and a.cpu != "68k":
+        sys.exit("macapp: --code-resource needs --cpu 68k")
     if a.cpu == "fat" and any(s.endswith((".o", ".a")) for s in a.sources):
         sys.exit("macapp: objects are for one CPU; use --cpu 68k or ppc")
     clang = shlex.split(os.environ.get("CLANG", "clang"))
