@@ -58,27 +58,27 @@ enum {
     kRegIterSibling = 6,
 };
 
-pascal void RegistryEntryIDDispose(RegEntryID *id);
+pascal void RegistryEntryIDDispose(RegEntryID *id) MAC_IMPORT(RegistryEntryIDDispose);
 
-pascal OSStatus RegistryEntryIterateCreate(RegEntryIter *cookie);
+pascal OSStatus RegistryEntryIterateCreate(RegEntryIter *cookie) MAC_IMPORT(RegistryEntryIterateCreate);
 
-pascal void RegistryEntryIterateDispose(RegEntryIter *cookie);
+pascal void RegistryEntryIterateDispose(RegEntryIter *cookie) MAC_IMPORT(RegistryEntryIterateDispose);
 
 // Each entry returned in foundEntry must be disposed of with
 // RegistryEntryIDDispose.
-pascal OSStatus RegistryEntryIterate(RegEntryIter *cookie, RegEntryIterationOp relationship, RegEntryID *foundEntry, Boolean *done);
+pascal OSStatus RegistryEntryIterate(RegEntryIter *cookie, RegEntryIterationOp relationship, RegEntryID *foundEntry, Boolean *done) MAC_IMPORT(RegistryEntryIterate);
 
 // Fails if the property already exists; use RegistryPropertySet to
 // change the value of an existing one.
-pascal OSStatus RegistryPropertyCreate(const RegEntryID *entryID, const RegPropertyName *propertyName, const void *propertyValue, RegPropertyValueSize propertySize);
+pascal OSStatus RegistryPropertyCreate(const RegEntryID *entryID, const RegPropertyName *propertyName, const void *propertyValue, RegPropertyValueSize propertySize) MAC_IMPORT(RegistryPropertyCreate);
 
-pascal OSStatus RegistryPropertyGetSize(const RegEntryID *entryID, const RegPropertyName *propertyName, RegPropertyValueSize *propertySize);
+pascal OSStatus RegistryPropertyGetSize(const RegEntryID *entryID, const RegPropertyName *propertyName, RegPropertyValueSize *propertySize) MAC_IMPORT(RegistryPropertyGetSize);
 
 // propertySize is the buffer size on entry and the value's size on
 // return.
-pascal OSStatus RegistryPropertyGet(const RegEntryID *entryID, const RegPropertyName *propertyName, void *propertyValue, RegPropertyValueSize *propertySize);
+pascal OSStatus RegistryPropertyGet(const RegEntryID *entryID, const RegPropertyName *propertyName, void *propertyValue, RegPropertyValueSize *propertySize) MAC_IMPORT(RegistryPropertyGet);
 
-pascal OSStatus RegistryPropertySet(const RegEntryID *entryID, const RegPropertyName *propertyName, const void *propertyValue, RegPropertyValueSize propertySize);
+pascal OSStatus RegistryPropertySet(const RegEntryID *entryID, const RegPropertyName *propertyName, const void *propertyValue, RegPropertyValueSize propertySize) MAC_IMPORT(RegistryPropertySet);
 
 #ifdef __cplusplus
 }

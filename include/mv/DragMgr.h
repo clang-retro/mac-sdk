@@ -223,83 +223,83 @@ typedef DragDrawingProcPtr DragDrawingUPP;
 
 enum { _DragDispatch = 0xABED };
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr InstallTrackingHandler(DragTrackingHandlerUPP trackingHandler, WindowRef theWindow, void *handlerRefCon) M68K_INLINE(0x7001, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr InstallTrackingHandler(DragTrackingHandlerUPP trackingHandler, WindowRef theWindow, void *handlerRefCon) MAC_IMPORT(InstallTrackingHandler) M68K_INLINE(0x7001, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr InstallReceiveHandler(DragReceiveHandlerUPP receiveHandler, WindowRef theWindow, void *handlerRefCon) M68K_INLINE(0x7002, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr InstallReceiveHandler(DragReceiveHandlerUPP receiveHandler, WindowRef theWindow, void *handlerRefCon) MAC_IMPORT(InstallReceiveHandler) M68K_INLINE(0x7002, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr RemoveTrackingHandler(DragTrackingHandlerUPP trackingHandler, WindowRef theWindow) M68K_INLINE(0x7003, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr RemoveTrackingHandler(DragTrackingHandlerUPP trackingHandler, WindowRef theWindow) MAC_IMPORT(RemoveTrackingHandler) M68K_INLINE(0x7003, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr RemoveReceiveHandler(DragReceiveHandlerUPP receiveHandler, WindowRef theWindow) M68K_INLINE(0x7004, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr RemoveReceiveHandler(DragReceiveHandlerUPP receiveHandler, WindowRef theWindow) MAC_IMPORT(RemoveReceiveHandler) M68K_INLINE(0x7004, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr NewDrag(DragRef *theDrag) M68K_INLINE(0x7005, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr NewDrag(DragRef *theDrag) MAC_IMPORT(NewDrag) M68K_INLINE(0x7005, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr DisposeDrag(DragRef theDrag) M68K_INLINE(0x7006, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr DisposeDrag(DragRef theDrag) MAC_IMPORT(DisposeDrag) M68K_INLINE(0x7006, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr AddDragItemFlavor(DragRef theDrag, DragItemRef theItemRef, FlavorType theType, const void *dataPtr, Size dataSize, FlavorFlags theFlags) M68K_INLINE(0x7007, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr AddDragItemFlavor(DragRef theDrag, DragItemRef theItemRef, FlavorType theType, const void *dataPtr, Size dataSize, FlavorFlags theFlags) MAC_IMPORT(AddDragItemFlavor) M68K_INLINE(0x7007, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr SetDragItemFlavorData(DragRef theDrag, DragItemRef theItemRef, FlavorType theType, const void *dataPtr, Size dataSize, UInt32 dataOffset) M68K_INLINE(0x7009, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr SetDragItemFlavorData(DragRef theDrag, DragItemRef theItemRef, FlavorType theType, const void *dataPtr, Size dataSize, UInt32 dataOffset) MAC_IMPORT(SetDragItemFlavorData) M68K_INLINE(0x7009, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr SetDragSendProc(DragRef theDrag, DragSendDataUPP sendProc, void *dragSendRefCon) M68K_INLINE(0x700A, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr SetDragSendProc(DragRef theDrag, DragSendDataUPP sendProc, void *dragSendRefCon) MAC_IMPORT(SetDragSendProc) M68K_INLINE(0x700A, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr SetDragInputProc(DragRef theDrag, DragInputUPP inputProc, void *dragInputRefCon) M68K_INLINE(0x700B, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr SetDragInputProc(DragRef theDrag, DragInputUPP inputProc, void *dragInputRefCon) MAC_IMPORT(SetDragInputProc) M68K_INLINE(0x700B, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr SetDragDrawingProc(DragRef theDrag, DragDrawingUPP drawingProc, void *dragDrawingRefCon) M68K_INLINE(0x700C, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr SetDragDrawingProc(DragRef theDrag, DragDrawingUPP drawingProc, void *dragDrawingRefCon) MAC_IMPORT(SetDragDrawingProc) M68K_INLINE(0x700C, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr TrackDrag(DragRef theDrag, const EventRecord *theEvent, RgnHandle theRegion) M68K_INLINE(0x700D, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr TrackDrag(DragRef theDrag, const EventRecord *theEvent, RgnHandle theRegion) MAC_IMPORT(TrackDrag) M68K_INLINE(0x700D, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr CountDragItems(DragRef theDrag, UInt16 *numItems) M68K_INLINE(0x700E, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr CountDragItems(DragRef theDrag, UInt16 *numItems) MAC_IMPORT(CountDragItems) M68K_INLINE(0x700E, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr GetDragItemReferenceNumber(DragRef theDrag, UInt16 index, DragItemRef *theItemRef) M68K_INLINE(0x700F, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr GetDragItemReferenceNumber(DragRef theDrag, UInt16 index, DragItemRef *theItemRef) MAC_IMPORT(GetDragItemReferenceNumber) M68K_INLINE(0x700F, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr CountDragItemFlavors(DragRef theDrag, DragItemRef theItemRef, UInt16 *numFlavors) M68K_INLINE(0x7010, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr CountDragItemFlavors(DragRef theDrag, DragItemRef theItemRef, UInt16 *numFlavors) MAC_IMPORT(CountDragItemFlavors) M68K_INLINE(0x7010, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr GetFlavorType(DragRef theDrag, DragItemRef theItemRef, UInt16 index, FlavorType *theType) M68K_INLINE(0x7011, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr GetFlavorType(DragRef theDrag, DragItemRef theItemRef, UInt16 index, FlavorType *theType) MAC_IMPORT(GetFlavorType) M68K_INLINE(0x7011, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr GetFlavorFlags(DragRef theDrag, DragItemRef theItemRef, FlavorType theType, FlavorFlags *theFlags) M68K_INLINE(0x7012, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr GetFlavorFlags(DragRef theDrag, DragItemRef theItemRef, FlavorType theType, FlavorFlags *theFlags) MAC_IMPORT(GetFlavorFlags) M68K_INLINE(0x7012, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr GetFlavorDataSize(DragRef theDrag, DragItemRef theItemRef, FlavorType theType, Size *dataSize) M68K_INLINE(0x7013, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr GetFlavorDataSize(DragRef theDrag, DragItemRef theItemRef, FlavorType theType, Size *dataSize) MAC_IMPORT(GetFlavorDataSize) M68K_INLINE(0x7013, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr GetFlavorData(DragRef theDrag, DragItemRef theItemRef, FlavorType theType, void *dataPtr, Size *dataSize, UInt32 dataOffset) M68K_INLINE(0x7014, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr GetFlavorData(DragRef theDrag, DragItemRef theItemRef, FlavorType theType, void *dataPtr, Size *dataSize, UInt32 dataOffset) MAC_IMPORT(GetFlavorData) M68K_INLINE(0x7014, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr GetDragItemBounds(DragRef theDrag, DragItemRef theItemRef, Rect *itemBounds) M68K_INLINE(0x7015, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr GetDragItemBounds(DragRef theDrag, DragItemRef theItemRef, Rect *itemBounds) MAC_IMPORT(GetDragItemBounds) M68K_INLINE(0x7015, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr SetDragItemBounds(DragRef theDrag, DragItemRef theItemRef, const Rect *itemBounds) M68K_INLINE(0x7016, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr SetDragItemBounds(DragRef theDrag, DragItemRef theItemRef, const Rect *itemBounds) MAC_IMPORT(SetDragItemBounds) M68K_INLINE(0x7016, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr GetDropLocation(DragRef theDrag, AEDesc *dropLocation) M68K_INLINE(0x7017, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr GetDropLocation(DragRef theDrag, AEDesc *dropLocation) MAC_IMPORT(GetDropLocation) M68K_INLINE(0x7017, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr SetDropLocation(DragRef theDrag, const AEDesc *dropLocation) M68K_INLINE(0x7018, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr SetDropLocation(DragRef theDrag, const AEDesc *dropLocation) MAC_IMPORT(SetDropLocation) M68K_INLINE(0x7018, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr GetDragAttributes(DragRef theDrag, DragAttributes *flags) M68K_INLINE(0x7019, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr GetDragAttributes(DragRef theDrag, DragAttributes *flags) MAC_IMPORT(GetDragAttributes) M68K_INLINE(0x7019, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr GetDragMouse(DragRef theDrag, Point *mouse, Point *globalPinnedMouse) M68K_INLINE(0x701A, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr GetDragMouse(DragRef theDrag, Point *mouse, Point *globalPinnedMouse) MAC_IMPORT(GetDragMouse) M68K_INLINE(0x701A, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr SetDragMouse(DragRef theDrag, Point globalPinnedMouse) M68K_INLINE(0x701B, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr SetDragMouse(DragRef theDrag, Point globalPinnedMouse) MAC_IMPORT(SetDragMouse) M68K_INLINE(0x701B, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr GetDragOrigin(DragRef theDrag, Point *globalInitialMouse) M68K_INLINE(0x701C, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr GetDragOrigin(DragRef theDrag, Point *globalInitialMouse) MAC_IMPORT(GetDragOrigin) M68K_INLINE(0x701C, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr GetDragModifiers(DragRef theDrag, INTEGER *modifiers, INTEGER *mouseDownModifiers, INTEGER *mouseUpModifiers) M68K_INLINE(0x701D, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr GetDragModifiers(DragRef theDrag, INTEGER *modifiers, INTEGER *mouseDownModifiers, INTEGER *mouseUpModifiers) MAC_IMPORT(GetDragModifiers) M68K_INLINE(0x701D, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr ShowDragHilite(DragRef theDrag, RgnHandle hiliteFrame, Boolean inside) M68K_INLINE(0x701E, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr ShowDragHilite(DragRef theDrag, RgnHandle hiliteFrame, Boolean inside) MAC_IMPORT(ShowDragHilite) M68K_INLINE(0x701E, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr HideDragHilite(DragRef theDrag) M68K_INLINE(0x701F, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr HideDragHilite(DragRef theDrag) MAC_IMPORT(HideDragHilite) M68K_INLINE(0x701F, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr DragPreScroll(DragRef theDrag, INTEGER dH, INTEGER dV) M68K_INLINE(0x7020, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr DragPreScroll(DragRef theDrag, INTEGER dH, INTEGER dV) MAC_IMPORT(DragPreScroll) M68K_INLINE(0x7020, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr DragPostScroll(DragRef theDrag) M68K_INLINE(0x7021, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr DragPostScroll(DragRef theDrag) MAC_IMPORT(DragPostScroll) M68K_INLINE(0x7021, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr UpdateDragHilite(DragRef theDrag, RgnHandle updateRgn) M68K_INLINE(0x7022, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr UpdateDragHilite(DragRef theDrag, RgnHandle updateRgn) MAC_IMPORT(UpdateDragHilite) M68K_INLINE(0x7022, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal Boolean WaitMouseMoved(Point initialMouse) M68K_INLINE(0x7023, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal Boolean WaitMouseMoved(Point initialMouse) MAC_IMPORT(WaitMouseMoved) M68K_INLINE(0x7023, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr ZoomRects(const Rect *fromRect, const Rect *toRect, INTEGER zoomSteps, ZoomAcceleration acceleration) M68K_INLINE(0x7024, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr ZoomRects(const Rect *fromRect, const Rect *toRect, INTEGER zoomSteps, ZoomAcceleration acceleration) MAC_IMPORT(ZoomRects) M68K_INLINE(0x7024, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr ZoomRegion(RgnHandle region, Point zoomDistance, INTEGER zoomSteps, ZoomAcceleration acceleration) M68K_INLINE(0x7025, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr ZoomRegion(RgnHandle region, Point zoomDistance, INTEGER zoomSteps, ZoomAcceleration acceleration) MAC_IMPORT(ZoomRegion) M68K_INLINE(0x7025, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr GetDragHiliteColor(WindowRef window, RGBColor *color) M68K_INLINE(0x7026, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr GetDragHiliteColor(WindowRef window, RGBColor *color) MAC_IMPORT(GetDragHiliteColor) M68K_INLINE(0x7026, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr SetDragImage(DragRef theDrag, PixMapHandle imagePixMap, RgnHandle imageRgn, Point imageOffsetPt, DragImageFlags theImageFlags) M68K_INLINE(0x7027, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr SetDragImage(DragRef theDrag, PixMapHandle imagePixMap, RgnHandle imageRgn, Point imageOffsetPt, DragImageFlags theImageFlags) MAC_IMPORT(SetDragImage) M68K_INLINE(0x7027, 0xABED);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr ChangeDragBehaviors(DragRef theDrag, DragBehaviors inBehaviorsToSet, DragBehaviors inBehaviorsToClear) M68K_INLINE(0x7028, 0xABED);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'drag'") pascal OSErr ChangeDragBehaviors(DragRef theDrag, DragBehaviors inBehaviorsToSet, DragBehaviors inBehaviorsToClear) MAC_IMPORT(ChangeDragBehaviors) M68K_INLINE(0x7028, 0xABED);
 
 #ifdef __cplusplus
 }

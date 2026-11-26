@@ -13,12 +13,14 @@
 #  define TARGET_RT_MAC_CFM 0
 #  define TARGET_RT_MAC_68881 0
 #  define M68K_INLINE(...) __attribute__((__raw_inline__(__VA_ARGS__)))
+#  define MAC_IMPORT(name)
 #  define GetCurrentArchitecture() ((ISAType)0)
 #elif defined(__powerpc__) || defined(__ppc__)
 #  define TARGET_CPU_68K 0
 #  define TARGET_CPU_PPC 1
 #  define TARGET_RT_MAC_CFM 1
 #  define M68K_INLINE(...)
+#  define MAC_IMPORT(name) __asm__("__imp_" #name)
 #  define GetCurrentArchitecture() ((ISAType)1)
 #else
 #  error "classic Mac OS headers: unknown CPU"

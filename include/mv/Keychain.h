@@ -147,143 +147,143 @@ enum {
 
 // Keychain Manager
 #if !TARGET_CPU_68K
-pascal OSStatus KCGetKeychainManagerVersion(UInt32 *returnVers);
+pascal OSStatus KCGetKeychainManagerVersion(UInt32 *returnVers) MAC_IMPORT(KCGetKeychainManagerVersion);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCSetInteractionAllowed(Boolean state);
+pascal OSStatus KCSetInteractionAllowed(Boolean state) MAC_IMPORT(KCSetInteractionAllowed);
 #endif
 
 #if !TARGET_CPU_68K
-pascal Boolean KCIsInteractionAllowed(void);
+pascal Boolean KCIsInteractionAllowed(void) MAC_IMPORT(KCIsInteractionAllowed);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCMakeKCRefFromFSSpec(FSSpec *keychainFSSpec, KCRef *keychain);
+pascal OSStatus KCMakeKCRefFromFSSpec(FSSpec *keychainFSSpec, KCRef *keychain) MAC_IMPORT(KCMakeKCRefFromFSSpec);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCMakeKCRefFromAlias(AliasHandle keychainAlias, KCRef *keychain);
+pascal OSStatus KCMakeKCRefFromAlias(AliasHandle keychainAlias, KCRef *keychain) MAC_IMPORT(KCMakeKCRefFromAlias);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCMakeAliasFromKCRef(KCRef keychain, AliasHandle *keychainAlias);
+pascal OSStatus KCMakeAliasFromKCRef(KCRef keychain, AliasHandle *keychainAlias) MAC_IMPORT(KCMakeAliasFromKCRef);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCReleaseKeychain(KCRef *keychain);
+pascal OSStatus KCReleaseKeychain(KCRef *keychain) MAC_IMPORT(KCReleaseKeychain);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCGetDefaultKeychain(KCRef *keychain);
+pascal OSStatus KCGetDefaultKeychain(KCRef *keychain) MAC_IMPORT(KCGetDefaultKeychain);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCSetDefaultKeychain(KCRef keychain);
+pascal OSStatus KCSetDefaultKeychain(KCRef keychain) MAC_IMPORT(KCSetDefaultKeychain);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCGetStatus(KCRef keychain, UInt32 *keychainStatus);
+pascal OSStatus KCGetStatus(KCRef keychain, UInt32 *keychainStatus) MAC_IMPORT(KCGetStatus);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCGetKeychain(KCItemRef item, KCRef *keychain);
+pascal OSStatus KCGetKeychain(KCItemRef item, KCRef *keychain) MAC_IMPORT(KCGetKeychain);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCGetKeychainName(KCRef keychain, StringPtr keychainName);
+pascal OSStatus KCGetKeychainName(KCRef keychain, StringPtr keychainName) MAC_IMPORT(KCGetKeychainName);
 #endif
 
 #if !TARGET_CPU_68K
-pascal UInt16 KCCountKeychains(void);
+pascal UInt16 KCCountKeychains(void) MAC_IMPORT(KCCountKeychains);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCGetIndKeychain(UInt16 index, KCRef *keychain);
+pascal OSStatus KCGetIndKeychain(UInt16 index, KCRef *keychain) MAC_IMPORT(KCGetIndKeychain);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCUnlock(KCRef keychain, StringPtr password);
+pascal OSStatus KCUnlock(KCRef keychain, StringPtr password) MAC_IMPORT(KCUnlock);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCCreateKeychain(StringPtr password, KCRef *keychain);
+pascal OSStatus KCCreateKeychain(StringPtr password, KCRef *keychain) MAC_IMPORT(KCCreateKeychain);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCChangeSettings(KCRef keychain);
+pascal OSStatus KCChangeSettings(KCRef keychain) MAC_IMPORT(KCChangeSettings);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCLock(KCRef keychain);
+pascal OSStatus KCLock(KCRef keychain) MAC_IMPORT(KCLock);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCAddGenericPassword(StringPtr serviceName, StringPtr accountName, UInt32 passwordLength, const void *passwordData, KCItemRef *item);
+pascal OSStatus KCAddGenericPassword(StringPtr serviceName, StringPtr accountName, UInt32 passwordLength, const void *passwordData, KCItemRef *item) MAC_IMPORT(KCAddGenericPassword);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCFindGenericPassword(StringPtr serviceName, StringPtr accountName, UInt32 maxLength, void *passwordData, UInt32 *actualLength, KCItemRef *item);
+pascal OSStatus KCFindGenericPassword(StringPtr serviceName, StringPtr accountName, UInt32 maxLength, void *passwordData, UInt32 *actualLength, KCItemRef *item) MAC_IMPORT(KCFindGenericPassword);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCAddInternetPassword(StringPtr serverName, StringPtr securityDomain, StringPtr accountName, UInt16 port, OSType protocol, OSType authType, UInt32 passwordLength, const void *passwordData, KCItemRef *item);
+pascal OSStatus KCAddInternetPassword(StringPtr serverName, StringPtr securityDomain, StringPtr accountName, UInt16 port, OSType protocol, OSType authType, UInt32 passwordLength, const void *passwordData, KCItemRef *item) MAC_IMPORT(KCAddInternetPassword);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCFindInternetPassword(StringPtr serverName, StringPtr securityDomain, StringPtr accountName, UInt16 port, OSType protocol, OSType authType, UInt32 maxLength, void *passwordData, UInt32 *actualLength, KCItemRef *item);
+pascal OSStatus KCFindInternetPassword(StringPtr serverName, StringPtr securityDomain, StringPtr accountName, UInt16 port, OSType protocol, OSType authType, UInt32 maxLength, void *passwordData, UInt32 *actualLength, KCItemRef *item) MAC_IMPORT(KCFindInternetPassword);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCNewItem(KCItemClass itemClass, OSType itemCreator, UInt32 length, const void *data, KCItemRef *item);
+pascal OSStatus KCNewItem(KCItemClass itemClass, OSType itemCreator, UInt32 length, const void *data, KCItemRef *item) MAC_IMPORT(KCNewItem);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCSetAttribute(KCItemRef item, KCAttribute *attr);
+pascal OSStatus KCSetAttribute(KCItemRef item, KCAttribute *attr) MAC_IMPORT(KCSetAttribute);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCGetAttribute(KCItemRef item, KCAttribute *attr, UInt32 *actualLength);
+pascal OSStatus KCGetAttribute(KCItemRef item, KCAttribute *attr, UInt32 *actualLength) MAC_IMPORT(KCGetAttribute);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCSetData(KCItemRef item, UInt32 length, const void *data);
+pascal OSStatus KCSetData(KCItemRef item, UInt32 length, const void *data) MAC_IMPORT(KCSetData);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCGetData(KCItemRef item, UInt32 maxLength, void *data, UInt32 *actualLength);
+pascal OSStatus KCGetData(KCItemRef item, UInt32 maxLength, void *data, UInt32 *actualLength) MAC_IMPORT(KCGetData);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCAddItem(KCItemRef item);
+pascal OSStatus KCAddItem(KCItemRef item) MAC_IMPORT(KCAddItem);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCDeleteItem(KCItemRef item);
+pascal OSStatus KCDeleteItem(KCItemRef item) MAC_IMPORT(KCDeleteItem);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCUpdateItem(KCItemRef item);
+pascal OSStatus KCUpdateItem(KCItemRef item) MAC_IMPORT(KCUpdateItem);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCReleaseItem(KCItemRef *item);
+pascal OSStatus KCReleaseItem(KCItemRef *item) MAC_IMPORT(KCReleaseItem);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCCopyItem(KCItemRef item, KCRef destKeychain, KCItemRef *copy);
+pascal OSStatus KCCopyItem(KCItemRef item, KCRef destKeychain, KCItemRef *copy) MAC_IMPORT(KCCopyItem);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCFindFirstItem(KCRef keychain, const KCAttributeList *attrList, KCSearchRef *search, KCItemRef *item);
+pascal OSStatus KCFindFirstItem(KCRef keychain, const KCAttributeList *attrList, KCSearchRef *search, KCItemRef *item) MAC_IMPORT(KCFindFirstItem);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCFindNextItem(KCSearchRef search, KCItemRef *item);
+pascal OSStatus KCFindNextItem(KCSearchRef search, KCItemRef *item) MAC_IMPORT(KCFindNextItem);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus KCReleaseSearch(KCSearchRef *search);
+pascal OSStatus KCReleaseSearch(KCSearchRef *search) MAC_IMPORT(KCReleaseSearch);
 #endif
 
 #ifdef __cplusplus

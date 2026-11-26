@@ -618,195 +618,195 @@ typedef XPPParamBlock *XPPParmBlkPtr;
 #if TARGET_CPU_68K
 static __inline__ OSErr MPPOpen(void);
 #else
-pascal OSErr MPPOpen(void);
+pascal OSErr MPPOpen(void) MAC_IMPORT(MPPOpen);
 #endif
 
 // ATP is part of the .MPP driver.
 #if TARGET_CPU_68K
 static __inline__ OSErr ATPLoad(void);
 #else
-pascal OSErr ATPLoad(void);
+pascal OSErr ATPLoad(void) MAC_IMPORT(ATPLoad);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr ATPUnload(void);
 #else
-pascal OSErr ATPUnload(void);
+pascal OSErr ATPUnload(void) MAC_IMPORT(ATPUnload);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr OpenXPP(INTEGER *xppRefnum);
 #else
-pascal OSErr OpenXPP(INTEGER *xppRefnum);
+pascal OSErr OpenXPP(INTEGER *xppRefnum) MAC_IMPORT(OpenXPP);
 #endif
 
 // True when port B is configured for AppleTalk and .MPP is open.
 #if TARGET_CPU_68K
 static __inline__ Boolean IsMPPOpen(void);
 #else
-pascal Boolean IsMPPOpen(void);
+pascal Boolean IsMPPOpen(void) MAC_IMPORT(IsMPPOpen);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ Boolean IsATPOpen(void);
 #else
-pascal Boolean IsATPOpen(void);
+pascal Boolean IsATPOpen(void) MAC_IMPORT(IsATPOpen);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr PWriteLAP(MPPPBPtr thePBptr, Boolean async);
 #else
-pascal OSErr PWriteLAP(MPPPBPtr thePBptr, Boolean async);
+pascal OSErr PWriteLAP(MPPPBPtr thePBptr, Boolean async) MAC_IMPORT(PWriteLAP);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr PDetachPH(MPPPBPtr thePBptr, Boolean async);
 #else
-pascal OSErr PDetachPH(MPPPBPtr thePBptr, Boolean async);
+pascal OSErr PDetachPH(MPPPBPtr thePBptr, Boolean async) MAC_IMPORT(PDetachPH);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr PAttachPH(MPPPBPtr thePBptr, Boolean async);
 #else
-pascal OSErr PAttachPH(MPPPBPtr thePBptr, Boolean async);
+pascal OSErr PAttachPH(MPPPBPtr thePBptr, Boolean async) MAC_IMPORT(PAttachPH);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr PWriteDDP(MPPPBPtr thePBptr, Boolean async);
 #else
-pascal OSErr PWriteDDP(MPPPBPtr thePBptr, Boolean async);
+pascal OSErr PWriteDDP(MPPPBPtr thePBptr, Boolean async) MAC_IMPORT(PWriteDDP);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr PCloseSkt(MPPPBPtr thePBptr, Boolean async);
 #else
-pascal OSErr PCloseSkt(MPPPBPtr thePBptr, Boolean async);
+pascal OSErr PCloseSkt(MPPPBPtr thePBptr, Boolean async) MAC_IMPORT(PCloseSkt);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr POpenSkt(MPPPBPtr thePBptr, Boolean async);
 #else
-pascal OSErr POpenSkt(MPPPBPtr thePBptr, Boolean async);
+pascal OSErr POpenSkt(MPPPBPtr thePBptr, Boolean async) MAC_IMPORT(POpenSkt);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr PRegisterName(MPPPBPtr thePBptr, Boolean async);
 #else
-pascal OSErr PRegisterName(MPPPBPtr thePBptr, Boolean async);
+pascal OSErr PRegisterName(MPPPBPtr thePBptr, Boolean async) MAC_IMPORT(PRegisterName);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr PLookupName(MPPPBPtr thePBptr, Boolean async);
 #else
-pascal OSErr PLookupName(MPPPBPtr thePBptr, Boolean async);
+pascal OSErr PLookupName(MPPPBPtr thePBptr, Boolean async) MAC_IMPORT(PLookupName);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr PConfirmName(MPPPBPtr thePBptr, Boolean async);
 #else
-pascal OSErr PConfirmName(MPPPBPtr thePBptr, Boolean async);
+pascal OSErr PConfirmName(MPPPBPtr thePBptr, Boolean async) MAC_IMPORT(PConfirmName);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr PRemoveName(MPPPBPtr thePBptr, Boolean async);
 #else
-pascal OSErr PRemoveName(MPPPBPtr thePBptr, Boolean async);
+pascal OSErr PRemoveName(MPPPBPtr thePBptr, Boolean async) MAC_IMPORT(PRemoveName);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr PKillNBP(MPPPBPtr thePBptr, Boolean async);
 #else
-pascal OSErr PKillNBP(MPPPBPtr thePBptr, Boolean async);
+pascal OSErr PKillNBP(MPPPBPtr thePBptr, Boolean async) MAC_IMPORT(PKillNBP);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr PSetSelfSend(MPPPBPtr thePBptr, Boolean async);
 #else
-pascal OSErr PSetSelfSend(MPPPBPtr thePBptr, Boolean async);
+pascal OSErr PSetSelfSend(MPPPBPtr thePBptr, Boolean async) MAC_IMPORT(PSetSelfSend);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr PGetAppleTalkInfo(MPPPBPtr thePBptr, Boolean async);
 #else
-pascal OSErr PGetAppleTalkInfo(MPPPBPtr thePBptr, Boolean async);
+pascal OSErr PGetAppleTalkInfo(MPPPBPtr thePBptr, Boolean async) MAC_IMPORT(PGetAppleTalkInfo);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr PATalkClosePrep(MPPPBPtr thePBptr, Boolean async);
 #else
-pascal OSErr PATalkClosePrep(MPPPBPtr thePBptr, Boolean async);
+pascal OSErr PATalkClosePrep(MPPPBPtr thePBptr, Boolean async) MAC_IMPORT(PATalkClosePrep);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr POpenATPSkt(ATPPBPtr thePBptr, Boolean async);
 #else
-pascal OSErr POpenATPSkt(ATPPBPtr thePBptr, Boolean async);
+pascal OSErr POpenATPSkt(ATPPBPtr thePBptr, Boolean async) MAC_IMPORT(POpenATPSkt);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr PCloseATPSkt(ATPPBPtr thePBptr, Boolean async);
 #else
-pascal OSErr PCloseATPSkt(ATPPBPtr thePBptr, Boolean async);
+pascal OSErr PCloseATPSkt(ATPPBPtr thePBptr, Boolean async) MAC_IMPORT(PCloseATPSkt);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr PSendRequest(ATPPBPtr thePBptr, Boolean async);
 #else
-pascal OSErr PSendRequest(ATPPBPtr thePBptr, Boolean async);
+pascal OSErr PSendRequest(ATPPBPtr thePBptr, Boolean async) MAC_IMPORT(PSendRequest);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr PNSendRequest(ATPPBPtr thePBptr, Boolean async);
 #else
-pascal OSErr PNSendRequest(ATPPBPtr thePBptr, Boolean async);
+pascal OSErr PNSendRequest(ATPPBPtr thePBptr, Boolean async) MAC_IMPORT(PNSendRequest);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr PGetRequest(ATPPBPtr thePBptr, Boolean async);
 #else
-pascal OSErr PGetRequest(ATPPBPtr thePBptr, Boolean async);
+pascal OSErr PGetRequest(ATPPBPtr thePBptr, Boolean async) MAC_IMPORT(PGetRequest);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr PSendResponse(ATPPBPtr thePBptr, Boolean async);
 #else
-pascal OSErr PSendResponse(ATPPBPtr thePBptr, Boolean async);
+pascal OSErr PSendResponse(ATPPBPtr thePBptr, Boolean async) MAC_IMPORT(PSendResponse);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr PAddResponse(ATPPBPtr thePBptr, Boolean async);
 #else
-pascal OSErr PAddResponse(ATPPBPtr thePBptr, Boolean async);
+pascal OSErr PAddResponse(ATPPBPtr thePBptr, Boolean async) MAC_IMPORT(PAddResponse);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr PRelTCB(ATPPBPtr thePBptr, Boolean async);
 #else
-pascal OSErr PRelTCB(ATPPBPtr thePBptr, Boolean async);
+pascal OSErr PRelTCB(ATPPBPtr thePBptr, Boolean async) MAC_IMPORT(PRelTCB);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr PRelRspCB(ATPPBPtr thePBptr, Boolean async);
 #else
-pascal OSErr PRelRspCB(ATPPBPtr thePBptr, Boolean async);
+pascal OSErr PRelRspCB(ATPPBPtr thePBptr, Boolean async) MAC_IMPORT(PRelRspCB);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr PKillSendReq(ATPPBPtr thePBptr, Boolean async);
 #else
-pascal OSErr PKillSendReq(ATPPBPtr thePBptr, Boolean async);
+pascal OSErr PKillSendReq(ATPPBPtr thePBptr, Boolean async) MAC_IMPORT(PKillSendReq);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr PKillGetReq(ATPPBPtr thePBptr, Boolean async);
 #else
-pascal OSErr PKillGetReq(ATPPBPtr thePBptr, Boolean async);
+pascal OSErr PKillGetReq(ATPPBPtr thePBptr, Boolean async) MAC_IMPORT(PKillGetReq);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr ATPKillAllGetReq(ATPPBPtr thePBptr, Boolean async);
 #else
-pascal OSErr ATPKillAllGetReq(ATPPBPtr thePBptr, Boolean async);
+pascal OSErr ATPKillAllGetReq(ATPPBPtr thePBptr, Boolean async) MAC_IMPORT(ATPKillAllGetReq);
 #endif
 
 // ASP and AFP: set ioRefNum to the .XPP reference number from OpenXPP
@@ -814,73 +814,73 @@ pascal OSErr ATPKillAllGetReq(ATPPBPtr thePBptr, Boolean async);
 #if TARGET_CPU_68K
 static __inline__ OSErr ASPOpenSession(XPPParmBlkPtr thePBptr, Boolean async);
 #else
-pascal OSErr ASPOpenSession(XPPParmBlkPtr thePBptr, Boolean async);
+pascal OSErr ASPOpenSession(XPPParmBlkPtr thePBptr, Boolean async) MAC_IMPORT(ASPOpenSession);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr ASPCloseSession(XPPParmBlkPtr thePBptr, Boolean async);
 #else
-pascal OSErr ASPCloseSession(XPPParmBlkPtr thePBptr, Boolean async);
+pascal OSErr ASPCloseSession(XPPParmBlkPtr thePBptr, Boolean async) MAC_IMPORT(ASPCloseSession);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr ASPAbortOS(XPPParmBlkPtr thePBptr, Boolean async);
 #else
-pascal OSErr ASPAbortOS(XPPParmBlkPtr thePBptr, Boolean async);
+pascal OSErr ASPAbortOS(XPPParmBlkPtr thePBptr, Boolean async) MAC_IMPORT(ASPAbortOS);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr ASPGetParms(XPPParmBlkPtr thePBptr, Boolean async);
 #else
-pascal OSErr ASPGetParms(XPPParmBlkPtr thePBptr, Boolean async);
+pascal OSErr ASPGetParms(XPPParmBlkPtr thePBptr, Boolean async) MAC_IMPORT(ASPGetParms);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr ASPCloseAll(XPPParmBlkPtr thePBptr, Boolean async);
 #else
-pascal OSErr ASPCloseAll(XPPParmBlkPtr thePBptr, Boolean async);
+pascal OSErr ASPCloseAll(XPPParmBlkPtr thePBptr, Boolean async) MAC_IMPORT(ASPCloseAll);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr ASPUserWrite(XPPParmBlkPtr thePBptr, Boolean async);
 #else
-pascal OSErr ASPUserWrite(XPPParmBlkPtr thePBptr, Boolean async);
+pascal OSErr ASPUserWrite(XPPParmBlkPtr thePBptr, Boolean async) MAC_IMPORT(ASPUserWrite);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr ASPUserCommand(XPPParmBlkPtr thePBptr, Boolean async);
 #else
-pascal OSErr ASPUserCommand(XPPParmBlkPtr thePBptr, Boolean async);
+pascal OSErr ASPUserCommand(XPPParmBlkPtr thePBptr, Boolean async) MAC_IMPORT(ASPUserCommand);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr ASPGetStatus(XPPParmBlkPtr thePBptr, Boolean async);
 #else
-pascal OSErr ASPGetStatus(XPPParmBlkPtr thePBptr, Boolean async);
+pascal OSErr ASPGetStatus(XPPParmBlkPtr thePBptr, Boolean async) MAC_IMPORT(ASPGetStatus);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr AFPCommand(XPPParmBlkPtr thePBptr, Boolean async);
 #else
-pascal OSErr AFPCommand(XPPParmBlkPtr thePBptr, Boolean async);
+pascal OSErr AFPCommand(XPPParmBlkPtr thePBptr, Boolean async) MAC_IMPORT(AFPCommand);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr GetLocalZones(XPPParmBlkPtr thePBptr, Boolean async);
 #else
-pascal OSErr GetLocalZones(XPPParmBlkPtr thePBptr, Boolean async);
+pascal OSErr GetLocalZones(XPPParmBlkPtr thePBptr, Boolean async) MAC_IMPORT(GetLocalZones);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr GetZoneList(XPPParmBlkPtr thePBptr, Boolean async);
 #else
-pascal OSErr GetZoneList(XPPParmBlkPtr thePBptr, Boolean async);
+pascal OSErr GetZoneList(XPPParmBlkPtr thePBptr, Boolean async) MAC_IMPORT(GetZoneList);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr GetMyZone(XPPParmBlkPtr thePBptr, Boolean async);
 #else
-pascal OSErr GetMyZone(XPPParmBlkPtr thePBptr, Boolean async);
+pascal OSErr GetMyZone(XPPParmBlkPtr thePBptr, Boolean async) MAC_IMPORT(GetMyZone);
 #endif
 
 // Building records
@@ -888,52 +888,52 @@ pascal OSErr GetMyZone(XPPParmBlkPtr thePBptr, Boolean async);
 #if TARGET_CPU_68K
 static __inline__ void BuildLAPwds(Ptr wdsPtr, Ptr dataPtr, INTEGER destHost, INTEGER protoType, INTEGER frameLen);
 #else
-pascal void BuildLAPwds(Ptr wdsPtr, Ptr dataPtr, INTEGER destHost, INTEGER protoType, INTEGER frameLen);
+pascal void BuildLAPwds(Ptr wdsPtr, Ptr dataPtr, INTEGER destHost, INTEGER protoType, INTEGER frameLen) MAC_IMPORT(BuildLAPwds);
 #endif
 
 // Like the ROM's version, this leaves the first entry's length alone.
 #if TARGET_CPU_68K
 static __inline__ void BuildDDPwds(Ptr wdsPtr, Ptr headerPtr, Ptr dataPtr, AddrBlock netAddr, INTEGER ddpType, INTEGER dataLen);
 #else
-pascal void BuildDDPwds(Ptr wdsPtr, Ptr headerPtr, Ptr dataPtr, AddrBlock netAddr, INTEGER ddpType, INTEGER dataLen);
+pascal void BuildDDPwds(Ptr wdsPtr, Ptr headerPtr, Ptr dataPtr, AddrBlock netAddr, INTEGER ddpType, INTEGER dataLen) MAC_IMPORT(BuildDDPwds);
 #endif
 
 // Splits a buffer into ATP response buffers of up to 578 bytes.
 #if TARGET_CPU_68K
 static __inline__ INTEGER BuildBDS(Ptr buffPtr, Ptr bdsPtr, INTEGER buffSize);
 #else
-pascal INTEGER BuildBDS(Ptr buffPtr, Ptr bdsPtr, INTEGER buffSize);
+pascal INTEGER BuildBDS(Ptr buffPtr, Ptr bdsPtr, INTEGER buffSize) MAC_IMPORT(BuildBDS);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void NBPSetEntity(Ptr buffer, ConstStr32Param nbpObject, ConstStr32Param nbpType, ConstStr32Param nbpZone);
 #else
-pascal void NBPSetEntity(Ptr buffer, ConstStr32Param nbpObject, ConstStr32Param nbpType, ConstStr32Param nbpZone);
+pascal void NBPSetEntity(Ptr buffer, ConstStr32Param nbpObject, ConstStr32Param nbpType, ConstStr32Param nbpZone) MAC_IMPORT(NBPSetEntity);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void NBPSetNTE(Ptr ntePtr, ConstStr32Param nbpObject, ConstStr32Param nbpType, ConstStr32Param nbpZone, INTEGER socket);
 #else
-pascal void NBPSetNTE(Ptr ntePtr, ConstStr32Param nbpObject, ConstStr32Param nbpType, ConstStr32Param nbpZone, INTEGER socket);
+pascal void NBPSetNTE(Ptr ntePtr, ConstStr32Param nbpObject, ConstStr32Param nbpType, ConstStr32Param nbpZone, INTEGER socket) MAC_IMPORT(NBPSetNTE);
 #endif
 
 // Gets one name and address from the buffer PLookupName filled.
 #if TARGET_CPU_68K
 static __inline__ OSErr NBPExtract(Ptr theBuffer, INTEGER numInBuf, INTEGER whichOne, EntityName *abEntity, AddrBlock *address);
 #else
-pascal OSErr NBPExtract(Ptr theBuffer, INTEGER numInBuf, INTEGER whichOne, EntityName *abEntity, AddrBlock *address);
+pascal OSErr NBPExtract(Ptr theBuffer, INTEGER numInBuf, INTEGER whichOne, EntityName *abEntity, AddrBlock *address) MAC_IMPORT(NBPExtract);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr GetNodeAddress(INTEGER *myNode, INTEGER *myNet);
 #else
-pascal OSErr GetNodeAddress(INTEGER *myNode, INTEGER *myNet);
+pascal OSErr GetNodeAddress(INTEGER *myNode, INTEGER *myNet) MAC_IMPORT(GetNodeAddress);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER GetBridgeAddress(void);
 #else
-pascal INTEGER GetBridgeAddress(void);
+pascal INTEGER GetBridgeAddress(void) MAC_IMPORT(GetBridgeAddress);
 #endif
 
 // The AppleTalk transition queue
@@ -941,18 +941,18 @@ pascal INTEGER GetBridgeAddress(void);
 #if TARGET_CPU_68K
 static __inline__ OSErr LAPAddATQ(ATQEntryPtr theATQEntry);
 #else
-pascal OSErr LAPAddATQ(ATQEntryPtr theATQEntry);
+pascal OSErr LAPAddATQ(ATQEntryPtr theATQEntry) MAC_IMPORT(LAPAddATQ);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr LAPRmvATQ(ATQEntryPtr theATQEntry);
 #else
-pascal OSErr LAPRmvATQ(ATQEntryPtr theATQEntry);
+pascal OSErr LAPRmvATQ(ATQEntryPtr theATQEntry) MAC_IMPORT(LAPRmvATQ);
 #endif
 
-pascal void ATEvent(long event, Ptr infoPtr);
+pascal void ATEvent(long event, Ptr infoPtr) MAC_IMPORT(ATEvent);
 
-pascal OSErr ATPreFlightEvent(long event, long cancel, Ptr infoPtr);
+pascal OSErr ATPreFlightEvent(long event, long cancel, Ptr infoPtr) MAC_IMPORT(ATPreFlightEvent);
 
 #if TARGET_CPU_68K
 static __inline__ OSErr MPPOpen(void) {

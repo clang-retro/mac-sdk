@@ -89,55 +89,55 @@ struct DelimiterInfo {
     Byte endDelimiter[2];
 };
 
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal NumVersion SpeechManagerVersion(void) M68K_INLINE(0x700C, 0xA800);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal NumVersion SpeechManagerVersion(void) MAC_IMPORT(SpeechManagerVersion) M68K_INLINE(0x700C, 0xA800);
 
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal int16_t SpeechBusy(void) M68K_INLINE(0x203C, 0x003C, 0x000C, 0xA800);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal int16_t SpeechBusy(void) MAC_IMPORT(SpeechBusy) M68K_INLINE(0x203C, 0x003C, 0x000C, 0xA800);
 
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal int16_t SpeechBusySystemWide(void) M68K_INLINE(0x203C, 0x0040, 0x000C, 0xA800);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal int16_t SpeechBusySystemWide(void) MAC_IMPORT(SpeechBusySystemWide) M68K_INLINE(0x203C, 0x0040, 0x000C, 0xA800);
 
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr CountVoices(int16_t *numVoices) M68K_INLINE(0x203C, 0x0108, 0x000C, 0xA800);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr CountVoices(int16_t *numVoices) MAC_IMPORT(CountVoices) M68K_INLINE(0x203C, 0x0108, 0x000C, 0xA800);
 
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr DisposeSpeechChannel(SpeechChannel chan) M68K_INLINE(0x203C, 0x021C, 0x000C, 0xA800);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr DisposeSpeechChannel(SpeechChannel chan) MAC_IMPORT(DisposeSpeechChannel) M68K_INLINE(0x203C, 0x021C, 0x000C, 0xA800);
 
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr SpeakString(ConstStringPtr textToBeSpoken) M68K_INLINE(0x203C, 0x0220, 0x000C, 0xA800);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr SpeakString(ConstStringPtr textToBeSpoken) MAC_IMPORT(SpeakString) M68K_INLINE(0x203C, 0x0220, 0x000C, 0xA800);
 
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr StopSpeech(SpeechChannel chan) M68K_INLINE(0x203C, 0x022C, 0x000C, 0xA800);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr StopSpeech(SpeechChannel chan) MAC_IMPORT(StopSpeech) M68K_INLINE(0x203C, 0x022C, 0x000C, 0xA800);
 
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr ContinueSpeech(SpeechChannel chan) M68K_INLINE(0x203C, 0x0238, 0x000C, 0xA800);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr ContinueSpeech(SpeechChannel chan) MAC_IMPORT(ContinueSpeech) M68K_INLINE(0x203C, 0x0238, 0x000C, 0xA800);
 
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr GetIndVoice(int16_t index, VoiceSpec *voice) M68K_INLINE(0x203C, 0x030C, 0x000C, 0xA800);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr GetIndVoice(int16_t index, VoiceSpec *voice) MAC_IMPORT(GetIndVoice) M68K_INLINE(0x203C, 0x030C, 0x000C, 0xA800);
 
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr NewSpeechChannel(VoiceSpec *voice, SpeechChannel *chan) M68K_INLINE(0x203C, 0x0418, 0x000C, 0xA800);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr NewSpeechChannel(VoiceSpec *voice, SpeechChannel *chan) MAC_IMPORT(NewSpeechChannel) M68K_INLINE(0x203C, 0x0418, 0x000C, 0xA800);
 
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr StopSpeechAt(SpeechChannel chan, long whereToStop) M68K_INLINE(0x203C, 0x0430, 0x000C, 0xA800);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr StopSpeechAt(SpeechChannel chan, long whereToStop) MAC_IMPORT(StopSpeechAt) M68K_INLINE(0x203C, 0x0430, 0x000C, 0xA800);
 
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr PauseSpeechAt(SpeechChannel chan, long whereToPause) M68K_INLINE(0x203C, 0x0434, 0x000C, 0xA800);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr PauseSpeechAt(SpeechChannel chan, long whereToPause) MAC_IMPORT(PauseSpeechAt) M68K_INLINE(0x203C, 0x0434, 0x000C, 0xA800);
 
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr SetSpeechRate(SpeechChannel chan, Fixed rate) M68K_INLINE(0x203C, 0x0444, 0x000C, 0xA800);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr SetSpeechRate(SpeechChannel chan, Fixed rate) MAC_IMPORT(SetSpeechRate) M68K_INLINE(0x203C, 0x0444, 0x000C, 0xA800);
 
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr GetSpeechRate(SpeechChannel chan, Fixed *rate) M68K_INLINE(0x203C, 0x0448, 0x000C, 0xA800);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr GetSpeechRate(SpeechChannel chan, Fixed *rate) MAC_IMPORT(GetSpeechRate) M68K_INLINE(0x203C, 0x0448, 0x000C, 0xA800);
 
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr SetSpeechPitch(SpeechChannel chan, Fixed pitch) M68K_INLINE(0x203C, 0x044C, 0x000C, 0xA800);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr SetSpeechPitch(SpeechChannel chan, Fixed pitch) MAC_IMPORT(SetSpeechPitch) M68K_INLINE(0x203C, 0x044C, 0x000C, 0xA800);
 
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr GetSpeechPitch(SpeechChannel chan, Fixed *pitch) M68K_INLINE(0x203C, 0x0450, 0x000C, 0xA800);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr GetSpeechPitch(SpeechChannel chan, Fixed *pitch) MAC_IMPORT(GetSpeechPitch) M68K_INLINE(0x203C, 0x0450, 0x000C, 0xA800);
 
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr UseDictionary(SpeechChannel chan, Handle dictionary) M68K_INLINE(0x203C, 0x0460, 0x000C, 0xA800);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr UseDictionary(SpeechChannel chan, Handle dictionary) MAC_IMPORT(UseDictionary) M68K_INLINE(0x203C, 0x0460, 0x000C, 0xA800);
 
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr MakeVoiceSpec(OSType creator, OSType id, VoiceSpec *voice) M68K_INLINE(0x203C, 0x0604, 0x000C, 0xA800);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr MakeVoiceSpec(OSType creator, OSType id, VoiceSpec *voice) MAC_IMPORT(MakeVoiceSpec) M68K_INLINE(0x203C, 0x0604, 0x000C, 0xA800);
 
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr GetVoiceDescription(const VoiceSpec *voice, VoiceDescription *info, LONGINT infoLength) M68K_INLINE(0x203C, 0x0610, 0x000C, 0xA800);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr GetVoiceDescription(const VoiceSpec *voice, VoiceDescription *info, LONGINT infoLength) MAC_IMPORT(GetVoiceDescription) M68K_INLINE(0x203C, 0x0610, 0x000C, 0xA800);
 
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr GetVoiceInfo(const VoiceSpec *voice, OSType selector, void *voiceInfo) M68K_INLINE(0x203C, 0x0614, 0x000C, 0xA800);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr GetVoiceInfo(const VoiceSpec *voice, OSType selector, void *voiceInfo) MAC_IMPORT(GetVoiceInfo) M68K_INLINE(0x203C, 0x0614, 0x000C, 0xA800);
 
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr SpeakText(SpeechChannel chan, const void *textBuf, ULONGINT textBytes) M68K_INLINE(0x203C, 0x0624, 0x000C, 0xA800);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr SpeakText(SpeechChannel chan, const void *textBuf, ULONGINT textBytes) MAC_IMPORT(SpeakText) M68K_INLINE(0x203C, 0x0624, 0x000C, 0xA800);
 
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr SetSpeechInfo(SpeechChannel chan, OSType selector, const void *speechInfo) M68K_INLINE(0x203C, 0x0654, 0x000C, 0xA800);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr SetSpeechInfo(SpeechChannel chan, OSType selector, const void *speechInfo) MAC_IMPORT(SetSpeechInfo) M68K_INLINE(0x203C, 0x0654, 0x000C, 0xA800);
 
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr GetSpeechInfo(SpeechChannel chan, OSType selector, void *speechInfo) M68K_INLINE(0x203C, 0x0658, 0x000C, 0xA800);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr GetSpeechInfo(SpeechChannel chan, OSType selector, void *speechInfo) MAC_IMPORT(GetSpeechInfo) M68K_INLINE(0x203C, 0x0658, 0x000C, 0xA800);
 
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr SpeakBuffer(SpeechChannel chan, const void *textBuf, ULONGINT textBytes, long controlFlags) M68K_INLINE(0x203C, 0x0828, 0x000C, 0xA800);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr SpeakBuffer(SpeechChannel chan, const void *textBuf, ULONGINT textBytes, long controlFlags) MAC_IMPORT(SpeakBuffer) M68K_INLINE(0x203C, 0x0828, 0x000C, 0xA800);
 
-MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr TextToPhonemes(SpeechChannel chan, const void *textBuf, ULONGINT textBytes, Handle phonemeBuf, LONGINT *phonemeBytes) M68K_INLINE(0x203C, 0x0A5C, 0x000C, 0xA800);
+MAC_SINCE_GESTALT(0x0921, "9.2.1", "'ttsc'") pascal OSErr TextToPhonemes(SpeechChannel chan, const void *textBuf, ULONGINT textBytes, Handle phonemeBuf, LONGINT *phonemeBytes) MAC_IMPORT(TextToPhonemes) M68K_INLINE(0x203C, 0x0A5C, 0x000C, 0xA800);
 
 #ifdef __cplusplus
 }

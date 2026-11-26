@@ -105,11 +105,11 @@ struct SIZEResource {
 #if TARGET_CPU_68K
 static __inline__ OSErr PPostEvent(INTEGER evcode, LONGINT evmsg, EvQElPtr *qelp);
 #else
-pascal OSErr PPostEvent(INTEGER evcode, LONGINT evmsg, EvQElPtr *qelp);
+pascal OSErr PPostEvent(INTEGER evcode, LONGINT evmsg, EvQElPtr *qelp) MAC_IMPORT(PPostEvent);
 #endif
 
 enum { _FlushEvents = 0xA032 };
-pascal void FlushEvents(INTEGER evmask, INTEGER stopmask) M68K_INLINE(0x201F, 0xA032);
+pascal void FlushEvents(INTEGER evmask, INTEGER stopmask) MAC_IMPORT(FlushEvents) M68K_INLINE(0x201F, 0xA032);
 
 enum { _GetOSEvent = 0xA031 };
 #if TARGET_CPU_68K
@@ -124,7 +124,7 @@ static __inline__ __attribute__((__always_inline__)) Boolean GetOSEvent(INTEGER 
     return _ret;
 }
 #else
-pascal Boolean GetOSEvent(INTEGER evmask, EventRecord *eventp);
+pascal Boolean GetOSEvent(INTEGER evmask, EventRecord *eventp) MAC_IMPORT(GetOSEvent);
 #endif
 
 enum { _OSEventAvail = 0xA030 };
@@ -140,22 +140,22 @@ static __inline__ __attribute__((__always_inline__)) Boolean OSEventAvail(INTEGE
     return _ret;
 }
 #else
-pascal Boolean OSEventAvail(INTEGER evmask, EventRecord *eventp);
+pascal Boolean OSEventAvail(INTEGER evmask, EventRecord *eventp) MAC_IMPORT(OSEventAvail);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void SetEventMask(INTEGER evmask);
 #else
-pascal void SetEventMask(INTEGER evmask);
+pascal void SetEventMask(INTEGER evmask) MAC_IMPORT(SetEventMask);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ QHdrPtr GetEvQHdr(void);
 #else
-pascal QHdrPtr GetEvQHdr(void);
+pascal QHdrPtr GetEvQHdr(void) MAC_IMPORT(GetEvQHdr);
 #endif
 
-pascal EvQEl* geteventelem(void);
+pascal EvQEl* geteventelem(void) MAC_IMPORT(geteventelem);
 
 typedef struct TargetID TargetID;
 struct TargetID {
@@ -199,11 +199,11 @@ enum {
     bufferIsSmall = -608,
 };
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr AcceptHighLevelEvent(TargetID *sender_id_return, long *refcon_return, Ptr msg_buf, long *msg_length_return) M68K_INLINE(0x3F3C, 0x0033, 0xA88F);
+MAC_SINCE(0x0700, "7.0") pascal OSErr AcceptHighLevelEvent(TargetID *sender_id_return, long *refcon_return, Ptr msg_buf, long *msg_length_return) MAC_IMPORT(AcceptHighLevelEvent) M68K_INLINE(0x3F3C, 0x0033, 0xA88F);
 
-MAC_SINCE(0x0700, "7.0") pascal Boolean GetSpecificHighLevelEvent(GetSpecificFilterUPP fn, Ptr data, OSErr *err_return) M68K_INLINE(0x3F3C, 0x0045, 0xA88F);
+MAC_SINCE(0x0700, "7.0") pascal Boolean GetSpecificHighLevelEvent(GetSpecificFilterUPP fn, Ptr data, OSErr *err_return) MAC_IMPORT(GetSpecificHighLevelEvent) M68K_INLINE(0x3F3C, 0x0045, 0xA88F);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr PostHighLevelEvent(EventRecord *evt, Ptr receiver_id, long refcon, Ptr msg_buf, long msg_length, long post_options) M68K_INLINE(0x3F3C, 0x0034, 0xA88F);
+MAC_SINCE(0x0700, "7.0") pascal OSErr PostHighLevelEvent(EventRecord *evt, Ptr receiver_id, long refcon, Ptr msg_buf, long msg_length, long post_options) MAC_IMPORT(PostHighLevelEvent) M68K_INLINE(0x3F3C, 0x0034, 0xA88F);
 
 enum { _PostEvent = 0xA02F };
 #if TARGET_CPU_68K
@@ -218,7 +218,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PostEvent(INTEGER eve
     return _ret;
 }
 #else
-pascal OSErr PostEvent(INTEGER eventNum, unsigned long eventMsg);
+pascal OSErr PostEvent(INTEGER eventNum, unsigned long eventMsg) MAC_IMPORT(PostEvent);
 #endif
 
 #if TARGET_CPU_68K

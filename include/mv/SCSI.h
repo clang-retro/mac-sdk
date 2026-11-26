@@ -49,31 +49,31 @@ enum {
 enum { _SCSIDispatch = 0xA815 };
 
 // Original SCSI Manager
-MAC_SINCE(0x0070, "0.7") pascal OSErr SCSIReset(void) M68K_INLINE(0x3F3C, 0x0000, 0xA815);
+MAC_SINCE(0x0070, "0.7") pascal OSErr SCSIReset(void) MAC_IMPORT(SCSIReset) M68K_INLINE(0x3F3C, 0x0000, 0xA815);
 
-MAC_SINCE(0x0070, "0.7") pascal OSErr SCSIGet(void) M68K_INLINE(0x3F3C, 0x0001, 0xA815);
+MAC_SINCE(0x0070, "0.7") pascal OSErr SCSIGet(void) MAC_IMPORT(SCSIGet) M68K_INLINE(0x3F3C, 0x0001, 0xA815);
 
-MAC_SINCE(0x0070, "0.7") pascal OSErr SCSISelect(INTEGER targetID) M68K_INLINE(0x3F3C, 0x0002, 0xA815);
+MAC_SINCE(0x0070, "0.7") pascal OSErr SCSISelect(INTEGER targetID) MAC_IMPORT(SCSISelect) M68K_INLINE(0x3F3C, 0x0002, 0xA815);
 
-MAC_SINCE(0x0070, "0.7") pascal OSErr SCSICmd(Ptr buffer, INTEGER count) M68K_INLINE(0x3F3C, 0x0003, 0xA815);
+MAC_SINCE(0x0070, "0.7") pascal OSErr SCSICmd(Ptr buffer, INTEGER count) MAC_IMPORT(SCSICmd) M68K_INLINE(0x3F3C, 0x0003, 0xA815);
 
-MAC_SINCE(0x0070, "0.7") pascal OSErr SCSIRead(Ptr tibPtr) M68K_INLINE(0x3F3C, 0x0005, 0xA815);
+MAC_SINCE(0x0070, "0.7") pascal OSErr SCSIRead(Ptr tibPtr) MAC_IMPORT(SCSIRead) M68K_INLINE(0x3F3C, 0x0005, 0xA815);
 
-MAC_SINCE(0x0070, "0.7") pascal OSErr SCSIRBlind(Ptr tibPtr) M68K_INLINE(0x3F3C, 0x0008, 0xA815);
+MAC_SINCE(0x0070, "0.7") pascal OSErr SCSIRBlind(Ptr tibPtr) MAC_IMPORT(SCSIRBlind) M68K_INLINE(0x3F3C, 0x0008, 0xA815);
 
-MAC_SINCE(0x0070, "0.7") pascal OSErr SCSIWrite(Ptr tibPtr) M68K_INLINE(0x3F3C, 0x0006, 0xA815);
+MAC_SINCE(0x0070, "0.7") pascal OSErr SCSIWrite(Ptr tibPtr) MAC_IMPORT(SCSIWrite) M68K_INLINE(0x3F3C, 0x0006, 0xA815);
 
-MAC_SINCE(0x0070, "0.7") pascal OSErr SCSIWBlind(Ptr tibPtr) M68K_INLINE(0x3F3C, 0x0009, 0xA815);
+MAC_SINCE(0x0070, "0.7") pascal OSErr SCSIWBlind(Ptr tibPtr) MAC_IMPORT(SCSIWBlind) M68K_INLINE(0x3F3C, 0x0009, 0xA815);
 
-MAC_SINCE(0x0070, "0.7") pascal OSErr SCSIComplete(INTEGER *stat, INTEGER *message, unsigned long wait) M68K_INLINE(0x3F3C, 0x0004, 0xA815);
+MAC_SINCE(0x0070, "0.7") pascal OSErr SCSIComplete(INTEGER *stat, INTEGER *message, unsigned long wait) MAC_IMPORT(SCSIComplete) M68K_INLINE(0x3F3C, 0x0004, 0xA815);
 
-MAC_SINCE(0x0070, "0.7") pascal INTEGER SCSIStat(void) M68K_INLINE(0x3F3C, 0x000A, 0xA815);
+MAC_SINCE(0x0070, "0.7") pascal INTEGER SCSIStat(void) MAC_IMPORT(SCSIStat) M68K_INLINE(0x3F3C, 0x000A, 0xA815);
 
-MAC_SINCE(0x0070, "0.7") pascal OSErr SCSISelAtn(INTEGER targetID) M68K_INLINE(0x3F3C, 0x000B, 0xA815);
+MAC_SINCE(0x0070, "0.7") pascal OSErr SCSISelAtn(INTEGER targetID) MAC_IMPORT(SCSISelAtn) M68K_INLINE(0x3F3C, 0x000B, 0xA815);
 
-MAC_SINCE(0x0070, "0.7") pascal OSErr SCSIMsgIn(INTEGER *message) M68K_INLINE(0x3F3C, 0x000C, 0xA815);
+MAC_SINCE(0x0070, "0.7") pascal OSErr SCSIMsgIn(INTEGER *message) MAC_IMPORT(SCSIMsgIn) M68K_INLINE(0x3F3C, 0x000C, 0xA815);
 
-MAC_SINCE(0x0070, "0.7") pascal OSErr SCSIMsgOut(INTEGER message) M68K_INLINE(0x3F3C, 0x000D, 0xA815);
+MAC_SINCE(0x0070, "0.7") pascal OSErr SCSIMsgOut(INTEGER message) MAC_IMPORT(SCSIMsgOut) M68K_INLINE(0x3F3C, 0x000D, 0xA815);
 
 // SCSI Manager 4.3
 enum {
@@ -214,7 +214,7 @@ MAC_SINCE(0x0761, "7.6.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0761, "7.6.1") pascal OSErr SCSIAction(SCSI_PB *parameterBlock);
+MAC_SINCE(0x0761, "7.6.1") pascal OSErr SCSIAction(SCSI_PB *parameterBlock) MAC_IMPORT(SCSIAction);
 #endif
 
 #if TARGET_CPU_68K
@@ -228,7 +228,7 @@ MAC_SINCE(0x0761, "7.6.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0761, "7.6.1") pascal OSErr SCSIRegisterBus(SIMInitInfo *SIMinfoPtr);
+MAC_SINCE(0x0761, "7.6.1") pascal OSErr SCSIRegisterBus(SIMInitInfo *SIMinfoPtr) MAC_IMPORT(SCSIRegisterBus);
 #endif
 
 #if TARGET_CPU_68K
@@ -242,7 +242,7 @@ MAC_SINCE(0x0761, "7.6.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0761, "7.6.1") pascal OSErr SCSIDeregisterBus(SCSI_PB *parameterBlock);
+MAC_SINCE(0x0761, "7.6.1") pascal OSErr SCSIDeregisterBus(SCSI_PB *parameterBlock) MAC_IMPORT(SCSIDeregisterBus);
 #endif
 
 #if TARGET_CPU_68K
@@ -256,7 +256,7 @@ MAC_SINCE(0x0761, "7.6.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0761, "7.6.1") pascal OSErr SCSIReregisterBus(SIMInitInfo *SIMinfoPtr);
+MAC_SINCE(0x0761, "7.6.1") pascal OSErr SCSIReregisterBus(SIMInitInfo *SIMinfoPtr) MAC_IMPORT(SCSIReregisterBus);
 #endif
 
 #if TARGET_CPU_68K
@@ -270,7 +270,7 @@ MAC_SINCE(0x0761, "7.6.1") static __inline__ __attribute__((__always_inline__)) 
     return _ret;
 }
 #else
-MAC_SINCE(0x0761, "7.6.1") pascal OSErr SCSIKillXPT(SIMInitInfo *SIMinfoPtr);
+MAC_SINCE(0x0761, "7.6.1") pascal OSErr SCSIKillXPT(SIMInitInfo *SIMinfoPtr) MAC_IMPORT(SCSIKillXPT);
 #endif
 
 #ifdef __cplusplus

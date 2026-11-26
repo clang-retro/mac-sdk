@@ -115,21 +115,21 @@ enum {
     procNotFound = -600,
 };
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr GetCurrentProcess(ProcessSerialNumber *serial_number) M68K_INLINE(0x3F3C, 0x0037, 0xA88F);
+MAC_SINCE(0x0700, "7.0") pascal OSErr GetCurrentProcess(ProcessSerialNumber *serial_number) MAC_IMPORT(GetCurrentProcess) M68K_INLINE(0x3F3C, 0x0037, 0xA88F);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr GetNextProcess(ProcessSerialNumber *serial_number) M68K_INLINE(0x3F3C, 0x0038, 0xA88F);
+MAC_SINCE(0x0700, "7.0") pascal OSErr GetNextProcess(ProcessSerialNumber *serial_number) MAC_IMPORT(GetNextProcess) M68K_INLINE(0x3F3C, 0x0038, 0xA88F);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr GetProcessInformation(ProcessSerialNumber *serial_number, ProcessInfoPtr info) M68K_INLINE(0x3F3C, 0x003A, 0xA88F);
+MAC_SINCE(0x0700, "7.0") pascal OSErr GetProcessInformation(ProcessSerialNumber *serial_number, ProcessInfoPtr info) MAC_IMPORT(GetProcessInformation) M68K_INLINE(0x3F3C, 0x003A, 0xA88F);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr SameProcess(ProcessSerialNumber *serial_number0, ProcessSerialNumber *serial_number1, Boolean *same_out) M68K_INLINE(0x3F3C, 0x003D, 0xA88F);
+MAC_SINCE(0x0700, "7.0") pascal OSErr SameProcess(ProcessSerialNumber *serial_number0, ProcessSerialNumber *serial_number1, Boolean *same_out) MAC_IMPORT(SameProcess) M68K_INLINE(0x3F3C, 0x003D, 0xA88F);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr SetFrontProcess(ProcessSerialNumber *serial_number) M68K_INLINE(0x3F3C, 0x003B, 0xA88F);
+MAC_SINCE(0x0700, "7.0") pascal OSErr SetFrontProcess(ProcessSerialNumber *serial_number) MAC_IMPORT(SetFrontProcess) M68K_INLINE(0x3F3C, 0x003B, 0xA88F);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr WakeUpProcess(ProcessSerialNumber *serial_number) M68K_INLINE(0x3F3C, 0x003C, 0xA88F);
+MAC_SINCE(0x0700, "7.0") pascal OSErr WakeUpProcess(ProcessSerialNumber *serial_number) MAC_IMPORT(WakeUpProcess) M68K_INLINE(0x3F3C, 0x003C, 0xA88F);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr GetProcessSerialNumberFromPortName(PPCPortPtr port_name, ProcessSerialNumber *serial_number) M68K_INLINE(0x3F3C, 0x0035, 0xA88F);
+MAC_SINCE(0x0700, "7.0") pascal OSErr GetProcessSerialNumberFromPortName(PPCPortPtr port_name, ProcessSerialNumber *serial_number) MAC_IMPORT(GetProcessSerialNumberFromPortName) M68K_INLINE(0x3F3C, 0x0035, 0xA88F);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr GetPortNameFromProcessSerialNumber(PPCPortPtr port_name, ProcessSerialNumber *serial_number) M68K_INLINE(0x3F3C, 0x0046, 0xA88F);
+MAC_SINCE(0x0700, "7.0") pascal OSErr GetPortNameFromProcessSerialNumber(PPCPortPtr port_name, ProcessSerialNumber *serial_number) MAC_IMPORT(GetPortNameFromProcessSerialNumber) M68K_INLINE(0x3F3C, 0x0046, 0xA88F);
 
 enum { _LaunchApplication = 0xA9F2 };
 #if TARGET_CPU_68K
@@ -143,14 +143,14 @@ static __inline__ __attribute__((__always_inline__)) OSErr LaunchApplication(Lau
     return _ret;
 }
 #else
-pascal OSErr LaunchApplication(LaunchParamBlockRec *params);
+pascal OSErr LaunchApplication(LaunchParamBlockRec *params) MAC_IMPORT(LaunchApplication);
 #endif
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr LaunchDeskAccessory(const FSSpec *pFileSpec, ConstStr255Param pDAName) M68K_INLINE(0x3F3C, 0x0036, 0xA88F);
+MAC_SINCE(0x0700, "7.0") pascal OSErr LaunchDeskAccessory(const FSSpec *pFileSpec, ConstStr255Param pDAName) MAC_IMPORT(LaunchDeskAccessory) M68K_INLINE(0x3F3C, 0x0036, 0xA88F);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr GetFrontProcess(ProcessSerialNumber *PSN) M68K_INLINE(0x70FF, 0x2F00, 0x3F3C, 0x0039, 0xA88F);
+MAC_SINCE(0x0700, "7.0") pascal OSErr GetFrontProcess(ProcessSerialNumber *PSN) MAC_IMPORT(GetFrontProcess) M68K_INLINE(0x70FF, 0x2F00, 0x3F3C, 0x0039, 0xA88F);
 
-pascal OSErr KillProcess(const ProcessSerialNumber *inProcess);
+pascal OSErr KillProcess(const ProcessSerialNumber *inProcess) MAC_IMPORT(KillProcess);
 
 #ifdef __cplusplus
 }

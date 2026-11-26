@@ -297,7 +297,12 @@ The linkers it runs are in `tools/link/` and can be used on their own:
   `imports.json` (from Retro68's import libraries, by `gen-imports.py`;
   `macos-exports.py` makes one from a real System Folder and ROM).
   InterfaceLib wins a name that other libraries also export; CarbonLib
-  and `Apple;Carbon;Networking` are imported weakly.
+  and `Apple;Carbon;Networking` are imported weakly. On PowerPC the
+  headers give each Toolbox call the symbol `__imp_` and its name
+  (`MAC_IMPORT`). Thus a program function with the same name, such as
+  a Win32 `ShowWindow`, does not replace the Toolbox call. The linker
+  sends `__imp_X` to the import `X`. If no library exports `X`, it
+  sends it to the program's own `X`.
 - `fatlink.py` merges the two: the PowerPC code in the data fork, named
   by `cfrg`, and the 68k code in CODE. A Power Mac runs the PowerPC
   code and a 68k Mac runs CODE.

@@ -169,113 +169,113 @@ typedef UniversalProcPtr ComponentFunctionUPP;
 
 enum { _ComponentDispatch = 0xA82A };
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal Component RegisterComponentResource(ComponentResourceHandle cr, INTEGER global) M68K_INLINE(0x7012, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal Component RegisterComponentResource(ComponentResourceHandle cr, INTEGER global) MAC_IMPORT(RegisterComponentResource) M68K_INLINE(0x7012, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal OSErr UnregisterComponent(Component aComponent) M68K_INLINE(0x7002, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal OSErr UnregisterComponent(Component aComponent) MAC_IMPORT(UnregisterComponent) M68K_INLINE(0x7002, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal Component FindNextComponent(Component aComponent, ComponentDescription *looking) M68K_INLINE(0x7004, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal Component FindNextComponent(Component aComponent, ComponentDescription *looking) MAC_IMPORT(FindNextComponent) M68K_INLINE(0x7004, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal long CountComponents(ComponentDescription *looking) M68K_INLINE(0x7003, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal long CountComponents(ComponentDescription *looking) MAC_IMPORT(CountComponents) M68K_INLINE(0x7003, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal OSErr GetComponentInfo(Component aComponent, ComponentDescription *cd, Handle componentName, Handle componentInfo, Handle componentIcon) M68K_INLINE(0x7005, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal OSErr GetComponentInfo(Component aComponent, ComponentDescription *cd, Handle componentName, Handle componentInfo, Handle componentIcon) MAC_IMPORT(GetComponentInfo) M68K_INLINE(0x7005, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal long GetComponentListModSeed(void) M68K_INLINE(0x7006, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal long GetComponentListModSeed(void) MAC_IMPORT(GetComponentListModSeed) M68K_INLINE(0x7006, 0xA82A);
 
-pascal long GetComponentTypeModSeed(OSType componentType) M68K_INLINE(0x702C, 0xA82A);
+pascal long GetComponentTypeModSeed(OSType componentType) MAC_IMPORT(GetComponentTypeModSeed) M68K_INLINE(0x702C, 0xA82A);
 
-pascal OSErr OpenAComponent(Component aComponent, ComponentInstance *ci) M68K_INLINE(0x702D, 0xA82A);
+pascal OSErr OpenAComponent(Component aComponent, ComponentInstance *ci) MAC_IMPORT(OpenAComponent) M68K_INLINE(0x702D, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal ComponentInstance OpenComponent(Component aComponent) M68K_INLINE(0x7007, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal ComponentInstance OpenComponent(Component aComponent) MAC_IMPORT(OpenComponent) M68K_INLINE(0x7007, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal OSErr CloseComponent(ComponentInstance aComponentInstance) M68K_INLINE(0x7008, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal OSErr CloseComponent(ComponentInstance aComponentInstance) MAC_IMPORT(CloseComponent) M68K_INLINE(0x7008, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal OSErr GetComponentInstanceError(ComponentInstance aComponentInstance) M68K_INLINE(0x700A, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal OSErr GetComponentInstanceError(ComponentInstance aComponentInstance) MAC_IMPORT(GetComponentInstanceError) M68K_INLINE(0x700A, 0xA82A);
 
-pascal Component ResolveComponentAlias(Component aComponent) M68K_INLINE(0x7020, 0xA82A);
+pascal Component ResolveComponentAlias(Component aComponent) MAC_IMPORT(ResolveComponentAlias) M68K_INLINE(0x7020, 0xA82A);
 
-pascal OSErr GetComponentPublicResource(Component aComponent, OSType resourceType, INTEGER resourceID, Handle *theResource) M68K_INLINE(0x7038, 0xA82A);
+pascal OSErr GetComponentPublicResource(Component aComponent, OSType resourceType, INTEGER resourceID, Handle *theResource) MAC_IMPORT(GetComponentPublicResource) M68K_INLINE(0x7038, 0xA82A);
 
-pascal OSErr GetComponentPublicResourceList(OSType resourceType, INTEGER resourceID, long flags, ComponentDescription *cd, GetMissingComponentResourceUPP missingProc, void *refCon, void *atomContainerPtr) M68K_INLINE(0x7039, 0xA82A);
+pascal OSErr GetComponentPublicResourceList(OSType resourceType, INTEGER resourceID, long flags, ComponentDescription *cd, GetMissingComponentResourceUPP missingProc, void *refCon, void *atomContainerPtr) MAC_IMPORT(GetComponentPublicResourceList) M68K_INLINE(0x7039, 0xA82A);
 
-pascal OSErr GetComponentPublicIndString(Component aComponent, Str255 theString, INTEGER strListID, INTEGER index) M68K_INLINE(0x703A, 0xA82A);
+pascal OSErr GetComponentPublicIndString(Component aComponent, Str255 theString, INTEGER strListID, INTEGER index) MAC_IMPORT(GetComponentPublicIndString) M68K_INLINE(0x703A, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal void SetComponentInstanceError(ComponentInstance aComponentInstance, OSErr theError) M68K_INLINE(0x700B, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal void SetComponentInstanceError(ComponentInstance aComponentInstance, OSErr theError) MAC_IMPORT(SetComponentInstanceError) M68K_INLINE(0x700B, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal long GetComponentRefcon(Component aComponent) M68K_INLINE(0x7010, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal long GetComponentRefcon(Component aComponent) MAC_IMPORT(GetComponentRefcon) M68K_INLINE(0x7010, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal void SetComponentRefcon(Component aComponent, long theRefcon) M68K_INLINE(0x7011, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal void SetComponentRefcon(Component aComponent, long theRefcon) MAC_IMPORT(SetComponentRefcon) M68K_INLINE(0x7011, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal INTEGER OpenComponentResFile(Component aComponent) M68K_INLINE(0x7015, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal INTEGER OpenComponentResFile(Component aComponent) MAC_IMPORT(OpenComponentResFile) M68K_INLINE(0x7015, 0xA82A);
 
-pascal OSErr OpenAComponentResFile(Component aComponent, INTEGER *resRef) M68K_INLINE(0x702F, 0xA82A);
+pascal OSErr OpenAComponentResFile(Component aComponent, INTEGER *resRef) MAC_IMPORT(OpenAComponentResFile) M68K_INLINE(0x702F, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal OSErr CloseComponentResFile(INTEGER refnum) M68K_INLINE(0x7018, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal OSErr CloseComponentResFile(INTEGER refnum) MAC_IMPORT(CloseComponentResFile) M68K_INLINE(0x7018, 0xA82A);
 
-pascal OSErr GetComponentResource(Component aComponent, OSType resType, INTEGER resID, Handle *theResource) M68K_INLINE(0x7035, 0xA82A);
+pascal OSErr GetComponentResource(Component aComponent, OSType resType, INTEGER resID, Handle *theResource) MAC_IMPORT(GetComponentResource) M68K_INLINE(0x7035, 0xA82A);
 
-pascal OSErr GetComponentIndString(Component aComponent, Str255 theString, INTEGER strListID, INTEGER index) M68K_INLINE(0x7036, 0xA82A);
+pascal OSErr GetComponentIndString(Component aComponent, Str255 theString, INTEGER strListID, INTEGER index) MAC_IMPORT(GetComponentIndString) M68K_INLINE(0x7036, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal Handle GetComponentInstanceStorage(ComponentInstance aComponentInstance) M68K_INLINE(0x700C, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal Handle GetComponentInstanceStorage(ComponentInstance aComponentInstance) MAC_IMPORT(GetComponentInstanceStorage) M68K_INLINE(0x700C, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal void SetComponentInstanceStorage(ComponentInstance aComponentInstance, Handle theStorage) M68K_INLINE(0x700D, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal void SetComponentInstanceStorage(ComponentInstance aComponentInstance, Handle theStorage) MAC_IMPORT(SetComponentInstanceStorage) M68K_INLINE(0x700D, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal long GetComponentInstanceA5(ComponentInstance aComponentInstance) M68K_INLINE(0x700E, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal long GetComponentInstanceA5(ComponentInstance aComponentInstance) MAC_IMPORT(GetComponentInstanceA5) M68K_INLINE(0x700E, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal void SetComponentInstanceA5(ComponentInstance aComponentInstance, long theA5) M68K_INLINE(0x700F, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal void SetComponentInstanceA5(ComponentInstance aComponentInstance, long theA5) MAC_IMPORT(SetComponentInstanceA5) M68K_INLINE(0x700F, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal long CountComponentInstances(Component aComponent) M68K_INLINE(0x7013, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal long CountComponentInstances(Component aComponent) MAC_IMPORT(CountComponentInstances) M68K_INLINE(0x7013, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal long CallComponentFunction(ComponentParameters *params, ComponentFunctionUPP func) M68K_INLINE(0x203C, 0xFFFF, 0xFFFF, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal long CallComponentFunction(ComponentParameters *params, ComponentFunctionUPP func) MAC_IMPORT(CallComponentFunction) M68K_INLINE(0x203C, 0xFFFF, 0xFFFF, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal long CallComponentFunctionWithStorage(Handle storage, ComponentParameters *params, ComponentFunctionUPP func) M68K_INLINE(0x203C, 0xFFFF, 0xFFFF, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal long CallComponentFunctionWithStorage(Handle storage, ComponentParameters *params, ComponentFunctionUPP func) MAC_IMPORT(CallComponentFunctionWithStorage) M68K_INLINE(0x203C, 0xFFFF, 0xFFFF, 0xA82A);
 
 #if TARGET_CPU_68K
 static __inline__ long CallComponentFunctionWithStorageProcInfo(Handle storage, ComponentParameters *params, ProcPtr func, long funcProcInfo);
 #else
-pascal long CallComponentFunctionWithStorageProcInfo(Handle storage, ComponentParameters *params, ProcPtr func, long funcProcInfo);
+pascal long CallComponentFunctionWithStorageProcInfo(Handle storage, ComponentParameters *params, ProcPtr func, long funcProcInfo) MAC_IMPORT(CallComponentFunctionWithStorageProcInfo);
 #endif
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal long DelegateComponentCall(ComponentParameters *originalParams, ComponentInstance ci) M68K_INLINE(0x7024, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal long DelegateComponentCall(ComponentParameters *originalParams, ComponentInstance ci) MAC_IMPORT(DelegateComponentCall) M68K_INLINE(0x7024, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal OSErr SetDefaultComponent(Component aComponent, INTEGER flags) M68K_INLINE(0x701E, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal OSErr SetDefaultComponent(Component aComponent, INTEGER flags) MAC_IMPORT(SetDefaultComponent) M68K_INLINE(0x701E, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal ComponentInstance OpenDefaultComponent(OSType componentType, OSType componentSubType) M68K_INLINE(0x7021, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal ComponentInstance OpenDefaultComponent(OSType componentType, OSType componentSubType) MAC_IMPORT(OpenDefaultComponent) M68K_INLINE(0x7021, 0xA82A);
 
-pascal OSErr OpenADefaultComponent(OSType componentType, OSType componentSubType, ComponentInstance *ci) M68K_INLINE(0x702E, 0xA82A);
+pascal OSErr OpenADefaultComponent(OSType componentType, OSType componentSubType, ComponentInstance *ci) MAC_IMPORT(OpenADefaultComponent) M68K_INLINE(0x702E, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal Component CaptureComponent(Component capturedComponent, Component capturingComponent) M68K_INLINE(0x701C, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal Component CaptureComponent(Component capturedComponent, Component capturingComponent) MAC_IMPORT(CaptureComponent) M68K_INLINE(0x701C, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal OSErr UncaptureComponent(Component aComponent) M68K_INLINE(0x701D, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal OSErr UncaptureComponent(Component aComponent) MAC_IMPORT(UncaptureComponent) M68K_INLINE(0x701D, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal long RegisterComponentResourceFile(INTEGER resRefNum, INTEGER global) M68K_INLINE(0x7014, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal long RegisterComponentResourceFile(INTEGER resRefNum, INTEGER global) MAC_IMPORT(RegisterComponentResourceFile) M68K_INLINE(0x7014, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal OSErr GetComponentIconSuite(Component aComponent, Handle *iconSuite) M68K_INLINE(0x7029, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal OSErr GetComponentIconSuite(Component aComponent, Handle *iconSuite) MAC_IMPORT(GetComponentIconSuite) M68K_INLINE(0x7029, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal long ComponentFunctionImplemented(ComponentInstance ci, INTEGER ftnNumber) M68K_INLINE(0x2F3C, 0x0002, 0xFFFD, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal long ComponentFunctionImplemented(ComponentInstance ci, INTEGER ftnNumber) MAC_IMPORT(ComponentFunctionImplemented) M68K_INLINE(0x2F3C, 0x0002, 0xFFFD, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal long GetComponentVersion(ComponentInstance ci) M68K_INLINE(0x2F3C, 0x0000, 0xFFFC, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal long GetComponentVersion(ComponentInstance ci) MAC_IMPORT(GetComponentVersion) M68K_INLINE(0x2F3C, 0x0000, 0xFFFC, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal long ComponentSetTarget(ComponentInstance ci, ComponentInstance target) M68K_INLINE(0x2F3C, 0x0004, 0xFFFA, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal long ComponentSetTarget(ComponentInstance ci, ComponentInstance target) MAC_IMPORT(ComponentSetTarget) M68K_INLINE(0x2F3C, 0x0004, 0xFFFA, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal ComponentResult CallComponentOpen(ComponentInstance ci, ComponentInstance self) M68K_INLINE(0x2F3C, 0x0004, 0xFFFF, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal ComponentResult CallComponentOpen(ComponentInstance ci, ComponentInstance self) MAC_IMPORT(CallComponentOpen) M68K_INLINE(0x2F3C, 0x0004, 0xFFFF, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal ComponentResult CallComponentClose(ComponentInstance ci, ComponentInstance self) M68K_INLINE(0x2F3C, 0x0004, 0xFFFE, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal ComponentResult CallComponentClose(ComponentInstance ci, ComponentInstance self) MAC_IMPORT(CallComponentClose) M68K_INLINE(0x2F3C, 0x0004, 0xFFFE, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal ComponentResult CallComponentCanDo(ComponentInstance ci, INTEGER ftnNumber) M68K_INLINE(0x2F3C, 0x0002, 0xFFFD, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal ComponentResult CallComponentCanDo(ComponentInstance ci, INTEGER ftnNumber) MAC_IMPORT(CallComponentCanDo) M68K_INLINE(0x2F3C, 0x0002, 0xFFFD, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal ComponentResult CallComponentVersion(ComponentInstance ci) M68K_INLINE(0x2F3C, 0x0000, 0xFFFC, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal ComponentResult CallComponentVersion(ComponentInstance ci) MAC_IMPORT(CallComponentVersion) M68K_INLINE(0x2F3C, 0x0000, 0xFFFC, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal ComponentResult CallComponentRegister(ComponentInstance ci) M68K_INLINE(0x2F3C, 0x0000, 0xFFFB, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal ComponentResult CallComponentRegister(ComponentInstance ci) MAC_IMPORT(CallComponentRegister) M68K_INLINE(0x2F3C, 0x0000, 0xFFFB, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal ComponentResult CallComponentTarget(ComponentInstance ci, ComponentInstance target) M68K_INLINE(0x2F3C, 0x0004, 0xFFFA, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal ComponentResult CallComponentTarget(ComponentInstance ci, ComponentInstance target) MAC_IMPORT(CallComponentTarget) M68K_INLINE(0x2F3C, 0x0004, 0xFFFA, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal ComponentResult CallComponentUnregister(ComponentInstance ci) M68K_INLINE(0x2F3C, 0x0000, 0xFFF9, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal ComponentResult CallComponentUnregister(ComponentInstance ci) MAC_IMPORT(CallComponentUnregister) M68K_INLINE(0x2F3C, 0x0000, 0xFFF9, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal ComponentResult CallComponentGetMPWorkFunction(ComponentInstance ci, ComponentMPWorkFunctionUPP *workFunction, Ptr *refCon) M68K_INLINE(0x2F3C, 0x0008, 0xFFF8, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal ComponentResult CallComponentGetMPWorkFunction(ComponentInstance ci, ComponentMPWorkFunctionUPP *workFunction, Ptr *refCon) MAC_IMPORT(CallComponentGetMPWorkFunction) M68K_INLINE(0x2F3C, 0x0008, 0xFFF8, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal ComponentResult CallComponentGetPublicResource(ComponentInstance ci, OSType resourceType, INTEGER resourceID, Handle *resource) M68K_INLINE(0x2F3C, 0x000A, 0xFFF6, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal ComponentResult CallComponentGetPublicResource(ComponentInstance ci, OSType resourceType, INTEGER resourceID, Handle *resource) MAC_IMPORT(CallComponentGetPublicResource) M68K_INLINE(0x2F3C, 0x000A, 0xFFF6, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal Component RegisterComponent(ComponentDescription *cd, ComponentRoutineUPP componentEntryPoint, INTEGER global, Handle componentName, Handle componentInfo, Handle componentIcon) M68K_INLINE(0x7001, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'cpnt'") MAC_COLOR_QD pascal Component RegisterComponent(ComponentDescription *cd, ComponentRoutineUPP componentEntryPoint, INTEGER global, Handle componentName, Handle componentInfo, Handle componentIcon) MAC_IMPORT(RegisterComponent) M68K_INLINE(0x7001, 0xA82A);
 
 typedef ComponentRoutineProcPtr ComponentRoutine;
 

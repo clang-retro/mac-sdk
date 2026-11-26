@@ -232,63 +232,63 @@ typedef Byte **CharsHandle;
 enum { _TEDispatch = 0xA83D };
 
 enum { _TESetText = 0xA9CF };
-pascal void TESetText(Ptr p, LONGINT ln, TEHandle teh) M68K_INLINE(0xA9CF);
+pascal void TESetText(Ptr p, LONGINT ln, TEHandle teh) MAC_IMPORT(TESetText) M68K_INLINE(0xA9CF);
 
 enum { _TEGetText = 0xA9CB };
-pascal CharsHandle TEGetText(TEHandle teh) M68K_INLINE(0xA9CB);
+pascal CharsHandle TEGetText(TEHandle teh) MAC_IMPORT(TEGetText) M68K_INLINE(0xA9CB);
 
 enum { _TESetAlignment = 0xA9DF };
-pascal void TESetAlignment(INTEGER j, TEHandle teh) M68K_INLINE(0xA9DF);
+pascal void TESetAlignment(INTEGER j, TEHandle teh) MAC_IMPORT(TESetAlignment) M68K_INLINE(0xA9DF);
 #if OLDROUTINENAMES
 #define TESetJust(j, teh) TESetAlignment(j, teh)
 #endif
 
 enum { _TEUpdate = 0xA9D3 };
-pascal void TEUpdate(const Rect *r, TEHandle teh) M68K_INLINE(0xA9D3);
+pascal void TEUpdate(const Rect *r, TEHandle teh) MAC_IMPORT(TEUpdate) M68K_INLINE(0xA9D3);
 
 enum { _TETextBox = 0xA9CE };
-pascal void TETextBox(Ptr p, LONGINT ln, const Rect *r, INTEGER j) M68K_INLINE(0xA9CE);
+pascal void TETextBox(Ptr p, LONGINT ln, const Rect *r, INTEGER j) MAC_IMPORT(TETextBox) M68K_INLINE(0xA9CE);
 #if OLDROUTINENAMES
 #define TextBox(p, ln, r, j) TETextBox(p, ln, r, j)
 #endif
 
 enum { _TEScroll = 0xA9DD };
-pascal void TEScroll(INTEGER dh, INTEGER dv, TEHandle teh) M68K_INLINE(0xA9DD);
+pascal void TEScroll(INTEGER dh, INTEGER dv, TEHandle teh) MAC_IMPORT(TEScroll) M68K_INLINE(0xA9DD);
 
 enum { _TEKey = 0xA9DC };
-pascal void TEKey(CharParameter thec, TEHandle teh) M68K_INLINE(0xA9DC);
+pascal void TEKey(CharParameter thec, TEHandle teh) MAC_IMPORT(TEKey) M68K_INLINE(0xA9DC);
 
 enum { _TECopy = 0xA9D5 };
-pascal void TECopy(TEHandle teh) M68K_INLINE(0xA9D5);
+pascal void TECopy(TEHandle teh) MAC_IMPORT(TECopy) M68K_INLINE(0xA9D5);
 
 enum { _TECut = 0xA9D6 };
-pascal void TECut(TEHandle teh) M68K_INLINE(0xA9D6);
+pascal void TECut(TEHandle teh) MAC_IMPORT(TECut) M68K_INLINE(0xA9D6);
 
 enum { _TEPaste = 0xA9DB };
-pascal void TEPaste(TEHandle teh) M68K_INLINE(0xA9DB);
+pascal void TEPaste(TEHandle teh) MAC_IMPORT(TEPaste) M68K_INLINE(0xA9DB);
 
 enum { _TEDelete = 0xA9D7 };
-pascal void TEDelete(TEHandle teh) M68K_INLINE(0xA9D7);
+pascal void TEDelete(TEHandle teh) MAC_IMPORT(TEDelete) M68K_INLINE(0xA9D7);
 
 enum { _TEInsert = 0xA9DE };
-pascal void TEInsert(Ptr p, LONGINT ln, TEHandle teh) M68K_INLINE(0xA9DE);
+pascal void TEInsert(Ptr p, LONGINT ln, TEHandle teh) MAC_IMPORT(TEInsert) M68K_INLINE(0xA9DE);
 
 enum { _TEPinScroll = 0xA812 };
-MAC_SINCE(0x0070, "0.7") pascal void TEPinScroll(INTEGER dh, INTEGER dv, TEHandle teh) M68K_INLINE(0xA812);
+MAC_SINCE(0x0070, "0.7") pascal void TEPinScroll(INTEGER dh, INTEGER dv, TEHandle teh) MAC_IMPORT(TEPinScroll) M68K_INLINE(0xA812);
 
 enum { _TESelView = 0xA811 };
-MAC_SINCE(0x0070, "0.7") pascal void TESelView(TEHandle teh) M68K_INLINE(0xA811);
+MAC_SINCE(0x0070, "0.7") pascal void TESelView(TEHandle teh) MAC_IMPORT(TESelView) M68K_INLINE(0xA811);
 
 enum { _TEAutoView = 0xA813 };
-MAC_SINCE(0x0070, "0.7") pascal void TEAutoView(Boolean autoflag, TEHandle teh) M68K_INLINE(0xA813);
+MAC_SINCE(0x0070, "0.7") pascal void TEAutoView(Boolean autoflag, TEHandle teh) MAC_IMPORT(TEAutoView) M68K_INLINE(0xA813);
 
 enum { _TEStyleNew = 0xA83E };
-MAC_SINCE(0x0200, "2.0") pascal TEHandle TEStyleNew(const Rect *dst, const Rect *view) M68K_INLINE(0xA83E);
+MAC_SINCE(0x0200, "2.0") pascal TEHandle TEStyleNew(const Rect *dst, const Rect *view) MAC_IMPORT(TEStyleNew) M68K_INLINE(0xA83E);
 #if OLDROUTINENAMES
 #define TEStylNew(dst, view) TEStyleNew(dst, view)
 #endif
 
-MAC_SINCE(0x0200, "2.0") pascal void TESetStyleHandle(TEStyleHandle theHandle, TEHandle teh) M68K_INLINE(0x3F3C, 0x0005, 0xA83D);
+MAC_SINCE(0x0200, "2.0") pascal void TESetStyleHandle(TEStyleHandle theHandle, TEHandle teh) MAC_IMPORT(TESetStyleHandle) M68K_INLINE(0x3F3C, 0x0005, 0xA83D);
 #if OLDROUTINENAMES
 #define SetStylHandle(theHandle, teh) TESetStyleHandle(theHandle, teh)
 #endif
@@ -296,7 +296,7 @@ MAC_SINCE(0x0200, "2.0") pascal void TESetStyleHandle(TEStyleHandle theHandle, T
 #define SetStyleHandle(theHandle, teh) TESetStyleHandle(theHandle, teh)
 #endif
 
-MAC_SINCE(0x0200, "2.0") pascal TEStyleHandle TEGetStyleHandle(TEHandle teh) M68K_INLINE(0x3F3C, 0x0004, 0xA83D);
+MAC_SINCE(0x0200, "2.0") pascal TEStyleHandle TEGetStyleHandle(TEHandle teh) MAC_IMPORT(TEGetStyleHandle) M68K_INLINE(0x3F3C, 0x0004, 0xA83D);
 #if OLDROUTINENAMES
 #define GetStylHandle(teh) TEGetStyleHandle(teh)
 #endif
@@ -304,7 +304,7 @@ MAC_SINCE(0x0200, "2.0") pascal TEStyleHandle TEGetStyleHandle(TEHandle teh) M68
 #define GetStyleHandle(teh) TEGetStyleHandle(teh)
 #endif
 
-MAC_SINCE(0x0200, "2.0") pascal StScrpHandle TEGetStyleScrapHandle(TEHandle teh) M68K_INLINE(0x3F3C, 0x0006, 0xA83D);
+MAC_SINCE(0x0200, "2.0") pascal StScrpHandle TEGetStyleScrapHandle(TEHandle teh) MAC_IMPORT(TEGetStyleScrapHandle) M68K_INLINE(0x3F3C, 0x0006, 0xA83D);
 #if OLDROUTINENAMES
 #define GetStylScrap(teh) TEGetStyleScrapHandle(teh)
 #endif
@@ -312,32 +312,32 @@ MAC_SINCE(0x0200, "2.0") pascal StScrpHandle TEGetStyleScrapHandle(TEHandle teh)
 #define GetStyleScrap(teh) TEGetStyleScrapHandle(teh)
 #endif
 
-MAC_SINCE(0x0200, "2.0") pascal void TEStyleInsert(Ptr text, LONGINT length, StScrpHandle hST, TEHandle teh) M68K_INLINE(0x3F3C, 0x0007, 0xA83D);
+MAC_SINCE(0x0200, "2.0") pascal void TEStyleInsert(Ptr text, LONGINT length, StScrpHandle hST, TEHandle teh) MAC_IMPORT(TEStyleInsert) M68K_INLINE(0x3F3C, 0x0007, 0xA83D);
 #if OLDROUTINENAMES
 #define TEStylInsert(text, length, hST, teh) TEStyleInsert(text, length, hST, teh)
 #endif
 
 enum { _TEGetOffset = 0xA83C };
-MAC_SINCE(0x0200, "2.0") pascal INTEGER TEGetOffset(Point pt, TEHandle teh) M68K_INLINE(0xA83C);
+MAC_SINCE(0x0200, "2.0") pascal INTEGER TEGetOffset(Point pt, TEHandle teh) MAC_IMPORT(TEGetOffset) M68K_INLINE(0xA83C);
 
-MAC_SINCE(0x0200, "2.0") pascal LONGINT TEGetPoint(INTEGER offset, TEHandle teh) M68K_INLINE(0x3F3C, 0x0008, 0xA83D);
+MAC_SINCE(0x0200, "2.0") pascal LONGINT TEGetPoint(INTEGER offset, TEHandle teh) MAC_IMPORT(TEGetPoint) M68K_INLINE(0x3F3C, 0x0008, 0xA83D);
 
-MAC_SINCE(0x0200, "2.0") pascal long TEGetHeight(LONGINT endLine, LONGINT startLine, TEHandle teh) M68K_INLINE(0x3F3C, 0x0009, 0xA83D);
+MAC_SINCE(0x0200, "2.0") pascal long TEGetHeight(LONGINT endLine, LONGINT startLine, TEHandle teh) MAC_IMPORT(TEGetHeight) M68K_INLINE(0x3F3C, 0x0009, 0xA83D);
 
-MAC_SINCE(0x0200, "2.0") pascal void TEGetStyle(INTEGER offset, TextStyle *theStyle, INTEGER *lineHeight, INTEGER *fontAscent, TEHandle teh) M68K_INLINE(0x3F3C, 0x0003, 0xA83D);
+MAC_SINCE(0x0200, "2.0") pascal void TEGetStyle(INTEGER offset, TextStyle *theStyle, INTEGER *lineHeight, INTEGER *fontAscent, TEHandle teh) MAC_IMPORT(TEGetStyle) M68K_INLINE(0x3F3C, 0x0003, 0xA83D);
 
-MAC_SINCE(0x0200, "2.0") pascal void TEStylePaste(TEHandle teh) M68K_INLINE(0x3F3C, 0x0000, 0xA83D);
+MAC_SINCE(0x0200, "2.0") pascal void TEStylePaste(TEHandle teh) MAC_IMPORT(TEStylePaste) M68K_INLINE(0x3F3C, 0x0000, 0xA83D);
 #if OLDROUTINENAMES
 #define TEStylPaste(teh) TEStylePaste(teh)
 #endif
 
-MAC_SINCE(0x0200, "2.0") pascal void TESetStyle(INTEGER mode, TextStyle *newStyle, Boolean redraw, TEHandle teh) M68K_INLINE(0x3F3C, 0x0001, 0xA83D);
+MAC_SINCE(0x0200, "2.0") pascal void TESetStyle(INTEGER mode, TextStyle *newStyle, Boolean redraw, TEHandle teh) MAC_IMPORT(TESetStyle) M68K_INLINE(0x3F3C, 0x0001, 0xA83D);
 
-MAC_SINCE(0x0200, "2.0") pascal void TEReplaceStyle(INTEGER mode, TextStyle *oldStyle, TextStyle *newStyle, Boolean redraw, TEHandle teh) M68K_INLINE(0x3F3C, 0x0002, 0xA83D);
+MAC_SINCE(0x0200, "2.0") pascal void TEReplaceStyle(INTEGER mode, TextStyle *oldStyle, TextStyle *newStyle, Boolean redraw, TEHandle teh) MAC_IMPORT(TEReplaceStyle) M68K_INLINE(0x3F3C, 0x0002, 0xA83D);
 
-MAC_SINCE(0x0200, "2.0") pascal Boolean TEContinuousStyle(INTEGER *modep, TextStyle *thestyle, TEHandle teh) M68K_INLINE(0x3F3C, 0x000A, 0xA83D);
+MAC_SINCE(0x0200, "2.0") pascal Boolean TEContinuousStyle(INTEGER *modep, TextStyle *thestyle, TEHandle teh) MAC_IMPORT(TEContinuousStyle) M68K_INLINE(0x3F3C, 0x000A, 0xA83D);
 
-MAC_SINCE(0x0200, "2.0") pascal void TEUseStyleScrap(LONGINT start, LONGINT stop, StScrpHandle newstyles, Boolean redraw, TEHandle teh) M68K_INLINE(0x3F3C, 0x000B, 0xA83D);
+MAC_SINCE(0x0200, "2.0") pascal void TEUseStyleScrap(LONGINT start, LONGINT stop, StScrpHandle newstyles, Boolean redraw, TEHandle teh) MAC_IMPORT(TEUseStyleScrap) M68K_INLINE(0x3F3C, 0x000B, 0xA83D);
 #if OLDROUTINENAMES
 #define SetStylScrap(start, stop, newstyles, redraw, teh) TEUseStyleScrap(start, stop, newstyles, redraw, teh)
 #endif
@@ -345,80 +345,80 @@ MAC_SINCE(0x0200, "2.0") pascal void TEUseStyleScrap(LONGINT start, LONGINT stop
 #define SetStyleScrap(start, stop, newstyles, redraw, teh) TEUseStyleScrap(start, stop, newstyles, redraw, teh)
 #endif
 
-MAC_SINCE(0x0200, "2.0") pascal void TECustomHook(INTEGER sel, ProcPtr *addr, TEHandle teh) M68K_INLINE(0x3F3C, 0x000C, 0xA83D);
+MAC_SINCE(0x0200, "2.0") pascal void TECustomHook(INTEGER sel, ProcPtr *addr, TEHandle teh) MAC_IMPORT(TECustomHook) M68K_INLINE(0x3F3C, 0x000C, 0xA83D);
 
-MAC_SINCE(0x0200, "2.0") pascal LONGINT TENumStyles(LONGINT start, LONGINT stop, TEHandle teh) M68K_INLINE(0x3F3C, 0x000D, 0xA83D);
+MAC_SINCE(0x0200, "2.0") pascal LONGINT TENumStyles(LONGINT start, LONGINT stop, TEHandle teh) MAC_IMPORT(TENumStyles) M68K_INLINE(0x3F3C, 0x000D, 0xA83D);
 
 enum { _TEInit = 0xA9CC };
-pascal void TEInit(void) M68K_INLINE(0xA9CC);
+pascal void TEInit(void) MAC_IMPORT(TEInit) M68K_INLINE(0xA9CC);
 
 enum { _TENew = 0xA9D2 };
-pascal TEHandle TENew(const Rect *dst, const Rect *view) M68K_INLINE(0xA9D2);
+pascal TEHandle TENew(const Rect *dst, const Rect *view) MAC_IMPORT(TENew) M68K_INLINE(0xA9D2);
 
 enum { _TEDispose = 0xA9CD };
-pascal void TEDispose(TEHandle teh) M68K_INLINE(0xA9CD);
+pascal void TEDispose(TEHandle teh) MAC_IMPORT(TEDispose) M68K_INLINE(0xA9CD);
 
 enum { _TEIdle = 0xA9DA };
-pascal void TEIdle(TEHandle teh) M68K_INLINE(0xA9DA);
+pascal void TEIdle(TEHandle teh) MAC_IMPORT(TEIdle) M68K_INLINE(0xA9DA);
 
 enum { _TEClick = 0xA9D4 };
-pascal void TEClick(Point p, Boolean ext, TEHandle teh) M68K_INLINE(0xA9D4);
+pascal void TEClick(Point p, Boolean ext, TEHandle teh) MAC_IMPORT(TEClick) M68K_INLINE(0xA9D4);
 
 enum { _TESetSelect = 0xA9D1 };
-pascal void TESetSelect(LONGINT start, LONGINT stop, TEHandle teh) M68K_INLINE(0xA9D1);
+pascal void TESetSelect(LONGINT start, LONGINT stop, TEHandle teh) MAC_IMPORT(TESetSelect) M68K_INLINE(0xA9D1);
 
 enum { _TEActivate = 0xA9D8 };
-pascal void TEActivate(TEHandle teh) M68K_INLINE(0xA9D8);
+pascal void TEActivate(TEHandle teh) MAC_IMPORT(TEActivate) M68K_INLINE(0xA9D8);
 
 enum { _TEDeactivate = 0xA9D9 };
-pascal void TEDeactivate(TEHandle teh) M68K_INLINE(0xA9D9);
+pascal void TEDeactivate(TEHandle teh) MAC_IMPORT(TEDeactivate) M68K_INLINE(0xA9D9);
 
 #if TARGET_CPU_68K
 static __inline__ void TESetWordBreak(ProcPtr wb, TEHandle teh);
 #else
-pascal void TESetWordBreak(ProcPtr wb, TEHandle teh);
+pascal void TESetWordBreak(ProcPtr wb, TEHandle teh) MAC_IMPORT(TESetWordBreak);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void TESetClickLoop(ProcPtr cp, TEHandle teh);
 #else
-pascal void TESetClickLoop(ProcPtr cp, TEHandle teh);
+pascal void TESetClickLoop(ProcPtr cp, TEHandle teh) MAC_IMPORT(TESetClickLoop);
 #endif
 
 enum { _TECalText = 0xA9D0 };
-pascal void TECalText(TEHandle teh) M68K_INLINE(0xA9D0);
+pascal void TECalText(TEHandle teh) MAC_IMPORT(TECalText) M68K_INLINE(0xA9D0);
 
 #if TARGET_CPU_68K
 static __inline__ OSErr TEFromScrap(void);
 #else
-pascal OSErr TEFromScrap(void);
+pascal OSErr TEFromScrap(void) MAC_IMPORT(TEFromScrap);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr TEToScrap(void);
 #else
-pascal OSErr TEToScrap(void);
+pascal OSErr TEToScrap(void) MAC_IMPORT(TEToScrap);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ Handle TEScrapHandle(void);
 #else
-pascal Handle TEScrapHandle(void);
+pascal Handle TEScrapHandle(void) MAC_IMPORT(TEScrapHandle);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ LONGINT TEGetScrapLength(void);
 #else
-pascal LONGINT TEGetScrapLength(void);
+pascal LONGINT TEGetScrapLength(void) MAC_IMPORT(TEGetScrapLength);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void TESetScrapLength(LONGINT ln);
 #else
-pascal void TESetScrapLength(LONGINT ln);
+pascal void TESetScrapLength(LONGINT ln) MAC_IMPORT(TESetScrapLength);
 #endif
 
-MAC_SINCE(0x0200, "2.0") pascal int16_t TEFeatureFlag(int16_t feature, int16_t action, TEHandle te) M68K_INLINE(0x3F3C, 0x000E, 0xA83D);
+MAC_SINCE(0x0200, "2.0") pascal int16_t TEFeatureFlag(int16_t feature, int16_t action, TEHandle te) MAC_IMPORT(TEFeatureFlag) M68K_INLINE(0x3F3C, 0x000E, 0xA83D);
 
 #if TARGET_CPU_68K
 static __inline__ void TESetWordBreak(ProcPtr wb, TEHandle teh) {

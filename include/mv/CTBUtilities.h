@@ -129,7 +129,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (CTBUErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CTBUErr InitCTBUtilities(void);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CTBUErr InitCTBUtilities(void) MAC_IMPORT(InitCTBUtilities);
 #endif
 
 #if TARGET_CPU_68K
@@ -143,7 +143,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (INTEGER)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal INTEGER CTBGetCTBVersion(void);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal INTEGER CTBGetCTBVersion(void) MAC_IMPORT(CTBGetCTBVersion);
 #endif
 
 #if TARGET_CPU_68K
@@ -157,7 +157,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (INTEGER)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal INTEGER StandardNBP(Point where, ConstStr255Param prompt, INTEGER numTypes, NLType typeList, NameFilterUPP nameFilter, ZoneFilterUPP zoneFilter, DlgHookUPP hook, NBPReply *theReply);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal INTEGER StandardNBP(Point where, ConstStr255Param prompt, INTEGER numTypes, NLType typeList, NameFilterUPP nameFilter, ZoneFilterUPP zoneFilter, DlgHookUPP hook, NBPReply *theReply) MAC_IMPORT(StandardNBP);
 #endif
 
 #if TARGET_CPU_68K
@@ -171,7 +171,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (INTEGER)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal INTEGER CustomNBP(Point where, ConstStr255Param prompt, INTEGER numTypes, NLType typeList, NameFilterUPP nameFilter, ZoneFilterUPP zoneFilter, DlgHookUPP hook, long userData, INTEGER dialogID, ModalFilterUPP filter, NBPReply *theReply);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal INTEGER CustomNBP(Point where, ConstStr255Param prompt, INTEGER numTypes, NLType typeList, NameFilterUPP nameFilter, ZoneFilterUPP zoneFilter, DlgHookUPP hook, long userData, INTEGER dialogID, ModalFilterUPP filter, NBPReply *theReply) MAC_IMPORT(CustomNBP);
 #endif
 
 #ifdef __cplusplus

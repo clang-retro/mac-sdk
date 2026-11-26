@@ -202,133 +202,133 @@ typedef UserItemProcPtr UserItemUPP;
 enum { _DialogDispatch = 0xAA68 };
 
 enum { _Alert = 0xA985 };
-pascal INTEGER Alert(INTEGER id, ModalFilterUPP fp) M68K_INLINE(0xA985);
+pascal INTEGER Alert(INTEGER id, ModalFilterUPP fp) MAC_IMPORT(Alert) M68K_INLINE(0xA985);
 
 enum { _StopAlert = 0xA986 };
-pascal INTEGER StopAlert(INTEGER id, ModalFilterUPP fp) M68K_INLINE(0xA986);
+pascal INTEGER StopAlert(INTEGER id, ModalFilterUPP fp) MAC_IMPORT(StopAlert) M68K_INLINE(0xA986);
 
 enum { _NoteAlert = 0xA987 };
-pascal INTEGER NoteAlert(INTEGER id, ModalFilterUPP fp) M68K_INLINE(0xA987);
+pascal INTEGER NoteAlert(INTEGER id, ModalFilterUPP fp) MAC_IMPORT(NoteAlert) M68K_INLINE(0xA987);
 
 enum { _CautionAlert = 0xA988 };
-pascal INTEGER CautionAlert(INTEGER id, ModalFilterUPP fp) M68K_INLINE(0xA988);
+pascal INTEGER CautionAlert(INTEGER id, ModalFilterUPP fp) MAC_IMPORT(CautionAlert) M68K_INLINE(0xA988);
 
 enum { _CouldAlert = 0xA989 };
-pascal void CouldAlert(INTEGER id) M68K_INLINE(0xA989);
+pascal void CouldAlert(INTEGER id) MAC_IMPORT(CouldAlert) M68K_INLINE(0xA989);
 
 enum { _FreeAlert = 0xA98A };
-pascal void FreeAlert(INTEGER id) M68K_INLINE(0xA98A);
+pascal void FreeAlert(INTEGER id) MAC_IMPORT(FreeAlert) M68K_INLINE(0xA98A);
 
 enum { _CouldDialog = 0xA979 };
-pascal void CouldDialog(INTEGER id) M68K_INLINE(0xA979);
+pascal void CouldDialog(INTEGER id) MAC_IMPORT(CouldDialog) M68K_INLINE(0xA979);
 
 enum { _FreeDialog = 0xA97A };
-pascal void FreeDialog(INTEGER id) M68K_INLINE(0xA97A);
+pascal void FreeDialog(INTEGER id) MAC_IMPORT(FreeDialog) M68K_INLINE(0xA97A);
 
 enum { _NewDialog = 0xA97D };
-pascal DialogPtr NewDialog(void *dst, const Rect *r, ConstStringPtr tit, Boolean vis, INTEGER procid, WindowPtr behind, Boolean gaflag, LONGINT rc, Handle items) M68K_INLINE(0xA97D);
+pascal DialogPtr NewDialog(void *dst, const Rect *r, ConstStringPtr tit, Boolean vis, INTEGER procid, WindowPtr behind, Boolean gaflag, LONGINT rc, Handle items) MAC_IMPORT(NewDialog) M68K_INLINE(0xA97D);
 
 enum { _GetNewDialog = 0xA97C };
-pascal DialogPtr GetNewDialog(INTEGER id, void *dst, WindowPtr behind) M68K_INLINE(0xA97C);
+pascal DialogPtr GetNewDialog(INTEGER id, void *dst, WindowPtr behind) MAC_IMPORT(GetNewDialog) M68K_INLINE(0xA97C);
 
 enum { _CloseDialog = 0xA982 };
-pascal void CloseDialog(DialogPtr dp) M68K_INLINE(0xA982);
+pascal void CloseDialog(DialogPtr dp) MAC_IMPORT(CloseDialog) M68K_INLINE(0xA982);
 
 enum { _DisposeDialog = 0xA983 };
-pascal void DisposeDialog(DialogPtr dp) M68K_INLINE(0xA983);
+pascal void DisposeDialog(DialogPtr dp) MAC_IMPORT(DisposeDialog) M68K_INLINE(0xA983);
 #if OLDROUTINENAMES
 #define DisposDialog(dp) DisposeDialog(dp)
 #endif
 
 enum { _ModalDialog = 0xA991 };
-pascal void ModalDialog(ModalFilterUPP fp, INTEGER *item) M68K_INLINE(0xA991);
+pascal void ModalDialog(ModalFilterUPP fp, INTEGER *item) MAC_IMPORT(ModalDialog) M68K_INLINE(0xA991);
 
 enum { _IsDialogEvent = 0xA97F };
-pascal Boolean IsDialogEvent(EventRecord *evt) M68K_INLINE(0xA97F);
+pascal Boolean IsDialogEvent(EventRecord *evt) MAC_IMPORT(IsDialogEvent) M68K_INLINE(0xA97F);
 
 enum { _DrawDialog = 0xA981 };
-pascal void DrawDialog(DialogPtr dp) M68K_INLINE(0xA981);
+pascal void DrawDialog(DialogPtr dp) MAC_IMPORT(DrawDialog) M68K_INLINE(0xA981);
 
 enum { _FindDialogItem = 0xA984 };
-MAC_SINCE(0x0070, "0.7") pascal INTEGER FindDialogItem(DialogPtr dp, Point pt) M68K_INLINE(0xA984);
+MAC_SINCE(0x0070, "0.7") pascal INTEGER FindDialogItem(DialogPtr dp, Point pt) MAC_IMPORT(FindDialogItem) M68K_INLINE(0xA984);
 #if OLDROUTINENAMES
 #define FindDItem(dp, pt) FindDialogItem(dp, pt)
 #endif
 
 enum { _UpdateDialog = 0xA978 };
-MAC_SINCE(0x0070, "0.7") pascal void UpdateDialog(DialogPtr dp, RgnHandle rgn) M68K_INLINE(0xA978);
+MAC_SINCE(0x0070, "0.7") pascal void UpdateDialog(DialogPtr dp, RgnHandle rgn) MAC_IMPORT(UpdateDialog) M68K_INLINE(0xA978);
 #if OLDROUTINENAMES
 #define UpdtDialog(dp, rgn) UpdateDialog(dp, rgn)
 #endif
 
 enum { _DialogSelect = 0xA980 };
-pascal Boolean DialogSelect(EventRecord *evt, DialogPtr *dpp, INTEGER *item) M68K_INLINE(0xA980);
+pascal Boolean DialogSelect(EventRecord *evt, DialogPtr *dpp, INTEGER *item) MAC_IMPORT(DialogSelect) M68K_INLINE(0xA980);
 
 #if TARGET_CPU_68K
 static __inline__ void DialogCut(DialogPtr dp);
 #else
-pascal void DialogCut(DialogPtr dp);
+pascal void DialogCut(DialogPtr dp) MAC_IMPORT(DialogCut);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void DialogCopy(DialogPtr dp);
 #else
-pascal void DialogCopy(DialogPtr dp);
+pascal void DialogCopy(DialogPtr dp) MAC_IMPORT(DialogCopy);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void DialogPaste(DialogPtr dp);
 #else
-pascal void DialogPaste(DialogPtr dp);
+pascal void DialogPaste(DialogPtr dp) MAC_IMPORT(DialogPaste);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void DialogDelete(DialogPtr dp);
 #else
-pascal void DialogDelete(DialogPtr dp);
+pascal void DialogDelete(DialogPtr dp) MAC_IMPORT(DialogDelete);
 #endif
 
 enum { _ErrorSound = 0xA98C };
-pascal void ErrorSound(SoundUPP sp) M68K_INLINE(0xA98C);
+pascal void ErrorSound(SoundUPP sp) MAC_IMPORT(ErrorSound) M68K_INLINE(0xA98C);
 
 enum { _InitDialogs = 0xA97B };
-pascal void InitDialogs(ProcPtr rp) M68K_INLINE(0xA97B);
+pascal void InitDialogs(ProcPtr rp) MAC_IMPORT(InitDialogs) M68K_INLINE(0xA97B);
 
 #if TARGET_CPU_68K
 static __inline__ void SetDialogFont(INTEGER i);
 #else
-pascal void SetDialogFont(INTEGER i);
+pascal void SetDialogFont(INTEGER i) MAC_IMPORT(SetDialogFont);
 #endif
 
 enum { _ParamText = 0xA98B };
-pascal void ParamText(ConstStringPtr p0, ConstStringPtr p1, ConstStringPtr p2, ConstStringPtr p3) M68K_INLINE(0xA98B);
+pascal void ParamText(ConstStringPtr p0, ConstStringPtr p1, ConstStringPtr p2, ConstStringPtr p3) MAC_IMPORT(ParamText) M68K_INLINE(0xA98B);
 
 enum { _GetDialogItem = 0xA98D };
-pascal void GetDialogItem(DialogPtr dp, INTEGER itemno, INTEGER *itype, Handle *item, Rect *r) M68K_INLINE(0xA98D);
+pascal void GetDialogItem(DialogPtr dp, INTEGER itemno, INTEGER *itype, Handle *item, Rect *r) MAC_IMPORT(GetDialogItem) M68K_INLINE(0xA98D);
 #if OLDROUTINENAMES
 #define GetDItem(dp, itemno, itype, item, r) GetDialogItem(dp, itemno, itype, item, r)
 #endif
 
 enum { _SetDialogItem = 0xA98E };
-pascal void SetDialogItem(DialogPtr dp, INTEGER itemno, INTEGER itype, Handle item, const Rect *r) M68K_INLINE(0xA98E);
+pascal void SetDialogItem(DialogPtr dp, INTEGER itemno, INTEGER itype, Handle item, const Rect *r) MAC_IMPORT(SetDialogItem) M68K_INLINE(0xA98E);
 #if OLDROUTINENAMES
 #define SetDItem(dp, itemno, itype, item, r) SetDialogItem(dp, itemno, itype, item, r)
 #endif
 
 enum { _GetDialogItemText = 0xA990 };
-pascal void GetDialogItemText(Handle item, StringPtr text) M68K_INLINE(0xA990);
+pascal void GetDialogItemText(Handle item, StringPtr text) MAC_IMPORT(GetDialogItemText) M68K_INLINE(0xA990);
 #if OLDROUTINENAMES
 #define GetIText(item, text) GetDialogItemText(item, text)
 #endif
 
 enum { _SetDialogItemText = 0xA98F };
-pascal void SetDialogItemText(Handle item, ConstStringPtr text) M68K_INLINE(0xA98F);
+pascal void SetDialogItemText(Handle item, ConstStringPtr text) MAC_IMPORT(SetDialogItemText) M68K_INLINE(0xA98F);
 #if OLDROUTINENAMES
 #define SetIText(item, text) SetDialogItemText(item, text)
 #endif
 
 enum { _SelectDialogItemText = 0xA97E };
-pascal void SelectDialogItemText(DialogPtr dp, INTEGER itemno, INTEGER start, INTEGER stop) M68K_INLINE(0xA97E);
+pascal void SelectDialogItemText(DialogPtr dp, INTEGER itemno, INTEGER start, INTEGER stop) MAC_IMPORT(SelectDialogItemText) M68K_INLINE(0xA97E);
 #if OLDROUTINENAMES
 #define SelIText(dp, itemno, start, stop) SelectDialogItemText(dp, itemno, start, stop)
 #endif
@@ -336,40 +336,40 @@ pascal void SelectDialogItemText(DialogPtr dp, INTEGER itemno, INTEGER start, IN
 #if TARGET_CPU_68K
 static __inline__ INTEGER GetAlertStage(void);
 #else
-pascal INTEGER GetAlertStage(void);
+pascal INTEGER GetAlertStage(void) MAC_IMPORT(GetAlertStage);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ void ResetAlertStage(void);
 #else
-pascal void ResetAlertStage(void);
+pascal void ResetAlertStage(void) MAC_IMPORT(ResetAlertStage);
 #endif
 
 enum { _HideDialogItem = 0xA827 };
-MAC_SINCE(0x0070, "0.7") pascal void HideDialogItem(DialogPtr dp, INTEGER item) M68K_INLINE(0xA827);
+MAC_SINCE(0x0070, "0.7") pascal void HideDialogItem(DialogPtr dp, INTEGER item) MAC_IMPORT(HideDialogItem) M68K_INLINE(0xA827);
 #if OLDROUTINENAMES
 #define HideDItem(dp, item) HideDialogItem(dp, item)
 #endif
 
 enum { _ShowDialogItem = 0xA828 };
-MAC_SINCE(0x0070, "0.7") pascal void ShowDialogItem(DialogPtr dp, INTEGER item) M68K_INLINE(0xA828);
+MAC_SINCE(0x0070, "0.7") pascal void ShowDialogItem(DialogPtr dp, INTEGER item) MAC_IMPORT(ShowDialogItem) M68K_INLINE(0xA828);
 #if OLDROUTINENAMES
 #define ShowDItem(dp, item) ShowDialogItem(dp, item)
 #endif
 
 enum { _NewColorDialog = 0xAA4B };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal DialogPtr NewColorDialog(void *arg0, const Rect *arg1, ConstStringPtr arg2, Boolean arg3, INTEGER arg4, WindowPtr arg5, Boolean arg6, LONGINT arg7, Handle arg8) M68K_INLINE(0xAA4B);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal DialogPtr NewColorDialog(void *arg0, const Rect *arg1, ConstStringPtr arg2, Boolean arg3, INTEGER arg4, WindowPtr arg5, Boolean arg6, LONGINT arg7, Handle arg8) MAC_IMPORT(NewColorDialog) M68K_INLINE(0xAA4B);
 #if OLDROUTINENAMES
 #define NewCDialog(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8) NewColorDialog(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)
 #endif
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr GetStdFilterProc(ProcPtr *proc) M68K_INLINE(0x303C, 0x0203, 0xAA68);
+MAC_SINCE(0x0700, "7.0") pascal OSErr GetStdFilterProc(ProcPtr *proc) MAC_IMPORT(GetStdFilterProc) M68K_INLINE(0x303C, 0x0203, 0xAA68);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr SetDialogDefaultItem(DialogPtr dialog, int16_t new_item) M68K_INLINE(0x303C, 0x0304, 0xAA68);
+MAC_SINCE(0x0700, "7.0") pascal OSErr SetDialogDefaultItem(DialogPtr dialog, int16_t new_item) MAC_IMPORT(SetDialogDefaultItem) M68K_INLINE(0x303C, 0x0304, 0xAA68);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr SetDialogCancelItem(DialogPtr dialog, int16_t new_item) M68K_INLINE(0x303C, 0x0305, 0xAA68);
+MAC_SINCE(0x0700, "7.0") pascal OSErr SetDialogCancelItem(DialogPtr dialog, int16_t new_item) MAC_IMPORT(SetDialogCancelItem) M68K_INLINE(0x303C, 0x0305, 0xAA68);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr SetDialogTracksCursor(DialogPtr dialog, Boolean tracks) M68K_INLINE(0x303C, 0x0306, 0xAA68);
+MAC_SINCE(0x0700, "7.0") pascal OSErr SetDialogTracksCursor(DialogPtr dialog, Boolean tracks) MAC_IMPORT(SetDialogTracksCursor) M68K_INLINE(0x303C, 0x0306, 0xAA68);
 
 #if TARGET_CPU_68K
 MAC_SINCE(0x0700, "7.0") static __inline__ __attribute__((__always_inline__)) void AppendDITL(DialogPtr arg0, Handle arg1, DITLMethod arg2) {
@@ -382,7 +382,7 @@ MAC_SINCE(0x0700, "7.0") static __inline__ __attribute__((__always_inline__)) vo
     (void)_ret;
 }
 #else
-MAC_SINCE(0x0700, "7.0") pascal void AppendDITL(DialogPtr arg0, Handle arg1, DITLMethod arg2);
+MAC_SINCE(0x0700, "7.0") pascal void AppendDITL(DialogPtr arg0, Handle arg1, DITLMethod arg2) MAC_IMPORT(AppendDITL);
 #endif
 
 #if TARGET_CPU_68K
@@ -396,7 +396,7 @@ MAC_SINCE(0x0700, "7.0") static __inline__ __attribute__((__always_inline__)) vo
     (void)_ret;
 }
 #else
-MAC_SINCE(0x0700, "7.0") pascal void ShortenDITL(DialogPtr arg0, int16_t arg1);
+MAC_SINCE(0x0700, "7.0") pascal void ShortenDITL(DialogPtr arg0, int16_t arg1) MAC_IMPORT(ShortenDITL);
 #endif
 
 #if TARGET_CPU_68K
@@ -410,7 +410,7 @@ MAC_SINCE(0x0700, "7.0") static __inline__ __attribute__((__always_inline__)) in
     return (int16_t)_ret;
 }
 #else
-MAC_SINCE(0x0700, "7.0") pascal int16_t CountDITL(DialogPtr arg0);
+MAC_SINCE(0x0700, "7.0") pascal int16_t CountDITL(DialogPtr arg0) MAC_IMPORT(CountDITL);
 #endif
 
 typedef DialogPtr DialogRef;
@@ -423,7 +423,7 @@ typedef int16_t DialogItemType;
 #if TARGET_CPU_68K
 static __inline__ Boolean StdFilterProc(DialogPtr theDialog, EventRecord *event, DialogItemIndex *itemHit);
 #else
-pascal Boolean StdFilterProc(DialogPtr theDialog, EventRecord *event, DialogItemIndex *itemHit);
+pascal Boolean StdFilterProc(DialogPtr theDialog, EventRecord *event, DialogItemIndex *itemHit) MAC_IMPORT(StdFilterProc);
 #endif
 
 // Alert types for StandardAlert (Dialog Manager 8).
@@ -471,35 +471,35 @@ struct AlertStdAlertParamRec {
 typedef AlertStdAlertParamRec *AlertStdAlertParamPtr;
 
 // Dialog Manager 8 (Appearance Manager)
-MAC_SINCE(0x0700, "7.0") pascal OSErr AutoSizeDialog(DialogRef inDialog) M68K_INLINE(0x303C, 0x020D, 0xAA68);
+MAC_SINCE(0x0700, "7.0") pascal OSErr AutoSizeDialog(DialogRef inDialog) MAC_IMPORT(AutoSizeDialog) M68K_INLINE(0x303C, 0x020D, 0xAA68);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr GetDialogItemAsControl(DialogRef inDialog, SInt16 inItemNo, ControlRef *outControl) M68K_INLINE(0x303C, 0x050F, 0xAA68);
+MAC_SINCE(0x0700, "7.0") pascal OSErr GetDialogItemAsControl(DialogRef inDialog, SInt16 inItemNo, ControlRef *outControl) MAC_IMPORT(GetDialogItemAsControl) M68K_INLINE(0x303C, 0x050F, 0xAA68);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr MoveDialogItem(DialogRef inDialog, SInt16 inItemNo, SInt16 inHoriz, SInt16 inVert) M68K_INLINE(0x303C, 0x0510, 0xAA68);
+MAC_SINCE(0x0700, "7.0") pascal OSErr MoveDialogItem(DialogRef inDialog, SInt16 inItemNo, SInt16 inHoriz, SInt16 inVert) MAC_IMPORT(MoveDialogItem) M68K_INLINE(0x303C, 0x0510, 0xAA68);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr SizeDialogItem(DialogRef inDialog, SInt16 inItemNo, SInt16 inWidth, SInt16 inHeight) M68K_INLINE(0x303C, 0x0511, 0xAA68);
+MAC_SINCE(0x0700, "7.0") pascal OSErr SizeDialogItem(DialogRef inDialog, SInt16 inItemNo, SInt16 inWidth, SInt16 inHeight) MAC_IMPORT(SizeDialogItem) M68K_INLINE(0x303C, 0x0511, 0xAA68);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr StandardAlert(AlertType inAlertType, StringPtr inError, StringPtr inExplanation, AlertStdAlertParamPtr inAlertParam, SInt16 *outItemHit) M68K_INLINE(0x303C, 0x090E, 0xAA68);
+MAC_SINCE(0x0700, "7.0") pascal OSErr StandardAlert(AlertType inAlertType, StringPtr inError, StringPtr inExplanation, AlertStdAlertParamPtr inAlertParam, SInt16 *outItemHit) MAC_IMPORT(StandardAlert) M68K_INLINE(0x303C, 0x090E, 0xAA68);
 
 // Dialog Manager in Mac OS 8.5 (MacDialogsLib)
 #if !TARGET_CPU_68K
-pascal OSStatus AppendDialogItemList(DialogRef dialog, SInt16 ditlID, DITLMethod method);
+pascal OSStatus AppendDialogItemList(DialogRef dialog, SInt16 ditlID, DITLMethod method) MAC_IMPORT(AppendDialogItemList);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus SetDialogTimeout(DialogRef inDialog, SInt16 inButtonToPress, UInt32 inSecondsToWait);
+pascal OSStatus SetDialogTimeout(DialogRef inDialog, SInt16 inButtonToPress, UInt32 inSecondsToWait) MAC_IMPORT(SetDialogTimeout);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetDialogTimeout(DialogRef inDialog, SInt16 *outButtonToPress, UInt32 *outSecondsToWait, UInt32 *outSecondsRemaining);
+pascal OSStatus GetDialogTimeout(DialogRef inDialog, SInt16 *outButtonToPress, UInt32 *outSecondsToWait, UInt32 *outSecondsRemaining) MAC_IMPORT(GetDialogTimeout);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus SetModalDialogEventMask(DialogRef inDialog, EventMask inMask);
+pascal OSStatus SetModalDialogEventMask(DialogRef inDialog, EventMask inMask) MAC_IMPORT(SetModalDialogEventMask);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetModalDialogEventMask(DialogRef inDialog, EventMask *outMask);
+pascal OSStatus GetModalDialogEventMask(DialogRef inDialog, EventMask *outMask) MAC_IMPORT(GetModalDialogEventMask);
 #endif
 
 #if TARGET_CPU_68K

@@ -87,7 +87,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SReadByte(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SReadByte(SpBlockPtr spBlkPtr) MAC_IMPORT(SReadByte);
 #endif
 
 #if TARGET_CPU_68K
@@ -101,7 +101,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SReadWord(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SReadWord(SpBlockPtr spBlkPtr) MAC_IMPORT(SReadWord);
 #endif
 
 #if TARGET_CPU_68K
@@ -115,7 +115,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SReadLong(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SReadLong(SpBlockPtr spBlkPtr) MAC_IMPORT(SReadLong);
 #endif
 
 #if TARGET_CPU_68K
@@ -129,7 +129,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SGetCString(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SGetCString(SpBlockPtr spBlkPtr) MAC_IMPORT(SGetCString);
 #endif
 
 #if TARGET_CPU_68K
@@ -143,7 +143,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SGetBlock(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SGetBlock(SpBlockPtr spBlkPtr) MAC_IMPORT(SGetBlock);
 #endif
 
 #if TARGET_CPU_68K
@@ -157,7 +157,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SFindStruct(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SFindStruct(SpBlockPtr spBlkPtr) MAC_IMPORT(SFindStruct);
 #endif
 
 #if TARGET_CPU_68K
@@ -171,7 +171,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SReadStruct(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SReadStruct(SpBlockPtr spBlkPtr) MAC_IMPORT(SReadStruct);
 #endif
 
 #if TARGET_CPU_68K
@@ -185,7 +185,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SVersion(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SVersion(SpBlockPtr spBlkPtr) MAC_IMPORT(SVersion);
 #endif
 
 #if TARGET_CPU_68K
@@ -199,7 +199,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SetSRsrcState(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SetSRsrcState(SpBlockPtr spBlkPtr) MAC_IMPORT(SetSRsrcState);
 #endif
 
 #if TARGET_CPU_68K
@@ -213,7 +213,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr InsertSRTRec(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr InsertSRTRec(SpBlockPtr spBlkPtr) MAC_IMPORT(InsertSRTRec);
 #endif
 
 #if TARGET_CPU_68K
@@ -227,7 +227,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SGetSRsrc(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SGetSRsrc(SpBlockPtr spBlkPtr) MAC_IMPORT(SGetSRsrc);
 #endif
 
 #if TARGET_CPU_68K
@@ -241,7 +241,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SGetTypeSRsrc(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SGetTypeSRsrc(SpBlockPtr spBlkPtr) MAC_IMPORT(SGetTypeSRsrc);
 #endif
 
 #if TARGET_CPU_68K
@@ -255,7 +255,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SGetSRsrcPtr(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SGetSRsrcPtr(SpBlockPtr spBlkPtr) MAC_IMPORT(SGetSRsrcPtr);
 #endif
 
 #if TARGET_CPU_68K
@@ -269,7 +269,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SReadInfo(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SReadInfo(SpBlockPtr spBlkPtr) MAC_IMPORT(SReadInfo);
 #endif
 
 #if TARGET_CPU_68K
@@ -283,7 +283,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SReadPRAMRec(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SReadPRAMRec(SpBlockPtr spBlkPtr) MAC_IMPORT(SReadPRAMRec);
 #endif
 
 #if TARGET_CPU_68K
@@ -297,7 +297,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SPutPRAMRec(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SPutPRAMRec(SpBlockPtr spBlkPtr) MAC_IMPORT(SPutPRAMRec);
 #endif
 
 #if TARGET_CPU_68K
@@ -311,7 +311,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SReadFHeader(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SReadFHeader(SpBlockPtr spBlkPtr) MAC_IMPORT(SReadFHeader);
 #endif
 
 #if TARGET_CPU_68K
@@ -325,7 +325,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SNextSRsrc(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SNextSRsrc(SpBlockPtr spBlkPtr) MAC_IMPORT(SNextSRsrc);
 #endif
 
 #if TARGET_CPU_68K
@@ -339,7 +339,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SNextTypeSRsrc(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SNextTypeSRsrc(SpBlockPtr spBlkPtr) MAC_IMPORT(SNextTypeSRsrc);
 #endif
 
 #if TARGET_CPU_68K
@@ -353,7 +353,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SRsrcInfo(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SRsrcInfo(SpBlockPtr spBlkPtr) MAC_IMPORT(SRsrcInfo);
 #endif
 
 #if TARGET_CPU_68K
@@ -367,7 +367,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SCkCardStat(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SCkCardStat(SpBlockPtr spBlkPtr) MAC_IMPORT(SCkCardStat);
 #endif
 
 #if TARGET_CPU_68K
@@ -381,7 +381,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SReadDrvrName(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SReadDrvrName(SpBlockPtr spBlkPtr) MAC_IMPORT(SReadDrvrName);
 #endif
 
 #if TARGET_CPU_68K
@@ -395,7 +395,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SFindDevBase(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SFindDevBase(SpBlockPtr spBlkPtr) MAC_IMPORT(SFindDevBase);
 #endif
 
 #if TARGET_CPU_68K
@@ -409,7 +409,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SFindBigDevBase(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SFindBigDevBase(SpBlockPtr spBlkPtr) MAC_IMPORT(SFindBigDevBase);
 #endif
 
 #if TARGET_CPU_68K
@@ -423,7 +423,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr InitSDeclMgr(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr InitSDeclMgr(SpBlockPtr spBlkPtr) MAC_IMPORT(InitSDeclMgr);
 #endif
 
 #if TARGET_CPU_68K
@@ -437,7 +437,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SPrimaryInit(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SPrimaryInit(SpBlockPtr spBlkPtr) MAC_IMPORT(SPrimaryInit);
 #endif
 
 #if TARGET_CPU_68K
@@ -451,7 +451,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SCardChanged(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SCardChanged(SpBlockPtr spBlkPtr) MAC_IMPORT(SCardChanged);
 #endif
 
 #if TARGET_CPU_68K
@@ -465,7 +465,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SExec(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SExec(SpBlockPtr spBlkPtr) MAC_IMPORT(SExec);
 #endif
 
 #if TARGET_CPU_68K
@@ -479,7 +479,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SOffsetData(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SOffsetData(SpBlockPtr spBlkPtr) MAC_IMPORT(SOffsetData);
 #endif
 
 #if TARGET_CPU_68K
@@ -493,7 +493,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SInitPRAMRecs(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SInitPRAMRecs(SpBlockPtr spBlkPtr) MAC_IMPORT(SInitPRAMRecs);
 #endif
 
 #if TARGET_CPU_68K
@@ -507,7 +507,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SReadPBSize(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SReadPBSize(SpBlockPtr spBlkPtr) MAC_IMPORT(SReadPBSize);
 #endif
 
 #if TARGET_CPU_68K
@@ -521,7 +521,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SCalcStep(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SCalcStep(SpBlockPtr spBlkPtr) MAC_IMPORT(SCalcStep);
 #endif
 
 #if TARGET_CPU_68K
@@ -535,7 +535,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SInitSRsrcTable(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SInitSRsrcTable(SpBlockPtr spBlkPtr) MAC_IMPORT(SInitSRsrcTable);
 #endif
 
 #if TARGET_CPU_68K
@@ -549,7 +549,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SSearchSRT(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SSearchSRT(SpBlockPtr spBlkPtr) MAC_IMPORT(SSearchSRT);
 #endif
 
 #if TARGET_CPU_68K
@@ -563,7 +563,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SUpdateSRT(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SUpdateSRT(SpBlockPtr spBlkPtr) MAC_IMPORT(SUpdateSRT);
 #endif
 
 #if TARGET_CPU_68K
@@ -577,7 +577,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SCalcSPointer(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SCalcSPointer(SpBlockPtr spBlkPtr) MAC_IMPORT(SCalcSPointer);
 #endif
 
 #if TARGET_CPU_68K
@@ -591,7 +591,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SGetDriver(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SGetDriver(SpBlockPtr spBlkPtr) MAC_IMPORT(SGetDriver);
 #endif
 
 #if TARGET_CPU_68K
@@ -605,7 +605,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SPtrToSlot(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SPtrToSlot(SpBlockPtr spBlkPtr) MAC_IMPORT(SPtrToSlot);
 #endif
 
 #if TARGET_CPU_68K
@@ -619,7 +619,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SFindSInfoRecPtr(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SFindSInfoRecPtr(SpBlockPtr spBlkPtr) MAC_IMPORT(SFindSInfoRecPtr);
 #endif
 
 #if TARGET_CPU_68K
@@ -633,7 +633,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SFindSRsrcPtr(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SFindSRsrcPtr(SpBlockPtr spBlkPtr) MAC_IMPORT(SFindSRsrcPtr);
 #endif
 
 #if TARGET_CPU_68K
@@ -647,7 +647,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SDeleteSRTRec(SpBlockPtr spBlkPtr);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SDeleteSRTRec(SpBlockPtr spBlkPtr) MAC_IMPORT(SDeleteSRTRec);
 #endif
 
 enum { _SIntInstall = 0xA075 };
@@ -663,7 +663,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SIntInstall(SQElemPtr sIntQElemPtr, INTEGER theSlot);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SIntInstall(SQElemPtr sIntQElemPtr, INTEGER theSlot) MAC_IMPORT(SIntInstall);
 #endif
 
 enum { _SIntRemove = 0xA076 };
@@ -679,7 +679,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SIntRemove(SQElemPtr sIntQElemPtr, INTEGER theSlot);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SIntRemove(SQElemPtr sIntQElemPtr, INTEGER theSlot) MAC_IMPORT(SIntRemove);
 #endif
 
 enum { _OpenSlotSync = 0xA200 };
@@ -694,7 +694,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr OpenSlotSync(ParmBlkP
     return _ret;
 }
 #else
-pascal OSErr OpenSlotSync(ParmBlkPtr paramBlock);
+pascal OSErr OpenSlotSync(ParmBlkPtr paramBlock) MAC_IMPORT(OpenSlotSync);
 #endif
 
 enum { _OpenSlotAsync = 0xA600 };
@@ -709,13 +709,13 @@ static __inline__ __attribute__((__always_inline__)) OSErr OpenSlotAsync(ParmBlk
     return _ret;
 }
 #else
-pascal OSErr OpenSlotAsync(ParmBlkPtr paramBlock);
+pascal OSErr OpenSlotAsync(ParmBlkPtr paramBlock) MAC_IMPORT(OpenSlotAsync);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr OpenSlot(ParmBlkPtr paramBlock, Boolean async);
 #else
-pascal OSErr OpenSlot(ParmBlkPtr paramBlock, Boolean async);
+pascal OSErr OpenSlot(ParmBlkPtr paramBlock, Boolean async) MAC_IMPORT(OpenSlot);
 #endif
 
 #if TARGET_CPU_68K

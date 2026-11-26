@@ -189,21 +189,21 @@ enum {
 
 enum { _Pack3 = 0xA9EA };
 
-pascal void SFPPutFile(Point p, ConstStringPtr prompt, ConstStringPtr name, DlgHookUPP dh, SFReply *rep, INTEGER dig, ModalFilterUPP fp) M68K_INLINE(0x3F3C, 0x0003, 0xA9EA);
+pascal void SFPPutFile(Point p, ConstStringPtr prompt, ConstStringPtr name, DlgHookUPP dh, SFReply *rep, INTEGER dig, ModalFilterUPP fp) MAC_IMPORT(SFPPutFile) M68K_INLINE(0x3F3C, 0x0003, 0xA9EA);
 
-pascal void SFPutFile(Point p, ConstStringPtr prompt, ConstStringPtr name, DlgHookUPP dh, SFReply *rep) M68K_INLINE(0x3F3C, 0x0001, 0xA9EA);
+pascal void SFPutFile(Point p, ConstStringPtr prompt, ConstStringPtr name, DlgHookUPP dh, SFReply *rep) MAC_IMPORT(SFPutFile) M68K_INLINE(0x3F3C, 0x0001, 0xA9EA);
 
-pascal void SFPGetFile(Point p, ConstStringPtr prompt, FileFilterUPP filef, INTEGER numt, SFTypeList tl, DlgHookUPP dh, SFReply *rep, INTEGER dig, ModalFilterUPP fp) M68K_INLINE(0x3F3C, 0x0004, 0xA9EA);
+pascal void SFPGetFile(Point p, ConstStringPtr prompt, FileFilterUPP filef, INTEGER numt, SFTypeList tl, DlgHookUPP dh, SFReply *rep, INTEGER dig, ModalFilterUPP fp) MAC_IMPORT(SFPGetFile) M68K_INLINE(0x3F3C, 0x0004, 0xA9EA);
 
-pascal void SFGetFile(Point p, ConstStringPtr prompt, FileFilterUPP filef, INTEGER numt, SFTypeList tl, DlgHookUPP dh, SFReply *rep) M68K_INLINE(0x3F3C, 0x0002, 0xA9EA);
+pascal void SFGetFile(Point p, ConstStringPtr prompt, FileFilterUPP filef, INTEGER numt, SFTypeList tl, DlgHookUPP dh, SFReply *rep) MAC_IMPORT(SFGetFile) M68K_INLINE(0x3F3C, 0x0002, 0xA9EA);
 
-pascal void StandardGetFile(FileFilterUPP filef, INTEGER numt, SFTypeList tl, StandardFileReply *replyp) M68K_INLINE(0x3F3C, 0x0006, 0xA9EA);
+pascal void StandardGetFile(FileFilterUPP filef, INTEGER numt, SFTypeList tl, StandardFileReply *replyp) MAC_IMPORT(StandardGetFile) M68K_INLINE(0x3F3C, 0x0006, 0xA9EA);
 
-pascal void StandardPutFile(ConstStringPtr prompt, ConstStringPtr defaultname, StandardFileReply *replyp) M68K_INLINE(0x3F3C, 0x0005, 0xA9EA);
+pascal void StandardPutFile(ConstStringPtr prompt, ConstStringPtr defaultname, StandardFileReply *replyp) MAC_IMPORT(StandardPutFile) M68K_INLINE(0x3F3C, 0x0005, 0xA9EA);
 
-pascal void CustomPutFile(ConstStringPtr prompt, ConstStringPtr defaultName, StandardFileReply *replyp, INTEGER dlgid, Point where, DlgHookYDUPP dlghook, ModalFilterYDUPP filterproc, Ptr activeList, ActivateYDUPP activateproc, void *yourdatap) M68K_INLINE(0x3F3C, 0x0007, 0xA9EA);
+pascal void CustomPutFile(ConstStringPtr prompt, ConstStringPtr defaultName, StandardFileReply *replyp, INTEGER dlgid, Point where, DlgHookYDUPP dlghook, ModalFilterYDUPP filterproc, Ptr activeList, ActivateYDUPP activateproc, void *yourdatap) MAC_IMPORT(CustomPutFile) M68K_INLINE(0x3F3C, 0x0007, 0xA9EA);
 
-pascal void CustomGetFile(FileFilterYDUPP filefilter, INTEGER numtypes, SFTypeList typelist, StandardFileReply *replyp, INTEGER dlgid, Point where, DlgHookYDUPP dlghook, ModalFilterYDUPP filterproc, Ptr activeList, ActivateYDUPP activateproc, void *yourdatap) M68K_INLINE(0x3F3C, 0x0008, 0xA9EA);
+pascal void CustomGetFile(FileFilterYDUPP filefilter, INTEGER numtypes, SFTypeList typelist, StandardFileReply *replyp, INTEGER dlgid, Point where, DlgHookYDUPP dlghook, ModalFilterYDUPP filterproc, Ptr activeList, ActivateYDUPP activateproc, void *yourdatap) MAC_IMPORT(CustomGetFile) M68K_INLINE(0x3F3C, 0x0008, 0xA9EA);
 
 #ifdef __cplusplus
 }

@@ -25,13 +25,13 @@ enum {
 
 enum { _ShutDown = 0xA895 };
 
-MAC_SINCE(0x0200, "2.0") pascal void ShutDwnPower(void) M68K_INLINE(0x3F3C, 0x0001, 0xA895);
+MAC_SINCE(0x0200, "2.0") pascal void ShutDwnPower(void) MAC_IMPORT(ShutDwnPower) M68K_INLINE(0x3F3C, 0x0001, 0xA895);
 
-MAC_SINCE(0x0200, "2.0") pascal void ShutDwnStart(void) M68K_INLINE(0x3F3C, 0x0002, 0xA895);
+MAC_SINCE(0x0200, "2.0") pascal void ShutDwnStart(void) MAC_IMPORT(ShutDwnStart) M68K_INLINE(0x3F3C, 0x0002, 0xA895);
 
-MAC_SINCE(0x0200, "2.0") pascal void ShutDwnInstall(ProcPtr shutdown_proc, int16_t flags) M68K_INLINE(0x3F3C, 0x0003, 0xA895);
+MAC_SINCE(0x0200, "2.0") pascal void ShutDwnInstall(ProcPtr shutdown_proc, int16_t flags) MAC_IMPORT(ShutDwnInstall) M68K_INLINE(0x3F3C, 0x0003, 0xA895);
 
-MAC_SINCE(0x0200, "2.0") pascal void ShutDwnRemove(ProcPtr shutdown_proc) M68K_INLINE(0x3F3C, 0x0004, 0xA895);
+MAC_SINCE(0x0200, "2.0") pascal void ShutDwnRemove(ProcPtr shutdown_proc) MAC_IMPORT(ShutDwnRemove) M68K_INLINE(0x3F3C, 0x0004, 0xA895);
 
 #ifdef __cplusplus
 }

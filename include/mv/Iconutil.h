@@ -134,83 +134,83 @@ typedef CIconPtr *CIconHandle;
 // icon utility function prototypes
 enum { _IconDispatch = 0xABC9 };
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr PlotIconID(const Rect *rect, IconAlignmentType align, IconTransformType tranform, int16_t res_id) M68K_INLINE(0x303C, 0x0500, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal OSErr PlotIconID(const Rect *rect, IconAlignmentType align, IconTransformType tranform, int16_t res_id) MAC_IMPORT(PlotIconID) M68K_INLINE(0x303C, 0x0500, 0xABC9);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr PlotIconMethod(const Rect *rect, IconAlignmentType align, IconTransformType transform, IconGetterUPP method, void *data) M68K_INLINE(0x303C, 0x0805, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal OSErr PlotIconMethod(const Rect *rect, IconAlignmentType align, IconTransformType transform, IconGetterUPP method, void *data) MAC_IMPORT(PlotIconMethod) M68K_INLINE(0x303C, 0x0805, 0xABC9);
 
 enum { _PlotCIcon = 0xAA1F };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void PlotCIcon(const Rect *rect, CIconHandle icon) M68K_INLINE(0xAA1F);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void PlotCIcon(const Rect *rect, CIconHandle icon) MAC_IMPORT(PlotCIcon) M68K_INLINE(0xAA1F);
 
 enum { _PlotIcon = 0xA94B };
-pascal void PlotIcon(const Rect *rect, Handle icon) M68K_INLINE(0xA94B);
+pascal void PlotIcon(const Rect *rect, Handle icon) MAC_IMPORT(PlotIcon) M68K_INLINE(0xA94B);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr PlotIconHandle(const Rect *rect, IconAlignmentType align, IconTransformType transform, Handle icon) M68K_INLINE(0x303C, 0x061D, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal OSErr PlotIconHandle(const Rect *rect, IconAlignmentType align, IconTransformType transform, Handle icon) MAC_IMPORT(PlotIconHandle) M68K_INLINE(0x303C, 0x061D, 0xABC9);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr PlotCIconHandle(const Rect *rect, IconAlignmentType align, IconTransformType transform, CIconHandle icon) M68K_INLINE(0x303C, 0x061F, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal OSErr PlotCIconHandle(const Rect *rect, IconAlignmentType align, IconTransformType transform, CIconHandle icon) MAC_IMPORT(PlotCIconHandle) M68K_INLINE(0x303C, 0x061F, 0xABC9);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr PlotSICNHandle(const Rect *rect, IconAlignmentType align, IconTransformType transform, Handle icon) M68K_INLINE(0x303C, 0x061E, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal OSErr PlotSICNHandle(const Rect *rect, IconAlignmentType align, IconTransformType transform, Handle icon) MAC_IMPORT(PlotSICNHandle) M68K_INLINE(0x303C, 0x061E, 0xABC9);
 
 enum { _GetIcon = 0xA9BB };
-pascal Handle GetIcon(int16_t icon_id) M68K_INLINE(0xA9BB);
+pascal Handle GetIcon(int16_t icon_id) MAC_IMPORT(GetIcon) M68K_INLINE(0xA9BB);
 
 enum { _GetCIcon = 0xAA1E };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal CIconHandle GetCIcon(int16_t icon_id) M68K_INLINE(0xAA1E);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal CIconHandle GetCIcon(int16_t icon_id) MAC_IMPORT(GetCIcon) M68K_INLINE(0xAA1E);
 
 enum { _DisposeCIcon = 0xAA25 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void DisposeCIcon(CIconHandle icon) M68K_INLINE(0xAA25);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void DisposeCIcon(CIconHandle icon) MAC_IMPORT(DisposeCIcon) M68K_INLINE(0xAA25);
 #if OLDROUTINENAMES
 #define DisposCIcon(icon) DisposeCIcon(icon)
 #endif
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr GetIconSuite(Handle *suite, int16_t res_id, IconSelectorValue selector) M68K_INLINE(0x303C, 0x0501, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal OSErr GetIconSuite(Handle *suite, int16_t res_id, IconSelectorValue selector) MAC_IMPORT(GetIconSuite) M68K_INLINE(0x303C, 0x0501, 0xABC9);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr NewIconSuite(Handle *suite) M68K_INLINE(0x303C, 0x0207, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal OSErr NewIconSuite(Handle *suite) MAC_IMPORT(NewIconSuite) M68K_INLINE(0x303C, 0x0207, 0xABC9);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr AddIconToSuite(Handle icon_data, Handle suite, ResType type) M68K_INLINE(0x303C, 0x0608, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal OSErr AddIconToSuite(Handle icon_data, Handle suite, ResType type) MAC_IMPORT(AddIconToSuite) M68K_INLINE(0x303C, 0x0608, 0xABC9);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr GetIconFromSuite(Handle *icon_data, Handle suite, ResType type) M68K_INLINE(0x303C, 0x0609, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal OSErr GetIconFromSuite(Handle *icon_data, Handle suite, ResType type) MAC_IMPORT(GetIconFromSuite) M68K_INLINE(0x303C, 0x0609, 0xABC9);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr PlotIconSuite(const Rect *rect, IconAlignmentType align, IconTransformType transform, Handle suite) M68K_INLINE(0x303C, 0x0603, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal OSErr PlotIconSuite(const Rect *rect, IconAlignmentType align, IconTransformType transform, Handle suite) MAC_IMPORT(PlotIconSuite) M68K_INLINE(0x303C, 0x0603, 0xABC9);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr ForEachIconDo(Handle suite, IconSelectorValue selector, IconActionUPP action, void *data) M68K_INLINE(0x303C, 0x080A, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal OSErr ForEachIconDo(Handle suite, IconSelectorValue selector, IconActionUPP action, void *data) MAC_IMPORT(ForEachIconDo) M68K_INLINE(0x303C, 0x080A, 0xABC9);
 
-MAC_SINCE(0x0700, "7.0") pascal int16_t GetSuiteLabel(Handle suite) M68K_INLINE(0x303C, 0x0217, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal int16_t GetSuiteLabel(Handle suite) MAC_IMPORT(GetSuiteLabel) M68K_INLINE(0x303C, 0x0217, 0xABC9);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr SetSuiteLabel(Handle suite, int16_t label) M68K_INLINE(0x303C, 0x0316, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal OSErr SetSuiteLabel(Handle suite, int16_t label) MAC_IMPORT(SetSuiteLabel) M68K_INLINE(0x303C, 0x0316, 0xABC9);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr GetLabel(int16_t label, RGBColor *label_color, Str255 label_string) M68K_INLINE(0x303C, 0x050B, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal OSErr GetLabel(int16_t label, RGBColor *label_color, Str255 label_string) MAC_IMPORT(GetLabel) M68K_INLINE(0x303C, 0x050B, 0xABC9);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr DisposeIconSuite(Handle suite, Boolean dispose_data_p) M68K_INLINE(0x303C, 0x0302, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal OSErr DisposeIconSuite(Handle suite, Boolean dispose_data_p) MAC_IMPORT(DisposeIconSuite) M68K_INLINE(0x303C, 0x0302, 0xABC9);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr IconSuiteToRgn(RgnHandle rgn, const Rect *rect, IconAlignmentType align, Handle suite) M68K_INLINE(0x303C, 0x0714, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal OSErr IconSuiteToRgn(RgnHandle rgn, const Rect *rect, IconAlignmentType align, Handle suite) MAC_IMPORT(IconSuiteToRgn) M68K_INLINE(0x303C, 0x0714, 0xABC9);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr IconIDToRgn(RgnHandle rgn, const Rect *rect, IconAlignmentType align, int16_t icon_id) M68K_INLINE(0x303C, 0x0613, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal OSErr IconIDToRgn(RgnHandle rgn, const Rect *rect, IconAlignmentType align, int16_t icon_id) MAC_IMPORT(IconIDToRgn) M68K_INLINE(0x303C, 0x0613, 0xABC9);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr IconMethodToRgn(RgnHandle rgn, const Rect *rect, IconAlignmentType align, IconGetterUPP method, void *data) M68K_INLINE(0x303C, 0x0915, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal OSErr IconMethodToRgn(RgnHandle rgn, const Rect *rect, IconAlignmentType align, IconGetterUPP method, void *data) MAC_IMPORT(IconMethodToRgn) M68K_INLINE(0x303C, 0x0915, 0xABC9);
 
-MAC_SINCE(0x0700, "7.0") pascal Boolean PtInIconSuite(Point test_pt, const Rect *rect, IconAlignmentType align, Handle suite) M68K_INLINE(0x303C, 0x070E, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal Boolean PtInIconSuite(Point test_pt, const Rect *rect, IconAlignmentType align, Handle suite) MAC_IMPORT(PtInIconSuite) M68K_INLINE(0x303C, 0x070E, 0xABC9);
 
-MAC_SINCE(0x0700, "7.0") pascal Boolean PtInIconID(Point test_pt, const Rect *rect, IconAlignmentType align, int16_t icon_id) M68K_INLINE(0x303C, 0x060D, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal Boolean PtInIconID(Point test_pt, const Rect *rect, IconAlignmentType align, int16_t icon_id) MAC_IMPORT(PtInIconID) M68K_INLINE(0x303C, 0x060D, 0xABC9);
 
-MAC_SINCE(0x0700, "7.0") pascal Boolean PtInIconMethod(Point test_pt, const Rect *rect, IconAlignmentType align, IconGetterUPP method, void *data) M68K_INLINE(0x303C, 0x090F, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal Boolean PtInIconMethod(Point test_pt, const Rect *rect, IconAlignmentType align, IconGetterUPP method, void *data) MAC_IMPORT(PtInIconMethod) M68K_INLINE(0x303C, 0x090F, 0xABC9);
 
-MAC_SINCE(0x0700, "7.0") pascal Boolean RectInIconSuite(const Rect *test_rect, const Rect *rect, IconAlignmentType align, Handle suite) M68K_INLINE(0x303C, 0x0711, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal Boolean RectInIconSuite(const Rect *test_rect, const Rect *rect, IconAlignmentType align, Handle suite) MAC_IMPORT(RectInIconSuite) M68K_INLINE(0x303C, 0x0711, 0xABC9);
 
-MAC_SINCE(0x0700, "7.0") pascal Boolean RectInIconID(const Rect *test_rect, const Rect *rect, IconAlignmentType align, int16_t icon_id) M68K_INLINE(0x303C, 0x0610, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal Boolean RectInIconID(const Rect *test_rect, const Rect *rect, IconAlignmentType align, int16_t icon_id) MAC_IMPORT(RectInIconID) M68K_INLINE(0x303C, 0x0610, 0xABC9);
 
-MAC_SINCE(0x0700, "7.0") pascal Boolean RectInIconMethod(const Rect *test_rect, const Rect *rect, IconAlignmentType align, IconGetterUPP method, void *data) M68K_INLINE(0x303C, 0x0912, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal Boolean RectInIconMethod(const Rect *test_rect, const Rect *rect, IconAlignmentType align, IconGetterUPP method, void *data) MAC_IMPORT(RectInIconMethod) M68K_INLINE(0x303C, 0x0912, 0xABC9);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr MakeIconCache(Handle *cache, IconGetterUPP make_icon, void *data) M68K_INLINE(0x303C, 0x0604, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal OSErr MakeIconCache(Handle *cache, IconGetterUPP make_icon, void *data) MAC_IMPORT(MakeIconCache) M68K_INLINE(0x303C, 0x0604, 0xABC9);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr LoadIconCache(const Rect *rect, IconAlignmentType align, IconTransformType transform, Handle cache) M68K_INLINE(0x303C, 0x0606, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal OSErr LoadIconCache(const Rect *rect, IconAlignmentType align, IconTransformType transform, Handle cache) MAC_IMPORT(LoadIconCache) M68K_INLINE(0x303C, 0x0606, 0xABC9);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr GetIconCacheData(Handle cache, void **data) M68K_INLINE(0x303C, 0x0419, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal OSErr GetIconCacheData(Handle cache, void **data) MAC_IMPORT(GetIconCacheData) M68K_INLINE(0x303C, 0x0419, 0xABC9);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr SetIconCacheData(Handle cache, void *data) M68K_INLINE(0x303C, 0x041A, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal OSErr SetIconCacheData(Handle cache, void *data) MAC_IMPORT(SetIconCacheData) M68K_INLINE(0x303C, 0x041A, 0xABC9);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr GetIconCacheProc(Handle cache, IconGetterUPP *proc) M68K_INLINE(0x303C, 0x041B, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal OSErr GetIconCacheProc(Handle cache, IconGetterUPP *proc) MAC_IMPORT(GetIconCacheProc) M68K_INLINE(0x303C, 0x041B, 0xABC9);
 
-MAC_SINCE(0x0700, "7.0") pascal OSErr SetIconCacheProc(Handle cache, IconGetterUPP proc) M68K_INLINE(0x303C, 0x041C, 0xABC9);
+MAC_SINCE(0x0700, "7.0") pascal OSErr SetIconCacheProc(Handle cache, IconGetterUPP proc) MAC_IMPORT(SetIconCacheProc) M68K_INLINE(0x303C, 0x041C, 0xABC9);
 
 // Icon Services (Mac OS 8.5): a reference to an icon of every size and depth.
 typedef struct OpaqueIconRef *IconRef;
@@ -349,75 +349,75 @@ enum {
 enum { _IconServicesDispatch = 0xAA75 };
 
 // Icon Services (Mac OS 8.5). 68k applications reach it through trap 0xAA75 under Mac OS 8.5 and later.
-MAC_SINCE(0x0810, "8.1") pascal OSErr IconRefToIconFamily(IconRef theIconRef, IconSelectorValue whichIcons, IconFamilyHandle *iconFamily) M68K_INLINE(0x7024, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr IconRefToIconFamily(IconRef theIconRef, IconSelectorValue whichIcons, IconFamilyHandle *iconFamily) MAC_IMPORT(IconRefToIconFamily) M68K_INLINE(0x7024, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr IconFamilyToIconSuite(IconFamilyHandle iconFamily, IconSelectorValue whichIcons, IconSuiteRef *iconSuite) M68K_INLINE(0x7025, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr IconFamilyToIconSuite(IconFamilyHandle iconFamily, IconSelectorValue whichIcons, IconSuiteRef *iconSuite) MAC_IMPORT(IconFamilyToIconSuite) M68K_INLINE(0x7025, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr IconSuiteToIconFamily(IconSuiteRef iconSuite, IconSelectorValue whichIcons, IconFamilyHandle *iconFamily) M68K_INLINE(0x7026, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr IconSuiteToIconFamily(IconSuiteRef iconSuite, IconSelectorValue whichIcons, IconFamilyHandle *iconFamily) MAC_IMPORT(IconSuiteToIconFamily) M68K_INLINE(0x7026, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr SetIconFamilyData(IconFamilyHandle iconFamily, OSType iconType, Handle h) M68K_INLINE(0x7030, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr SetIconFamilyData(IconFamilyHandle iconFamily, OSType iconType, Handle h) MAC_IMPORT(SetIconFamilyData) M68K_INLINE(0x7030, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr GetIconFamilyData(IconFamilyHandle iconFamily, OSType iconType, Handle h) M68K_INLINE(0x7031, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr GetIconFamilyData(IconFamilyHandle iconFamily, OSType iconType, Handle h) MAC_IMPORT(GetIconFamilyData) M68K_INLINE(0x7031, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr GetIconRefOwners(IconRef theIconRef, UInt16 *owners) M68K_INLINE(0x700B, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr GetIconRefOwners(IconRef theIconRef, UInt16 *owners) MAC_IMPORT(GetIconRefOwners) M68K_INLINE(0x700B, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr AcquireIconRef(IconRef theIconRef) M68K_INLINE(0x7027, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr AcquireIconRef(IconRef theIconRef) MAC_IMPORT(AcquireIconRef) M68K_INLINE(0x7027, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr ReleaseIconRef(IconRef theIconRef) M68K_INLINE(0x7028, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr ReleaseIconRef(IconRef theIconRef) MAC_IMPORT(ReleaseIconRef) M68K_INLINE(0x7028, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr GetIconRefFromFile(const FSSpec *theFile, IconRef *theIconRef, SInt16 *theLabel) M68K_INLINE(0x7002, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr GetIconRefFromFile(const FSSpec *theFile, IconRef *theIconRef, SInt16 *theLabel) MAC_IMPORT(GetIconRefFromFile) M68K_INLINE(0x7002, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr GetIconRef(SInt16 vRefNum, OSType creator, OSType iconType, IconRef *theIconRef) M68K_INLINE(0x7021, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr GetIconRef(SInt16 vRefNum, OSType creator, OSType iconType, IconRef *theIconRef) MAC_IMPORT(GetIconRef) M68K_INLINE(0x7021, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr GetIconRefFromFolder(SInt16 vRefNum, SInt32 parentFolderID, SInt32 folderID, SInt8 attributes, SInt8 accessPrivileges, IconRef *theIconRef) M68K_INLINE(0x7022, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr GetIconRefFromFolder(SInt16 vRefNum, SInt32 parentFolderID, SInt32 folderID, SInt8 attributes, SInt8 accessPrivileges, IconRef *theIconRef) MAC_IMPORT(GetIconRefFromFolder) M68K_INLINE(0x7022, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr RegisterIconRefFromIconFamily(OSType creator, OSType iconType, IconFamilyHandle iconFamily, IconRef *theIconRef) M68K_INLINE(0x701C, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr RegisterIconRefFromIconFamily(OSType creator, OSType iconType, IconFamilyHandle iconFamily, IconRef *theIconRef) MAC_IMPORT(RegisterIconRefFromIconFamily) M68K_INLINE(0x701C, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr RegisterIconRefFromResource(OSType creator, OSType iconType, const FSSpec *resourceFile, SInt16 resourceID, IconRef *theIconRef) M68K_INLINE(0x7023, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr RegisterIconRefFromResource(OSType creator, OSType iconType, const FSSpec *resourceFile, SInt16 resourceID, IconRef *theIconRef) MAC_IMPORT(RegisterIconRefFromResource) M68K_INLINE(0x7023, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr UnregisterIconRef(OSType creator, OSType iconType) M68K_INLINE(0x7008, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr UnregisterIconRef(OSType creator, OSType iconType) MAC_IMPORT(UnregisterIconRef) M68K_INLINE(0x7008, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr UpdateIconRef(IconRef theIconRef) M68K_INLINE(0x7009, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr UpdateIconRef(IconRef theIconRef) MAC_IMPORT(UpdateIconRef) M68K_INLINE(0x7009, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr OverrideIconRefFromResource(IconRef theIconRef, const FSSpec *resourceFile, SInt16 resourceID) M68K_INLINE(0x702A, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr OverrideIconRefFromResource(IconRef theIconRef, const FSSpec *resourceFile, SInt16 resourceID) MAC_IMPORT(OverrideIconRefFromResource) M68K_INLINE(0x702A, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr OverrideIconRef(IconRef oldIconRef, IconRef newIconRef) M68K_INLINE(0x702B, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr OverrideIconRef(IconRef oldIconRef, IconRef newIconRef) MAC_IMPORT(OverrideIconRef) M68K_INLINE(0x702B, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr RemoveIconRefOverride(IconRef theIconRef) M68K_INLINE(0x701E, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr RemoveIconRefOverride(IconRef theIconRef) MAC_IMPORT(RemoveIconRefOverride) M68K_INLINE(0x701E, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr CompositeIconRef(IconRef backgroundIconRef, IconRef foregroundIconRef, IconRef *compositeIconRef) M68K_INLINE(0x7014, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr CompositeIconRef(IconRef backgroundIconRef, IconRef foregroundIconRef, IconRef *compositeIconRef) MAC_IMPORT(CompositeIconRef) M68K_INLINE(0x7014, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr IsIconRefComposite(IconRef compositeIconRef, IconRef *backgroundIconRef, IconRef *foregroundIconRef) M68K_INLINE(0x701A, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr IsIconRefComposite(IconRef compositeIconRef, IconRef *backgroundIconRef, IconRef *foregroundIconRef) MAC_IMPORT(IsIconRefComposite) M68K_INLINE(0x701A, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal Boolean IsValidIconRef(IconRef theIconRef) M68K_INLINE(0x7032, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal Boolean IsValidIconRef(IconRef theIconRef) MAC_IMPORT(IsValidIconRef) M68K_INLINE(0x7032, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr PlotIconRef(const Rect *theRect, IconAlignmentType align, IconTransformType transform, IconServicesUsageFlags theIconServicesUsageFlags, IconRef theIconRef) M68K_INLINE(0x700E, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr PlotIconRef(const Rect *theRect, IconAlignmentType align, IconTransformType transform, IconServicesUsageFlags theIconServicesUsageFlags, IconRef theIconRef) MAC_IMPORT(PlotIconRef) M68K_INLINE(0x700E, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal Boolean PtInIconRef(const Point *testPt, const Rect *iconRect, IconAlignmentType align, IconServicesUsageFlags theIconServicesUsageFlags, IconRef theIconRef) M68K_INLINE(0x700F, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal Boolean PtInIconRef(const Point *testPt, const Rect *iconRect, IconAlignmentType align, IconServicesUsageFlags theIconServicesUsageFlags, IconRef theIconRef) MAC_IMPORT(PtInIconRef) M68K_INLINE(0x700F, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal Boolean RectInIconRef(const Rect *testRect, const Rect *iconRect, IconAlignmentType align, IconServicesUsageFlags iconServicesUsageFlags, IconRef theIconRef) M68K_INLINE(0x7010, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal Boolean RectInIconRef(const Rect *testRect, const Rect *iconRect, IconAlignmentType align, IconServicesUsageFlags iconServicesUsageFlags, IconRef theIconRef) MAC_IMPORT(RectInIconRef) M68K_INLINE(0x7010, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr IconRefToRgn(RgnHandle theRgn, const Rect *iconRect, IconAlignmentType align, IconServicesUsageFlags iconServicesUsageFlags, IconRef theIconRef) M68K_INLINE(0x7011, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr IconRefToRgn(RgnHandle theRgn, const Rect *iconRect, IconAlignmentType align, IconServicesUsageFlags iconServicesUsageFlags, IconRef theIconRef) MAC_IMPORT(IconRefToRgn) M68K_INLINE(0x7011, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr GetIconSizesFromIconRef(IconSelectorValue iconSelectorInput, IconSelectorValue *iconSelectorOutputPtr, IconServicesUsageFlags iconServicesUsageFlags, IconRef theIconRef) M68K_INLINE(0x7012, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr GetIconSizesFromIconRef(IconSelectorValue iconSelectorInput, IconSelectorValue *iconSelectorOutputPtr, IconServicesUsageFlags iconServicesUsageFlags, IconRef theIconRef) MAC_IMPORT(GetIconSizesFromIconRef) M68K_INLINE(0x7012, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr FlushIconRefs(OSType creator, OSType iconType) M68K_INLINE(0x7029, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr FlushIconRefs(OSType creator, OSType iconType) MAC_IMPORT(FlushIconRefs) M68K_INLINE(0x7029, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr FlushIconRefsByVolume(SInt16 vRefNum) M68K_INLINE(0x7018, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr FlushIconRefsByVolume(SInt16 vRefNum) MAC_IMPORT(FlushIconRefsByVolume) M68K_INLINE(0x7018, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr SetCustomIconsEnabled(SInt16 vRefNum, Boolean enableCustomIcons) M68K_INLINE(0x701F, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr SetCustomIconsEnabled(SInt16 vRefNum, Boolean enableCustomIcons) MAC_IMPORT(SetCustomIconsEnabled) M68K_INLINE(0x701F, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr GetCustomIconsEnabled(SInt16 vRefNum, Boolean *customIconsEnabled) M68K_INLINE(0x7020, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr GetCustomIconsEnabled(SInt16 vRefNum, Boolean *customIconsEnabled) MAC_IMPORT(GetCustomIconsEnabled) M68K_INLINE(0x7020, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal Boolean IsIconRefMaskEmpty(IconRef iconRef) M68K_INLINE(0x7033, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal Boolean IsIconRefMaskEmpty(IconRef iconRef) MAC_IMPORT(IsIconRefMaskEmpty) M68K_INLINE(0x7033, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal IconRef GetIconRefVariant(IconRef inIconRef, OSType inVariant, IconTransformType *outTransform) M68K_INLINE(0x7034, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal IconRef GetIconRefVariant(IconRef inIconRef, OSType inVariant, IconTransformType *outTransform) MAC_IMPORT(GetIconRefVariant) M68K_INLINE(0x7034, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr RegisterIconRefFromIconFile(OSType creator, OSType iconType, const FSSpec *iconFile, IconRef *theIconRef) M68K_INLINE(0x7035, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr RegisterIconRefFromIconFile(OSType creator, OSType iconType, const FSSpec *iconFile, IconRef *theIconRef) MAC_IMPORT(RegisterIconRefFromIconFile) M68K_INLINE(0x7035, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr ReadIconFile(const FSSpec *iconFile, IconFamilyHandle *iconFamily) M68K_INLINE(0x7036, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr ReadIconFile(const FSSpec *iconFile, IconFamilyHandle *iconFamily) MAC_IMPORT(ReadIconFile) M68K_INLINE(0x7036, 0xAA75);
 
-MAC_SINCE(0x0810, "8.1") pascal OSErr WriteIconFile(IconFamilyHandle iconFamily, const FSSpec *iconFile) M68K_INLINE(0x7037, 0xAA75);
+MAC_SINCE(0x0810, "8.1") pascal OSErr WriteIconFile(IconFamilyHandle iconFamily, const FSSpec *iconFile) MAC_IMPORT(WriteIconFile) M68K_INLINE(0x7037, 0xAA75);
 
 enum {
     kAlignNone = 0,

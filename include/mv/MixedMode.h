@@ -136,19 +136,19 @@ typedef RoutineDescriptor *UniversalProcPtr;
 
 enum { _MixedModeDispatch = 0xAA59 };
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'alis'") pascal UniversalProcPtr NewRoutineDescriptor(ProcPtr proc, ProcInfoType info, ISAType isa) M68K_INLINE(0x7000, 0xAA59);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'alis'") pascal UniversalProcPtr NewRoutineDescriptor(ProcPtr proc, ProcInfoType info, ISAType isa) MAC_IMPORT(NewRoutineDescriptor) M68K_INLINE(0x7000, 0xAA59);
 
-MAC_SINCE_GESTALT(0x0761, "7.6.1", "'alis'") pascal void DisposeRoutineDescriptor(UniversalProcPtr ptr) M68K_INLINE(0x7001, 0xAA59);
+MAC_SINCE_GESTALT(0x0761, "7.6.1", "'alis'") pascal void DisposeRoutineDescriptor(UniversalProcPtr ptr) MAC_IMPORT(DisposeRoutineDescriptor) M68K_INLINE(0x7001, 0xAA59);
 
-MAC_SINCE(0x0761, "7.6.1") pascal UniversalProcPtr NewFatRoutineDescriptor(ProcPtr m68k, ProcPtr ppc, ProcInfoType info) M68K_INLINE(0x7002, 0xAA59);
+MAC_SINCE(0x0761, "7.6.1") pascal UniversalProcPtr NewFatRoutineDescriptor(ProcPtr m68k, ProcPtr ppc, ProcInfoType info) MAC_IMPORT(NewFatRoutineDescriptor) M68K_INLINE(0x7002, 0xAA59);
 
-MAC_SINCE(0x0761, "7.6.1") pascal OSErr SaveMixedModeState(void *statep, unsigned long vers) M68K_INLINE(0x7003, 0xAA59);
+MAC_SINCE(0x0761, "7.6.1") pascal OSErr SaveMixedModeState(void *statep, unsigned long vers) MAC_IMPORT(SaveMixedModeState) M68K_INLINE(0x7003, 0xAA59);
 
-MAC_SINCE(0x0761, "7.6.1") pascal OSErr RestoreMixedModeState(void *statep, unsigned long vers) M68K_INLINE(0x7004, 0xAA59);
+MAC_SINCE(0x0761, "7.6.1") pascal OSErr RestoreMixedModeState(void *statep, unsigned long vers) MAC_IMPORT(RestoreMixedModeState) M68K_INLINE(0x7004, 0xAA59);
 
-LONGINT CallUniversalProc(UniversalProcPtr theProcPtr, ProcInfoType procInfo, ...);
+LONGINT CallUniversalProc(UniversalProcPtr theProcPtr, ProcInfoType procInfo, ...) MAC_IMPORT(CallUniversalProc);
 
-long CallOSTrapUniversalProc(UniversalProcPtr theProc, ProcInfoType procInfo, ...);
+long CallOSTrapUniversalProc(UniversalProcPtr theProc, ProcInfoType procInfo, ...) MAC_IMPORT(CallOSTrapUniversalProc);
 
 #ifdef __cplusplus
 }

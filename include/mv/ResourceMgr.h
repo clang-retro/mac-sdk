@@ -109,173 +109,173 @@ enum {
 enum { _ResourceDispatch = 0xA822 };
 
 enum { _SetResLoad = 0xA99B };
-pascal void SetResLoad(Boolean load) M68K_INLINE(0xA99B);
+pascal void SetResLoad(Boolean load) MAC_IMPORT(SetResLoad) M68K_INLINE(0xA99B);
 
 enum { _CountResources = 0xA99C };
-pascal INTEGER CountResources(ResType typ) M68K_INLINE(0xA99C);
+pascal INTEGER CountResources(ResType typ) MAC_IMPORT(CountResources) M68K_INLINE(0xA99C);
 
 enum { _Count1Resources = 0xA80D };
-MAC_SINCE(0x0070, "0.7") pascal INTEGER Count1Resources(ResType typ) M68K_INLINE(0xA80D);
+MAC_SINCE(0x0070, "0.7") pascal INTEGER Count1Resources(ResType typ) MAC_IMPORT(Count1Resources) M68K_INLINE(0xA80D);
 
 enum { _GetIndResource = 0xA99D };
-pascal Handle GetIndResource(ResType typ, INTEGER indx) M68K_INLINE(0xA99D);
+pascal Handle GetIndResource(ResType typ, INTEGER indx) MAC_IMPORT(GetIndResource) M68K_INLINE(0xA99D);
 
 enum { _Get1IndResource = 0xA80E };
-MAC_SINCE(0x0070, "0.7") pascal Handle Get1IndResource(ResType typ, INTEGER i) M68K_INLINE(0xA80E);
+MAC_SINCE(0x0070, "0.7") pascal Handle Get1IndResource(ResType typ, INTEGER i) MAC_IMPORT(Get1IndResource) M68K_INLINE(0xA80E);
 
 enum { _GetResource = 0xA9A0 };
-pascal Handle GetResource(ResType typ, INTEGER id) M68K_INLINE(0xA9A0);
+pascal Handle GetResource(ResType typ, INTEGER id) MAC_IMPORT(GetResource) M68K_INLINE(0xA9A0);
 
 enum { _Get1Resource = 0xA81F };
-MAC_SINCE(0x0070, "0.7") pascal Handle Get1Resource(ResType typ, INTEGER id) M68K_INLINE(0xA81F);
+MAC_SINCE(0x0070, "0.7") pascal Handle Get1Resource(ResType typ, INTEGER id) MAC_IMPORT(Get1Resource) M68K_INLINE(0xA81F);
 
 enum { _GetNamedResource = 0xA9A1 };
-pascal Handle GetNamedResource(ResType typ, ConstStringPtr nam) M68K_INLINE(0xA9A1);
+pascal Handle GetNamedResource(ResType typ, ConstStringPtr nam) MAC_IMPORT(GetNamedResource) M68K_INLINE(0xA9A1);
 
 enum { _Get1NamedResource = 0xA820 };
-MAC_SINCE(0x0070, "0.7") pascal Handle Get1NamedResource(ResType typ, ConstStringPtr s) M68K_INLINE(0xA820);
+MAC_SINCE(0x0070, "0.7") pascal Handle Get1NamedResource(ResType typ, ConstStringPtr s) MAC_IMPORT(Get1NamedResource) M68K_INLINE(0xA820);
 
 enum { _LoadResource = 0xA9A2 };
-pascal void LoadResource(Handle res) M68K_INLINE(0xA9A2);
+pascal void LoadResource(Handle res) MAC_IMPORT(LoadResource) M68K_INLINE(0xA9A2);
 
 enum { _ReleaseResource = 0xA9A3 };
-pascal void ReleaseResource(Handle res) M68K_INLINE(0xA9A3);
+pascal void ReleaseResource(Handle res) MAC_IMPORT(ReleaseResource) M68K_INLINE(0xA9A3);
 
 enum { _DetachResource = 0xA992 };
-pascal void DetachResource(Handle res) M68K_INLINE(0xA992);
+pascal void DetachResource(Handle res) MAC_IMPORT(DetachResource) M68K_INLINE(0xA992);
 
 enum { _UniqueID = 0xA9C1 };
-pascal INTEGER UniqueID(ResType typ) M68K_INLINE(0xA9C1);
+pascal INTEGER UniqueID(ResType typ) MAC_IMPORT(UniqueID) M68K_INLINE(0xA9C1);
 
 enum { _Unique1ID = 0xA810 };
-MAC_SINCE(0x0070, "0.7") pascal INTEGER Unique1ID(ResType typ) M68K_INLINE(0xA810);
+MAC_SINCE(0x0070, "0.7") pascal INTEGER Unique1ID(ResType typ) MAC_IMPORT(Unique1ID) M68K_INLINE(0xA810);
 
 enum { _GetResInfo = 0xA9A8 };
-pascal void GetResInfo(Handle res, INTEGER *id1, ResType *typ, StringPtr name) M68K_INLINE(0xA9A8);
+pascal void GetResInfo(Handle res, INTEGER *id1, ResType *typ, StringPtr name) MAC_IMPORT(GetResInfo) M68K_INLINE(0xA9A8);
 
 enum { _GetResAttrs = 0xA9A6 };
-pascal INTEGER GetResAttrs(Handle res) M68K_INLINE(0xA9A6);
+pascal INTEGER GetResAttrs(Handle res) MAC_IMPORT(GetResAttrs) M68K_INLINE(0xA9A6);
 
 enum { _GetResourceSizeOnDisk = 0xA9A5 };
-pascal LONGINT GetResourceSizeOnDisk(Handle res) M68K_INLINE(0xA9A5);
+pascal LONGINT GetResourceSizeOnDisk(Handle res) MAC_IMPORT(GetResourceSizeOnDisk) M68K_INLINE(0xA9A5);
 #if OLDROUTINENAMES
 #define SizeResource(res) GetResourceSizeOnDisk(res)
 #endif
 
 enum { _CountTypes = 0xA99E };
-pascal INTEGER CountTypes(void) M68K_INLINE(0xA99E);
+pascal INTEGER CountTypes(void) MAC_IMPORT(CountTypes) M68K_INLINE(0xA99E);
 
 enum { _Count1Types = 0xA81C };
-MAC_SINCE(0x0070, "0.7") pascal INTEGER Count1Types(void) M68K_INLINE(0xA81C);
+MAC_SINCE(0x0070, "0.7") pascal INTEGER Count1Types(void) MAC_IMPORT(Count1Types) M68K_INLINE(0xA81C);
 
 enum { _GetIndType = 0xA99F };
-pascal void GetIndType(ResType *typ, INTEGER indx) M68K_INLINE(0xA99F);
+pascal void GetIndType(ResType *typ, INTEGER indx) MAC_IMPORT(GetIndType) M68K_INLINE(0xA99F);
 
 enum { _Get1IndType = 0xA80F };
-MAC_SINCE(0x0070, "0.7") pascal void Get1IndType(ResType *typ, INTEGER indx) M68K_INLINE(0xA80F);
+MAC_SINCE(0x0070, "0.7") pascal void Get1IndType(ResType *typ, INTEGER indx) MAC_IMPORT(Get1IndType) M68K_INLINE(0xA80F);
 
 enum { _GetMaxResourceSize = 0xA821 };
-MAC_SINCE(0x0070, "0.7") pascal LONGINT GetMaxResourceSize(Handle h) M68K_INLINE(0xA821);
+MAC_SINCE(0x0070, "0.7") pascal LONGINT GetMaxResourceSize(Handle h) MAC_IMPORT(GetMaxResourceSize) M68K_INLINE(0xA821);
 #if OLDROUTINENAMES
 #define MaxSizeRsrc(h) GetMaxResourceSize(h)
 #endif
 
 enum { _RsrcMapEntry = 0xA9C5 };
-MAC_SINCE(0x0070, "0.7") pascal LONGINT RsrcMapEntry(Handle h) M68K_INLINE(0xA9C5);
+MAC_SINCE(0x0070, "0.7") pascal LONGINT RsrcMapEntry(Handle h) MAC_IMPORT(RsrcMapEntry) M68K_INLINE(0xA9C5);
 
 enum { _RGetResource = 0xA80C };
-MAC_SINCE(0x0200, "2.0") pascal Handle RGetResource(ResType typ, INTEGER id) M68K_INLINE(0xA80C);
+MAC_SINCE(0x0200, "2.0") pascal Handle RGetResource(ResType typ, INTEGER id) MAC_IMPORT(RGetResource) M68K_INLINE(0xA80C);
 
 enum { _InitResources = 0xA995 };
-pascal INTEGER InitResources(void) M68K_INLINE(0xA995);
+pascal INTEGER InitResources(void) MAC_IMPORT(InitResources) M68K_INLINE(0xA995);
 
 enum { _RsrcZoneInit = 0xA996 };
-pascal void RsrcZoneInit(void) M68K_INLINE(0xA996);
+pascal void RsrcZoneInit(void) MAC_IMPORT(RsrcZoneInit) M68K_INLINE(0xA996);
 
 enum { _ResError = 0xA9AF };
-pascal INTEGER ResError(void) M68K_INLINE(0xA9AF);
+pascal INTEGER ResError(void) MAC_IMPORT(ResError) M68K_INLINE(0xA9AF);
 
 enum { _GetResFileAttrs = 0xA9F6 };
-pascal INTEGER GetResFileAttrs(INTEGER rn) M68K_INLINE(0xA9F6);
+pascal INTEGER GetResFileAttrs(INTEGER rn) MAC_IMPORT(GetResFileAttrs) M68K_INLINE(0xA9F6);
 
 enum { _SetResFileAttrs = 0xA9F7 };
-pascal void SetResFileAttrs(INTEGER rn, INTEGER attrs) M68K_INLINE(0xA9F7);
+pascal void SetResFileAttrs(INTEGER rn, INTEGER attrs) MAC_IMPORT(SetResFileAttrs) M68K_INLINE(0xA9F7);
 
 enum { _SetResInfo = 0xA9A9 };
-pascal void SetResInfo(Handle res, INTEGER id, ConstStringPtr name) M68K_INLINE(0xA9A9);
+pascal void SetResInfo(Handle res, INTEGER id, ConstStringPtr name) MAC_IMPORT(SetResInfo) M68K_INLINE(0xA9A9);
 
 enum { _SetResAttrs = 0xA9A7 };
-pascal void SetResAttrs(Handle res, INTEGER attrs) M68K_INLINE(0xA9A7);
+pascal void SetResAttrs(Handle res, INTEGER attrs) MAC_IMPORT(SetResAttrs) M68K_INLINE(0xA9A7);
 
 enum { _ChangedResource = 0xA9AA };
-pascal void ChangedResource(Handle res) M68K_INLINE(0xA9AA);
+pascal void ChangedResource(Handle res) MAC_IMPORT(ChangedResource) M68K_INLINE(0xA9AA);
 
 enum { _AddResource = 0xA9AB };
-pascal void AddResource(Handle data, ResType typ, INTEGER id, ConstStringPtr name) M68K_INLINE(0xA9AB);
+pascal void AddResource(Handle data, ResType typ, INTEGER id, ConstStringPtr name) MAC_IMPORT(AddResource) M68K_INLINE(0xA9AB);
 
 enum { _RemoveResource = 0xA9AD };
-pascal void RemoveResource(Handle res) M68K_INLINE(0xA9AD);
+pascal void RemoveResource(Handle res) MAC_IMPORT(RemoveResource) M68K_INLINE(0xA9AD);
 #if OLDROUTINENAMES
 #define RmveResource(res) RemoveResource(res)
 #endif
 
 enum { _UpdateResFile = 0xA999 };
-pascal void UpdateResFile(INTEGER rn) M68K_INLINE(0xA999);
+pascal void UpdateResFile(INTEGER rn) MAC_IMPORT(UpdateResFile) M68K_INLINE(0xA999);
 
 enum { _WriteResource = 0xA9B0 };
-pascal void WriteResource(Handle res) M68K_INLINE(0xA9B0);
+pascal void WriteResource(Handle res) MAC_IMPORT(WriteResource) M68K_INLINE(0xA9B0);
 
 enum { _SetResPurge = 0xA993 };
-pascal void SetResPurge(Boolean install) M68K_INLINE(0xA993);
+pascal void SetResPurge(Boolean install) MAC_IMPORT(SetResPurge) M68K_INLINE(0xA993);
 
 enum { _CreateResFile = 0xA9B1 };
-pascal void CreateResFile(ConstStringPtr fn) M68K_INLINE(0xA9B1);
+pascal void CreateResFile(ConstStringPtr fn) MAC_IMPORT(CreateResFile) M68K_INLINE(0xA9B1);
 
 enum { _OpenRFPerm = 0xA9C4 };
-MAC_SINCE(0x0070, "0.7") pascal INTEGER OpenRFPerm(ConstStringPtr fn, INTEGER vref, Byte perm) M68K_INLINE(0xA9C4);
+MAC_SINCE(0x0070, "0.7") pascal INTEGER OpenRFPerm(ConstStringPtr fn, INTEGER vref, Byte perm) MAC_IMPORT(OpenRFPerm) M68K_INLINE(0xA9C4);
 
 enum { _OpenResFile = 0xA997 };
-pascal INTEGER OpenResFile(ConstStringPtr fn) M68K_INLINE(0xA997);
+pascal INTEGER OpenResFile(ConstStringPtr fn) MAC_IMPORT(OpenResFile) M68K_INLINE(0xA997);
 
 enum { _CloseResFile = 0xA99A };
-pascal void CloseResFile(INTEGER rn) M68K_INLINE(0xA99A);
+pascal void CloseResFile(INTEGER rn) MAC_IMPORT(CloseResFile) M68K_INLINE(0xA99A);
 
 enum { _CurResFile = 0xA994 };
-pascal INTEGER CurResFile(void) M68K_INLINE(0xA994);
+pascal INTEGER CurResFile(void) MAC_IMPORT(CurResFile) M68K_INLINE(0xA994);
 
 enum { _HomeResFile = 0xA9A4 };
-pascal INTEGER HomeResFile(Handle res) M68K_INLINE(0xA9A4);
+pascal INTEGER HomeResFile(Handle res) MAC_IMPORT(HomeResFile) M68K_INLINE(0xA9A4);
 
 enum { _UseResFile = 0xA998 };
-pascal void UseResFile(INTEGER rn) M68K_INLINE(0xA998);
+pascal void UseResFile(INTEGER rn) MAC_IMPORT(UseResFile) M68K_INLINE(0xA998);
 
-MAC_SINCE(0x0700, "7.0") pascal void ReadPartialResource(Handle resource, long offset, Ptr buffer, long count) M68K_INLINE(0x7001, 0xA822);
+MAC_SINCE(0x0700, "7.0") pascal void ReadPartialResource(Handle resource, long offset, Ptr buffer, long count) MAC_IMPORT(ReadPartialResource) M68K_INLINE(0x7001, 0xA822);
 
-MAC_SINCE(0x0700, "7.0") pascal void WritePartialResource(Handle resource, long offset, Ptr buffer, long count) M68K_INLINE(0x7002, 0xA822);
+MAC_SINCE(0x0700, "7.0") pascal void WritePartialResource(Handle resource, long offset, Ptr buffer, long count) MAC_IMPORT(WritePartialResource) M68K_INLINE(0x7002, 0xA822);
 
-MAC_SINCE(0x0700, "7.0") pascal void SetResourceSize(Handle resource, long size) M68K_INLINE(0x7003, 0xA822);
+MAC_SINCE(0x0700, "7.0") pascal void SetResourceSize(Handle resource, long size) MAC_IMPORT(SetResourceSize) M68K_INLINE(0x7003, 0xA822);
 
-MAC_SINCE(0x0700, "7.0") pascal Handle GetNextFOND(Handle fondHandle) M68K_INLINE(0x700A, 0xA822);
+MAC_SINCE(0x0700, "7.0") pascal Handle GetNextFOND(Handle fondHandle) MAC_IMPORT(GetNextFOND) M68K_INLINE(0x700A, 0xA822);
 
 // Opening resource files by FSRef (Mac OS 9 and later)
-MAC_SINCE(0x0700, "7.0") pascal INTEGER FSOpenResFile(const FSRef *ref, SInt8 permission) M68K_INLINE(0x7013, 0xA822);
+MAC_SINCE(0x0700, "7.0") pascal INTEGER FSOpenResFile(const FSRef *ref, SInt8 permission) MAC_IMPORT(FSOpenResFile) M68K_INLINE(0x7013, 0xA822);
 
-MAC_SINCE(0x0700, "7.0") pascal void FSCreateResFile(const FSRef *parentRef, UniCharCount nameLength, const UniChar *name, FSCatalogInfoBitmap whichInfo, const FSCatalogInfo *catalogInfo, FSRef *newRef, FSSpec *newSpec) M68K_INLINE(0x7014, 0xA822);
+MAC_SINCE(0x0700, "7.0") pascal void FSCreateResFile(const FSRef *parentRef, UniCharCount nameLength, const UniChar *name, FSCatalogInfoBitmap whichInfo, const FSCatalogInfo *catalogInfo, FSRef *newRef, FSSpec *newSpec) MAC_IMPORT(FSCreateResFile) M68K_INLINE(0x7014, 0xA822);
 
-pascal OSErr FSCreateResourceFile(const FSRef *parentRef, UniCharCount nameLength, const UniChar *name, FSCatalogInfoBitmap whichInfo, const FSCatalogInfo *catalogInfo, UniCharCount forkNameLength, const UniChar *forkName, FSRef *newRef, FSSpec *newSpec);
+pascal OSErr FSCreateResourceFile(const FSRef *parentRef, UniCharCount nameLength, const UniChar *name, FSCatalogInfoBitmap whichInfo, const FSCatalogInfo *catalogInfo, UniCharCount forkNameLength, const UniChar *forkName, FSRef *newRef, FSSpec *newSpec) MAC_IMPORT(FSCreateResourceFile);
 
-pascal OSErr FSOpenResourceFile(const FSRef *ref, UniCharCount forkNameLength, const UniChar *forkName, SInt8 permissions, SInt16 *refNum);
+pascal OSErr FSOpenResourceFile(const FSRef *ref, UniCharCount forkNameLength, const UniChar *forkName, SInt8 permissions, SInt16 *refNum) MAC_IMPORT(FSOpenResourceFile);
 
 #if TARGET_CPU_68K
 static __inline__ void TempInsertROMMap(Boolean tempResLoad);
 #else
-pascal void TempInsertROMMap(Boolean tempResLoad);
+pascal void TempInsertROMMap(Boolean tempResLoad) MAC_IMPORT(TempInsertROMMap);
 #endif
 
 // Is a resource file already open? (Mac OS 9)
-MAC_SINCE(0x0700, "7.0") pascal Boolean FSpResourceFileAlreadyOpen(const FSSpec *resourceFile, Boolean *inChain, SInt16 *refNum) M68K_INLINE(0x7010, 0xA822);
+MAC_SINCE(0x0700, "7.0") pascal Boolean FSpResourceFileAlreadyOpen(const FSSpec *resourceFile, Boolean *inChain, SInt16 *refNum) MAC_IMPORT(FSpResourceFileAlreadyOpen) M68K_INLINE(0x7010, 0xA822);
 
-MAC_SINCE(0x0700, "7.0") pascal Boolean FSResourceFileAlreadyOpen(const FSRef *resourceFileRef, Boolean *inChain, SInt16 *refNum) M68K_INLINE(0x7015, 0xA822);
+MAC_SINCE(0x0700, "7.0") pascal Boolean FSResourceFileAlreadyOpen(const FSRef *resourceFileRef, Boolean *inChain, SInt16 *refNum) MAC_IMPORT(FSResourceFileAlreadyOpen) M68K_INLINE(0x7015, 0xA822);
 
 #if TARGET_CPU_68K
 static __inline__ void TempInsertROMMap(Boolean tempResLoad) {

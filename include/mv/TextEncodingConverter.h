@@ -37,123 +37,123 @@ struct TECConversionInfo {
 
 // Text Encoding Converter
 #if !TARGET_CPU_68K
-pascal OSStatus TECCountAvailableTextEncodings(ItemCount *numberEncodings);
+pascal OSStatus TECCountAvailableTextEncodings(ItemCount *numberEncodings) MAC_IMPORT(TECCountAvailableTextEncodings);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECGetAvailableTextEncodings(TextEncoding *availableEncodings, ItemCount maxAvailableEncodings, ItemCount *actualAvailableEncodings);
+pascal OSStatus TECGetAvailableTextEncodings(TextEncoding *availableEncodings, ItemCount maxAvailableEncodings, ItemCount *actualAvailableEncodings) MAC_IMPORT(TECGetAvailableTextEncodings);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECCountDirectTextEncodingConversions(ItemCount *numberOfEncodings);
+pascal OSStatus TECCountDirectTextEncodingConversions(ItemCount *numberOfEncodings) MAC_IMPORT(TECCountDirectTextEncodingConversions);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECGetDirectTextEncodingConversions(TECConversionInfo *availableConversions, ItemCount maxAvailableConversions, ItemCount *actualAvailableConversions);
+pascal OSStatus TECGetDirectTextEncodingConversions(TECConversionInfo *availableConversions, ItemCount maxAvailableConversions, ItemCount *actualAvailableConversions) MAC_IMPORT(TECGetDirectTextEncodingConversions);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECCountDestinationTextEncodings(TextEncoding inputEncoding, ItemCount *numberOfEncodings);
+pascal OSStatus TECCountDestinationTextEncodings(TextEncoding inputEncoding, ItemCount *numberOfEncodings) MAC_IMPORT(TECCountDestinationTextEncodings);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECGetDestinationTextEncodings(TextEncoding inputEncoding, TextEncoding *destinationEncodings, ItemCount maxDestinationEncodings, ItemCount *actualDestinationEncodings);
+pascal OSStatus TECGetDestinationTextEncodings(TextEncoding inputEncoding, TextEncoding *destinationEncodings, ItemCount maxDestinationEncodings, ItemCount *actualDestinationEncodings) MAC_IMPORT(TECGetDestinationTextEncodings);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECGetTextEncodingInternetName(TextEncoding textEncoding, StringPtr encodingName);
+pascal OSStatus TECGetTextEncodingInternetName(TextEncoding textEncoding, StringPtr encodingName) MAC_IMPORT(TECGetTextEncodingInternetName);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECGetTextEncodingFromInternetName(TextEncoding *textEncoding, ConstStr255Param encodingName);
+pascal OSStatus TECGetTextEncodingFromInternetName(TextEncoding *textEncoding, ConstStr255Param encodingName) MAC_IMPORT(TECGetTextEncodingFromInternetName);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECCreateConverter(TECObjectRef *newEncodingConverter, TextEncoding inputEncoding, TextEncoding outputEncoding);
+pascal OSStatus TECCreateConverter(TECObjectRef *newEncodingConverter, TextEncoding inputEncoding, TextEncoding outputEncoding) MAC_IMPORT(TECCreateConverter);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECCreateConverterFromPath(TECObjectRef *newEncodingConverter, const TextEncoding *inPath, ItemCount inEncodings);
+pascal OSStatus TECCreateConverterFromPath(TECObjectRef *newEncodingConverter, const TextEncoding *inPath, ItemCount inEncodings) MAC_IMPORT(TECCreateConverterFromPath);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECDisposeConverter(TECObjectRef newEncodingConverter);
+pascal OSStatus TECDisposeConverter(TECObjectRef newEncodingConverter) MAC_IMPORT(TECDisposeConverter);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECClearConverterContextInfo(TECObjectRef encodingConverter);
+pascal OSStatus TECClearConverterContextInfo(TECObjectRef encodingConverter) MAC_IMPORT(TECClearConverterContextInfo);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECConvertText(TECObjectRef encodingConverter, ConstTextPtr inputBuffer, ByteCount inputBufferLength, ByteCount *actualInputLength, TextPtr outputBuffer, ByteCount outputBufferLength, ByteCount *actualOutputLength);
+pascal OSStatus TECConvertText(TECObjectRef encodingConverter, ConstTextPtr inputBuffer, ByteCount inputBufferLength, ByteCount *actualInputLength, TextPtr outputBuffer, ByteCount outputBufferLength, ByteCount *actualOutputLength) MAC_IMPORT(TECConvertText);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECFlushText(TECObjectRef encodingConverter, TextPtr outputBuffer, ByteCount outputBufferLength, ByteCount *actualOutputLength);
+pascal OSStatus TECFlushText(TECObjectRef encodingConverter, TextPtr outputBuffer, ByteCount outputBufferLength, ByteCount *actualOutputLength) MAC_IMPORT(TECFlushText);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECCountSubTextEncodings(TextEncoding inputEncoding, ItemCount *numberOfEncodings);
+pascal OSStatus TECCountSubTextEncodings(TextEncoding inputEncoding, ItemCount *numberOfEncodings) MAC_IMPORT(TECCountSubTextEncodings);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECGetSubTextEncodings(TextEncoding inputEncoding, TextEncoding *subEncodings, ItemCount maxSubEncodings, ItemCount *actualSubEncodings);
+pascal OSStatus TECGetSubTextEncodings(TextEncoding inputEncoding, TextEncoding *subEncodings, ItemCount maxSubEncodings, ItemCount *actualSubEncodings) MAC_IMPORT(TECGetSubTextEncodings);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECGetEncodingList(TECObjectRef encodingConverter, ItemCount *numEncodings, Handle *encodingList);
+pascal OSStatus TECGetEncodingList(TECObjectRef encodingConverter, ItemCount *numEncodings, Handle *encodingList) MAC_IMPORT(TECGetEncodingList);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECCreateOneToManyConverter(TECObjectRef *newEncodingConverter, TextEncoding inputEncoding, ItemCount numOutputEncodings, const TextEncoding *outputEncodings);
+pascal OSStatus TECCreateOneToManyConverter(TECObjectRef *newEncodingConverter, TextEncoding inputEncoding, ItemCount numOutputEncodings, const TextEncoding *outputEncodings) MAC_IMPORT(TECCreateOneToManyConverter);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECConvertTextToMultipleEncodings(TECObjectRef encodingConverter, ConstTextPtr inputBuffer, ByteCount inputBufferLength, ByteCount *actualInputLength, TextPtr outputBuffer, ByteCount outputBufferLength, ByteCount *actualOutputLength, TextEncodingRun *outEncodingsBuffer, ItemCount maxOutEncodingRuns, ItemCount *actualOutEncodingRuns);
+pascal OSStatus TECConvertTextToMultipleEncodings(TECObjectRef encodingConverter, ConstTextPtr inputBuffer, ByteCount inputBufferLength, ByteCount *actualInputLength, TextPtr outputBuffer, ByteCount outputBufferLength, ByteCount *actualOutputLength, TextEncodingRun *outEncodingsBuffer, ItemCount maxOutEncodingRuns, ItemCount *actualOutEncodingRuns) MAC_IMPORT(TECConvertTextToMultipleEncodings);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECFlushMultipleEncodings(TECObjectRef encodingConverter, TextPtr outputBuffer, ByteCount outputBufferLength, ByteCount *actualOutputLength, TextEncodingRun *outEncodingsBuffer, ItemCount maxOutEncodingRuns, ItemCount *actualOutEncodingRuns);
+pascal OSStatus TECFlushMultipleEncodings(TECObjectRef encodingConverter, TextPtr outputBuffer, ByteCount outputBufferLength, ByteCount *actualOutputLength, TextEncodingRun *outEncodingsBuffer, ItemCount maxOutEncodingRuns, ItemCount *actualOutEncodingRuns) MAC_IMPORT(TECFlushMultipleEncodings);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECCountWebTextEncodings(RegionCode locale, ItemCount *numberEncodings);
+pascal OSStatus TECCountWebTextEncodings(RegionCode locale, ItemCount *numberEncodings) MAC_IMPORT(TECCountWebTextEncodings);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECGetWebTextEncodings(RegionCode locale, TextEncoding *availableEncodings, ItemCount maxAvailableEncodings, ItemCount *actualAvailableEncodings);
+pascal OSStatus TECGetWebTextEncodings(RegionCode locale, TextEncoding *availableEncodings, ItemCount maxAvailableEncodings, ItemCount *actualAvailableEncodings) MAC_IMPORT(TECGetWebTextEncodings);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECCountMailTextEncodings(RegionCode locale, ItemCount *numberEncodings);
+pascal OSStatus TECCountMailTextEncodings(RegionCode locale, ItemCount *numberEncodings) MAC_IMPORT(TECCountMailTextEncodings);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECGetMailTextEncodings(RegionCode locale, TextEncoding *availableEncodings, ItemCount maxAvailableEncodings, ItemCount *actualAvailableEncodings);
+pascal OSStatus TECGetMailTextEncodings(RegionCode locale, TextEncoding *availableEncodings, ItemCount maxAvailableEncodings, ItemCount *actualAvailableEncodings) MAC_IMPORT(TECGetMailTextEncodings);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECCountAvailableSniffers(ItemCount *numberOfEncodings);
+pascal OSStatus TECCountAvailableSniffers(ItemCount *numberOfEncodings) MAC_IMPORT(TECCountAvailableSniffers);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECGetAvailableSniffers(TextEncoding *availableSniffers, ItemCount maxAvailableSniffers, ItemCount *actualAvailableSniffers);
+pascal OSStatus TECGetAvailableSniffers(TextEncoding *availableSniffers, ItemCount maxAvailableSniffers, ItemCount *actualAvailableSniffers) MAC_IMPORT(TECGetAvailableSniffers);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECCreateSniffer(TECSnifferObjectRef *encodingSniffer, TextEncoding *testEncodings, ItemCount numTextEncodings);
+pascal OSStatus TECCreateSniffer(TECSnifferObjectRef *encodingSniffer, TextEncoding *testEncodings, ItemCount numTextEncodings) MAC_IMPORT(TECCreateSniffer);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECSniffTextEncoding(TECSnifferObjectRef encodingSniffer, TextPtr inputBuffer, ByteCount inputBufferLength, TextEncoding *testEncodings, ItemCount numTextEncodings, ItemCount *numErrsArray, ItemCount maxErrs, ItemCount *numFeaturesArray, ItemCount maxFeatures);
+pascal OSStatus TECSniffTextEncoding(TECSnifferObjectRef encodingSniffer, TextPtr inputBuffer, ByteCount inputBufferLength, TextEncoding *testEncodings, ItemCount numTextEncodings, ItemCount *numErrsArray, ItemCount maxErrs, ItemCount *numFeaturesArray, ItemCount maxFeatures) MAC_IMPORT(TECSniffTextEncoding);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECDisposeSniffer(TECSnifferObjectRef encodingSniffer);
+pascal OSStatus TECDisposeSniffer(TECSnifferObjectRef encodingSniffer) MAC_IMPORT(TECDisposeSniffer);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TECClearSnifferContextInfo(TECSnifferObjectRef encodingSniffer);
+pascal OSStatus TECClearSnifferContextInfo(TECSnifferObjectRef encodingSniffer) MAC_IMPORT(TECClearSnifferContextInfo);
 #endif
 
 #ifdef __cplusplus

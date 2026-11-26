@@ -21,17 +21,17 @@ extern "C" {
 // configAddr is typed as an address but carries a register offset in
 // configuration space, 0 to 255.  The word and long routines swap
 // bytes, so values arrive as they appear on the bus.
-pascal OSErr ExpMgrConfigReadByte(RegEntryIDPtr node, LogicalAddress configAddr, UInt8 *valuePtr);
+pascal OSErr ExpMgrConfigReadByte(RegEntryIDPtr node, LogicalAddress configAddr, UInt8 *valuePtr) MAC_IMPORT(ExpMgrConfigReadByte);
 
-pascal OSErr ExpMgrConfigReadWord(RegEntryIDPtr node, LogicalAddress configAddr, UInt16 *valuePtr);
+pascal OSErr ExpMgrConfigReadWord(RegEntryIDPtr node, LogicalAddress configAddr, UInt16 *valuePtr) MAC_IMPORT(ExpMgrConfigReadWord);
 
-pascal OSErr ExpMgrConfigReadLong(RegEntryIDPtr node, LogicalAddress configAddr, UInt32 *valuePtr);
+pascal OSErr ExpMgrConfigReadLong(RegEntryIDPtr node, LogicalAddress configAddr, UInt32 *valuePtr) MAC_IMPORT(ExpMgrConfigReadLong);
 
-pascal OSErr ExpMgrConfigWriteByte(RegEntryIDPtr node, LogicalAddress configAddr, UInt8 value);
+pascal OSErr ExpMgrConfigWriteByte(RegEntryIDPtr node, LogicalAddress configAddr, UInt8 value) MAC_IMPORT(ExpMgrConfigWriteByte);
 
-pascal OSErr ExpMgrConfigWriteWord(RegEntryIDPtr node, LogicalAddress configAddr, UInt16 value);
+pascal OSErr ExpMgrConfigWriteWord(RegEntryIDPtr node, LogicalAddress configAddr, UInt16 value) MAC_IMPORT(ExpMgrConfigWriteWord);
 
-pascal OSErr ExpMgrConfigWriteLong(RegEntryIDPtr node, LogicalAddress configAddr, UInt32 value);
+pascal OSErr ExpMgrConfigWriteLong(RegEntryIDPtr node, LogicalAddress configAddr, UInt32 value) MAC_IMPORT(ExpMgrConfigWriteLong);
 
 #ifdef __cplusplus
 }

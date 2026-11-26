@@ -52,7 +52,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr VInstall(VBLTaskPtr v
     return _ret;
 }
 #else
-pascal OSErr VInstall(VBLTaskPtr vtaskp);
+pascal OSErr VInstall(VBLTaskPtr vtaskp) MAC_IMPORT(VInstall);
 #endif
 
 enum { _VRemove = 0xA034 };
@@ -67,13 +67,13 @@ static __inline__ __attribute__((__always_inline__)) OSErr VRemove(VBLTaskPtr vt
     return _ret;
 }
 #else
-pascal OSErr VRemove(VBLTaskPtr vtaskp);
+pascal OSErr VRemove(VBLTaskPtr vtaskp) MAC_IMPORT(VRemove);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ QHdrPtr GetVBLQHdr(void);
 #else
-pascal QHdrPtr GetVBLQHdr(void);
+pascal QHdrPtr GetVBLQHdr(void) MAC_IMPORT(GetVBLQHdr);
 #endif
 
 enum { _SlotVInstall = 0xA06F };
@@ -89,7 +89,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SlotVInstall(VBLTaskPtr vtaskp, INTEGER slot);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SlotVInstall(VBLTaskPtr vtaskp, INTEGER slot) MAC_IMPORT(SlotVInstall);
 #endif
 
 enum { _SlotVRemove = 0xA070 };
@@ -105,7 +105,7 @@ MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD static __inline__ __attribute__((__always_
     return _ret;
 }
 #else
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SlotVRemove(VBLTaskPtr vtaskp, INTEGER slot);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SlotVRemove(VBLTaskPtr vtaskp, INTEGER slot) MAC_IMPORT(SlotVRemove);
 #endif
 
 #if TARGET_CPU_68K

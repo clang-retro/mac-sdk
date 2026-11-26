@@ -18,17 +18,17 @@ extern "C" {
 
 enum { _Pack2 = 0xA9E9 };
 
-pascal void DILoad(void) M68K_INLINE(0x3F3C, 0x0002, 0xA9E9);
+pascal void DILoad(void) MAC_IMPORT(DILoad) M68K_INLINE(0x3F3C, 0x0002, 0xA9E9);
 
-pascal void DIUnload(void) M68K_INLINE(0x3F3C, 0x0004, 0xA9E9);
+pascal void DIUnload(void) MAC_IMPORT(DIUnload) M68K_INLINE(0x3F3C, 0x0004, 0xA9E9);
 
-pascal INTEGER DIBadMount(Point pt, LONGINT evtmess) M68K_INLINE(0x3F3C, 0x0000, 0xA9E9);
+pascal INTEGER DIBadMount(Point pt, LONGINT evtmess) MAC_IMPORT(DIBadMount) M68K_INLINE(0x3F3C, 0x0000, 0xA9E9);
 
-pascal OSErr DIFormat(INTEGER dn) M68K_INLINE(0x3F3C, 0x0006, 0xA9E9);
+pascal OSErr DIFormat(INTEGER dn) MAC_IMPORT(DIFormat) M68K_INLINE(0x3F3C, 0x0006, 0xA9E9);
 
-pascal OSErr DIVerify(INTEGER dn) M68K_INLINE(0x3F3C, 0x0008, 0xA9E9);
+pascal OSErr DIVerify(INTEGER dn) MAC_IMPORT(DIVerify) M68K_INLINE(0x3F3C, 0x0008, 0xA9E9);
 
-pascal OSErr DIZero(INTEGER dn, StringPtr vname) M68K_INLINE(0x3F3C, 0x000A, 0xA9E9);
+pascal OSErr DIZero(INTEGER dn, StringPtr vname) MAC_IMPORT(DIZero) M68K_INLINE(0x3F3C, 0x000A, 0xA9E9);
 
 #ifdef __cplusplus
 }

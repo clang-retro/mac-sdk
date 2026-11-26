@@ -53,22 +53,22 @@ typedef ScrapStuff *PScrapStuff;
 #define LMSetScrapName(val) ((*(StringPtr *)0x0000096C) = (val))
 
 enum { _InfoScrap = 0xA9F9 };
-pascal PScrapStuff InfoScrap(void) M68K_INLINE(0xA9F9);
+pascal PScrapStuff InfoScrap(void) MAC_IMPORT(InfoScrap) M68K_INLINE(0xA9F9);
 
 enum { _UnloadScrap = 0xA9FA };
-pascal LONGINT UnloadScrap(void) M68K_INLINE(0xA9FA);
+pascal LONGINT UnloadScrap(void) MAC_IMPORT(UnloadScrap) M68K_INLINE(0xA9FA);
 
 enum { _LoadScrap = 0xA9FB };
-pascal LONGINT LoadScrap(void) M68K_INLINE(0xA9FB);
+pascal LONGINT LoadScrap(void) MAC_IMPORT(LoadScrap) M68K_INLINE(0xA9FB);
 
 enum { _ZeroScrap = 0xA9FC };
-pascal LONGINT ZeroScrap(void) M68K_INLINE(0xA9FC);
+pascal LONGINT ZeroScrap(void) MAC_IMPORT(ZeroScrap) M68K_INLINE(0xA9FC);
 
 enum { _PutScrap = 0xA9FE };
-pascal LONGINT PutScrap(LONGINT len, ResType rest, Ptr p) M68K_INLINE(0xA9FE);
+pascal LONGINT PutScrap(LONGINT len, ResType rest, Ptr p) MAC_IMPORT(PutScrap) M68K_INLINE(0xA9FE);
 
 enum { _GetScrap = 0xA9FD };
-pascal LONGINT GetScrap(Handle h, ResType rest, LONGINT *off) M68K_INLINE(0xA9FD);
+pascal LONGINT GetScrap(Handle h, ResType rest, LONGINT *off) MAC_IMPORT(GetScrap) M68K_INLINE(0xA9FD);
 
 #ifdef __cplusplus
 }

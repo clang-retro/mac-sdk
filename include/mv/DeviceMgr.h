@@ -190,7 +190,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBControlSync(ParmBlk
     return _ret;
 }
 #else
-pascal OSErr PBControlSync(ParmBlkPtr pbp);
+pascal OSErr PBControlSync(ParmBlkPtr pbp) MAC_IMPORT(PBControlSync);
 #endif
 enum { _PBControlAsync = 0xA404 };
 #if TARGET_CPU_68K
@@ -204,7 +204,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBControlAsync(ParmBl
     return _ret;
 }
 #else
-pascal OSErr PBControlAsync(ParmBlkPtr pbp);
+pascal OSErr PBControlAsync(ParmBlkPtr pbp) MAC_IMPORT(PBControlAsync);
 #endif
 
 enum { _PBStatusSync = 0xA005 };
@@ -219,7 +219,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBStatusSync(ParmBlkP
     return _ret;
 }
 #else
-pascal OSErr PBStatusSync(ParmBlkPtr pbp);
+pascal OSErr PBStatusSync(ParmBlkPtr pbp) MAC_IMPORT(PBStatusSync);
 #endif
 enum { _PBStatusAsync = 0xA405 };
 #if TARGET_CPU_68K
@@ -233,7 +233,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBStatusAsync(ParmBlk
     return _ret;
 }
 #else
-pascal OSErr PBStatusAsync(ParmBlkPtr pbp);
+pascal OSErr PBStatusAsync(ParmBlkPtr pbp) MAC_IMPORT(PBStatusAsync);
 #endif
 
 enum { _PBKillIOSync = 0xA006 };
@@ -248,7 +248,7 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBKillIOSync(ParmBlkP
     return _ret;
 }
 #else
-pascal OSErr PBKillIOSync(ParmBlkPtr pbp);
+pascal OSErr PBKillIOSync(ParmBlkPtr pbp) MAC_IMPORT(PBKillIOSync);
 #endif
 enum { _PBKillIOAsync = 0xA406 };
 #if TARGET_CPU_68K
@@ -262,43 +262,43 @@ static __inline__ __attribute__((__always_inline__)) OSErr PBKillIOAsync(ParmBlk
     return _ret;
 }
 #else
-pascal OSErr PBKillIOAsync(ParmBlkPtr pbp);
+pascal OSErr PBKillIOAsync(ParmBlkPtr pbp) MAC_IMPORT(PBKillIOAsync);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr OpenDriver(ConstStringPtr name, INTEGER *rnp);
 #else
-pascal OSErr OpenDriver(ConstStringPtr name, INTEGER *rnp);
+pascal OSErr OpenDriver(ConstStringPtr name, INTEGER *rnp) MAC_IMPORT(OpenDriver);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr CloseDriver(INTEGER rn);
 #else
-pascal OSErr CloseDriver(INTEGER rn);
+pascal OSErr CloseDriver(INTEGER rn) MAC_IMPORT(CloseDriver);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr Control(INTEGER rn, INTEGER code, const void *param);
 #else
-pascal OSErr Control(INTEGER rn, INTEGER code, const void *param);
+pascal OSErr Control(INTEGER rn, INTEGER code, const void *param) MAC_IMPORT(Control);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr Status(INTEGER rn, INTEGER code, Ptr param);
 #else
-pascal OSErr Status(INTEGER rn, INTEGER code, Ptr param);
+pascal OSErr Status(INTEGER rn, INTEGER code, Ptr param) MAC_IMPORT(Status);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ OSErr KillIO(INTEGER rn);
 #else
-pascal OSErr KillIO(INTEGER rn);
+pascal OSErr KillIO(INTEGER rn) MAC_IMPORT(KillIO);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ DCtlHandle GetDCtlEntry(INTEGER rn);
 #else
-pascal DCtlHandle GetDCtlEntry(INTEGER rn);
+pascal DCtlHandle GetDCtlEntry(INTEGER rn) MAC_IMPORT(GetDCtlEntry);
 #endif
 
 typedef struct DRVRHeader DRVRHeader;
@@ -331,14 +331,14 @@ static __inline__ __attribute__((__always_inline__)) OSErr DrvrRemove(INTEGER re
     return _ret;
 }
 #else
-pascal OSErr DrvrRemove(INTEGER refNum);
+pascal OSErr DrvrRemove(INTEGER refNum) MAC_IMPORT(DrvrRemove);
 #endif
 
 // The trap takes the driver itself (A0) and the reference number (D0).
 #if TARGET_CPU_68K
 static __inline__ OSErr DrvrInstall(DRVRHeaderHandle drvrHandle, INTEGER refNum);
 #else
-pascal OSErr DrvrInstall(DRVRHeaderHandle drvrHandle, INTEGER refNum);
+pascal OSErr DrvrInstall(DRVRHeaderHandle drvrHandle, INTEGER refNum) MAC_IMPORT(DrvrInstall);
 #endif
 
 // The trap takes the drive number in the high word of D0 and the
@@ -346,7 +346,7 @@ pascal OSErr DrvrInstall(DRVRHeaderHandle drvrHandle, INTEGER refNum);
 #if TARGET_CPU_68K
 static __inline__ void AddDrive(INTEGER drvrRefNum, INTEGER drvNum, DrvQElPtr qEl);
 #else
-pascal void AddDrive(INTEGER drvrRefNum, INTEGER drvNum, DrvQElPtr qEl);
+pascal void AddDrive(INTEGER drvrRefNum, INTEGER drvNum, DrvQElPtr qEl) MAC_IMPORT(AddDrive);
 #endif
 
 #if TARGET_CPU_68K

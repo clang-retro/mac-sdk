@@ -42,218 +42,218 @@ typedef Pattern *PatPtr;
 typedef PatPtr *PatHandle;
 
 enum { _FracSqrt = 0xA849 };
-MAC_SINCE(0x0070, "0.7") pascal Fract FracSqrt(Fract x) M68K_INLINE(0xA849);
+MAC_SINCE(0x0070, "0.7") pascal Fract FracSqrt(Fract x) MAC_IMPORT(FracSqrt) M68K_INLINE(0xA849);
 
 enum { _FracSin = 0xA848 };
-MAC_SINCE(0x0070, "0.7") pascal Fract FracSin(Fixed x) M68K_INLINE(0xA848);
+MAC_SINCE(0x0070, "0.7") pascal Fract FracSin(Fixed x) MAC_IMPORT(FracSin) M68K_INLINE(0xA848);
 
 enum { _FixATan2 = 0xA818 };
-MAC_SINCE(0x0070, "0.7") pascal Fixed FixATan2(LONGINT x, LONGINT y) M68K_INLINE(0xA818);
+MAC_SINCE(0x0070, "0.7") pascal Fixed FixATan2(LONGINT x, LONGINT y) MAC_IMPORT(FixATan2) M68K_INLINE(0xA818);
 
 enum { _FracCos = 0xA847 };
-MAC_SINCE(0x0070, "0.7") pascal Fract FracCos(Fixed x) M68K_INLINE(0xA847);
+MAC_SINCE(0x0070, "0.7") pascal Fract FracCos(Fixed x) MAC_IMPORT(FracCos) M68K_INLINE(0xA847);
 
 enum { _FixRatio = 0xA869 };
-pascal Fixed FixRatio(INTEGER n, INTEGER d) M68K_INLINE(0xA869);
+pascal Fixed FixRatio(INTEGER n, INTEGER d) MAC_IMPORT(FixRatio) M68K_INLINE(0xA869);
 
 enum { _FixMul = 0xA868 };
-pascal Fixed FixMul(Fixed a, Fixed b) M68K_INLINE(0xA868);
+pascal Fixed FixMul(Fixed a, Fixed b) MAC_IMPORT(FixMul) M68K_INLINE(0xA868);
 
 enum { _FixRound = 0xA86C };
-pascal INTEGER FixRound(Fixed x) M68K_INLINE(0xA86C);
+pascal INTEGER FixRound(Fixed x) MAC_IMPORT(FixRound) M68K_INLINE(0xA86C);
 
 enum { _NewString = 0xA906 };
-pascal StringHandle NewString(ConstStringPtr s) M68K_INLINE(0xA906);
+pascal StringHandle NewString(ConstStringPtr s) MAC_IMPORT(NewString) M68K_INLINE(0xA906);
 
 enum { _SetString = 0xA907 };
-pascal void SetString(StringHandle h, ConstStringPtr s) M68K_INLINE(0xA907);
+pascal void SetString(StringHandle h, ConstStringPtr s) MAC_IMPORT(SetString) M68K_INLINE(0xA907);
 
 enum { _GetString = 0xA9BA };
-pascal StringHandle GetString(INTEGER i) M68K_INLINE(0xA9BA);
+pascal StringHandle GetString(INTEGER i) MAC_IMPORT(GetString) M68K_INLINE(0xA9BA);
 
 #if TARGET_CPU_68K
 static __inline__ void GetIndString(StringPtr s, INTEGER sid, INTEGER index);
 #else
-pascal void GetIndString(StringPtr s, INTEGER sid, INTEGER index);
+pascal void GetIndString(StringPtr s, INTEGER sid, INTEGER index) MAC_IMPORT(GetIndString);
 #endif
 
 enum { _Munger = 0xA9E0 };
-pascal LONGINT Munger(Handle h, LONGINT off, Ptr p1, LONGINT len1, Ptr p2, LONGINT len2) M68K_INLINE(0xA9E0);
+pascal LONGINT Munger(Handle h, LONGINT off, Ptr p1, LONGINT len1, Ptr p2, LONGINT len2) MAC_IMPORT(Munger) M68K_INLINE(0xA9E0);
 
 enum { _PackBits = 0xA8CF };
-pascal void PackBits(Ptr *sp, Ptr *dp, INTEGER len) M68K_INLINE(0xA8CF);
+pascal void PackBits(Ptr *sp, Ptr *dp, INTEGER len) MAC_IMPORT(PackBits) M68K_INLINE(0xA8CF);
 
 enum { _UnpackBits = 0xA8D0 };
-pascal void UnpackBits(Ptr *sp, Ptr *dp, INTEGER len) M68K_INLINE(0xA8D0);
+pascal void UnpackBits(Ptr *sp, Ptr *dp, INTEGER len) MAC_IMPORT(UnpackBits) M68K_INLINE(0xA8D0);
 
 enum { _BitTst = 0xA85D };
-pascal Boolean BitTst(Ptr bp, LONGINT bn) M68K_INLINE(0xA85D);
+pascal Boolean BitTst(Ptr bp, LONGINT bn) MAC_IMPORT(BitTst) M68K_INLINE(0xA85D);
 
 enum { _BitSet = 0xA85E };
-pascal void BitSet(Ptr bp, LONGINT bn) M68K_INLINE(0xA85E);
+pascal void BitSet(Ptr bp, LONGINT bn) MAC_IMPORT(BitSet) M68K_INLINE(0xA85E);
 
 enum { _BitClr = 0xA85F };
-pascal void BitClr(Ptr bp, LONGINT bn) M68K_INLINE(0xA85F);
+pascal void BitClr(Ptr bp, LONGINT bn) MAC_IMPORT(BitClr) M68K_INLINE(0xA85F);
 
 enum { _BitAnd = 0xA858 };
-pascal LONGINT BitAnd(LONGINT a, LONGINT b) M68K_INLINE(0xA858);
+pascal LONGINT BitAnd(LONGINT a, LONGINT b) MAC_IMPORT(BitAnd) M68K_INLINE(0xA858);
 
 enum { _BitOr = 0xA85B };
-pascal LONGINT BitOr(LONGINT a, LONGINT b) M68K_INLINE(0xA85B);
+pascal LONGINT BitOr(LONGINT a, LONGINT b) MAC_IMPORT(BitOr) M68K_INLINE(0xA85B);
 
 enum { _BitXor = 0xA859 };
-pascal LONGINT BitXor(LONGINT a, LONGINT b) M68K_INLINE(0xA859);
+pascal LONGINT BitXor(LONGINT a, LONGINT b) MAC_IMPORT(BitXor) M68K_INLINE(0xA859);
 
 enum { _BitNot = 0xA85A };
-pascal LONGINT BitNot(LONGINT a) M68K_INLINE(0xA85A);
+pascal LONGINT BitNot(LONGINT a) MAC_IMPORT(BitNot) M68K_INLINE(0xA85A);
 
 enum { _BitShift = 0xA85C };
-pascal LONGINT BitShift(LONGINT a, INTEGER n) M68K_INLINE(0xA85C);
+pascal LONGINT BitShift(LONGINT a, INTEGER n) MAC_IMPORT(BitShift) M68K_INLINE(0xA85C);
 
 enum { _HiWord = 0xA86A };
-pascal INTEGER HiWord(LONGINT a) M68K_INLINE(0xA86A);
+pascal INTEGER HiWord(LONGINT a) MAC_IMPORT(HiWord) M68K_INLINE(0xA86A);
 
 enum { _LoWord = 0xA86B };
-pascal INTEGER LoWord(LONGINT a) M68K_INLINE(0xA86B);
+pascal INTEGER LoWord(LONGINT a) MAC_IMPORT(LoWord) M68K_INLINE(0xA86B);
 
 enum { _LongMul = 0xA867 };
-pascal void LongMul(LONGINT a, LONGINT b, Int64Bit *c) M68K_INLINE(0xA867);
+pascal void LongMul(LONGINT a, LONGINT b, Int64Bit *c) MAC_IMPORT(LongMul) M68K_INLINE(0xA867);
 
 enum { _GetPattern = 0xA9B8 };
-pascal PatHandle GetPattern(INTEGER id) M68K_INLINE(0xA9B8);
+pascal PatHandle GetPattern(INTEGER id) MAC_IMPORT(GetPattern) M68K_INLINE(0xA9B8);
 
 #if TARGET_CPU_68K
 static __inline__ void GetIndPattern(Byte *op, INTEGER plistid, INTEGER index);
 #else
-pascal void GetIndPattern(Byte *op, INTEGER plistid, INTEGER index);
+pascal void GetIndPattern(Byte *op, INTEGER plistid, INTEGER index) MAC_IMPORT(GetIndPattern);
 #endif
 
 enum { _GetCursor = 0xA9B9 };
-pascal CursHandle GetCursor(INTEGER id) M68K_INLINE(0xA9B9);
+pascal CursHandle GetCursor(INTEGER id) MAC_IMPORT(GetCursor) M68K_INLINE(0xA9B9);
 
 enum { _GetPicture = 0xA9BC };
-pascal PicHandle GetPicture(INTEGER id) M68K_INLINE(0xA9BC);
+pascal PicHandle GetPicture(INTEGER id) MAC_IMPORT(GetPicture) M68K_INLINE(0xA9BC);
 
 enum { _DeltaPoint = 0xA94F };
-pascal LONGINT DeltaPoint(Point a, Point b) M68K_INLINE(0xA94F);
+pascal LONGINT DeltaPoint(Point a, Point b) MAC_IMPORT(DeltaPoint) M68K_INLINE(0xA94F);
 
 enum { _SlopeFromAngle = 0xA8BC };
-pascal Fixed SlopeFromAngle(INTEGER a) M68K_INLINE(0xA8BC);
+pascal Fixed SlopeFromAngle(INTEGER a) MAC_IMPORT(SlopeFromAngle) M68K_INLINE(0xA8BC);
 
 enum { _AngleFromSlope = 0xA8C4 };
-pascal INTEGER AngleFromSlope(Fixed s) M68K_INLINE(0xA8C4);
+pascal INTEGER AngleFromSlope(Fixed s) MAC_IMPORT(AngleFromSlope) M68K_INLINE(0xA8C4);
 
 enum { _FracMul = 0xA84A };
-MAC_SINCE(0x0070, "0.7") pascal Fract FracMul(Fract x, Fract y) M68K_INLINE(0xA84A);
+MAC_SINCE(0x0070, "0.7") pascal Fract FracMul(Fract x, Fract y) MAC_IMPORT(FracMul) M68K_INLINE(0xA84A);
 
 enum { _FixDiv = 0xA84D };
-MAC_SINCE(0x0070, "0.7") pascal Fixed FixDiv(Fixed x, Fixed y) M68K_INLINE(0xA84D);
+MAC_SINCE(0x0070, "0.7") pascal Fixed FixDiv(Fixed x, Fixed y) MAC_IMPORT(FixDiv) M68K_INLINE(0xA84D);
 
 enum { _FracDiv = 0xA84B };
-MAC_SINCE(0x0070, "0.7") pascal Fract FracDiv(Fract x, Fract y) M68K_INLINE(0xA84B);
+MAC_SINCE(0x0070, "0.7") pascal Fract FracDiv(Fract x, Fract y) MAC_IMPORT(FracDiv) M68K_INLINE(0xA84B);
 
 enum { _Long2Fix = 0xA83F };
-MAC_SINCE(0x0070, "0.7") pascal Fixed Long2Fix(LONGINT x) M68K_INLINE(0xA83F);
+MAC_SINCE(0x0070, "0.7") pascal Fixed Long2Fix(LONGINT x) MAC_IMPORT(Long2Fix) M68K_INLINE(0xA83F);
 
 enum { _Fix2Long = 0xA840 };
-MAC_SINCE(0x0070, "0.7") pascal LONGINT Fix2Long(Fixed x) M68K_INLINE(0xA840);
+MAC_SINCE(0x0070, "0.7") pascal LONGINT Fix2Long(Fixed x) MAC_IMPORT(Fix2Long) M68K_INLINE(0xA840);
 
 enum { _Fix2Frac = 0xA841 };
-MAC_SINCE(0x0070, "0.7") pascal Fract Fix2Frac(Fixed x) M68K_INLINE(0xA841);
+MAC_SINCE(0x0070, "0.7") pascal Fract Fix2Frac(Fixed x) MAC_IMPORT(Fix2Frac) M68K_INLINE(0xA841);
 
 enum { _Frac2Fix = 0xA842 };
-MAC_SINCE(0x0070, "0.7") pascal Fixed Frac2Fix(Fract x) M68K_INLINE(0xA842);
+MAC_SINCE(0x0070, "0.7") pascal Fixed Frac2Fix(Fract x) MAC_IMPORT(Frac2Fix) M68K_INLINE(0xA842);
 
 enum { _R_X2Fix = 0xA844 };
-MAC_SINCE(0x0070, "0.7") pascal Fixed R_X2Fix(extended80 *x) M68K_INLINE(0xA844);
+MAC_SINCE(0x0070, "0.7") pascal Fixed R_X2Fix(extended80 *x) MAC_IMPORT(R_X2Fix) M68K_INLINE(0xA844);
 
 enum { _R_X2Frac = 0xA846 };
-MAC_SINCE(0x0070, "0.7") pascal Fract R_X2Frac(extended80 *x) M68K_INLINE(0xA846);
+MAC_SINCE(0x0070, "0.7") pascal Fract R_X2Frac(extended80 *x) MAC_IMPORT(R_X2Frac) M68K_INLINE(0xA846);
 
 // Conversions to floating point (68k needs SANE glue for these)
 #if TARGET_CPU_68K
 static __inline__ double Fix2X(Fixed x);
 #else
-pascal double Fix2X(Fixed x);
+pascal double Fix2X(Fixed x) MAC_IMPORT(Fix2X);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ Fixed X2Fix(double x);
 #else
-pascal Fixed X2Fix(double x);
+pascal Fixed X2Fix(double x) MAC_IMPORT(X2Fix);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ double Frac2X(Fract x);
 #else
-pascal double Frac2X(Fract x);
+pascal double Frac2X(Fract x) MAC_IMPORT(Frac2X);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ Fract X2Frac(double x);
 #else
-pascal Fract X2Frac(double x);
+pascal Fract X2Frac(double x) MAC_IMPORT(X2Frac);
 #endif
 
 // 64-bit integer arithmetic
 #if TARGET_CPU_68K
 static __inline__ wide* WideAdd(wide *target, const wide *source);
 #else
-pascal wide* WideAdd(wide *target, const wide *source);
+pascal wide* WideAdd(wide *target, const wide *source) MAC_IMPORT(WideAdd);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ wide* WideSubtract(wide *target, const wide *source);
 #else
-pascal wide* WideSubtract(wide *target, const wide *source);
+pascal wide* WideSubtract(wide *target, const wide *source) MAC_IMPORT(WideSubtract);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER WideCompare(const wide *target, const wide *source);
 #else
-pascal INTEGER WideCompare(const wide *target, const wide *source);
+pascal INTEGER WideCompare(const wide *target, const wide *source) MAC_IMPORT(WideCompare);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ wide* WideNegate(wide *target);
 #else
-pascal wide* WideNegate(wide *target);
+pascal wide* WideNegate(wide *target) MAC_IMPORT(WideNegate);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ wide* WideShift(wide *target, long shift);
 #else
-pascal wide* WideShift(wide *target, long shift);
+pascal wide* WideShift(wide *target, long shift) MAC_IMPORT(WideShift);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ unsigned long WideSquareRoot(const wide *source);
 #else
-pascal unsigned long WideSquareRoot(const wide *source);
+pascal unsigned long WideSquareRoot(const wide *source) MAC_IMPORT(WideSquareRoot);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ wide* WideMultiply(long multiplicand, long multiplier, wide *target);
 #else
-pascal wide* WideMultiply(long multiplicand, long multiplier, wide *target);
+pascal wide* WideMultiply(long multiplicand, long multiplier, wide *target) MAC_IMPORT(WideMultiply);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ long WideDivide(const wide *dividend, long divisor, long *remainder);
 #else
-pascal long WideDivide(const wide *dividend, long divisor, long *remainder);
+pascal long WideDivide(const wide *dividend, long divisor, long *remainder) MAC_IMPORT(WideDivide);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ wide* WideWideDivide(wide *dividend, long divisor, long *remainder);
 #else
-pascal wide* WideWideDivide(wide *dividend, long divisor, long *remainder);
+pascal wide* WideWideDivide(wide *dividend, long divisor, long *remainder) MAC_IMPORT(WideWideDivide);
 #endif
 
 #if TARGET_CPU_68K
 static __inline__ wide* WideBitShift(wide *src, long shift);
 #else
-pascal wide* WideBitShift(wide *src, long shift);
+pascal wide* WideBitShift(wide *src, long shift) MAC_IMPORT(WideBitShift);
 #endif
 
 #if TARGET_CPU_68K

@@ -326,387 +326,387 @@ enum { _QDExtensions = 0xAB1D };
 enum { _Pack15 = 0xA831 };
 
 enum { _SetStdCProcs = 0xAA4E };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetStdCProcs(CQDProcs *cProcs) M68K_INLINE(0xAA4E);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetStdCProcs(CQDProcs *cProcs) MAC_IMPORT(SetStdCProcs) M68K_INLINE(0xAA4E);
 
 enum { _OpenCPort = 0xAA00 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void OpenCPort(CGrafPtr arg0) M68K_INLINE(0xAA00);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void OpenCPort(CGrafPtr arg0) MAC_IMPORT(OpenCPort) M68K_INLINE(0xAA00);
 
 enum { _InitCPort = 0xAA01 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void InitCPort(CGrafPtr arg0) M68K_INLINE(0xAA01);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void InitCPort(CGrafPtr arg0) MAC_IMPORT(InitCPort) M68K_INLINE(0xAA01);
 
 enum { _CloseCPort = 0xA87D };
-pascal void CloseCPort(CGrafPtr arg0) M68K_INLINE(0xA87D);
+pascal void CloseCPort(CGrafPtr arg0) MAC_IMPORT(CloseCPort) M68K_INLINE(0xA87D);
 
 enum { _RGBForeColor = 0xAA14 };
-MAC_SINCE(0x0700, "7.0") pascal void RGBForeColor(RGBColor *arg0) M68K_INLINE(0xAA14);
+MAC_SINCE(0x0700, "7.0") pascal void RGBForeColor(RGBColor *arg0) MAC_IMPORT(RGBForeColor) M68K_INLINE(0xAA14);
 
 enum { _RGBBackColor = 0xAA15 };
-MAC_SINCE(0x0700, "7.0") pascal void RGBBackColor(RGBColor *arg0) M68K_INLINE(0xAA15);
+MAC_SINCE(0x0700, "7.0") pascal void RGBBackColor(RGBColor *arg0) MAC_IMPORT(RGBBackColor) M68K_INLINE(0xAA15);
 
 enum { _GetForeColor = 0xAA19 };
-MAC_SINCE(0x0700, "7.0") pascal void GetForeColor(RGBColor *arg0) M68K_INLINE(0xAA19);
+MAC_SINCE(0x0700, "7.0") pascal void GetForeColor(RGBColor *arg0) MAC_IMPORT(GetForeColor) M68K_INLINE(0xAA19);
 
 enum { _GetBackColor = 0xAA1A };
-MAC_SINCE(0x0700, "7.0") pascal void GetBackColor(RGBColor *arg0) M68K_INLINE(0xAA1A);
+MAC_SINCE(0x0700, "7.0") pascal void GetBackColor(RGBColor *arg0) MAC_IMPORT(GetBackColor) M68K_INLINE(0xAA1A);
 
 enum { _PenPixPat = 0xAA0A };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void PenPixPat(PixPatHandle arg0) M68K_INLINE(0xAA0A);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void PenPixPat(PixPatHandle arg0) MAC_IMPORT(PenPixPat) M68K_INLINE(0xAA0A);
 
 enum { _BackPixPat = 0xAA0B };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void BackPixPat(PixPatHandle arg0) M68K_INLINE(0xAA0B);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void BackPixPat(PixPatHandle arg0) MAC_IMPORT(BackPixPat) M68K_INLINE(0xAA0B);
 
 enum { _OpColor = 0xAA21 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void OpColor(RGBColor *arg0) M68K_INLINE(0xAA21);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void OpColor(RGBColor *arg0) MAC_IMPORT(OpColor) M68K_INLINE(0xAA21);
 
 enum { _HiliteColor = 0xAA22 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void HiliteColor(RGBColor *arg0) M68K_INLINE(0xAA22);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void HiliteColor(RGBColor *arg0) MAC_IMPORT(HiliteColor) M68K_INLINE(0xAA22);
 
 enum { _NewPixMap = 0xAA03 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal PixMapHandle NewPixMap(void) M68K_INLINE(0xAA03);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal PixMapHandle NewPixMap(void) MAC_IMPORT(NewPixMap) M68K_INLINE(0xAA03);
 
 enum { _DisposePixMap = 0xAA04 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void DisposePixMap(PixMapHandle arg0) M68K_INLINE(0xAA04);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void DisposePixMap(PixMapHandle arg0) MAC_IMPORT(DisposePixMap) M68K_INLINE(0xAA04);
 #if OLDROUTINENAMES
 #define DisposPixMap(arg0) DisposePixMap(arg0)
 #endif
 
 enum { _CopyPixMap = 0xAA05 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void CopyPixMap(PixMapHandle arg0, PixMapHandle arg1) M68K_INLINE(0xAA05);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void CopyPixMap(PixMapHandle arg0, PixMapHandle arg1) MAC_IMPORT(CopyPixMap) M68K_INLINE(0xAA05);
 
 enum { _NewPixPat = 0xAA07 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal PixPatHandle NewPixPat(void) M68K_INLINE(0xAA07);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal PixPatHandle NewPixPat(void) MAC_IMPORT(NewPixPat) M68K_INLINE(0xAA07);
 
 enum { _DisposePixPat = 0xAA08 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void DisposePixPat(PixPatHandle arg0) M68K_INLINE(0xAA08);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void DisposePixPat(PixPatHandle arg0) MAC_IMPORT(DisposePixPat) M68K_INLINE(0xAA08);
 #if OLDROUTINENAMES
 #define DisposPixPat(arg0) DisposePixPat(arg0)
 #endif
 
 enum { _CopyPixPat = 0xAA09 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void CopyPixPat(PixPatHandle arg0, PixPatHandle arg1) M68K_INLINE(0xAA09);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void CopyPixPat(PixPatHandle arg0, PixPatHandle arg1) MAC_IMPORT(CopyPixPat) M68K_INLINE(0xAA09);
 
 enum { _SetPortPix = 0xAA06 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetPortPix(PixMapHandle arg0) M68K_INLINE(0xAA06);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetPortPix(PixMapHandle arg0) MAC_IMPORT(SetPortPix) M68K_INLINE(0xAA06);
 
 enum { _NewGDevice = 0xAA2F };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal GDHandle NewGDevice(INTEGER arg0, LONGINT arg1) M68K_INLINE(0xAA2F);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal GDHandle NewGDevice(INTEGER arg0, LONGINT arg1) MAC_IMPORT(NewGDevice) M68K_INLINE(0xAA2F);
 
 enum { _InitGDevice = 0xAA2E };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void InitGDevice(INTEGER arg0, LONGINT arg1, GDHandle arg2) M68K_INLINE(0xAA2E);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void InitGDevice(INTEGER arg0, LONGINT arg1, GDHandle arg2) MAC_IMPORT(InitGDevice) M68K_INLINE(0xAA2E);
 
 enum { _SetDeviceAttribute = 0xAA2D };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetDeviceAttribute(GDHandle arg0, INTEGER arg1, Boolean arg2) M68K_INLINE(0xAA2D);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetDeviceAttribute(GDHandle arg0, INTEGER arg1, Boolean arg2) MAC_IMPORT(SetDeviceAttribute) M68K_INLINE(0xAA2D);
 
 enum { _SetGDevice = 0xAA31 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetGDevice(GDHandle arg0) M68K_INLINE(0xAA31);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetGDevice(GDHandle arg0) MAC_IMPORT(SetGDevice) M68K_INLINE(0xAA31);
 
 enum { _DisposeGDevice = 0xAA30 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void DisposeGDevice(GDHandle arg0) M68K_INLINE(0xAA30);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void DisposeGDevice(GDHandle arg0) MAC_IMPORT(DisposeGDevice) M68K_INLINE(0xAA30);
 #if OLDROUTINENAMES
 #define DisposGDevice(arg0) DisposeGDevice(arg0)
 #endif
 
 enum { _GetGDevice = 0xAA32 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal GDHandle GetGDevice(void) M68K_INLINE(0xAA32);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal GDHandle GetGDevice(void) MAC_IMPORT(GetGDevice) M68K_INLINE(0xAA32);
 
 enum { _GetDeviceList = 0xAA29 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal GDHandle GetDeviceList(void) M68K_INLINE(0xAA29);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal GDHandle GetDeviceList(void) MAC_IMPORT(GetDeviceList) M68K_INLINE(0xAA29);
 
 enum { _GetMainDevice = 0xAA2A };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal GDHandle GetMainDevice(void) M68K_INLINE(0xAA2A);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal GDHandle GetMainDevice(void) MAC_IMPORT(GetMainDevice) M68K_INLINE(0xAA2A);
 
 enum { _GetMaxDevice = 0xAA27 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal GDHandle GetMaxDevice(const Rect *arg0) M68K_INLINE(0xAA27);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal GDHandle GetMaxDevice(const Rect *arg0) MAC_IMPORT(GetMaxDevice) M68K_INLINE(0xAA27);
 
 enum { _GetNextDevice = 0xAA2B };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal GDHandle GetNextDevice(GDHandle arg0) M68K_INLINE(0xAA2B);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal GDHandle GetNextDevice(GDHandle arg0) MAC_IMPORT(GetNextDevice) M68K_INLINE(0xAA2B);
 
 enum { _DeviceLoop = 0xABCA };
-MAC_SINCE(0x0700, "7.0") pascal void DeviceLoop(RgnHandle arg0, DeviceLoopDrawingUPP arg1, LONGINT arg2, DeviceLoopFlags arg3) M68K_INLINE(0xABCA);
+MAC_SINCE(0x0700, "7.0") pascal void DeviceLoop(RgnHandle arg0, DeviceLoopDrawingUPP arg1, LONGINT arg2, DeviceLoopFlags arg3) MAC_IMPORT(DeviceLoop) M68K_INLINE(0xABCA);
 
 enum { _TestDeviceAttribute = 0xAA2C };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal Boolean TestDeviceAttribute(GDHandle arg0, INTEGER arg1) M68K_INLINE(0xAA2C);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal Boolean TestDeviceAttribute(GDHandle arg0, INTEGER arg1) MAC_IMPORT(TestDeviceAttribute) M68K_INLINE(0xAA2C);
 
 #if TARGET_CPU_68K
 static __inline__ void ScreenRes(INTEGER *arg0, INTEGER *arg1);
 #else
-pascal void ScreenRes(INTEGER *arg0, INTEGER *arg1);
+pascal void ScreenRes(INTEGER *arg0, INTEGER *arg1) MAC_IMPORT(ScreenRes);
 #endif
 
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal INTEGER HasDepth(GDHandle arg0, INTEGER arg1, INTEGER arg2, INTEGER arg3) M68K_INLINE(0x303C, 0x0A14, 0xAAA2);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal INTEGER HasDepth(GDHandle arg0, INTEGER arg1, INTEGER arg2, INTEGER arg3) MAC_IMPORT(HasDepth) M68K_INLINE(0x303C, 0x0A14, 0xAAA2);
 
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SetDepth(GDHandle arg0, INTEGER arg1, INTEGER arg2, INTEGER arg3) M68K_INLINE(0x303C, 0x0A13, 0xAAA2);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal OSErr SetDepth(GDHandle arg0, INTEGER arg1, INTEGER arg2, INTEGER arg3) MAC_IMPORT(SetDepth) M68K_INLINE(0x303C, 0x0A13, 0xAAA2);
 
 enum { _MakeITable = 0xAA39 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void MakeITable(CTabHandle arg0, ITabHandle arg1, INTEGER arg2) M68K_INLINE(0xAA39);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void MakeITable(CTabHandle arg0, ITabHandle arg1, INTEGER arg2) MAC_IMPORT(MakeITable) M68K_INLINE(0xAA39);
 
 enum { _Color2Index = 0xAA33 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal LONGINT Color2Index(RGBColor *arg0) M68K_INLINE(0xAA33);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal LONGINT Color2Index(RGBColor *arg0) MAC_IMPORT(Color2Index) M68K_INLINE(0xAA33);
 
 enum { _Index2Color = 0xAA34 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void Index2Color(LONGINT arg0, RGBColor *arg1) M68K_INLINE(0xAA34);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void Index2Color(LONGINT arg0, RGBColor *arg1) MAC_IMPORT(Index2Color) M68K_INLINE(0xAA34);
 
 enum { _GetCTSeed = 0xAA28 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal LONGINT GetCTSeed(void) M68K_INLINE(0xAA28);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal LONGINT GetCTSeed(void) MAC_IMPORT(GetCTSeed) M68K_INLINE(0xAA28);
 
 enum { _GetSubTable = 0xAA37 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void GetSubTable(CTabHandle arg0, INTEGER arg1, CTabHandle arg2) M68K_INLINE(0xAA37);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void GetSubTable(CTabHandle arg0, INTEGER arg1, CTabHandle arg2) MAC_IMPORT(GetSubTable) M68K_INLINE(0xAA37);
 
 enum { _FillCRoundRect = 0xAA10 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void FillCRoundRect(const Rect *arg0, int16_t arg1, int16_t arg2, PixPatHandle arg3) M68K_INLINE(0xAA10);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void FillCRoundRect(const Rect *arg0, int16_t arg1, int16_t arg2, PixPatHandle arg3) MAC_IMPORT(FillCRoundRect) M68K_INLINE(0xAA10);
 
 enum { _FillCRect = 0xAA0E };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void FillCRect(const Rect *arg0, PixPatHandle arg1) M68K_INLINE(0xAA0E);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void FillCRect(const Rect *arg0, PixPatHandle arg1) MAC_IMPORT(FillCRect) M68K_INLINE(0xAA0E);
 
 enum { _FillCOval = 0xAA0F };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void FillCOval(const Rect *arg0, PixPatHandle arg1) M68K_INLINE(0xAA0F);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void FillCOval(const Rect *arg0, PixPatHandle arg1) MAC_IMPORT(FillCOval) M68K_INLINE(0xAA0F);
 
 enum { _FillCArc = 0xAA11 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void FillCArc(const Rect *arg0, int16_t arg1, int16_t arg2, PixPatHandle arg3) M68K_INLINE(0xAA11);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void FillCArc(const Rect *arg0, int16_t arg1, int16_t arg2, PixPatHandle arg3) MAC_IMPORT(FillCArc) M68K_INLINE(0xAA11);
 
 enum { _FillCPoly = 0xAA13 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void FillCPoly(PolyHandle arg0, PixPatHandle arg1) M68K_INLINE(0xAA13);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void FillCPoly(PolyHandle arg0, PixPatHandle arg1) MAC_IMPORT(FillCPoly) M68K_INLINE(0xAA13);
 
 enum { _FillCRgn = 0xAA12 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void FillCRgn(RgnHandle arg0, PixPatHandle arg1) M68K_INLINE(0xAA12);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void FillCRgn(RgnHandle arg0, PixPatHandle arg1) MAC_IMPORT(FillCRgn) M68K_INLINE(0xAA12);
 
 enum { _InvertColor = 0xAA35 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void InvertColor(RGBColor *arg0) M68K_INLINE(0xAA35);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void InvertColor(RGBColor *arg0) MAC_IMPORT(InvertColor) M68K_INLINE(0xAA35);
 
 enum { _RealColor = 0xAA36 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal Boolean RealColor(RGBColor *arg0) M68K_INLINE(0xAA36);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal Boolean RealColor(RGBColor *arg0) MAC_IMPORT(RealColor) M68K_INLINE(0xAA36);
 
 enum { _ProtectEntry = 0xAA3D };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void ProtectEntry(INTEGER arg0, Boolean arg1) M68K_INLINE(0xAA3D);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void ProtectEntry(INTEGER arg0, Boolean arg1) MAC_IMPORT(ProtectEntry) M68K_INLINE(0xAA3D);
 
 enum { _ReserveEntry = 0xAA3E };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void ReserveEntry(INTEGER arg0, Boolean arg1) M68K_INLINE(0xAA3E);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void ReserveEntry(INTEGER arg0, Boolean arg1) MAC_IMPORT(ReserveEntry) M68K_INLINE(0xAA3E);
 
 enum { _SetEntries = 0xAA3F };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetEntries(INTEGER arg0, INTEGER arg1, ColorSpec *cSpecArray) M68K_INLINE(0xAA3F);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetEntries(INTEGER arg0, INTEGER arg1, ColorSpec *cSpecArray) MAC_IMPORT(SetEntries) M68K_INLINE(0xAA3F);
 
 enum { _AddSearch = 0xAA3A };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void AddSearch(ProcPtr arg0) M68K_INLINE(0xAA3A);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void AddSearch(ProcPtr arg0) MAC_IMPORT(AddSearch) M68K_INLINE(0xAA3A);
 
 enum { _AddComp = 0xAA3B };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void AddComp(ProcPtr arg0) M68K_INLINE(0xAA3B);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void AddComp(ProcPtr arg0) MAC_IMPORT(AddComp) M68K_INLINE(0xAA3B);
 
 enum { _DelSearch = 0xAA4C };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void DelSearch(ProcPtr arg0) M68K_INLINE(0xAA4C);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void DelSearch(ProcPtr arg0) MAC_IMPORT(DelSearch) M68K_INLINE(0xAA4C);
 
 enum { _DelComp = 0xAA4D };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void DelComp(ProcPtr arg0) M68K_INLINE(0xAA4D);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void DelComp(ProcPtr arg0) MAC_IMPORT(DelComp) M68K_INLINE(0xAA4D);
 
 enum { _SetClientID = 0xAA3C };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetClientID(INTEGER arg0) M68K_INLINE(0xAA3C);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetClientID(INTEGER arg0) MAC_IMPORT(SetClientID) M68K_INLINE(0xAA3C);
 
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal Boolean GetGray(GDHandle arg0, RGBColor *arg1, RGBColor *arg2) M68K_INLINE(0x303C, 0x0C19, 0xAAA2);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal Boolean GetGray(GDHandle arg0, RGBColor *arg1, RGBColor *arg2) MAC_IMPORT(GetGray) M68K_INLINE(0x303C, 0x0C19, 0xAAA2);
 
 enum { _GetPixPat = 0xAA0C };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal PixPatHandle GetPixPat(INTEGER arg0) M68K_INLINE(0xAA0C);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal PixPatHandle GetPixPat(INTEGER arg0) MAC_IMPORT(GetPixPat) M68K_INLINE(0xAA0C);
 
 enum { _QDError = 0xAA40 };
-MAC_SINCE(0x0700, "7.0") pascal INTEGER QDError(void) M68K_INLINE(0xAA40);
+MAC_SINCE(0x0700, "7.0") pascal INTEGER QDError(void) MAC_IMPORT(QDError) M68K_INLINE(0xAA40);
 
-MAC_SINCE(0x0200, "2.0") pascal void CMY2RGB(CMYColor *arg0, RGBColor *arg1) M68K_INLINE(0x3F3C, 0x0003, 0xA82E);
+MAC_SINCE(0x0200, "2.0") pascal void CMY2RGB(CMYColor *arg0, RGBColor *arg1) MAC_IMPORT(CMY2RGB) M68K_INLINE(0x3F3C, 0x0003, 0xA82E);
 
-MAC_SINCE(0x0200, "2.0") pascal void RGB2CMY(RGBColor *arg0, CMYColor *arg1) M68K_INLINE(0x3F3C, 0x0004, 0xA82E);
+MAC_SINCE(0x0200, "2.0") pascal void RGB2CMY(RGBColor *arg0, CMYColor *arg1) MAC_IMPORT(RGB2CMY) M68K_INLINE(0x3F3C, 0x0004, 0xA82E);
 
-MAC_SINCE(0x0200, "2.0") pascal void HSL2RGB(HSLColor *arg0, RGBColor *arg1) M68K_INLINE(0x3F3C, 0x0005, 0xA82E);
+MAC_SINCE(0x0200, "2.0") pascal void HSL2RGB(HSLColor *arg0, RGBColor *arg1) MAC_IMPORT(HSL2RGB) M68K_INLINE(0x3F3C, 0x0005, 0xA82E);
 
-MAC_SINCE(0x0200, "2.0") pascal void RGB2HSL(RGBColor *arg0, HSLColor *arg1) M68K_INLINE(0x3F3C, 0x0006, 0xA82E);
+MAC_SINCE(0x0200, "2.0") pascal void RGB2HSL(RGBColor *arg0, HSLColor *arg1) MAC_IMPORT(RGB2HSL) M68K_INLINE(0x3F3C, 0x0006, 0xA82E);
 
-MAC_SINCE(0x0200, "2.0") pascal void HSV2RGB(HSVColor *arg0, RGBColor *arg1) M68K_INLINE(0x3F3C, 0x0007, 0xA82E);
+MAC_SINCE(0x0200, "2.0") pascal void HSV2RGB(HSVColor *arg0, RGBColor *arg1) MAC_IMPORT(HSV2RGB) M68K_INLINE(0x3F3C, 0x0007, 0xA82E);
 
-MAC_SINCE(0x0200, "2.0") pascal void RGB2HSV(RGBColor *arg0, HSVColor *arg1) M68K_INLINE(0x3F3C, 0x0008, 0xA82E);
+MAC_SINCE(0x0200, "2.0") pascal void RGB2HSV(RGBColor *arg0, HSVColor *arg1) MAC_IMPORT(RGB2HSV) M68K_INLINE(0x3F3C, 0x0008, 0xA82E);
 
-MAC_SINCE(0x0200, "2.0") pascal SmallFract Fix2SmallFract(Fixed arg0) M68K_INLINE(0x3F3C, 0x0001, 0xA82E);
+MAC_SINCE(0x0200, "2.0") pascal SmallFract Fix2SmallFract(Fixed arg0) MAC_IMPORT(Fix2SmallFract) M68K_INLINE(0x3F3C, 0x0001, 0xA82E);
 
-MAC_SINCE(0x0200, "2.0") pascal Fixed SmallFract2Fix(SmallFract arg0) M68K_INLINE(0x3F3C, 0x0002, 0xA82E);
+MAC_SINCE(0x0200, "2.0") pascal Fixed SmallFract2Fix(SmallFract arg0) MAC_IMPORT(SmallFract2Fix) M68K_INLINE(0x3F3C, 0x0002, 0xA82E);
 
-MAC_SINCE(0x0200, "2.0") pascal Boolean GetColor(Point arg0, ConstStr255Param arg1, RGBColor *arg2, RGBColor *arg3) M68K_INLINE(0x3F3C, 0x0009, 0xA82E);
+MAC_SINCE(0x0200, "2.0") pascal Boolean GetColor(Point arg0, ConstStr255Param arg1, RGBColor *arg2, RGBColor *arg3) MAC_IMPORT(GetColor) M68K_INLINE(0x3F3C, 0x0009, 0xA82E);
 
 enum { _GetCTable = 0xAA18 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal CTabHandle GetCTable(INTEGER arg0) M68K_INLINE(0xAA18);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal CTabHandle GetCTable(INTEGER arg0) MAC_IMPORT(GetCTable) M68K_INLINE(0xAA18);
 
 enum { _DisposeCTable = 0xAA24 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void DisposeCTable(CTabHandle arg0) M68K_INLINE(0xAA24);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void DisposeCTable(CTabHandle arg0) MAC_IMPORT(DisposeCTable) M68K_INLINE(0xAA24);
 #if OLDROUTINENAMES
 #define DisposCTable(arg0) DisposeCTable(arg0)
 #endif
 
 enum { _InitPalettes = 0xAA90 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void InitPalettes(void) M68K_INLINE(0xAA90);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void InitPalettes(void) MAC_IMPORT(InitPalettes) M68K_INLINE(0xAA90);
 
 enum { _NewPalette = 0xAA91 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal PaletteHandle NewPalette(INTEGER arg0, CTabHandle arg1, INTEGER arg2, INTEGER arg3) M68K_INLINE(0xAA91);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal PaletteHandle NewPalette(INTEGER arg0, CTabHandle arg1, INTEGER arg2, INTEGER arg3) MAC_IMPORT(NewPalette) M68K_INLINE(0xAA91);
 
 enum { _GetNewPalette = 0xAA92 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal PaletteHandle GetNewPalette(INTEGER arg0) M68K_INLINE(0xAA92);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal PaletteHandle GetNewPalette(INTEGER arg0) MAC_IMPORT(GetNewPalette) M68K_INLINE(0xAA92);
 
 enum { _DisposePalette = 0xAA93 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void DisposePalette(PaletteHandle arg0) M68K_INLINE(0xAA93);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void DisposePalette(PaletteHandle arg0) MAC_IMPORT(DisposePalette) M68K_INLINE(0xAA93);
 
 enum { _ActivatePalette = 0xAA94 };
-MAC_SINCE(0x0700, "7.0") pascal void ActivatePalette(WindowPtr arg0) M68K_INLINE(0xAA94);
+MAC_SINCE(0x0700, "7.0") pascal void ActivatePalette(WindowPtr arg0) MAC_IMPORT(ActivatePalette) M68K_INLINE(0xAA94);
 
 enum { _NSetPalette = 0xAA95 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void NSetPalette(WindowPtr arg0, PaletteHandle arg1, INTEGER updates) M68K_INLINE(0xAA95);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void NSetPalette(WindowPtr arg0, PaletteHandle arg1, INTEGER updates) MAC_IMPORT(NSetPalette) M68K_INLINE(0xAA95);
 
 enum { _GetPalette = 0xAA96 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal PaletteHandle GetPalette(WindowPtr arg0) M68K_INLINE(0xAA96);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal PaletteHandle GetPalette(WindowPtr arg0) MAC_IMPORT(GetPalette) M68K_INLINE(0xAA96);
 
 enum { _PmForeColor = 0xAA97 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void PmForeColor(INTEGER arg0) M68K_INLINE(0xAA97);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void PmForeColor(INTEGER arg0) MAC_IMPORT(PmForeColor) M68K_INLINE(0xAA97);
 
 enum { _PmBackColor = 0xAA98 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void PmBackColor(INTEGER arg0) M68K_INLINE(0xAA98);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void PmBackColor(INTEGER arg0) MAC_IMPORT(PmBackColor) M68K_INLINE(0xAA98);
 
 enum { _AnimateEntry = 0xAA99 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void AnimateEntry(WindowPtr arg0, INTEGER arg1, RGBColor *arg2) M68K_INLINE(0xAA99);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void AnimateEntry(WindowPtr arg0, INTEGER arg1, RGBColor *arg2) MAC_IMPORT(AnimateEntry) M68K_INLINE(0xAA99);
 
 enum { _AnimatePalette = 0xAA9A };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void AnimatePalette(WindowPtr arg0, CTabHandle arg1, INTEGER arg2, INTEGER arg3, INTEGER arg4) M68K_INLINE(0xAA9A);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void AnimatePalette(WindowPtr arg0, CTabHandle arg1, INTEGER arg2, INTEGER arg3, INTEGER arg4) MAC_IMPORT(AnimatePalette) M68K_INLINE(0xAA9A);
 
 enum { _GetEntryColor = 0xAA9B };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void GetEntryColor(PaletteHandle arg0, INTEGER arg1, RGBColor *arg2) M68K_INLINE(0xAA9B);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void GetEntryColor(PaletteHandle arg0, INTEGER arg1, RGBColor *arg2) MAC_IMPORT(GetEntryColor) M68K_INLINE(0xAA9B);
 
 enum { _SetEntryColor = 0xAA9C };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetEntryColor(PaletteHandle arg0, INTEGER arg1, RGBColor *arg2) M68K_INLINE(0xAA9C);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetEntryColor(PaletteHandle arg0, INTEGER arg1, RGBColor *arg2) MAC_IMPORT(SetEntryColor) M68K_INLINE(0xAA9C);
 
 enum { _GetEntryUsage = 0xAA9D };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void GetEntryUsage(PaletteHandle arg0, INTEGER arg1, INTEGER *arg2, INTEGER *arg3) M68K_INLINE(0xAA9D);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void GetEntryUsage(PaletteHandle arg0, INTEGER arg1, INTEGER *arg2, INTEGER *arg3) MAC_IMPORT(GetEntryUsage) M68K_INLINE(0xAA9D);
 
 enum { _SetEntryUsage = 0xAA9E };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetEntryUsage(PaletteHandle arg0, INTEGER arg1, INTEGER arg2, INTEGER arg3) M68K_INLINE(0xAA9E);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetEntryUsage(PaletteHandle arg0, INTEGER arg1, INTEGER arg2, INTEGER arg3) MAC_IMPORT(SetEntryUsage) M68K_INLINE(0xAA9E);
 
 enum { _CTab2Palette = 0xAA9F };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void CTab2Palette(CTabHandle arg0, PaletteHandle arg1, INTEGER arg2, INTEGER arg3) M68K_INLINE(0xAA9F);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void CTab2Palette(CTabHandle arg0, PaletteHandle arg1, INTEGER arg2, INTEGER arg3) MAC_IMPORT(CTab2Palette) M68K_INLINE(0xAA9F);
 
 enum { _Palette2CTab = 0xAAA0 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void Palette2CTab(PaletteHandle arg0, CTabHandle arg1) M68K_INLINE(0xAAA0);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void Palette2CTab(PaletteHandle arg0, CTabHandle arg1) MAC_IMPORT(Palette2CTab) M68K_INLINE(0xAAA0);
 
 enum { _GetCCursor = 0xAA1B };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal CCrsrHandle GetCCursor(INTEGER arg0) M68K_INLINE(0xAA1B);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal CCrsrHandle GetCCursor(INTEGER arg0) MAC_IMPORT(GetCCursor) M68K_INLINE(0xAA1B);
 
 enum { _SetCCursor = 0xAA1C };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetCCursor(CCrsrHandle arg0) M68K_INLINE(0xAA1C);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetCCursor(CCrsrHandle arg0) MAC_IMPORT(SetCCursor) M68K_INLINE(0xAA1C);
 
 enum { _DisposeCCursor = 0xAA26 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void DisposeCCursor(CCrsrHandle arg0) M68K_INLINE(0xAA26);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void DisposeCCursor(CCrsrHandle arg0) MAC_IMPORT(DisposeCCursor) M68K_INLINE(0xAA26);
 #if OLDROUTINENAMES
 #define DisposCCursor(arg0) DisposeCCursor(arg0)
 #endif
 
 enum { _AllocCursor = 0xAA1D };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void AllocCursor(void) M68K_INLINE(0xAA1D);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void AllocCursor(void) MAC_IMPORT(AllocCursor) M68K_INLINE(0xAA1D);
 
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void RestoreDeviceClut(GDHandle arg0) M68K_INLINE(0x7002, 0xAAA2);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void RestoreDeviceClut(GDHandle arg0) MAC_IMPORT(RestoreDeviceClut) M68K_INLINE(0x7002, 0xAAA2);
 
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void ResizePalette(PaletteHandle arg0, INTEGER arg1) M68K_INLINE(0x7003, 0xAAA2);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void ResizePalette(PaletteHandle arg0, INTEGER arg1) MAC_IMPORT(ResizePalette) M68K_INLINE(0x7003, 0xAAA2);
 
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal INTEGER PMgrVersion(void) M68K_INLINE(0x7015, 0xAAA2);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal INTEGER PMgrVersion(void) MAC_IMPORT(PMgrVersion) M68K_INLINE(0x7015, 0xAAA2);
 
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SaveFore(ColorSpec *arg0) M68K_INLINE(0x303C, 0x040D, 0xAAA2);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SaveFore(ColorSpec *arg0) MAC_IMPORT(SaveFore) M68K_INLINE(0x303C, 0x040D, 0xAAA2);
 
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void RestoreFore(ColorSpec *arg0) M68K_INLINE(0x303C, 0x040F, 0xAAA2);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void RestoreFore(ColorSpec *arg0) MAC_IMPORT(RestoreFore) M68K_INLINE(0x303C, 0x040F, 0xAAA2);
 
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SaveBack(ColorSpec *arg0) M68K_INLINE(0x303C, 0x040E, 0xAAA2);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SaveBack(ColorSpec *arg0) MAC_IMPORT(SaveBack) M68K_INLINE(0x303C, 0x040E, 0xAAA2);
 
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void RestoreBack(ColorSpec *arg0) M68K_INLINE(0x303C, 0x0410, 0xAAA2);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void RestoreBack(ColorSpec *arg0) MAC_IMPORT(RestoreBack) M68K_INLINE(0x303C, 0x0410, 0xAAA2);
 
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetPaletteUpdates(PaletteHandle arg0, INTEGER arg1) M68K_INLINE(0x303C, 0x0616, 0xAAA2);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetPaletteUpdates(PaletteHandle arg0, INTEGER arg1) MAC_IMPORT(SetPaletteUpdates) M68K_INLINE(0x303C, 0x0616, 0xAAA2);
 
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal INTEGER GetPaletteUpdates(PaletteHandle arg0) M68K_INLINE(0x303C, 0x0417, 0xAAA2);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal INTEGER GetPaletteUpdates(PaletteHandle arg0) MAC_IMPORT(GetPaletteUpdates) M68K_INLINE(0x303C, 0x0417, 0xAAA2);
 
 enum { _CopyPalette = 0xAAA1 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void CopyPalette(PaletteHandle src_palette, PaletteHandle dst_palette, int16_t src_start, int16_t dst_start, int16_t n_entries) M68K_INLINE(0xAAA1);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void CopyPalette(PaletteHandle src_palette, PaletteHandle dst_palette, int16_t src_start, int16_t dst_start, int16_t n_entries) MAC_IMPORT(CopyPalette) M68K_INLINE(0xAAA1);
 
 enum { _GetCWMgrPort = 0xAA48 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void GetCWMgrPort(CGrafPtr *arg0) M68K_INLINE(0xAA48);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void GetCWMgrPort(CGrafPtr *arg0) MAC_IMPORT(GetCWMgrPort) M68K_INLINE(0xAA48);
 
 // QDExtensions trap
-MAC_SINCE(0x0700, "7.0") pascal QDErr NewGWorld(GWorldPtr *arg0, INTEGER arg1, const Rect *arg2, CTabHandle arg3, GDHandle arg4, GWorldFlags arg5) M68K_INLINE(0x203C, 0x0016, 0x0000, 0xAB1D);
+MAC_SINCE(0x0700, "7.0") pascal QDErr NewGWorld(GWorldPtr *arg0, INTEGER arg1, const Rect *arg2, CTabHandle arg3, GDHandle arg4, GWorldFlags arg5) MAC_IMPORT(NewGWorld) M68K_INLINE(0x203C, 0x0016, 0x0000, 0xAB1D);
 
-MAC_SINCE(0x0700, "7.0") pascal Boolean LockPixels(PixMapHandle arg0) M68K_INLINE(0x203C, 0x0004, 0x0001, 0xAB1D);
+MAC_SINCE(0x0700, "7.0") pascal Boolean LockPixels(PixMapHandle arg0) MAC_IMPORT(LockPixels) M68K_INLINE(0x203C, 0x0004, 0x0001, 0xAB1D);
 
-MAC_SINCE(0x0700, "7.0") pascal void UnlockPixels(PixMapHandle arg0) M68K_INLINE(0x203C, 0x0004, 0x0002, 0xAB1D);
+MAC_SINCE(0x0700, "7.0") pascal void UnlockPixels(PixMapHandle arg0) MAC_IMPORT(UnlockPixels) M68K_INLINE(0x203C, 0x0004, 0x0002, 0xAB1D);
 
-MAC_SINCE(0x0700, "7.0") pascal GWorldFlags UpdateGWorld(GWorldPtr *arg0, INTEGER arg1, const Rect *arg2, CTabHandle arg3, GDHandle arg4, GWorldFlags arg5) M68K_INLINE(0x203C, 0x0016, 0x0003, 0xAB1D);
+MAC_SINCE(0x0700, "7.0") pascal GWorldFlags UpdateGWorld(GWorldPtr *arg0, INTEGER arg1, const Rect *arg2, CTabHandle arg3, GDHandle arg4, GWorldFlags arg5) MAC_IMPORT(UpdateGWorld) M68K_INLINE(0x203C, 0x0016, 0x0003, 0xAB1D);
 
-MAC_SINCE(0x0700, "7.0") pascal void DisposeGWorld(GWorldPtr arg0) M68K_INLINE(0x203C, 0x0004, 0x0004, 0xAB1D);
+MAC_SINCE(0x0700, "7.0") pascal void DisposeGWorld(GWorldPtr arg0) MAC_IMPORT(DisposeGWorld) M68K_INLINE(0x203C, 0x0004, 0x0004, 0xAB1D);
 
-MAC_SINCE(0x0700, "7.0") pascal void GetGWorld(CGrafPtr *arg0, GDHandle *arg1) M68K_INLINE(0x203C, 0x0008, 0x0005, 0xAB1D);
+MAC_SINCE(0x0700, "7.0") pascal void GetGWorld(CGrafPtr *arg0, GDHandle *arg1) MAC_IMPORT(GetGWorld) M68K_INLINE(0x203C, 0x0008, 0x0005, 0xAB1D);
 
-MAC_SINCE(0x0700, "7.0") pascal void SetGWorld(CGrafPtr arg0, GDHandle arg1) M68K_INLINE(0x203C, 0x0008, 0x0006, 0xAB1D);
+MAC_SINCE(0x0700, "7.0") pascal void SetGWorld(CGrafPtr arg0, GDHandle arg1) MAC_IMPORT(SetGWorld) M68K_INLINE(0x203C, 0x0008, 0x0006, 0xAB1D);
 
-MAC_SINCE(0x0700, "7.0") pascal void AllowPurgePixels(PixMapHandle arg0) M68K_INLINE(0x203C, 0x0004, 0x000B, 0xAB1D);
+MAC_SINCE(0x0700, "7.0") pascal void AllowPurgePixels(PixMapHandle arg0) MAC_IMPORT(AllowPurgePixels) M68K_INLINE(0x203C, 0x0004, 0x000B, 0xAB1D);
 
-MAC_SINCE(0x0700, "7.0") pascal void NoPurgePixels(PixMapHandle arg0) M68K_INLINE(0x203C, 0x0004, 0x000C, 0xAB1D);
+MAC_SINCE(0x0700, "7.0") pascal void NoPurgePixels(PixMapHandle arg0) MAC_IMPORT(NoPurgePixels) M68K_INLINE(0x203C, 0x0004, 0x000C, 0xAB1D);
 
-MAC_SINCE(0x0700, "7.0") pascal GWorldFlags GetPixelsState(PixMapHandle arg0) M68K_INLINE(0x203C, 0x0004, 0x000D, 0xAB1D);
+MAC_SINCE(0x0700, "7.0") pascal GWorldFlags GetPixelsState(PixMapHandle arg0) MAC_IMPORT(GetPixelsState) M68K_INLINE(0x203C, 0x0004, 0x000D, 0xAB1D);
 
-MAC_SINCE(0x0700, "7.0") pascal void SetPixelsState(PixMapHandle arg0, GWorldFlags arg1) M68K_INLINE(0x203C, 0x0008, 0x000E, 0xAB1D);
+MAC_SINCE(0x0700, "7.0") pascal void SetPixelsState(PixMapHandle arg0, GWorldFlags arg1) MAC_IMPORT(SetPixelsState) M68K_INLINE(0x203C, 0x0008, 0x000E, 0xAB1D);
 
-MAC_SINCE(0x0700, "7.0") pascal Ptr GetPixBaseAddr(PixMapHandle arg0) M68K_INLINE(0x203C, 0x0004, 0x000F, 0xAB1D);
+MAC_SINCE(0x0700, "7.0") pascal Ptr GetPixBaseAddr(PixMapHandle arg0) MAC_IMPORT(GetPixBaseAddr) M68K_INLINE(0x203C, 0x0004, 0x000F, 0xAB1D);
 
-MAC_SINCE(0x0700, "7.0") pascal QDErr NewScreenBuffer(const Rect *arg0, Boolean arg1, GDHandle *arg2, PixMapHandle *arg3) M68K_INLINE(0x203C, 0x000E, 0x0010, 0xAB1D);
+MAC_SINCE(0x0700, "7.0") pascal QDErr NewScreenBuffer(const Rect *arg0, Boolean arg1, GDHandle *arg2, PixMapHandle *arg3) MAC_IMPORT(NewScreenBuffer) M68K_INLINE(0x203C, 0x000E, 0x0010, 0xAB1D);
 
-MAC_SINCE(0x0700, "7.0") pascal void DisposeScreenBuffer(PixMapHandle arg0) M68K_INLINE(0x203C, 0x0004, 0x0011, 0xAB1D);
+MAC_SINCE(0x0700, "7.0") pascal void DisposeScreenBuffer(PixMapHandle arg0) MAC_IMPORT(DisposeScreenBuffer) M68K_INLINE(0x203C, 0x0004, 0x0011, 0xAB1D);
 
-MAC_SINCE(0x0700, "7.0") pascal GDHandle GetGWorldDevice(GWorldPtr arg0) M68K_INLINE(0x203C, 0x0004, 0x0012, 0xAB1D);
+MAC_SINCE(0x0700, "7.0") pascal GDHandle GetGWorldDevice(GWorldPtr arg0) MAC_IMPORT(GetGWorldDevice) M68K_INLINE(0x203C, 0x0004, 0x0012, 0xAB1D);
 
-MAC_SINCE(0x0700, "7.0") pascal Boolean PixMap32Bit(PixMapHandle arg0) M68K_INLINE(0x203C, 0x0004, 0x0016, 0xAB1D);
+MAC_SINCE(0x0700, "7.0") pascal Boolean PixMap32Bit(PixMapHandle arg0) MAC_IMPORT(PixMap32Bit) M68K_INLINE(0x203C, 0x0004, 0x0016, 0xAB1D);
 
-MAC_SINCE(0x0700, "7.0") pascal PixMapHandle GetGWorldPixMap(GWorldPtr arg0) M68K_INLINE(0x203C, 0x0004, 0x0017, 0xAB1D);
+MAC_SINCE(0x0700, "7.0") pascal PixMapHandle GetGWorldPixMap(GWorldPtr arg0) MAC_IMPORT(GetGWorldPixMap) M68K_INLINE(0x203C, 0x0004, 0x0017, 0xAB1D);
 
-MAC_SINCE(0x0700, "7.0") pascal QDErr NewTempScreenBuffer(const Rect *arg0, Boolean arg1, GDHandle *arg2, PixMapHandle *arg3) M68K_INLINE(0x203C, 0x000E, 0x0015, 0xAB1D);
+MAC_SINCE(0x0700, "7.0") pascal QDErr NewTempScreenBuffer(const Rect *arg0, Boolean arg1, GDHandle *arg2, PixMapHandle *arg3) MAC_IMPORT(NewTempScreenBuffer) M68K_INLINE(0x203C, 0x000E, 0x0015, 0xAB1D);
 
-MAC_SINCE(0x0700, "7.0") pascal void GDeviceChanged(GDHandle arg0) M68K_INLINE(0x203C, 0x0004, 0x000A, 0xAB1D);
+MAC_SINCE(0x0700, "7.0") pascal void GDeviceChanged(GDHandle arg0) MAC_IMPORT(GDeviceChanged) M68K_INLINE(0x203C, 0x0004, 0x000A, 0xAB1D);
 
-MAC_SINCE(0x0700, "7.0") pascal void PortChanged(GrafPtr arg0) M68K_INLINE(0x203C, 0x0004, 0x0009, 0xAB1D);
+MAC_SINCE(0x0700, "7.0") pascal void PortChanged(GrafPtr arg0) MAC_IMPORT(PortChanged) M68K_INLINE(0x203C, 0x0004, 0x0009, 0xAB1D);
 
-MAC_SINCE(0x0700, "7.0") pascal void PixPatChanged(PixPatHandle arg0) M68K_INLINE(0x203C, 0x0004, 0x0008, 0xAB1D);
+MAC_SINCE(0x0700, "7.0") pascal void PixPatChanged(PixPatHandle arg0) MAC_IMPORT(PixPatChanged) M68K_INLINE(0x203C, 0x0004, 0x0008, 0xAB1D);
 
-MAC_SINCE(0x0700, "7.0") pascal void CTabChanged(CTabHandle arg0) M68K_INLINE(0x203C, 0x0004, 0x0007, 0xAB1D);
+MAC_SINCE(0x0700, "7.0") pascal void CTabChanged(CTabHandle arg0) MAC_IMPORT(CTabChanged) M68K_INLINE(0x203C, 0x0004, 0x0007, 0xAB1D);
 
-MAC_SINCE(0x0700, "7.0") pascal Boolean QDDone(GrafPtr arg0) M68K_INLINE(0x203C, 0x0004, 0x0013, 0xAB1D);
+MAC_SINCE(0x0700, "7.0") pascal Boolean QDDone(GrafPtr arg0) MAC_IMPORT(QDDone) M68K_INLINE(0x203C, 0x0004, 0x0013, 0xAB1D);
 
-MAC_SINCE(0x0700, "7.0") pascal LONGINT OffscreenVersion(void) M68K_INLINE(0x7014, 0xAB1D);
+MAC_SINCE(0x0700, "7.0") pascal LONGINT OffscreenVersion(void) MAC_IMPORT(OffscreenVersion) M68K_INLINE(0x7014, 0xAB1D);
 
 enum { _BitMapToRegion = 0xA8D7 };
-MAC_SINCE(0x0700, "7.0") pascal OSErr BitMapToRegion(RgnHandle arg0, const BitMap *arg1) M68K_INLINE(0xA8D7);
+MAC_SINCE(0x0700, "7.0") pascal OSErr BitMapToRegion(RgnHandle arg0, const BitMap *arg1) MAC_IMPORT(BitMapToRegion) M68K_INLINE(0xA8D7);
 
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal LONGINT Entry2Index(INTEGER arg0) M68K_INLINE(0x7000, 0xAAA2);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal LONGINT Entry2Index(INTEGER arg0) MAC_IMPORT(Entry2Index) M68K_INLINE(0x7000, 0xAAA2);
 
 enum { _SaveEntries = 0xAA49 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SaveEntries(CTabHandle arg0, CTabHandle arg1, ReqListRec *arg2) M68K_INLINE(0xAA49);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SaveEntries(CTabHandle arg0, CTabHandle arg1, ReqListRec *arg2) MAC_IMPORT(SaveEntries) M68K_INLINE(0xAA49);
 
 enum { _RestoreEntries = 0xAA4A };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void RestoreEntries(CTabHandle arg0, CTabHandle arg1, ReqListRec *arg2) M68K_INLINE(0xAA4A);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void RestoreEntries(CTabHandle arg0, CTabHandle arg1, ReqListRec *arg2) MAC_IMPORT(RestoreEntries) M68K_INLINE(0xAA4A);
 
-MAC_SINCE(0x0701, "7.0.1") pascal OSErr DisposePictInfo(PictInfoID arg0) M68K_INLINE(0x303C, 0x0206, 0xA831);
+MAC_SINCE(0x0701, "7.0.1") pascal OSErr DisposePictInfo(PictInfoID arg0) MAC_IMPORT(DisposePictInfo) M68K_INLINE(0x303C, 0x0206, 0xA831);
 #if OLDROUTINENAMES
 #define DisposPictInfo(arg0) DisposePictInfo(arg0)
 #endif
 
-MAC_SINCE(0x0701, "7.0.1") pascal OSErr RecordPictInfo(PictInfoID arg0, PicHandle arg1) M68K_INLINE(0x303C, 0x0403, 0xA831);
+MAC_SINCE(0x0701, "7.0.1") pascal OSErr RecordPictInfo(PictInfoID arg0, PicHandle arg1) MAC_IMPORT(RecordPictInfo) M68K_INLINE(0x303C, 0x0403, 0xA831);
 
-MAC_SINCE(0x0701, "7.0.1") pascal OSErr RecordPixMapInfo(PictInfoID arg0, PixMapHandle arg1) M68K_INLINE(0x303C, 0x0404, 0xA831);
+MAC_SINCE(0x0701, "7.0.1") pascal OSErr RecordPixMapInfo(PictInfoID arg0, PixMapHandle arg1) MAC_IMPORT(RecordPixMapInfo) M68K_INLINE(0x303C, 0x0404, 0xA831);
 
-MAC_SINCE(0x0701, "7.0.1") pascal OSErr RetrievePictInfo(PictInfoID arg0, PictInfo *arg1, int16_t arg2) M68K_INLINE(0x303C, 0x0505, 0xA831);
+MAC_SINCE(0x0701, "7.0.1") pascal OSErr RetrievePictInfo(PictInfoID arg0, PictInfo *arg1, int16_t arg2) MAC_IMPORT(RetrievePictInfo) M68K_INLINE(0x303C, 0x0505, 0xA831);
 
-MAC_SINCE(0x0701, "7.0.1") pascal OSErr NewPictInfo(PictInfoID *arg0, int16_t arg1, int16_t arg2, int16_t arg3, int16_t arg4) M68K_INLINE(0x303C, 0x0602, 0xA831);
+MAC_SINCE(0x0701, "7.0.1") pascal OSErr NewPictInfo(PictInfoID *arg0, int16_t arg1, int16_t arg2, int16_t arg3, int16_t arg4) MAC_IMPORT(NewPictInfo) M68K_INLINE(0x303C, 0x0602, 0xA831);
 
-MAC_SINCE(0x0701, "7.0.1") pascal OSErr GetPictInfo(PicHandle arg0, PictInfo *arg1, int16_t arg2, int16_t arg3, int16_t arg4, int16_t arg5) M68K_INLINE(0x303C, 0x0800, 0xA831);
+MAC_SINCE(0x0701, "7.0.1") pascal OSErr GetPictInfo(PicHandle arg0, PictInfo *arg1, int16_t arg2, int16_t arg3, int16_t arg4, int16_t arg5) MAC_IMPORT(GetPictInfo) M68K_INLINE(0x303C, 0x0800, 0xA831);
 
-MAC_SINCE(0x0701, "7.0.1") pascal OSErr GetPixMapInfo(PixMapHandle arg0, PictInfo *arg1, int16_t arg2, int16_t arg3, int16_t arg4, int16_t arg5) M68K_INLINE(0x303C, 0x0801, 0xA831);
+MAC_SINCE(0x0701, "7.0.1") pascal OSErr GetPixMapInfo(PixMapHandle arg0, PictInfo *arg1, int16_t arg2, int16_t arg3, int16_t arg4, int16_t arg5) MAC_IMPORT(GetPixMapInfo) M68K_INLINE(0x303C, 0x0801, 0xA831);
 
 enum { _OpenCPicture = 0xAA20 };
-MAC_SINCE(0x0700, "7.0") pascal PicHandle OpenCPicture(OpenCPicParams *newheaderp) M68K_INLINE(0xAA20);
+MAC_SINCE(0x0700, "7.0") pascal PicHandle OpenCPicture(OpenCPicParams *newheaderp) MAC_IMPORT(OpenCPicture) M68K_INLINE(0xAA20);
 
 enum { _SetPalette = 0xAA95 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetPalette(WindowPtr dstWindow, PaletteHandle srcPalette, Boolean cUpdates) M68K_INLINE(0xAA95);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetPalette(WindowPtr dstWindow, PaletteHandle srcPalette, Boolean cUpdates) MAC_IMPORT(SetPalette) M68K_INLINE(0xAA95);
 
 #if TARGET_CPU_68K
 static __inline__ void ScreenRes(INTEGER *arg0, INTEGER *arg1) {

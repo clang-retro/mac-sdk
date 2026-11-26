@@ -282,7 +282,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (CMErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr InitCM(void);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr InitCM(void) MAC_IMPORT(InitCM);
 #endif
 
 #if TARGET_CPU_68K
@@ -296,7 +296,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     { union { long l; long r; } _u; _u.l = _ret; return _u.r; }
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal long CMGetRefCon(ConnHandle hConn);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal long CMGetRefCon(ConnHandle hConn) MAC_IMPORT(CMGetRefCon);
 #endif
 
 #if TARGET_CPU_68K
@@ -310,7 +310,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMSetRefCon(ConnHandle hConn, long refCon);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMSetRefCon(ConnHandle hConn, long refCon) MAC_IMPORT(CMSetRefCon);
 #endif
 
 #if TARGET_CPU_68K
@@ -324,7 +324,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     { union { long l; long r; } _u; _u.l = _ret; return _u.r; }
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal long CMGetUserData(ConnHandle hConn);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal long CMGetUserData(ConnHandle hConn) MAC_IMPORT(CMGetUserData);
 #endif
 
 #if TARGET_CPU_68K
@@ -338,7 +338,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMSetUserData(ConnHandle hConn, long userData);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMSetUserData(ConnHandle hConn, long userData) MAC_IMPORT(CMSetUserData);
 #endif
 
 #if TARGET_CPU_68K
@@ -352,7 +352,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMGetToolName(INTEGER procID, Str255 name);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMGetToolName(INTEGER procID, Str255 name) MAC_IMPORT(CMGetToolName);
 #endif
 
 #if TARGET_CPU_68K
@@ -366,7 +366,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (INTEGER)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal INTEGER CMGetProcID(ConstStr255Param name);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal INTEGER CMGetProcID(ConstStr255Param name) MAC_IMPORT(CMGetProcID);
 #endif
 
 #if TARGET_CPU_68K
@@ -380,7 +380,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     { union { long l; ConnHandle r; } _u; _u.l = _ret; return _u.r; }
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal ConnHandle CMNew(INTEGER procID, CMRecFlags flags, ConstCMBufferSizesParam desiredSizes, long refCon, long userData);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal ConnHandle CMNew(INTEGER procID, CMRecFlags flags, ConstCMBufferSizesParam desiredSizes, long refCon, long userData) MAC_IMPORT(CMNew);
 #endif
 
 #if TARGET_CPU_68K
@@ -394,7 +394,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMDispose(ConnHandle hConn);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMDispose(ConnHandle hConn) MAC_IMPORT(CMDispose);
 #endif
 
 #if TARGET_CPU_68K
@@ -408,7 +408,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMIdle(ConnHandle hConn);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMIdle(ConnHandle hConn) MAC_IMPORT(CMIdle);
 #endif
 
 #if TARGET_CPU_68K
@@ -422,7 +422,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (CMErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMOpen(ConnHandle hConn, Boolean async, ConnectionCompletionUPP completor, long timeout);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMOpen(ConnHandle hConn, Boolean async, ConnectionCompletionUPP completor, long timeout) MAC_IMPORT(CMOpen);
 #endif
 
 #if TARGET_CPU_68K
@@ -436,7 +436,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (CMErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMListen(ConnHandle hConn, Boolean async, ConnectionCompletionUPP completor, long timeout);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMListen(ConnHandle hConn, Boolean async, ConnectionCompletionUPP completor, long timeout) MAC_IMPORT(CMListen);
 #endif
 
 #if TARGET_CPU_68K
@@ -450,7 +450,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (CMErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMAccept(ConnHandle hConn, Boolean accept);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMAccept(ConnHandle hConn, Boolean accept) MAC_IMPORT(CMAccept);
 #endif
 
 #if TARGET_CPU_68K
@@ -464,7 +464,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (CMErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMClose(ConnHandle hConn, Boolean async, ConnectionCompletionUPP completor, long timeout, Boolean now);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMClose(ConnHandle hConn, Boolean async, ConnectionCompletionUPP completor, long timeout, Boolean now) MAC_IMPORT(CMClose);
 #endif
 
 #if TARGET_CPU_68K
@@ -478,7 +478,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (CMErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMAbort(ConnHandle hConn);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMAbort(ConnHandle hConn) MAC_IMPORT(CMAbort);
 #endif
 
 #if TARGET_CPU_68K
@@ -492,7 +492,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (CMErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMStatus(ConnHandle hConn, CMBufferSizes sizes, CMStatFlags *flags);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMStatus(ConnHandle hConn, CMBufferSizes sizes, CMStatFlags *flags) MAC_IMPORT(CMStatus);
 #endif
 
 #if TARGET_CPU_68K
@@ -506,7 +506,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (CMErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMRead(ConnHandle hConn, void *theBuffer, long *toRead, CMChannel theChannel, Boolean async, ConnectionCompletionUPP completor, long timeout, CMFlags *flags);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMRead(ConnHandle hConn, void *theBuffer, long *toRead, CMChannel theChannel, Boolean async, ConnectionCompletionUPP completor, long timeout, CMFlags *flags) MAC_IMPORT(CMRead);
 #endif
 
 #if TARGET_CPU_68K
@@ -520,7 +520,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (CMErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMWrite(ConnHandle hConn, const void *theBuffer, long *toWrite, CMChannel theChannel, Boolean async, ConnectionCompletionUPP completor, long timeout, CMFlags flags);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMWrite(ConnHandle hConn, const void *theBuffer, long *toWrite, CMChannel theChannel, Boolean async, ConnectionCompletionUPP completor, long timeout, CMFlags flags) MAC_IMPORT(CMWrite);
 #endif
 
 #if TARGET_CPU_68K
@@ -534,7 +534,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMActivate(ConnHandle hConn, Boolean activate);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMActivate(ConnHandle hConn, Boolean activate) MAC_IMPORT(CMActivate);
 #endif
 
 #if TARGET_CPU_68K
@@ -548,7 +548,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMResume(ConnHandle hConn, Boolean resume);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMResume(ConnHandle hConn, Boolean resume) MAC_IMPORT(CMResume);
 #endif
 
 #if TARGET_CPU_68K
@@ -562,7 +562,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (Boolean)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Boolean CMMenu(ConnHandle hConn, INTEGER menuID, INTEGER item);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Boolean CMMenu(ConnHandle hConn, INTEGER menuID, INTEGER item) MAC_IMPORT(CMMenu);
 #endif
 
 #if TARGET_CPU_68K
@@ -576,7 +576,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMReset(ConnHandle hConn);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMReset(ConnHandle hConn) MAC_IMPORT(CMReset);
 #endif
 
 #if TARGET_CPU_68K
@@ -590,7 +590,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (Boolean)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Boolean CMValidate(ConnHandle hConn);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Boolean CMValidate(ConnHandle hConn) MAC_IMPORT(CMValidate);
 #endif
 
 #if TARGET_CPU_68K
@@ -604,7 +604,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMDefault(Ptr *theConfig, INTEGER procID, Boolean allocate);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMDefault(Ptr *theConfig, INTEGER procID, Boolean allocate) MAC_IMPORT(CMDefault);
 #endif
 
 #if TARGET_CPU_68K
@@ -618,7 +618,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     { union { long l; Handle r; } _u; _u.l = _ret; return _u.r; }
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Handle CMSetupPreflight(INTEGER procID, long *magicCookie);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Handle CMSetupPreflight(INTEGER procID, long *magicCookie) MAC_IMPORT(CMSetupPreflight);
 #endif
 
 #if TARGET_CPU_68K
@@ -632,7 +632,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (Boolean)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Boolean CMSetupFilter(INTEGER procID, const void *theConfig, INTEGER count, DialogPtr theDialog, EventRecord *theEvent, INTEGER *theItem, long *magicCookie);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Boolean CMSetupFilter(INTEGER procID, const void *theConfig, INTEGER count, DialogPtr theDialog, EventRecord *theEvent, INTEGER *theItem, long *magicCookie) MAC_IMPORT(CMSetupFilter);
 #endif
 
 #if TARGET_CPU_68K
@@ -646,7 +646,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMSetupSetup(INTEGER procID, const void *theConfig, INTEGER count, DialogPtr theDialog, long *magicCookie);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMSetupSetup(INTEGER procID, const void *theConfig, INTEGER count, DialogPtr theDialog, long *magicCookie) MAC_IMPORT(CMSetupSetup);
 #endif
 
 #if TARGET_CPU_68K
@@ -660,7 +660,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMSetupItem(INTEGER procID, const void *theConfig, INTEGER count, DialogPtr theDialog, INTEGER *theItem, long *magicCookie);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMSetupItem(INTEGER procID, const void *theConfig, INTEGER count, DialogPtr theDialog, INTEGER *theItem, long *magicCookie) MAC_IMPORT(CMSetupItem);
 #endif
 
 #if TARGET_CPU_68K
@@ -674,7 +674,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMSetupXCleanup(INTEGER procID, const void *theConfig, INTEGER count, DialogPtr theDialog, Boolean OKed, long *magicCookie);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMSetupXCleanup(INTEGER procID, const void *theConfig, INTEGER count, DialogPtr theDialog, Boolean OKed, long *magicCookie) MAC_IMPORT(CMSetupXCleanup);
 #endif
 
 #if TARGET_CPU_68K
@@ -688,7 +688,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMSetupPostflight(INTEGER procID);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMSetupPostflight(INTEGER procID) MAC_IMPORT(CMSetupPostflight);
 #endif
 
 #if TARGET_CPU_68K
@@ -702,7 +702,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     { union { long l; Ptr r; } _u; _u.l = _ret; return _u.r; }
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Ptr CMGetConfig(ConnHandle hConn);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Ptr CMGetConfig(ConnHandle hConn) MAC_IMPORT(CMGetConfig);
 #endif
 
 #if TARGET_CPU_68K
@@ -716,7 +716,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (INTEGER)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal INTEGER CMSetConfig(ConnHandle hConn, const void *thePtr);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal INTEGER CMSetConfig(ConnHandle hConn, const void *thePtr) MAC_IMPORT(CMSetConfig);
 #endif
 
 #if TARGET_CPU_68K
@@ -730,7 +730,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (OSErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal OSErr CMIntlToEnglish(ConnHandle hConn, const void *inputPtr, Ptr *outputPtr, INTEGER language);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal OSErr CMIntlToEnglish(ConnHandle hConn, const void *inputPtr, Ptr *outputPtr, INTEGER language) MAC_IMPORT(CMIntlToEnglish);
 #endif
 
 #if TARGET_CPU_68K
@@ -744,7 +744,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (OSErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal OSErr CMEnglishToIntl(ConnHandle hConn, const void *inputPtr, Ptr *outputPtr, INTEGER language);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal OSErr CMEnglishToIntl(ConnHandle hConn, const void *inputPtr, Ptr *outputPtr, INTEGER language) MAC_IMPORT(CMEnglishToIntl);
 #endif
 
 #if TARGET_CPU_68K
@@ -758,7 +758,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     { union { long l; long r; } _u; _u.l = _ret; return _u.r; }
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal long CMAddSearch(ConnHandle hConn, ConstStr255Param theString, CMSearchFlags flags, ConnectionSearchCallBackUPP callBack);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal long CMAddSearch(ConnHandle hConn, ConstStr255Param theString, CMSearchFlags flags, ConnectionSearchCallBackUPP callBack) MAC_IMPORT(CMAddSearch);
 #endif
 
 #if TARGET_CPU_68K
@@ -772,7 +772,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMRemoveSearch(ConnHandle hConn, long refnum);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMRemoveSearch(ConnHandle hConn, long refnum) MAC_IMPORT(CMRemoveSearch);
 #endif
 
 #if TARGET_CPU_68K
@@ -786,7 +786,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMClearSearch(ConnHandle hConn);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMClearSearch(ConnHandle hConn) MAC_IMPORT(CMClearSearch);
 #endif
 
 #if TARGET_CPU_68K
@@ -800,7 +800,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (CMErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMGetConnEnvirons(ConnHandle hConn, ConnEnvironRec *theEnvirons);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMGetConnEnvirons(ConnHandle hConn, ConnEnvironRec *theEnvirons) MAC_IMPORT(CMGetConnEnvirons);
 #endif
 
 #if TARGET_CPU_68K
@@ -814,7 +814,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (INTEGER)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal INTEGER CMChoose(ConnHandle *hConn, Point where, ConnectionChooseIdleUPP idle);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal INTEGER CMChoose(ConnHandle *hConn, Point where, ConnectionChooseIdleUPP idle) MAC_IMPORT(CMChoose);
 #endif
 
 #if TARGET_CPU_68K
@@ -828,7 +828,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMEvent(ConnHandle hConn, const EventRecord *theEvent);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMEvent(ConnHandle hConn, const EventRecord *theEvent) MAC_IMPORT(CMEvent);
 #endif
 
 #if TARGET_CPU_68K
@@ -842,7 +842,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMGetErrorString(ConnHandle hConn, INTEGER id, Str255 errMsg);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMGetErrorString(ConnHandle hConn, INTEGER id, Str255 errMsg) MAC_IMPORT(CMGetErrorString);
 #endif
 
 #if TARGET_CPU_68K
@@ -856,7 +856,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (CMErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMNewIOPB(ConnHandle hConn, CMIOPBPtr *theIOPB);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMNewIOPB(ConnHandle hConn, CMIOPBPtr *theIOPB) MAC_IMPORT(CMNewIOPB);
 #endif
 
 #if TARGET_CPU_68K
@@ -870,7 +870,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (CMErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMDisposeIOPB(ConnHandle hConn, CMIOPBPtr theIOPB);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMDisposeIOPB(ConnHandle hConn, CMIOPBPtr theIOPB) MAC_IMPORT(CMDisposeIOPB);
 #endif
 
 #if TARGET_CPU_68K
@@ -884,7 +884,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (CMErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMPBRead(ConnHandle hConn, CMIOPBPtr theIOPB, Boolean async);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMPBRead(ConnHandle hConn, CMIOPBPtr theIOPB, Boolean async) MAC_IMPORT(CMPBRead);
 #endif
 
 #if TARGET_CPU_68K
@@ -898,7 +898,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (CMErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMPBWrite(ConnHandle hConn, CMIOPBPtr theIOPB, Boolean async);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMPBWrite(ConnHandle hConn, CMIOPBPtr theIOPB, Boolean async) MAC_IMPORT(CMPBWrite);
 #endif
 
 #if TARGET_CPU_68K
@@ -912,7 +912,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (CMErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMPBIOKill(ConnHandle hConn, CMIOPBPtr theIOPB);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMPBIOKill(ConnHandle hConn, CMIOPBPtr theIOPB) MAC_IMPORT(CMPBIOKill);
 #endif
 
 #if TARGET_CPU_68K
@@ -926,7 +926,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMBreak(ConnHandle hConn, long duration, Boolean async, ConnectionCompletionUPP completor);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CMBreak(ConnHandle hConn, long duration, Boolean async, ConnectionCompletionUPP completor) MAC_IMPORT(CMBreak);
 #endif
 
 #if TARGET_CPU_68K
@@ -940,7 +940,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (CMErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMIOKill(ConnHandle hConn, INTEGER which);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CMErr CMIOKill(ConnHandle hConn, INTEGER which) MAC_IMPORT(CMIOKill);
 #endif
 
 #if TARGET_CPU_68K
@@ -954,7 +954,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     { union { long l; Handle r; } _u; _u.l = _ret; return _u.r; }
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Handle CMGetVersion(ConnHandle hConn);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Handle CMGetVersion(ConnHandle hConn) MAC_IMPORT(CMGetVersion);
 #endif
 
 #if TARGET_CPU_68K
@@ -968,7 +968,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (INTEGER)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal INTEGER CMGetCMVersion(void);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal INTEGER CMGetCMVersion(void) MAC_IMPORT(CMGetCMVersion);
 #endif
 
 #ifdef __cplusplus

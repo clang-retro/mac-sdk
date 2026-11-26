@@ -84,7 +84,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (CRMErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CRMErr InitCRM(void);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CRMErr InitCRM(void) MAC_IMPORT(InitCRM);
 #endif
 
 #if TARGET_CPU_68K
@@ -98,7 +98,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     { union { long l; QHdrPtr r; } _u; _u.l = _ret; return _u.r; }
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal QHdrPtr CRMGetHeader(void);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal QHdrPtr CRMGetHeader(void) MAC_IMPORT(CRMGetHeader);
 #endif
 
 #if TARGET_CPU_68K
@@ -112,7 +112,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CRMInstall(QElemPtr crmReqPtr);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CRMInstall(QElemPtr crmReqPtr) MAC_IMPORT(CRMInstall);
 #endif
 
 #if TARGET_CPU_68K
@@ -126,7 +126,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (OSErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal OSErr CRMRemove(QElemPtr crmReqPtr);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal OSErr CRMRemove(QElemPtr crmReqPtr) MAC_IMPORT(CRMRemove);
 #endif
 
 #if TARGET_CPU_68K
@@ -140,7 +140,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     { union { long l; QElemPtr r; } _u; _u.l = _ret; return _u.r; }
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal QElemPtr CRMSearch(QElemPtr crmReqPtr);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal QElemPtr CRMSearch(QElemPtr crmReqPtr) MAC_IMPORT(CRMSearch);
 #endif
 
 #if TARGET_CPU_68K
@@ -154,7 +154,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (INTEGER)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal INTEGER CRMGetCRMVersion(void);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal INTEGER CRMGetCRMVersion(void) MAC_IMPORT(CRMGetCRMVersion);
 #endif
 
 #if TARGET_CPU_68K
@@ -168,7 +168,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     { union { long l; Handle r; } _u; _u.l = _ret; return _u.r; }
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Handle CRMGetResource(ResType theType, INTEGER theID);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Handle CRMGetResource(ResType theType, INTEGER theID) MAC_IMPORT(CRMGetResource);
 #endif
 
 #if TARGET_CPU_68K
@@ -182,7 +182,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     { union { long l; Handle r; } _u; _u.l = _ret; return _u.r; }
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Handle CRMGet1Resource(ResType theType, INTEGER theID);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Handle CRMGet1Resource(ResType theType, INTEGER theID) MAC_IMPORT(CRMGet1Resource);
 #endif
 
 #if TARGET_CPU_68K
@@ -196,7 +196,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     { union { long l; Handle r; } _u; _u.l = _ret; return _u.r; }
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Handle CRMGetIndResource(ResType theType, INTEGER index);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Handle CRMGetIndResource(ResType theType, INTEGER index) MAC_IMPORT(CRMGetIndResource);
 #endif
 
 #if TARGET_CPU_68K
@@ -210,7 +210,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     { union { long l; Handle r; } _u; _u.l = _ret; return _u.r; }
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Handle CRMGet1IndResource(ResType theType, INTEGER index);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Handle CRMGet1IndResource(ResType theType, INTEGER index) MAC_IMPORT(CRMGet1IndResource);
 #endif
 
 #if TARGET_CPU_68K
@@ -224,7 +224,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     { union { long l; Handle r; } _u; _u.l = _ret; return _u.r; }
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Handle CRMGetNamedResource(ResType theType, ConstStr255Param name);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Handle CRMGetNamedResource(ResType theType, ConstStr255Param name) MAC_IMPORT(CRMGetNamedResource);
 #endif
 
 #if TARGET_CPU_68K
@@ -238,7 +238,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     { union { long l; Handle r; } _u; _u.l = _ret; return _u.r; }
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Handle CRMGet1NamedResource(ResType theType, ConstStr255Param name);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Handle CRMGet1NamedResource(ResType theType, ConstStr255Param name) MAC_IMPORT(CRMGet1NamedResource);
 #endif
 
 #if TARGET_CPU_68K
@@ -252,7 +252,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CRMReleaseResource(Handle theHandle);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CRMReleaseResource(Handle theHandle) MAC_IMPORT(CRMReleaseResource);
 #endif
 
 #if TARGET_CPU_68K
@@ -266,7 +266,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     { union { long l; Handle r; } _u; _u.l = _ret; return _u.r; }
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Handle CRMGetToolResource(INTEGER procID, ResType theType, INTEGER theID);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Handle CRMGetToolResource(INTEGER procID, ResType theType, INTEGER theID) MAC_IMPORT(CRMGetToolResource);
 #endif
 
 #if TARGET_CPU_68K
@@ -280,7 +280,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     { union { long l; Handle r; } _u; _u.l = _ret; return _u.r; }
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Handle CRMGetToolNamedResource(INTEGER procID, ResType theType, ConstStr255Param name);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Handle CRMGetToolNamedResource(INTEGER procID, ResType theType, ConstStr255Param name) MAC_IMPORT(CRMGetToolNamedResource);
 #endif
 
 #if TARGET_CPU_68K
@@ -294,7 +294,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     (void)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CRMReleaseToolResource(INTEGER procID, Handle theHandle);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal void CRMReleaseToolResource(INTEGER procID, Handle theHandle) MAC_IMPORT(CRMReleaseToolResource);
 #endif
 
 #if TARGET_CPU_68K
@@ -308,7 +308,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     { union { long l; long r; } _u; _u.l = _ret; return _u.r; }
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal long CRMGetIndex(Handle theHandle);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal long CRMGetIndex(Handle theHandle) MAC_IMPORT(CRMGetIndex);
 #endif
 
 #if TARGET_CPU_68K
@@ -322,7 +322,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (INTEGER)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal INTEGER CRMLocalToRealID(ResType bundleType, INTEGER toolID, ResType theType, INTEGER localID);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal INTEGER CRMLocalToRealID(ResType bundleType, INTEGER toolID, ResType theType, INTEGER localID) MAC_IMPORT(CRMLocalToRealID);
 #endif
 
 #if TARGET_CPU_68K
@@ -336,7 +336,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (INTEGER)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal INTEGER CRMRealToLocalID(ResType bundleType, INTEGER toolID, ResType theType, INTEGER realID);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal INTEGER CRMRealToLocalID(ResType bundleType, INTEGER toolID, ResType theType, INTEGER realID) MAC_IMPORT(CRMRealToLocalID);
 #endif
 
 #if TARGET_CPU_68K
@@ -350,7 +350,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (OSErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal OSErr CRMGetIndToolName(OSType bundleType, INTEGER index, Str255 toolName);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal OSErr CRMGetIndToolName(OSType bundleType, INTEGER index, Str255 toolName) MAC_IMPORT(CRMGetIndToolName);
 #endif
 
 #if TARGET_CPU_68K
@@ -364,7 +364,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (OSErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal OSErr CRMFindCommunications(INTEGER *vRefNum, long *dirID);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal OSErr CRMFindCommunications(INTEGER *vRefNum, long *dirID) MAC_IMPORT(CRMFindCommunications);
 #endif
 
 #if TARGET_CPU_68K
@@ -378,7 +378,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (Boolean)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Boolean CRMIsDriverOpen(ConstStr255Param driverName);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal Boolean CRMIsDriverOpen(ConstStr255Param driverName) MAC_IMPORT(CRMIsDriverOpen);
 #endif
 
 #if TARGET_CPU_68K
@@ -392,7 +392,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (CRMErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CRMErr CRMParseCAPSResource(Handle theHandle, ResType selector, unsigned long *value);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal CRMErr CRMParseCAPSResource(Handle theHandle, ResType selector, unsigned long *value) MAC_IMPORT(CRMParseCAPSResource);
 #endif
 
 #if TARGET_CPU_68K
@@ -406,7 +406,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (OSErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal OSErr CRMReserveRF(INTEGER refNum);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal OSErr CRMReserveRF(INTEGER refNum) MAC_IMPORT(CRMReserveRF);
 #endif
 
 #if TARGET_CPU_68K
@@ -420,7 +420,7 @@ MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") static __inline__ __attribute__((__
     return (OSErr)_ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal OSErr CRMReleaseRF(INTEGER refNum);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ctbv'") pascal OSErr CRMReleaseRF(INTEGER refNum) MAC_IMPORT(CRMReleaseRF);
 #endif
 
 #ifdef __cplusplus

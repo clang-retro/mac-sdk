@@ -139,67 +139,67 @@ enum {
 
 enum { _Pack6 = 0xA9ED };
 
-pascal void IUDatePString(LONGINT date, DateForm form, StringPtr p, Handle h) M68K_INLINE(0x3F3C, 0x000E, 0xA9ED);
+pascal void IUDatePString(LONGINT date, DateForm form, StringPtr p, Handle h) MAC_IMPORT(IUDatePString) M68K_INLINE(0x3F3C, 0x000E, 0xA9ED);
 
-pascal Handle GetIntlResource(INTEGER id) M68K_INLINE(0x3F3C, 0x0006, 0xA9ED);
+pascal Handle GetIntlResource(INTEGER id) MAC_IMPORT(GetIntlResource) M68K_INLINE(0x3F3C, 0x0006, 0xA9ED);
 #if OLDROUTINENAMES
 #define IUGetIntl(id) GetIntlResource(id)
 #endif
 
-pascal void IUDateString(LONGINT date, DateForm form, StringPtr p) M68K_INLINE(0x3F3C, 0x0000, 0xA9ED);
+pascal void IUDateString(LONGINT date, DateForm form, StringPtr p) MAC_IMPORT(IUDateString) M68K_INLINE(0x3F3C, 0x0000, 0xA9ED);
 
-pascal void IUTimePString(LONGINT date, Boolean secs, StringPtr p, Handle h) M68K_INLINE(0x3F3C, 0x0010, 0xA9ED);
+pascal void IUTimePString(LONGINT date, Boolean secs, StringPtr p, Handle h) MAC_IMPORT(IUTimePString) M68K_INLINE(0x3F3C, 0x0010, 0xA9ED);
 
-pascal void IUTimeString(LONGINT date, Boolean secs, StringPtr p) M68K_INLINE(0x3F3C, 0x0002, 0xA9ED);
+pascal void IUTimeString(LONGINT date, Boolean secs, StringPtr p) MAC_IMPORT(IUTimeString) M68K_INLINE(0x3F3C, 0x0002, 0xA9ED);
 
-pascal Boolean IsMetric(void) M68K_INLINE(0x3F3C, 0x0004, 0xA9ED);
+pascal Boolean IsMetric(void) MAC_IMPORT(IsMetric) M68K_INLINE(0x3F3C, 0x0004, 0xA9ED);
 #if OLDROUTINENAMES
 #define IUMetric() IsMetric()
 #endif
 
-pascal void SetIntlResource(INTEGER rn, INTEGER id, Handle newh) M68K_INLINE(0x3F3C, 0x0008, 0xA9ED);
+pascal void SetIntlResource(INTEGER rn, INTEGER id, Handle newh) MAC_IMPORT(SetIntlResource) M68K_INLINE(0x3F3C, 0x0008, 0xA9ED);
 #if OLDROUTINENAMES
 #define IUSetIntl(rn, id, newh) SetIntlResource(rn, id, newh)
 #endif
 
-pascal INTEGER IUMagString(Ptr ptr1, Ptr ptr2, INTEGER len1, INTEGER len2) M68K_INLINE(0x3F3C, 0x000A, 0xA9ED);
+pascal INTEGER IUMagString(Ptr ptr1, Ptr ptr2, INTEGER len1, INTEGER len2) MAC_IMPORT(IUMagString) M68K_INLINE(0x3F3C, 0x000A, 0xA9ED);
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER IUCompString(ConstStringPtr str1, ConstStringPtr str2);
 #else
-pascal INTEGER IUCompString(ConstStringPtr str1, ConstStringPtr str2);
+pascal INTEGER IUCompString(ConstStringPtr str1, ConstStringPtr str2) MAC_IMPORT(IUCompString);
 #endif
 
-pascal INTEGER IUMagIDString(Ptr ptr1, Ptr ptr2, INTEGER len1, INTEGER len2) M68K_INLINE(0x3F3C, 0x000C, 0xA9ED);
+pascal INTEGER IUMagIDString(Ptr ptr1, Ptr ptr2, INTEGER len1, INTEGER len2) MAC_IMPORT(IUMagIDString) M68K_INLINE(0x3F3C, 0x000C, 0xA9ED);
 
 #if TARGET_CPU_68K
 static __inline__ INTEGER IUEqualString(ConstStringPtr str1, ConstStringPtr str2);
 #else
-pascal INTEGER IUEqualString(ConstStringPtr str1, ConstStringPtr str2);
+pascal INTEGER IUEqualString(ConstStringPtr str1, ConstStringPtr str2) MAC_IMPORT(IUEqualString);
 #endif
 
-pascal void IUMystery(Ptr arg1, Ptr arg2, INTEGER arg3, INTEGER arg4) M68K_INLINE(0x3F3C, 0x0012, 0xA9ED);
+pascal void IUMystery(Ptr arg1, Ptr arg2, INTEGER arg3, INTEGER arg4) MAC_IMPORT(IUMystery) M68K_INLINE(0x3F3C, 0x0012, 0xA9ED);
 
-pascal void IULDateString(LongDateTime *datetimep, DateForm longflag, Str255 result, Handle intlhand) M68K_INLINE(0x3F3C, 0x0014, 0xA9ED);
+pascal void IULDateString(LongDateTime *datetimep, DateForm longflag, Str255 result, Handle intlhand) MAC_IMPORT(IULDateString) M68K_INLINE(0x3F3C, 0x0014, 0xA9ED);
 
-pascal void IULTimeString(LongDateTime *datetimep, Boolean wantseconds, Str255 result, Handle intlhand) M68K_INLINE(0x3F3C, 0x0016, 0xA9ED);
+pascal void IULTimeString(LongDateTime *datetimep, Boolean wantseconds, Str255 result, Handle intlhand) MAC_IMPORT(IULTimeString) M68K_INLINE(0x3F3C, 0x0016, 0xA9ED);
 
-pascal void ClearIntlResourceCache(void) M68K_INLINE(0x3F3C, 0x0018, 0xA9ED);
+pascal void ClearIntlResourceCache(void) MAC_IMPORT(ClearIntlResourceCache) M68K_INLINE(0x3F3C, 0x0018, 0xA9ED);
 #if OLDROUTINENAMES
 #define IUClearCache() ClearIntlResourceCache()
 #endif
 
-pascal INTEGER IUMagPString(Ptr ptra, Ptr ptrb, INTEGER lena, INTEGER lenb, Handle itl2hand) M68K_INLINE(0x3F3C, 0x001A, 0xA9ED);
+pascal INTEGER IUMagPString(Ptr ptra, Ptr ptrb, INTEGER lena, INTEGER lenb, Handle itl2hand) MAC_IMPORT(IUMagPString) M68K_INLINE(0x3F3C, 0x001A, 0xA9ED);
 
-pascal INTEGER IUMagIDPString(Ptr ptra, Ptr ptrb, INTEGER lena, INTEGER lenb, Handle itl2hand) M68K_INLINE(0x3F3C, 0x001C, 0xA9ED);
+pascal INTEGER IUMagIDPString(Ptr ptra, Ptr ptrb, INTEGER lena, INTEGER lenb, Handle itl2hand) MAC_IMPORT(IUMagIDPString) M68K_INLINE(0x3F3C, 0x001C, 0xA9ED);
 
-pascal INTEGER IUScriptOrder(ScriptCode script1, ScriptCode script2) M68K_INLINE(0x3F3C, 0x001E, 0xA9ED);
+pascal INTEGER IUScriptOrder(ScriptCode script1, ScriptCode script2) MAC_IMPORT(IUScriptOrder) M68K_INLINE(0x3F3C, 0x001E, 0xA9ED);
 
-pascal INTEGER IULangOrder(LangCode l1, LangCode l2) M68K_INLINE(0x3F3C, 0x0020, 0xA9ED);
+pascal INTEGER IULangOrder(LangCode l1, LangCode l2) MAC_IMPORT(IULangOrder) M68K_INLINE(0x3F3C, 0x0020, 0xA9ED);
 
-pascal INTEGER IUTextOrder(Ptr ptra, Ptr ptrb, INTEGER lena, INTEGER lenb, ScriptCode scripta, ScriptCode bscript, LangCode langa, LangCode langb) M68K_INLINE(0x3F3C, 0x0022, 0xA9ED);
+pascal INTEGER IUTextOrder(Ptr ptra, Ptr ptrb, INTEGER lena, INTEGER lenb, ScriptCode scripta, ScriptCode bscript, LangCode langa, LangCode langb) MAC_IMPORT(IUTextOrder) M68K_INLINE(0x3F3C, 0x0022, 0xA9ED);
 
-pascal void GetIntlResourceTable(ScriptCode script, INTEGER tablecode, Handle *itlhandlep, LONGINT *offsetp, LONGINT *lengthp) M68K_INLINE(0x3F3C, 0x0024, 0xA9ED);
+pascal void GetIntlResourceTable(ScriptCode script, INTEGER tablecode, Handle *itlhandlep, LONGINT *offsetp, LONGINT *lengthp) MAC_IMPORT(GetIntlResourceTable) M68K_INLINE(0x3F3C, 0x0024, 0xA9ED);
 #if OLDROUTINENAMES
 #define IUGetItlTable(script, tablecode, itlhandlep, offsetp, lengthp) GetIntlResourceTable(script, tablecode, itlhandlep, offsetp, lengthp)
 #endif

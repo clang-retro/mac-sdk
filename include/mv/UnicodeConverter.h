@@ -94,111 +94,111 @@ typedef UnicodeToTextFallbackProcPtr UnicodeToTextFallbackUPP;
 
 // Unicode Converter
 #if !TARGET_CPU_68K
-pascal OSStatus CreateTextToUnicodeInfo(ConstUnicodeMappingPtr iUnicodeMapping, TextToUnicodeInfo *oTextToUnicodeInfo);
+pascal OSStatus CreateTextToUnicodeInfo(ConstUnicodeMappingPtr iUnicodeMapping, TextToUnicodeInfo *oTextToUnicodeInfo) MAC_IMPORT(CreateTextToUnicodeInfo);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus CreateTextToUnicodeInfoByEncoding(TextEncoding iEncoding, TextToUnicodeInfo *oTextToUnicodeInfo);
+pascal OSStatus CreateTextToUnicodeInfoByEncoding(TextEncoding iEncoding, TextToUnicodeInfo *oTextToUnicodeInfo) MAC_IMPORT(CreateTextToUnicodeInfoByEncoding);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus CreateUnicodeToTextInfo(ConstUnicodeMappingPtr iUnicodeMapping, UnicodeToTextInfo *oUnicodeToTextInfo);
+pascal OSStatus CreateUnicodeToTextInfo(ConstUnicodeMappingPtr iUnicodeMapping, UnicodeToTextInfo *oUnicodeToTextInfo) MAC_IMPORT(CreateUnicodeToTextInfo);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus CreateUnicodeToTextInfoByEncoding(TextEncoding iEncoding, UnicodeToTextInfo *oUnicodeToTextInfo);
+pascal OSStatus CreateUnicodeToTextInfoByEncoding(TextEncoding iEncoding, UnicodeToTextInfo *oUnicodeToTextInfo) MAC_IMPORT(CreateUnicodeToTextInfoByEncoding);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus CreateUnicodeToTextRunInfo(ItemCount iNumberOfMappings, const UnicodeMapping *iUnicodeMappings, UnicodeToTextRunInfo *oUnicodeToTextInfo);
+pascal OSStatus CreateUnicodeToTextRunInfo(ItemCount iNumberOfMappings, const UnicodeMapping *iUnicodeMappings, UnicodeToTextRunInfo *oUnicodeToTextInfo) MAC_IMPORT(CreateUnicodeToTextRunInfo);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus CreateUnicodeToTextRunInfoByEncoding(ItemCount iNumberOfEncodings, const TextEncoding *iEncodings, UnicodeToTextRunInfo *oUnicodeToTextInfo);
+pascal OSStatus CreateUnicodeToTextRunInfoByEncoding(ItemCount iNumberOfEncodings, const TextEncoding *iEncodings, UnicodeToTextRunInfo *oUnicodeToTextInfo) MAC_IMPORT(CreateUnicodeToTextRunInfoByEncoding);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus CreateUnicodeToTextRunInfoByScriptCode(ItemCount iNumberOfScriptCodes, const ScriptCode *iScripts, UnicodeToTextRunInfo *oUnicodeToTextInfo);
+pascal OSStatus CreateUnicodeToTextRunInfoByScriptCode(ItemCount iNumberOfScriptCodes, const ScriptCode *iScripts, UnicodeToTextRunInfo *oUnicodeToTextInfo) MAC_IMPORT(CreateUnicodeToTextRunInfoByScriptCode);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus ChangeTextToUnicodeInfo(TextToUnicodeInfo ioTextToUnicodeInfo, ConstUnicodeMappingPtr iUnicodeMapping);
+pascal OSStatus ChangeTextToUnicodeInfo(TextToUnicodeInfo ioTextToUnicodeInfo, ConstUnicodeMappingPtr iUnicodeMapping) MAC_IMPORT(ChangeTextToUnicodeInfo);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus ChangeUnicodeToTextInfo(UnicodeToTextInfo ioUnicodeToTextInfo, ConstUnicodeMappingPtr iUnicodeMapping);
+pascal OSStatus ChangeUnicodeToTextInfo(UnicodeToTextInfo ioUnicodeToTextInfo, ConstUnicodeMappingPtr iUnicodeMapping) MAC_IMPORT(ChangeUnicodeToTextInfo);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus DisposeTextToUnicodeInfo(TextToUnicodeInfo *ioTextToUnicodeInfo);
+pascal OSStatus DisposeTextToUnicodeInfo(TextToUnicodeInfo *ioTextToUnicodeInfo) MAC_IMPORT(DisposeTextToUnicodeInfo);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus DisposeUnicodeToTextInfo(UnicodeToTextInfo *ioUnicodeToTextInfo);
+pascal OSStatus DisposeUnicodeToTextInfo(UnicodeToTextInfo *ioUnicodeToTextInfo) MAC_IMPORT(DisposeUnicodeToTextInfo);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus DisposeUnicodeToTextRunInfo(UnicodeToTextRunInfo *ioUnicodeToTextRunInfo);
+pascal OSStatus DisposeUnicodeToTextRunInfo(UnicodeToTextRunInfo *ioUnicodeToTextRunInfo) MAC_IMPORT(DisposeUnicodeToTextRunInfo);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus ConvertFromTextToUnicode(TextToUnicodeInfo iTextToUnicodeInfo, ByteCount iSourceLen, ConstLogicalAddress iSourceStr, OptionBits iControlFlags, ItemCount iOffsetCount, ByteOffset *iOffsetArray, ItemCount *oOffsetCount, ByteOffset *oOffsetArray, ByteCount iOutputBufLen, ByteCount *oSourceRead, ByteCount *oUnicodeLen, UniChar *oUnicodeStr);
+pascal OSStatus ConvertFromTextToUnicode(TextToUnicodeInfo iTextToUnicodeInfo, ByteCount iSourceLen, ConstLogicalAddress iSourceStr, OptionBits iControlFlags, ItemCount iOffsetCount, ByteOffset *iOffsetArray, ItemCount *oOffsetCount, ByteOffset *oOffsetArray, ByteCount iOutputBufLen, ByteCount *oSourceRead, ByteCount *oUnicodeLen, UniChar *oUnicodeStr) MAC_IMPORT(ConvertFromTextToUnicode);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus ConvertFromUnicodeToText(UnicodeToTextInfo iUnicodeToTextInfo, ByteCount iUnicodeLen, const UniChar *iUnicodeStr, OptionBits iControlFlags, ItemCount iOffsetCount, ByteOffset *iOffsetArray, ItemCount *oOffsetCount, ByteOffset *oOffsetArray, ByteCount iOutputBufLen, ByteCount *oInputRead, ByteCount *oOutputLen, LogicalAddress oOutputStr);
+pascal OSStatus ConvertFromUnicodeToText(UnicodeToTextInfo iUnicodeToTextInfo, ByteCount iUnicodeLen, const UniChar *iUnicodeStr, OptionBits iControlFlags, ItemCount iOffsetCount, ByteOffset *iOffsetArray, ItemCount *oOffsetCount, ByteOffset *oOffsetArray, ByteCount iOutputBufLen, ByteCount *oInputRead, ByteCount *oOutputLen, LogicalAddress oOutputStr) MAC_IMPORT(ConvertFromUnicodeToText);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus ConvertFromUnicodeToTextRun(UnicodeToTextRunInfo iUnicodeToTextInfo, ByteCount iUnicodeLen, const UniChar *iUnicodeStr, OptionBits iControlFlags, ItemCount iOffsetCount, ByteOffset *iOffsetArray, ItemCount *oOffsetCount, ByteOffset *oOffsetArray, ByteCount iOutputBufLen, ByteCount *oInputRead, ByteCount *oOutputLen, LogicalAddress oOutputStr, ItemCount iEncodingRunBufLen, ItemCount *oEncodingRunOutLen, TextEncodingRun *oEncodingRuns);
+pascal OSStatus ConvertFromUnicodeToTextRun(UnicodeToTextRunInfo iUnicodeToTextInfo, ByteCount iUnicodeLen, const UniChar *iUnicodeStr, OptionBits iControlFlags, ItemCount iOffsetCount, ByteOffset *iOffsetArray, ItemCount *oOffsetCount, ByteOffset *oOffsetArray, ByteCount iOutputBufLen, ByteCount *oInputRead, ByteCount *oOutputLen, LogicalAddress oOutputStr, ItemCount iEncodingRunBufLen, ItemCount *oEncodingRunOutLen, TextEncodingRun *oEncodingRuns) MAC_IMPORT(ConvertFromUnicodeToTextRun);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus ConvertFromUnicodeToScriptCodeRun(UnicodeToTextRunInfo iUnicodeToTextInfo, ByteCount iUnicodeLen, const UniChar *iUnicodeStr, OptionBits iFlags, ItemCount iOffsetCount, ByteOffset *iOffsetArray, ItemCount *oOffsetCount, ByteOffset *oOffsetArray, ByteCount iOutputBufLen, ByteCount *oInputRead, ByteCount *oOutputLen, LogicalAddress oOutputStr, ItemCount iScriptRunBufLen, ItemCount *oScriptRunOutLen, ScriptCodeRun *oScriptCodeRuns);
+pascal OSStatus ConvertFromUnicodeToScriptCodeRun(UnicodeToTextRunInfo iUnicodeToTextInfo, ByteCount iUnicodeLen, const UniChar *iUnicodeStr, OptionBits iFlags, ItemCount iOffsetCount, ByteOffset *iOffsetArray, ItemCount *oOffsetCount, ByteOffset *oOffsetArray, ByteCount iOutputBufLen, ByteCount *oInputRead, ByteCount *oOutputLen, LogicalAddress oOutputStr, ItemCount iScriptRunBufLen, ItemCount *oScriptRunOutLen, ScriptCodeRun *oScriptCodeRuns) MAC_IMPORT(ConvertFromUnicodeToScriptCodeRun);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TruncateForTextToUnicode(ConstTextToUnicodeInfo iTextToUnicodeInfo, ByteCount iSourceLen, ConstLogicalAddress iSourceStr, ByteCount iMaxLen, ByteCount *oTruncatedLen);
+pascal OSStatus TruncateForTextToUnicode(ConstTextToUnicodeInfo iTextToUnicodeInfo, ByteCount iSourceLen, ConstLogicalAddress iSourceStr, ByteCount iMaxLen, ByteCount *oTruncatedLen) MAC_IMPORT(TruncateForTextToUnicode);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus TruncateForUnicodeToText(ConstUnicodeToTextInfo iUnicodeToTextInfo, ByteCount iSourceLen, const UniChar *iSourceStr, OptionBits iControlFlags, ByteCount iMaxLen, ByteCount *oTruncatedLen);
+pascal OSStatus TruncateForUnicodeToText(ConstUnicodeToTextInfo iUnicodeToTextInfo, ByteCount iSourceLen, const UniChar *iSourceStr, OptionBits iControlFlags, ByteCount iMaxLen, ByteCount *oTruncatedLen) MAC_IMPORT(TruncateForUnicodeToText);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus ConvertFromPStringToUnicode(TextToUnicodeInfo iTextToUnicodeInfo, ConstStr255Param iPascalStr, ByteCount iOutputBufLen, ByteCount *oUnicodeLen, UniChar *oUnicodeStr);
+pascal OSStatus ConvertFromPStringToUnicode(TextToUnicodeInfo iTextToUnicodeInfo, ConstStr255Param iPascalStr, ByteCount iOutputBufLen, ByteCount *oUnicodeLen, UniChar *oUnicodeStr) MAC_IMPORT(ConvertFromPStringToUnicode);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus ConvertFromUnicodeToPString(UnicodeToTextInfo iUnicodeToTextInfo, ByteCount iUnicodeLen, const UniChar *iUnicodeStr, StringPtr oPascalStr);
+pascal OSStatus ConvertFromUnicodeToPString(UnicodeToTextInfo iUnicodeToTextInfo, ByteCount iUnicodeLen, const UniChar *iUnicodeStr, StringPtr oPascalStr) MAC_IMPORT(ConvertFromUnicodeToPString);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus CountUnicodeMappings(OptionBits iFilter, ConstUnicodeMappingPtr iFindMapping, ItemCount *oActualCount);
+pascal OSStatus CountUnicodeMappings(OptionBits iFilter, ConstUnicodeMappingPtr iFindMapping, ItemCount *oActualCount) MAC_IMPORT(CountUnicodeMappings);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus QueryUnicodeMappings(OptionBits iFilter, ConstUnicodeMappingPtr iFindMapping, ItemCount iMaxCount, ItemCount *oActualCount, UnicodeMapping *oReturnedMappings);
+pascal OSStatus QueryUnicodeMappings(OptionBits iFilter, ConstUnicodeMappingPtr iFindMapping, ItemCount iMaxCount, ItemCount *oActualCount, UnicodeMapping *oReturnedMappings) MAC_IMPORT(QueryUnicodeMappings);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus SetFallbackUnicodeToText(UnicodeToTextInfo iUnicodeToTextInfo, UnicodeToTextFallbackUPP iFallback, OptionBits iControlFlags, LogicalAddress iInfoPtr);
+pascal OSStatus SetFallbackUnicodeToText(UnicodeToTextInfo iUnicodeToTextInfo, UnicodeToTextFallbackUPP iFallback, OptionBits iControlFlags, LogicalAddress iInfoPtr) MAC_IMPORT(SetFallbackUnicodeToText);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus SetFallbackUnicodeToTextRun(UnicodeToTextRunInfo iUnicodeToTextRunInfo, UnicodeToTextFallbackUPP iFallback, OptionBits iControlFlags, LogicalAddress iInfoPtr);
+pascal OSStatus SetFallbackUnicodeToTextRun(UnicodeToTextRunInfo iUnicodeToTextRunInfo, UnicodeToTextFallbackUPP iFallback, OptionBits iControlFlags, LogicalAddress iInfoPtr) MAC_IMPORT(SetFallbackUnicodeToTextRun);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus ResetTextToUnicodeInfo(TextToUnicodeInfo ioTextToUnicodeInfo);
+pascal OSStatus ResetTextToUnicodeInfo(TextToUnicodeInfo ioTextToUnicodeInfo) MAC_IMPORT(ResetTextToUnicodeInfo);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus ResetUnicodeToTextInfo(UnicodeToTextInfo ioUnicodeToTextInfo);
+pascal OSStatus ResetUnicodeToTextInfo(UnicodeToTextInfo ioUnicodeToTextInfo) MAC_IMPORT(ResetUnicodeToTextInfo);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus ResetUnicodeToTextRunInfo(UnicodeToTextRunInfo ioUnicodeToTextRunInfo);
+pascal OSStatus ResetUnicodeToTextRunInfo(UnicodeToTextRunInfo ioUnicodeToTextRunInfo) MAC_IMPORT(ResetUnicodeToTextRunInfo);
 #endif
 
 #ifdef __cplusplus

@@ -37,7 +37,7 @@ typedef enum {
 #define LMSetQDExist(val) ((*(Byte *)0x000008F3) = (val))
 
 enum { _SysError = 0xA9C9 };
-pascal void SysError(int16_t errorcode) M68K_INLINE(0xA9C9);
+pascal void SysError(int16_t errorcode) MAC_IMPORT(SysError) M68K_INLINE(0xA9C9);
 
 #ifdef __cplusplus
 }

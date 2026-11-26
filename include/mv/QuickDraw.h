@@ -750,484 +750,484 @@ typedef QDGlobals *QDGlobalsPtr;
 #define LMSetPortList(val) ((*(Handle *)0x00000D66) = (val))
 
 enum { _CopyBits = 0xA8EC };
-pascal void CopyBits(const BitMap *src_bitmap, const BitMap *dst_bitmap, const Rect *src_rect, const Rect *dst_rect, INTEGER mode, RgnHandle mask) M68K_INLINE(0xA8EC);
+pascal void CopyBits(const BitMap *src_bitmap, const BitMap *dst_bitmap, const Rect *src_rect, const Rect *dst_rect, INTEGER mode, RgnHandle mask) MAC_IMPORT(CopyBits) M68K_INLINE(0xA8EC);
 
 enum { _ScrollRect = 0xA8EF };
-pascal void ScrollRect(Rect *rp, INTEGER dh, INTEGER dv, RgnHandle updatergn) M68K_INLINE(0xA8EF);
+pascal void ScrollRect(Rect *rp, INTEGER dh, INTEGER dv, RgnHandle updatergn) MAC_IMPORT(ScrollRect) M68K_INLINE(0xA8EF);
 
 enum { _ForeColor = 0xA862 };
-pascal void ForeColor(LONGINT c) M68K_INLINE(0xA862);
+pascal void ForeColor(LONGINT c) MAC_IMPORT(ForeColor) M68K_INLINE(0xA862);
 
 enum { _BackColor = 0xA863 };
-pascal void BackColor(LONGINT c) M68K_INLINE(0xA863);
+pascal void BackColor(LONGINT c) MAC_IMPORT(BackColor) M68K_INLINE(0xA863);
 
 enum { _ColorBit = 0xA864 };
-pascal void ColorBit(INTEGER b) M68K_INLINE(0xA864);
+pascal void ColorBit(INTEGER b) MAC_IMPORT(ColorBit) M68K_INLINE(0xA864);
 
 enum { _SetCursor = 0xA851 };
-pascal void SetCursor(Cursor *cp) M68K_INLINE(0xA851);
+pascal void SetCursor(Cursor *cp) MAC_IMPORT(SetCursor) M68K_INLINE(0xA851);
 
 enum { _InitCursor = 0xA850 };
-pascal void InitCursor(void) M68K_INLINE(0xA850);
+pascal void InitCursor(void) MAC_IMPORT(InitCursor) M68K_INLINE(0xA850);
 
 enum { _HideCursor = 0xA852 };
-pascal void HideCursor(void) M68K_INLINE(0xA852);
+pascal void HideCursor(void) MAC_IMPORT(HideCursor) M68K_INLINE(0xA852);
 
 enum { _ShowCursor = 0xA853 };
-pascal void ShowCursor(void) M68K_INLINE(0xA853);
+pascal void ShowCursor(void) MAC_IMPORT(ShowCursor) M68K_INLINE(0xA853);
 
 enum { _ObscureCursor = 0xA856 };
-pascal void ObscureCursor(void) M68K_INLINE(0xA856);
+pascal void ObscureCursor(void) MAC_IMPORT(ObscureCursor) M68K_INLINE(0xA856);
 
 enum { _ShieldCursor = 0xA855 };
-pascal void ShieldCursor(Rect *rp, Point p) M68K_INLINE(0xA855);
+pascal void ShieldCursor(Rect *rp, Point p) MAC_IMPORT(ShieldCursor) M68K_INLINE(0xA855);
 
 enum { _InitGraf = 0xA86E };
-pascal void InitGraf(GrafPtr *gp) M68K_INLINE(0xA86E);
+pascal void InitGraf(GrafPtr *gp) MAC_IMPORT(InitGraf) M68K_INLINE(0xA86E);
 
 enum { _SetPort = 0xA873 };
-pascal void SetPort(GrafPtr p) M68K_INLINE(0xA873);
+pascal void SetPort(GrafPtr p) MAC_IMPORT(SetPort) M68K_INLINE(0xA873);
 
 enum { _InitPort = 0xA86D };
-pascal void InitPort(GrafPtr p) M68K_INLINE(0xA86D);
+pascal void InitPort(GrafPtr p) MAC_IMPORT(InitPort) M68K_INLINE(0xA86D);
 
 enum { _OpenPort = 0xA86F };
-pascal void OpenPort(GrafPtr p) M68K_INLINE(0xA86F);
+pascal void OpenPort(GrafPtr p) MAC_IMPORT(OpenPort) M68K_INLINE(0xA86F);
 
 enum { _ClosePort = 0xA87D };
-pascal void ClosePort(GrafPtr p) M68K_INLINE(0xA87D);
+pascal void ClosePort(GrafPtr p) MAC_IMPORT(ClosePort) M68K_INLINE(0xA87D);
 
 enum { _GetPort = 0xA874 };
-pascal void GetPort(GrafPtr *pp) M68K_INLINE(0xA874);
+pascal void GetPort(GrafPtr *pp) MAC_IMPORT(GetPort) M68K_INLINE(0xA874);
 
 enum { _GrafDevice = 0xA872 };
-pascal void GrafDevice(INTEGER d) M68K_INLINE(0xA872);
+pascal void GrafDevice(INTEGER d) MAC_IMPORT(GrafDevice) M68K_INLINE(0xA872);
 
 enum { _SetPortBits = 0xA875 };
-pascal void SetPortBits(BitMap *bm) M68K_INLINE(0xA875);
+pascal void SetPortBits(BitMap *bm) MAC_IMPORT(SetPortBits) M68K_INLINE(0xA875);
 
 enum { _PortSize = 0xA876 };
-pascal void PortSize(INTEGER w, INTEGER h) M68K_INLINE(0xA876);
+pascal void PortSize(INTEGER w, INTEGER h) MAC_IMPORT(PortSize) M68K_INLINE(0xA876);
 
 enum { _MovePortTo = 0xA877 };
-pascal void MovePortTo(INTEGER lg, INTEGER tg) M68K_INLINE(0xA877);
+pascal void MovePortTo(INTEGER lg, INTEGER tg) MAC_IMPORT(MovePortTo) M68K_INLINE(0xA877);
 
 enum { _SetOrigin = 0xA878 };
-pascal void SetOrigin(INTEGER h, INTEGER v) M68K_INLINE(0xA878);
+pascal void SetOrigin(INTEGER h, INTEGER v) MAC_IMPORT(SetOrigin) M68K_INLINE(0xA878);
 
 enum { _SetClip = 0xA879 };
-pascal void SetClip(RgnHandle r) M68K_INLINE(0xA879);
+pascal void SetClip(RgnHandle r) MAC_IMPORT(SetClip) M68K_INLINE(0xA879);
 
 enum { _GetClip = 0xA87A };
-pascal void GetClip(RgnHandle r) M68K_INLINE(0xA87A);
+pascal void GetClip(RgnHandle r) MAC_IMPORT(GetClip) M68K_INLINE(0xA87A);
 
 enum { _ClipRect = 0xA87B };
-pascal void ClipRect(Rect *r) M68K_INLINE(0xA87B);
+pascal void ClipRect(Rect *r) MAC_IMPORT(ClipRect) M68K_INLINE(0xA87B);
 
 enum { _BackPat = 0xA87C };
-pascal void BackPat(const Pattern *pp) M68K_INLINE(0xA87C);
+pascal void BackPat(const Pattern *pp) MAC_IMPORT(BackPat) M68K_INLINE(0xA87C);
 
 enum { _SeedFill = 0xA839 };
-MAC_SINCE(0x0070, "0.7") pascal void SeedFill(Ptr srcp, Ptr dstp, INTEGER srcr, INTEGER dstr, INTEGER height, INTEGER width, INTEGER seedh, INTEGER seedv) M68K_INLINE(0xA839);
+MAC_SINCE(0x0070, "0.7") pascal void SeedFill(Ptr srcp, Ptr dstp, INTEGER srcr, INTEGER dstr, INTEGER height, INTEGER width, INTEGER seedh, INTEGER seedv) MAC_IMPORT(SeedFill) M68K_INLINE(0xA839);
 
 enum { _CalcMask = 0xA838 };
-MAC_SINCE(0x0070, "0.7") pascal void CalcMask(Ptr srcp, Ptr dstp, INTEGER srcr, INTEGER dstr, INTEGER height, INTEGER width) M68K_INLINE(0xA838);
+MAC_SINCE(0x0070, "0.7") pascal void CalcMask(Ptr srcp, Ptr dstp, INTEGER srcr, INTEGER dstr, INTEGER height, INTEGER width) MAC_IMPORT(CalcMask) M68K_INLINE(0xA838);
 
 enum { _CopyMask = 0xA817 };
-MAC_SINCE(0x0070, "0.7") pascal void CopyMask(const BitMap *srcbp, const BitMap *mskbp, const BitMap *dstbp, const Rect *srcrp, const Rect *mskrp, const Rect *dstrp) M68K_INLINE(0xA817);
+MAC_SINCE(0x0070, "0.7") pascal void CopyMask(const BitMap *srcbp, const BitMap *mskbp, const BitMap *dstbp, const Rect *srcrp, const Rect *mskrp, const Rect *dstrp) MAC_IMPORT(CopyMask) M68K_INLINE(0xA817);
 
 enum { _GetMaskTable = 0xA836 };
-MAC_SINCE(0x0070, "0.7") pascal INTEGER* GetMaskTable(void) M68K_INLINE(0xA836);
+MAC_SINCE(0x0070, "0.7") pascal INTEGER* GetMaskTable(void) MAC_IMPORT(GetMaskTable) M68K_INLINE(0xA836);
 
 enum { _CharExtra = 0xAA23 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void CharExtra(Fixed Extra) M68K_INLINE(0xAA23);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void CharExtra(Fixed Extra) MAC_IMPORT(CharExtra) M68K_INLINE(0xAA23);
 
 enum { _MakeRGBPat = 0xAA0D };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void MakeRGBPat(PixPatHandle ph, RGBColor *colorp) M68K_INLINE(0xAA0D);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void MakeRGBPat(PixPatHandle ph, RGBColor *colorp) MAC_IMPORT(MakeRGBPat) M68K_INLINE(0xAA0D);
 
 enum { _Random = 0xA861 };
-pascal INTEGER Random(void) M68K_INLINE(0xA861);
+pascal INTEGER Random(void) MAC_IMPORT(Random) M68K_INLINE(0xA861);
 
 enum { _GetPixel = 0xA865 };
-pascal Boolean GetPixel(INTEGER h, INTEGER v) M68K_INLINE(0xA865);
+pascal Boolean GetPixel(INTEGER h, INTEGER v) MAC_IMPORT(GetPixel) M68K_INLINE(0xA865);
 
 enum { _StuffHex = 0xA866 };
-pascal void StuffHex(Ptr p, ConstStringPtr s) M68K_INLINE(0xA866);
+pascal void StuffHex(Ptr p, ConstStringPtr s) MAC_IMPORT(StuffHex) M68K_INLINE(0xA866);
 
 enum { _ScalePt = 0xA8F8 };
-pascal void ScalePt(Point *pt, const Rect *srcr, const Rect *dstr) M68K_INLINE(0xA8F8);
+pascal void ScalePt(Point *pt, const Rect *srcr, const Rect *dstr) MAC_IMPORT(ScalePt) M68K_INLINE(0xA8F8);
 
 enum { _MapPt = 0xA8F9 };
-pascal void MapPt(Point *pt, const Rect *srcr, const Rect *dstr) M68K_INLINE(0xA8F9);
+pascal void MapPt(Point *pt, const Rect *srcr, const Rect *dstr) MAC_IMPORT(MapPt) M68K_INLINE(0xA8F9);
 
 enum { _MapRect = 0xA8FA };
-pascal void MapRect(Rect *r, const Rect *srcr, const Rect *dstr) M68K_INLINE(0xA8FA);
+pascal void MapRect(Rect *r, const Rect *srcr, const Rect *dstr) MAC_IMPORT(MapRect) M68K_INLINE(0xA8FA);
 
 enum { _MapRgn = 0xA8FB };
-pascal void MapRgn(RgnHandle rh, const Rect *srcr, const Rect *dstr) M68K_INLINE(0xA8FB);
+pascal void MapRgn(RgnHandle rh, const Rect *srcr, const Rect *dstr) MAC_IMPORT(MapRgn) M68K_INLINE(0xA8FB);
 
 enum { _MapPoly = 0xA8FC };
-pascal void MapPoly(PolyHandle poly, const Rect *srcr, const Rect *dstr) M68K_INLINE(0xA8FC);
+pascal void MapPoly(PolyHandle poly, const Rect *srcr, const Rect *dstr) MAC_IMPORT(MapPoly) M68K_INLINE(0xA8FC);
 
 enum { _HidePen = 0xA896 };
-pascal void HidePen(void) M68K_INLINE(0xA896);
+pascal void HidePen(void) MAC_IMPORT(HidePen) M68K_INLINE(0xA896);
 
 enum { _ShowPen = 0xA897 };
-pascal void ShowPen(void) M68K_INLINE(0xA897);
+pascal void ShowPen(void) MAC_IMPORT(ShowPen) M68K_INLINE(0xA897);
 
 enum { _GetPen = 0xA89A };
-pascal void GetPen(Point *ptp) M68K_INLINE(0xA89A);
+pascal void GetPen(Point *ptp) MAC_IMPORT(GetPen) M68K_INLINE(0xA89A);
 
 enum { _GetPenState = 0xA898 };
-pascal void GetPenState(PenState *ps) M68K_INLINE(0xA898);
+pascal void GetPenState(PenState *ps) MAC_IMPORT(GetPenState) M68K_INLINE(0xA898);
 
 enum { _SetPenState = 0xA899 };
-pascal void SetPenState(PenState *ps) M68K_INLINE(0xA899);
+pascal void SetPenState(PenState *ps) MAC_IMPORT(SetPenState) M68K_INLINE(0xA899);
 
 enum { _PenSize = 0xA89B };
-pascal void PenSize(INTEGER w, INTEGER h) M68K_INLINE(0xA89B);
+pascal void PenSize(INTEGER w, INTEGER h) MAC_IMPORT(PenSize) M68K_INLINE(0xA89B);
 
 enum { _PenMode = 0xA89C };
-pascal void PenMode(INTEGER m) M68K_INLINE(0xA89C);
+pascal void PenMode(INTEGER m) MAC_IMPORT(PenMode) M68K_INLINE(0xA89C);
 
 enum { _PenPat = 0xA89D };
-pascal void PenPat(const Pattern *pp) M68K_INLINE(0xA89D);
+pascal void PenPat(const Pattern *pp) MAC_IMPORT(PenPat) M68K_INLINE(0xA89D);
 
 enum { _PenNormal = 0xA89E };
-pascal void PenNormal(void) M68K_INLINE(0xA89E);
+pascal void PenNormal(void) MAC_IMPORT(PenNormal) M68K_INLINE(0xA89E);
 
 enum { _MoveTo = 0xA893 };
-pascal void MoveTo(INTEGER h, INTEGER v) M68K_INLINE(0xA893);
+pascal void MoveTo(INTEGER h, INTEGER v) MAC_IMPORT(MoveTo) M68K_INLINE(0xA893);
 
 enum { _Move = 0xA894 };
-pascal void Move(INTEGER dh, INTEGER dv) M68K_INLINE(0xA894);
+pascal void Move(INTEGER dh, INTEGER dv) MAC_IMPORT(Move) M68K_INLINE(0xA894);
 
 enum { _LineTo = 0xA891 };
-pascal void LineTo(INTEGER h, INTEGER v) M68K_INLINE(0xA891);
+pascal void LineTo(INTEGER h, INTEGER v) MAC_IMPORT(LineTo) M68K_INLINE(0xA891);
 
 enum { _Line = 0xA892 };
-pascal void Line(INTEGER dh, INTEGER dv) M68K_INLINE(0xA892);
+pascal void Line(INTEGER dh, INTEGER dv) MAC_IMPORT(Line) M68K_INLINE(0xA892);
 
 enum { _DrawPicture = 0xA8F6 };
-pascal void DrawPicture(PicHandle pic, const Rect *destrp) M68K_INLINE(0xA8F6);
+pascal void DrawPicture(PicHandle pic, const Rect *destrp) MAC_IMPORT(DrawPicture) M68K_INLINE(0xA8F6);
 
 enum { _OpenPicture = 0xA8F3 };
-pascal PicHandle OpenPicture(const Rect *pf) M68K_INLINE(0xA8F3);
+pascal PicHandle OpenPicture(const Rect *pf) MAC_IMPORT(OpenPicture) M68K_INLINE(0xA8F3);
 
 enum { _ClosePicture = 0xA8F4 };
-pascal void ClosePicture(void) M68K_INLINE(0xA8F4);
+pascal void ClosePicture(void) MAC_IMPORT(ClosePicture) M68K_INLINE(0xA8F4);
 
 enum { _PicComment = 0xA8F2 };
-pascal void PicComment(INTEGER kind, INTEGER size, Handle hand) M68K_INLINE(0xA8F2);
+pascal void PicComment(INTEGER kind, INTEGER size, Handle hand) MAC_IMPORT(PicComment) M68K_INLINE(0xA8F2);
 
 enum { _KillPicture = 0xA8F5 };
-pascal void KillPicture(PicHandle pic) M68K_INLINE(0xA8F5);
+pascal void KillPicture(PicHandle pic) MAC_IMPORT(KillPicture) M68K_INLINE(0xA8F5);
 
 enum { _AddPt = 0xA87E };
-pascal void AddPt(Point src, Point *dst) M68K_INLINE(0xA87E);
+pascal void AddPt(Point src, Point *dst) MAC_IMPORT(AddPt) M68K_INLINE(0xA87E);
 
 enum { _SubPt = 0xA87F };
-pascal void SubPt(Point src, Point *dst) M68K_INLINE(0xA87F);
+pascal void SubPt(Point src, Point *dst) MAC_IMPORT(SubPt) M68K_INLINE(0xA87F);
 
 enum { _SetPt = 0xA880 };
-pascal void SetPt(Point *pt, INTEGER h, INTEGER v) M68K_INLINE(0xA880);
+pascal void SetPt(Point *pt, INTEGER h, INTEGER v) MAC_IMPORT(SetPt) M68K_INLINE(0xA880);
 
 enum { _EqualPt = 0xA881 };
-pascal Boolean EqualPt(Point p1, Point p2) M68K_INLINE(0xA881);
+pascal Boolean EqualPt(Point p1, Point p2) MAC_IMPORT(EqualPt) M68K_INLINE(0xA881);
 
 enum { _LocalToGlobal = 0xA870 };
-pascal void LocalToGlobal(Point *pt) M68K_INLINE(0xA870);
+pascal void LocalToGlobal(Point *pt) MAC_IMPORT(LocalToGlobal) M68K_INLINE(0xA870);
 
 enum { _GlobalToLocal = 0xA871 };
-pascal void GlobalToLocal(Point *pt) M68K_INLINE(0xA871);
+pascal void GlobalToLocal(Point *pt) MAC_IMPORT(GlobalToLocal) M68K_INLINE(0xA871);
 
 enum { _OpenPoly = 0xA8CB };
-pascal PolyHandle OpenPoly(void) M68K_INLINE(0xA8CB);
+pascal PolyHandle OpenPoly(void) MAC_IMPORT(OpenPoly) M68K_INLINE(0xA8CB);
 
 enum { _ClosePoly = 0xA8CC };
-pascal void ClosePoly(void) M68K_INLINE(0xA8CC);
+pascal void ClosePoly(void) MAC_IMPORT(ClosePoly) M68K_INLINE(0xA8CC);
 
 enum { _KillPoly = 0xA8CD };
-pascal void KillPoly(PolyHandle poly) M68K_INLINE(0xA8CD);
+pascal void KillPoly(PolyHandle poly) MAC_IMPORT(KillPoly) M68K_INLINE(0xA8CD);
 
 enum { _OffsetPoly = 0xA8CE };
-pascal void OffsetPoly(PolyHandle poly, INTEGER dh, INTEGER dv) M68K_INLINE(0xA8CE);
+pascal void OffsetPoly(PolyHandle poly, INTEGER dh, INTEGER dv) MAC_IMPORT(OffsetPoly) M68K_INLINE(0xA8CE);
 
 enum { _SetRect = 0xA8A7 };
-pascal void SetRect(Rect *r, INTEGER left, INTEGER top, INTEGER right, INTEGER bottom) M68K_INLINE(0xA8A7);
+pascal void SetRect(Rect *r, INTEGER left, INTEGER top, INTEGER right, INTEGER bottom) MAC_IMPORT(SetRect) M68K_INLINE(0xA8A7);
 
 enum { _OffsetRect = 0xA8A8 };
-pascal void OffsetRect(Rect *r, INTEGER dh, INTEGER dv) M68K_INLINE(0xA8A8);
+pascal void OffsetRect(Rect *r, INTEGER dh, INTEGER dv) MAC_IMPORT(OffsetRect) M68K_INLINE(0xA8A8);
 
 enum { _InsetRect = 0xA8A9 };
-pascal void InsetRect(Rect *r, INTEGER dh, INTEGER dv) M68K_INLINE(0xA8A9);
+pascal void InsetRect(Rect *r, INTEGER dh, INTEGER dv) MAC_IMPORT(InsetRect) M68K_INLINE(0xA8A9);
 
 enum { _EmptyRect = 0xA8AE };
-pascal Boolean EmptyRect(const Rect *r) M68K_INLINE(0xA8AE);
+pascal Boolean EmptyRect(const Rect *r) MAC_IMPORT(EmptyRect) M68K_INLINE(0xA8AE);
 
 enum { _SectRect = 0xA8AA };
-pascal Boolean SectRect(const Rect *s1, const Rect *s2, Rect *dest) M68K_INLINE(0xA8AA);
+pascal Boolean SectRect(const Rect *s1, const Rect *s2, Rect *dest) MAC_IMPORT(SectRect) M68K_INLINE(0xA8AA);
 
 enum { _UnionRect = 0xA8AB };
-pascal void UnionRect(const Rect *s1, const Rect *s2, Rect *dest) M68K_INLINE(0xA8AB);
+pascal void UnionRect(const Rect *s1, const Rect *s2, Rect *dest) MAC_IMPORT(UnionRect) M68K_INLINE(0xA8AB);
 
 enum { _PtInRect = 0xA8AD };
-pascal Boolean PtInRect(Point p, const Rect *r) M68K_INLINE(0xA8AD);
+pascal Boolean PtInRect(Point p, const Rect *r) MAC_IMPORT(PtInRect) M68K_INLINE(0xA8AD);
 
 enum { _Pt2Rect = 0xA8AC };
-pascal void Pt2Rect(Point p1, Point p2, Rect *dest) M68K_INLINE(0xA8AC);
+pascal void Pt2Rect(Point p1, Point p2, Rect *dest) MAC_IMPORT(Pt2Rect) M68K_INLINE(0xA8AC);
 
 enum { _PtToAngle = 0xA8C3 };
-pascal void PtToAngle(const Rect *rp, Point p, INTEGER *angle) M68K_INLINE(0xA8C3);
+pascal void PtToAngle(const Rect *rp, Point p, INTEGER *angle) MAC_IMPORT(PtToAngle) M68K_INLINE(0xA8C3);
 
 enum { _EqualRect = 0xA8A6 };
-pascal Boolean EqualRect(const Rect *r1, const Rect *r2) M68K_INLINE(0xA8A6);
+pascal Boolean EqualRect(const Rect *r1, const Rect *r2) MAC_IMPORT(EqualRect) M68K_INLINE(0xA8A6);
 
 enum { _NewRgn = 0xA8D8 };
-pascal RgnHandle NewRgn(void) M68K_INLINE(0xA8D8);
+pascal RgnHandle NewRgn(void) MAC_IMPORT(NewRgn) M68K_INLINE(0xA8D8);
 
 enum { _OpenRgn = 0xA8DA };
-pascal void OpenRgn(void) M68K_INLINE(0xA8DA);
+pascal void OpenRgn(void) MAC_IMPORT(OpenRgn) M68K_INLINE(0xA8DA);
 
 enum { _CopyRgn = 0xA8DC };
-pascal void CopyRgn(RgnHandle s, RgnHandle d) M68K_INLINE(0xA8DC);
+pascal void CopyRgn(RgnHandle s, RgnHandle d) MAC_IMPORT(CopyRgn) M68K_INLINE(0xA8DC);
 
 enum { _CloseRgn = 0xA8DB };
-pascal void CloseRgn(RgnHandle rh) M68K_INLINE(0xA8DB);
+pascal void CloseRgn(RgnHandle rh) MAC_IMPORT(CloseRgn) M68K_INLINE(0xA8DB);
 
 enum { _DisposeRgn = 0xA8D9 };
-pascal void DisposeRgn(RgnHandle rh) M68K_INLINE(0xA8D9);
+pascal void DisposeRgn(RgnHandle rh) MAC_IMPORT(DisposeRgn) M68K_INLINE(0xA8D9);
 
 enum { _SetEmptyRgn = 0xA8DD };
-pascal void SetEmptyRgn(RgnHandle rh) M68K_INLINE(0xA8DD);
+pascal void SetEmptyRgn(RgnHandle rh) MAC_IMPORT(SetEmptyRgn) M68K_INLINE(0xA8DD);
 
 enum { _SetRectRgn = 0xA8DE };
-pascal void SetRectRgn(RgnHandle rh, INTEGER left, INTEGER top, INTEGER right, INTEGER bottom) M68K_INLINE(0xA8DE);
+pascal void SetRectRgn(RgnHandle rh, INTEGER left, INTEGER top, INTEGER right, INTEGER bottom) MAC_IMPORT(SetRectRgn) M68K_INLINE(0xA8DE);
 
 enum { _RectRgn = 0xA8DF };
-pascal void RectRgn(RgnHandle rh, const Rect *rect) M68K_INLINE(0xA8DF);
+pascal void RectRgn(RgnHandle rh, const Rect *rect) MAC_IMPORT(RectRgn) M68K_INLINE(0xA8DF);
 
 enum { _OffsetRgn = 0xA8E0 };
-pascal void OffsetRgn(RgnHandle rh, INTEGER dh, INTEGER dv) M68K_INLINE(0xA8E0);
+pascal void OffsetRgn(RgnHandle rh, INTEGER dh, INTEGER dv) MAC_IMPORT(OffsetRgn) M68K_INLINE(0xA8E0);
 
 enum { _PtInRgn = 0xA8E8 };
-pascal Boolean PtInRgn(Point p, RgnHandle rh) M68K_INLINE(0xA8E8);
+pascal Boolean PtInRgn(Point p, RgnHandle rh) MAC_IMPORT(PtInRgn) M68K_INLINE(0xA8E8);
 
 enum { _InsetRgn = 0xA8E1 };
-pascal void InsetRgn(RgnHandle rh, INTEGER dh, INTEGER dv) M68K_INLINE(0xA8E1);
+pascal void InsetRgn(RgnHandle rh, INTEGER dh, INTEGER dv) MAC_IMPORT(InsetRgn) M68K_INLINE(0xA8E1);
 
 enum { _SectRgn = 0xA8E4 };
-pascal void SectRgn(RgnHandle s1, RgnHandle s2, RgnHandle dest) M68K_INLINE(0xA8E4);
+pascal void SectRgn(RgnHandle s1, RgnHandle s2, RgnHandle dest) MAC_IMPORT(SectRgn) M68K_INLINE(0xA8E4);
 
 enum { _UnionRgn = 0xA8E5 };
-pascal void UnionRgn(RgnHandle s1, RgnHandle s2, RgnHandle dest) M68K_INLINE(0xA8E5);
+pascal void UnionRgn(RgnHandle s1, RgnHandle s2, RgnHandle dest) MAC_IMPORT(UnionRgn) M68K_INLINE(0xA8E5);
 
 enum { _DiffRgn = 0xA8E6 };
-pascal void DiffRgn(RgnHandle s1, RgnHandle s2, RgnHandle dest) M68K_INLINE(0xA8E6);
+pascal void DiffRgn(RgnHandle s1, RgnHandle s2, RgnHandle dest) MAC_IMPORT(DiffRgn) M68K_INLINE(0xA8E6);
 
 enum { _XorRgn = 0xA8E7 };
-pascal void XorRgn(RgnHandle s1, RgnHandle s2, RgnHandle dest) M68K_INLINE(0xA8E7);
+pascal void XorRgn(RgnHandle s1, RgnHandle s2, RgnHandle dest) MAC_IMPORT(XorRgn) M68K_INLINE(0xA8E7);
 
 enum { _RectInRgn = 0xA8E9 };
-pascal Boolean RectInRgn(const Rect *rp, RgnHandle rh) M68K_INLINE(0xA8E9);
+pascal Boolean RectInRgn(const Rect *rp, RgnHandle rh) MAC_IMPORT(RectInRgn) M68K_INLINE(0xA8E9);
 
 enum { _EqualRgn = 0xA8E3 };
-pascal Boolean EqualRgn(RgnHandle r1, RgnHandle r2) M68K_INLINE(0xA8E3);
+pascal Boolean EqualRgn(RgnHandle r1, RgnHandle r2) MAC_IMPORT(EqualRgn) M68K_INLINE(0xA8E3);
 
 enum { _EmptyRgn = 0xA8E2 };
-pascal Boolean EmptyRgn(RgnHandle rh) M68K_INLINE(0xA8E2);
+pascal Boolean EmptyRgn(RgnHandle rh) MAC_IMPORT(EmptyRgn) M68K_INLINE(0xA8E2);
 
 enum { _FrameRect = 0xA8A1 };
-pascal void FrameRect(const Rect *r) M68K_INLINE(0xA8A1);
+pascal void FrameRect(const Rect *r) MAC_IMPORT(FrameRect) M68K_INLINE(0xA8A1);
 
 enum { _PaintRect = 0xA8A2 };
-pascal void PaintRect(const Rect *r) M68K_INLINE(0xA8A2);
+pascal void PaintRect(const Rect *r) MAC_IMPORT(PaintRect) M68K_INLINE(0xA8A2);
 
 enum { _EraseRect = 0xA8A3 };
-pascal void EraseRect(const Rect *r) M68K_INLINE(0xA8A3);
+pascal void EraseRect(const Rect *r) MAC_IMPORT(EraseRect) M68K_INLINE(0xA8A3);
 
 enum { _InvertRect = 0xA8A4 };
-pascal void InvertRect(const Rect *r) M68K_INLINE(0xA8A4);
+pascal void InvertRect(const Rect *r) MAC_IMPORT(InvertRect) M68K_INLINE(0xA8A4);
 
 enum { _FillRect = 0xA8A5 };
-pascal void FillRect(const Rect *r, const Pattern *pat) M68K_INLINE(0xA8A5);
+pascal void FillRect(const Rect *r, const Pattern *pat) MAC_IMPORT(FillRect) M68K_INLINE(0xA8A5);
 
 enum { _FrameOval = 0xA8B7 };
-pascal void FrameOval(const Rect *r) M68K_INLINE(0xA8B7);
+pascal void FrameOval(const Rect *r) MAC_IMPORT(FrameOval) M68K_INLINE(0xA8B7);
 
 enum { _PaintOval = 0xA8B8 };
-pascal void PaintOval(const Rect *r) M68K_INLINE(0xA8B8);
+pascal void PaintOval(const Rect *r) MAC_IMPORT(PaintOval) M68K_INLINE(0xA8B8);
 
 enum { _EraseOval = 0xA8B9 };
-pascal void EraseOval(const Rect *r) M68K_INLINE(0xA8B9);
+pascal void EraseOval(const Rect *r) MAC_IMPORT(EraseOval) M68K_INLINE(0xA8B9);
 
 enum { _InvertOval = 0xA8BA };
-pascal void InvertOval(const Rect *r) M68K_INLINE(0xA8BA);
+pascal void InvertOval(const Rect *r) MAC_IMPORT(InvertOval) M68K_INLINE(0xA8BA);
 
 enum { _FillOval = 0xA8BB };
-pascal void FillOval(const Rect *r, const Pattern *pat) M68K_INLINE(0xA8BB);
+pascal void FillOval(const Rect *r, const Pattern *pat) MAC_IMPORT(FillOval) M68K_INLINE(0xA8BB);
 
 enum { _FrameRoundRect = 0xA8B0 };
-pascal void FrameRoundRect(const Rect *r, INTEGER ow, INTEGER oh) M68K_INLINE(0xA8B0);
+pascal void FrameRoundRect(const Rect *r, INTEGER ow, INTEGER oh) MAC_IMPORT(FrameRoundRect) M68K_INLINE(0xA8B0);
 
 enum { _PaintRoundRect = 0xA8B1 };
-pascal void PaintRoundRect(const Rect *r, INTEGER ow, INTEGER oh) M68K_INLINE(0xA8B1);
+pascal void PaintRoundRect(const Rect *r, INTEGER ow, INTEGER oh) MAC_IMPORT(PaintRoundRect) M68K_INLINE(0xA8B1);
 
 enum { _EraseRoundRect = 0xA8B2 };
-pascal void EraseRoundRect(const Rect *r, INTEGER ow, INTEGER oh) M68K_INLINE(0xA8B2);
+pascal void EraseRoundRect(const Rect *r, INTEGER ow, INTEGER oh) MAC_IMPORT(EraseRoundRect) M68K_INLINE(0xA8B2);
 
 enum { _InvertRoundRect = 0xA8B3 };
-pascal void InvertRoundRect(const Rect *r, INTEGER ow, INTEGER oh) M68K_INLINE(0xA8B3);
+pascal void InvertRoundRect(const Rect *r, INTEGER ow, INTEGER oh) MAC_IMPORT(InvertRoundRect) M68K_INLINE(0xA8B3);
 
 enum { _FillRoundRect = 0xA8B4 };
-pascal void FillRoundRect(const Rect *r, INTEGER ow, INTEGER oh, const Pattern *pat) M68K_INLINE(0xA8B4);
+pascal void FillRoundRect(const Rect *r, INTEGER ow, INTEGER oh, const Pattern *pat) MAC_IMPORT(FillRoundRect) M68K_INLINE(0xA8B4);
 
 enum { _FrameArc = 0xA8BE };
-pascal void FrameArc(const Rect *r, INTEGER start, INTEGER angle) M68K_INLINE(0xA8BE);
+pascal void FrameArc(const Rect *r, INTEGER start, INTEGER angle) MAC_IMPORT(FrameArc) M68K_INLINE(0xA8BE);
 
 enum { _PaintArc = 0xA8BF };
-pascal void PaintArc(const Rect *r, INTEGER start, INTEGER angle) M68K_INLINE(0xA8BF);
+pascal void PaintArc(const Rect *r, INTEGER start, INTEGER angle) MAC_IMPORT(PaintArc) M68K_INLINE(0xA8BF);
 
 enum { _EraseArc = 0xA8C0 };
-pascal void EraseArc(const Rect *r, INTEGER start, INTEGER angle) M68K_INLINE(0xA8C0);
+pascal void EraseArc(const Rect *r, INTEGER start, INTEGER angle) MAC_IMPORT(EraseArc) M68K_INLINE(0xA8C0);
 
 enum { _InvertArc = 0xA8C1 };
-pascal void InvertArc(const Rect *r, INTEGER start, INTEGER angle) M68K_INLINE(0xA8C1);
+pascal void InvertArc(const Rect *r, INTEGER start, INTEGER angle) MAC_IMPORT(InvertArc) M68K_INLINE(0xA8C1);
 
 enum { _FillArc = 0xA8C2 };
-pascal void FillArc(const Rect *r, INTEGER start, INTEGER angle, const Pattern *pat) M68K_INLINE(0xA8C2);
+pascal void FillArc(const Rect *r, INTEGER start, INTEGER angle, const Pattern *pat) MAC_IMPORT(FillArc) M68K_INLINE(0xA8C2);
 
 enum { _FrameRgn = 0xA8D2 };
-pascal void FrameRgn(RgnHandle rh) M68K_INLINE(0xA8D2);
+pascal void FrameRgn(RgnHandle rh) MAC_IMPORT(FrameRgn) M68K_INLINE(0xA8D2);
 
 enum { _PaintRgn = 0xA8D3 };
-pascal void PaintRgn(RgnHandle rh) M68K_INLINE(0xA8D3);
+pascal void PaintRgn(RgnHandle rh) MAC_IMPORT(PaintRgn) M68K_INLINE(0xA8D3);
 
 enum { _EraseRgn = 0xA8D4 };
-pascal void EraseRgn(RgnHandle rh) M68K_INLINE(0xA8D4);
+pascal void EraseRgn(RgnHandle rh) MAC_IMPORT(EraseRgn) M68K_INLINE(0xA8D4);
 
 enum { _InvertRgn = 0xA8D5 };
-pascal void InvertRgn(RgnHandle rh) M68K_INLINE(0xA8D5);
+pascal void InvertRgn(RgnHandle rh) MAC_IMPORT(InvertRgn) M68K_INLINE(0xA8D5);
 
 enum { _FillRgn = 0xA8D6 };
-pascal void FillRgn(RgnHandle rh, const Pattern *pat) M68K_INLINE(0xA8D6);
+pascal void FillRgn(RgnHandle rh, const Pattern *pat) MAC_IMPORT(FillRgn) M68K_INLINE(0xA8D6);
 
 enum { _FramePoly = 0xA8C6 };
-pascal void FramePoly(PolyHandle poly) M68K_INLINE(0xA8C6);
+pascal void FramePoly(PolyHandle poly) MAC_IMPORT(FramePoly) M68K_INLINE(0xA8C6);
 
 enum { _PaintPoly = 0xA8C7 };
-pascal void PaintPoly(PolyHandle poly) M68K_INLINE(0xA8C7);
+pascal void PaintPoly(PolyHandle poly) MAC_IMPORT(PaintPoly) M68K_INLINE(0xA8C7);
 
 enum { _ErasePoly = 0xA8C8 };
-pascal void ErasePoly(PolyHandle poly) M68K_INLINE(0xA8C8);
+pascal void ErasePoly(PolyHandle poly) MAC_IMPORT(ErasePoly) M68K_INLINE(0xA8C8);
 
 enum { _InvertPoly = 0xA8C9 };
-pascal void InvertPoly(PolyHandle poly) M68K_INLINE(0xA8C9);
+pascal void InvertPoly(PolyHandle poly) MAC_IMPORT(InvertPoly) M68K_INLINE(0xA8C9);
 
 enum { _FillPoly = 0xA8CA };
-pascal void FillPoly(PolyHandle poly, const Pattern *pat) M68K_INLINE(0xA8CA);
+pascal void FillPoly(PolyHandle poly, const Pattern *pat) MAC_IMPORT(FillPoly) M68K_INLINE(0xA8CA);
 
 enum { _SetStdProcs = 0xA8EA };
-pascal void SetStdProcs(QDProcs *procs) M68K_INLINE(0xA8EA);
+pascal void SetStdProcs(QDProcs *procs) MAC_IMPORT(SetStdProcs) M68K_INLINE(0xA8EA);
 
 enum { _StdArc = 0xA8BD };
-pascal void StdArc(GrafVerb verb, const Rect *r, INTEGER starta, INTEGER arca) M68K_INLINE(0xA8BD);
+pascal void StdArc(GrafVerb verb, const Rect *r, INTEGER starta, INTEGER arca) MAC_IMPORT(StdArc) M68K_INLINE(0xA8BD);
 
 enum { _StdBits = 0xA8EB };
-pascal void StdBits(const BitMap *srcbmp, const Rect *srcrp, const Rect *dstrp, INTEGER mode, RgnHandle mask) M68K_INLINE(0xA8EB);
+pascal void StdBits(const BitMap *srcbmp, const Rect *srcrp, const Rect *dstrp, INTEGER mode, RgnHandle mask) MAC_IMPORT(StdBits) M68K_INLINE(0xA8EB);
 
 enum { _StdLine = 0xA890 };
-pascal void StdLine(Point p) M68K_INLINE(0xA890);
+pascal void StdLine(Point p) MAC_IMPORT(StdLine) M68K_INLINE(0xA890);
 
 enum { _StdOval = 0xA8B6 };
-pascal void StdOval(GrafVerb v, const Rect *rp) M68K_INLINE(0xA8B6);
+pascal void StdOval(GrafVerb v, const Rect *rp) MAC_IMPORT(StdOval) M68K_INLINE(0xA8B6);
 
 enum { _StdComment = 0xA8F1 };
-pascal void StdComment(INTEGER kind, INTEGER size, Handle hand) M68K_INLINE(0xA8F1);
+pascal void StdComment(INTEGER kind, INTEGER size, Handle hand) MAC_IMPORT(StdComment) M68K_INLINE(0xA8F1);
 
 enum { _StdGetPic = 0xA8EE };
-pascal void StdGetPic(void *dp, INTEGER bc) M68K_INLINE(0xA8EE);
+pascal void StdGetPic(void *dp, INTEGER bc) MAC_IMPORT(StdGetPic) M68K_INLINE(0xA8EE);
 
 enum { _StdPutPic = 0xA8F0 };
-pascal void StdPutPic(const void *sp, INTEGER bc) M68K_INLINE(0xA8F0);
+pascal void StdPutPic(const void *sp, INTEGER bc) MAC_IMPORT(StdPutPic) M68K_INLINE(0xA8F0);
 
 enum { _StdPoly = 0xA8C5 };
-pascal void StdPoly(GrafVerb verb, PolyHandle ph) M68K_INLINE(0xA8C5);
+pascal void StdPoly(GrafVerb verb, PolyHandle ph) MAC_IMPORT(StdPoly) M68K_INLINE(0xA8C5);
 
 enum { _StdRRect = 0xA8AF };
-pascal void StdRRect(GrafVerb verb, const Rect *r, INTEGER width, INTEGER height) M68K_INLINE(0xA8AF);
+pascal void StdRRect(GrafVerb verb, const Rect *r, INTEGER width, INTEGER height) MAC_IMPORT(StdRRect) M68K_INLINE(0xA8AF);
 
 enum { _StdRect = 0xA8A0 };
-pascal void StdRect(GrafVerb v, const Rect *rp) M68K_INLINE(0xA8A0);
+pascal void StdRect(GrafVerb v, const Rect *rp) MAC_IMPORT(StdRect) M68K_INLINE(0xA8A0);
 
 enum { _StdRgn = 0xA8D1 };
-pascal void StdRgn(GrafVerb verb, RgnHandle rgn) M68K_INLINE(0xA8D1);
+pascal void StdRgn(GrafVerb verb, RgnHandle rgn) MAC_IMPORT(StdRgn) M68K_INLINE(0xA8D1);
 
 enum { _StdText = 0xA882 };
-pascal void StdText(INTEGER n, Ptr textbufp, Point num, Point den) M68K_INLINE(0xA882);
+pascal void StdText(INTEGER n, Ptr textbufp, Point num, Point den) MAC_IMPORT(StdText) M68K_INLINE(0xA882);
 
 enum { _StdTxMeas = 0xA8ED };
-pascal INTEGER StdTxMeas(INTEGER n, Ptr p, Point *nump, Point *denp, FontInfo *finfop) M68K_INLINE(0xA8ED);
+pascal INTEGER StdTxMeas(INTEGER n, Ptr p, Point *nump, Point *denp, FontInfo *finfop) MAC_IMPORT(StdTxMeas) M68K_INLINE(0xA8ED);
 
 enum { _MeasureText = 0xA837 };
-MAC_SINCE(0x0070, "0.7") pascal void MeasureText(INTEGER n, Ptr text, Ptr chars) M68K_INLINE(0xA837);
+MAC_SINCE(0x0070, "0.7") pascal void MeasureText(INTEGER n, Ptr text, Ptr chars) MAC_IMPORT(MeasureText) M68K_INLINE(0xA837);
 
 enum { _TextFont = 0xA887 };
-pascal void TextFont(INTEGER f) M68K_INLINE(0xA887);
+pascal void TextFont(INTEGER f) MAC_IMPORT(TextFont) M68K_INLINE(0xA887);
 
 enum { _TextFace = 0xA888 };
-pascal void TextFace(INTEGER thef) M68K_INLINE(0xA888);
+pascal void TextFace(INTEGER thef) MAC_IMPORT(TextFace) M68K_INLINE(0xA888);
 
 enum { _TextMode = 0xA889 };
-pascal void TextMode(INTEGER m) M68K_INLINE(0xA889);
+pascal void TextMode(INTEGER m) MAC_IMPORT(TextMode) M68K_INLINE(0xA889);
 
 enum { _TextSize = 0xA88A };
-pascal void TextSize(INTEGER s) M68K_INLINE(0xA88A);
+pascal void TextSize(INTEGER s) MAC_IMPORT(TextSize) M68K_INLINE(0xA88A);
 
 enum { _SpaceExtra = 0xA88E };
-pascal void SpaceExtra(Fixed e) M68K_INLINE(0xA88E);
+pascal void SpaceExtra(Fixed e) MAC_IMPORT(SpaceExtra) M68K_INLINE(0xA88E);
 
 enum { _DrawChar = 0xA883 };
-pascal void DrawChar(CharParameter thec) M68K_INLINE(0xA883);
+pascal void DrawChar(CharParameter thec) MAC_IMPORT(DrawChar) M68K_INLINE(0xA883);
 
 enum { _DrawString = 0xA884 };
-pascal void DrawString(ConstStringPtr s) M68K_INLINE(0xA884);
+pascal void DrawString(ConstStringPtr s) MAC_IMPORT(DrawString) M68K_INLINE(0xA884);
 
 enum { _DrawText = 0xA885 };
-pascal void DrawText(Ptr tb, INTEGER fb, INTEGER bc) M68K_INLINE(0xA885);
+pascal void DrawText(Ptr tb, INTEGER fb, INTEGER bc) MAC_IMPORT(DrawText) M68K_INLINE(0xA885);
 
 enum { _CharWidth = 0xA88D };
-pascal INTEGER CharWidth(CharParameter thec) M68K_INLINE(0xA88D);
+pascal INTEGER CharWidth(CharParameter thec) MAC_IMPORT(CharWidth) M68K_INLINE(0xA88D);
 
 enum { _StringWidth = 0xA88C };
-pascal INTEGER StringWidth(ConstStringPtr s) M68K_INLINE(0xA88C);
+pascal INTEGER StringWidth(ConstStringPtr s) MAC_IMPORT(StringWidth) M68K_INLINE(0xA88C);
 
 enum { _TextWidth = 0xA886 };
-pascal INTEGER TextWidth(Ptr tb, INTEGER fb, INTEGER bc) M68K_INLINE(0xA886);
+pascal INTEGER TextWidth(Ptr tb, INTEGER fb, INTEGER bc) MAC_IMPORT(TextWidth) M68K_INLINE(0xA886);
 
 enum { _GetFontInfo = 0xA88B };
-pascal void GetFontInfo(FontInfo *ip) M68K_INLINE(0xA88B);
+pascal void GetFontInfo(FontInfo *ip) MAC_IMPORT(GetFontInfo) M68K_INLINE(0xA88B);
 
 enum { _GetCPixel = 0xAA17 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void GetCPixel(INTEGER h, INTEGER v, RGBColor *colorp) M68K_INLINE(0xAA17);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void GetCPixel(INTEGER h, INTEGER v, RGBColor *colorp) MAC_IMPORT(GetCPixel) M68K_INLINE(0xAA17);
 
 enum { _SetCPixel = 0xAA16 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetCPixel(INTEGER h, INTEGER v, RGBColor *colorp) M68K_INLINE(0xAA16);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SetCPixel(INTEGER h, INTEGER v, RGBColor *colorp) MAC_IMPORT(SetCPixel) M68K_INLINE(0xAA16);
 
 enum { _SeedCFill = 0xAA50 };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SeedCFill(BitMap *srcbp, BitMap *dstbp, const Rect *srcrp, const Rect *dstrp, INTEGER seedh, INTEGER seedv, ProcPtr matchprocp, LONGINT matchdata) M68K_INLINE(0xAA50);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void SeedCFill(BitMap *srcbp, BitMap *dstbp, const Rect *srcrp, const Rect *dstrp, INTEGER seedh, INTEGER seedv, ProcPtr matchprocp, LONGINT matchdata) MAC_IMPORT(SeedCFill) M68K_INLINE(0xAA50);
 
 enum { _CalcCMask = 0xAA4F };
-MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void CalcCMask(BitMap *srcbp, BitMap *dstbp, const Rect *srcrp, const Rect *dstrp, RGBColor *seedrgbp, ProcPtr matchprocp, LONGINT matchdata) M68K_INLINE(0xAA4F);
+MAC_SINCE(0x0500, "5.0") MAC_COLOR_QD pascal void CalcCMask(BitMap *srcbp, BitMap *dstbp, const Rect *srcrp, const Rect *dstrp, RGBColor *seedrgbp, ProcPtr matchprocp, LONGINT matchdata) MAC_IMPORT(CalcCMask) M68K_INLINE(0xAA4F);
 
 enum { _CopyDeepMask = 0xAA51 };
-MAC_SINCE(0x0700, "7.0") MAC_COLOR_QD pascal void CopyDeepMask(const BitMap *srcBits, const BitMap *maskBits, const BitMap *dstBits, const Rect *srcRect, const Rect *maskRect, const Rect *dstRect, INTEGER mode, RgnHandle maskRgn) M68K_INLINE(0xAA51);
+MAC_SINCE(0x0700, "7.0") MAC_COLOR_QD pascal void CopyDeepMask(const BitMap *srcBits, const BitMap *maskBits, const BitMap *dstBits, const Rect *srcRect, const Rect *maskRect, const Rect *dstRect, INTEGER mode, RgnHandle maskRgn) MAC_IMPORT(CopyDeepMask) M68K_INLINE(0xAA51);
 
 #if TARGET_API_MAC_CARBON
 #if TARGET_CPU_68K
 static __inline__ int16_t GetPortTextFont(CGrafPtr p);
 #else
-pascal int16_t GetPortTextFont(CGrafPtr p);
+pascal int16_t GetPortTextFont(CGrafPtr p) MAC_IMPORT(GetPortTextFont);
 #endif
 #endif
 
@@ -1235,7 +1235,7 @@ pascal int16_t GetPortTextFont(CGrafPtr p);
 #if TARGET_CPU_68K
 static __inline__ int16_t GetPortTextSize(CGrafPtr p);
 #else
-pascal int16_t GetPortTextSize(CGrafPtr p);
+pascal int16_t GetPortTextSize(CGrafPtr p) MAC_IMPORT(GetPortTextSize);
 #endif
 #endif
 
@@ -1243,7 +1243,7 @@ pascal int16_t GetPortTextSize(CGrafPtr p);
 #if TARGET_CPU_68K
 static __inline__ int16_t GetPortTextFace(CGrafPtr p);
 #else
-pascal int16_t GetPortTextFace(CGrafPtr p);
+pascal int16_t GetPortTextFace(CGrafPtr p) MAC_IMPORT(GetPortTextFace);
 #endif
 #endif
 
@@ -1251,7 +1251,7 @@ pascal int16_t GetPortTextFace(CGrafPtr p);
 #if TARGET_CPU_68K
 static __inline__ void QDFlushPortBuffer(CGrafPtr p, RgnHandle rgn);
 #else
-pascal void QDFlushPortBuffer(CGrafPtr p, RgnHandle rgn);
+pascal void QDFlushPortBuffer(CGrafPtr p, RgnHandle rgn) MAC_IMPORT(QDFlushPortBuffer);
 #endif
 #endif
 
@@ -1259,7 +1259,7 @@ pascal void QDFlushPortBuffer(CGrafPtr p, RgnHandle rgn);
 #if TARGET_CPU_68K
 static __inline__ void GetPortBounds(CGrafPtr p, Rect *r);
 #else
-pascal void GetPortBounds(CGrafPtr p, Rect *r);
+pascal void GetPortBounds(CGrafPtr p, Rect *r) MAC_IMPORT(GetPortBounds);
 #endif
 #endif
 
@@ -1267,7 +1267,7 @@ pascal void GetPortBounds(CGrafPtr p, Rect *r);
 #if TARGET_CPU_68K
 static __inline__ void GetPortVisibleRegion(CGrafPtr p, RgnHandle rgn);
 #else
-pascal void GetPortVisibleRegion(CGrafPtr p, RgnHandle rgn);
+pascal void GetPortVisibleRegion(CGrafPtr p, RgnHandle rgn) MAC_IMPORT(GetPortVisibleRegion);
 #endif
 #endif
 
@@ -1275,7 +1275,7 @@ pascal void GetPortVisibleRegion(CGrafPtr p, RgnHandle rgn);
 #if TARGET_CPU_68K
 static __inline__ void GetRegionBounds(RgnHandle rgn, Rect *r);
 #else
-pascal void GetRegionBounds(RgnHandle rgn, Rect *r);
+pascal void GetRegionBounds(RgnHandle rgn, Rect *r) MAC_IMPORT(GetRegionBounds);
 #endif
 #endif
 
@@ -1283,7 +1283,7 @@ pascal void GetRegionBounds(RgnHandle rgn, Rect *r);
 #if TARGET_CPU_68K
 static __inline__ const BitMap * GetPortBitMapForCopyBits(CGrafPtr p);
 #else
-pascal const BitMap * GetPortBitMapForCopyBits(CGrafPtr p);
+pascal const BitMap * GetPortBitMapForCopyBits(CGrafPtr p) MAC_IMPORT(GetPortBitMapForCopyBits);
 #endif
 #endif
 
@@ -1291,7 +1291,7 @@ pascal const BitMap * GetPortBitMapForCopyBits(CGrafPtr p);
 #if TARGET_CPU_68K
 static __inline__ void GetQDGlobalsScreenBits(BitMap *bm);
 #else
-pascal void GetQDGlobalsScreenBits(BitMap *bm);
+pascal void GetQDGlobalsScreenBits(BitMap *bm) MAC_IMPORT(GetQDGlobalsScreenBits);
 #endif
 #endif
 

@@ -174,43 +174,43 @@ enum {
 
 // TextCommon (Mac OS 8.5 and later)
 #if !TARGET_CPU_68K
-pascal TextEncoding CreateTextEncoding(TextEncodingBase encodingBase, TextEncodingVariant encodingVariant, TextEncodingFormat encodingFormat);
+pascal TextEncoding CreateTextEncoding(TextEncodingBase encodingBase, TextEncodingVariant encodingVariant, TextEncodingFormat encodingFormat) MAC_IMPORT(CreateTextEncoding);
 #endif
 
 #if !TARGET_CPU_68K
-pascal TextEncodingBase GetTextEncodingBase(TextEncoding encoding);
+pascal TextEncodingBase GetTextEncodingBase(TextEncoding encoding) MAC_IMPORT(GetTextEncodingBase);
 #endif
 
 #if !TARGET_CPU_68K
-pascal TextEncodingVariant GetTextEncodingVariant(TextEncoding encoding);
+pascal TextEncodingVariant GetTextEncodingVariant(TextEncoding encoding) MAC_IMPORT(GetTextEncodingVariant);
 #endif
 
 #if !TARGET_CPU_68K
-pascal TextEncodingFormat GetTextEncodingFormat(TextEncoding encoding);
+pascal TextEncodingFormat GetTextEncodingFormat(TextEncoding encoding) MAC_IMPORT(GetTextEncodingFormat);
 #endif
 
 #if !TARGET_CPU_68K
-pascal TextEncoding ResolveDefaultTextEncoding(TextEncoding encoding);
+pascal TextEncoding ResolveDefaultTextEncoding(TextEncoding encoding) MAC_IMPORT(ResolveDefaultTextEncoding);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus GetTextEncodingName(TextEncoding iEncoding, TextEncodingNameSelector iNamePartSelector, RegionCode iPreferredRegion, TextEncoding iPreferredEncoding, ByteCount iOutputBufLen, ByteCount *oNameLength, RegionCode *oActualRegion, TextEncoding *oActualEncoding, TextPtr oEncodingName);
+pascal OSStatus GetTextEncodingName(TextEncoding iEncoding, TextEncodingNameSelector iNamePartSelector, RegionCode iPreferredRegion, TextEncoding iPreferredEncoding, ByteCount iOutputBufLen, ByteCount *oNameLength, RegionCode *oActualRegion, TextEncoding *oActualEncoding, TextPtr oEncodingName) MAC_IMPORT(GetTextEncodingName);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus UpgradeScriptInfoToTextEncoding(ScriptCode iTextScriptID, LangCode iTextLanguageID, RegionCode iRegionID, ConstStr255Param iTextFontname, TextEncoding *oEncoding);
+pascal OSStatus UpgradeScriptInfoToTextEncoding(ScriptCode iTextScriptID, LangCode iTextLanguageID, RegionCode iRegionID, ConstStr255Param iTextFontname, TextEncoding *oEncoding) MAC_IMPORT(UpgradeScriptInfoToTextEncoding);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus RevertTextEncodingToScriptInfo(TextEncoding iEncoding, ScriptCode *oTextScriptID, LangCode *oTextLanguageID, StringPtr oTextFontname);
+pascal OSStatus RevertTextEncodingToScriptInfo(TextEncoding iEncoding, ScriptCode *oTextScriptID, LangCode *oTextLanguageID, StringPtr oTextFontname) MAC_IMPORT(RevertTextEncodingToScriptInfo);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus NearestMacTextEncodings(TextEncoding generalEncoding, TextEncoding *bestMacEncoding, TextEncoding *alternateMacEncoding);
+pascal OSStatus NearestMacTextEncodings(TextEncoding generalEncoding, TextEncoding *bestMacEncoding, TextEncoding *alternateMacEncoding) MAC_IMPORT(NearestMacTextEncodings);
 #endif
 
 #if !TARGET_CPU_68K
-pascal OSStatus UCGetCharProperty(const UniChar *charPtr, UniCharCount textLength, UCCharPropertyType propType, UCCharPropertyValue *propValue);
+pascal OSStatus UCGetCharProperty(const UniChar *charPtr, UniCharCount textLength, UCCharPropertyType propType, UCCharPropertyValue *propValue) MAC_IMPORT(UCGetCharProperty);
 #endif
 
 #ifdef __cplusplus

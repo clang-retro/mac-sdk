@@ -303,7 +303,7 @@ MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") static __inline__ __attribute__((__al
     return _ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCInit(void);
+MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCInit(void) MAC_IMPORT(PPCInit);
 #endif
 
 #if TARGET_CPU_68K
@@ -317,7 +317,7 @@ MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") static __inline__ __attribute__((__al
     return _ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCOpenSync(PPCOpenPBPtr pb);
+MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCOpenSync(PPCOpenPBPtr pb) MAC_IMPORT(PPCOpenSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -331,7 +331,7 @@ MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") static __inline__ __attribute__((__al
     return _ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCOpenAsync(PPCOpenPBPtr pb);
+MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCOpenAsync(PPCOpenPBPtr pb) MAC_IMPORT(PPCOpenAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -345,7 +345,7 @@ MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") static __inline__ __attribute__((__al
     return _ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCStartSync(PPCStartPBPtr pb);
+MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCStartSync(PPCStartPBPtr pb) MAC_IMPORT(PPCStartSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -359,7 +359,7 @@ MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") static __inline__ __attribute__((__al
     return _ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCStartAsync(PPCStartPBPtr pb);
+MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCStartAsync(PPCStartPBPtr pb) MAC_IMPORT(PPCStartAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -373,7 +373,7 @@ MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") static __inline__ __attribute__((__al
     return _ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCInformSync(PPCInformPBPtr pb);
+MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCInformSync(PPCInformPBPtr pb) MAC_IMPORT(PPCInformSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -387,7 +387,7 @@ MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") static __inline__ __attribute__((__al
     return _ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCInformAsync(PPCInformPBPtr pb);
+MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCInformAsync(PPCInformPBPtr pb) MAC_IMPORT(PPCInformAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -401,7 +401,7 @@ MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") static __inline__ __attribute__((__al
     return _ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCAcceptSync(PPCAcceptPBPtr pb);
+MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCAcceptSync(PPCAcceptPBPtr pb) MAC_IMPORT(PPCAcceptSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -415,7 +415,7 @@ MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") static __inline__ __attribute__((__al
     return _ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCAcceptAsync(PPCAcceptPBPtr pb);
+MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCAcceptAsync(PPCAcceptPBPtr pb) MAC_IMPORT(PPCAcceptAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -429,7 +429,7 @@ MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") static __inline__ __attribute__((__al
     return _ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCRejectSync(PPCRejectPBPtr pb);
+MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCRejectSync(PPCRejectPBPtr pb) MAC_IMPORT(PPCRejectSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -443,7 +443,7 @@ MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") static __inline__ __attribute__((__al
     return _ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCRejectAsync(PPCRejectPBPtr pb);
+MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCRejectAsync(PPCRejectPBPtr pb) MAC_IMPORT(PPCRejectAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -457,7 +457,7 @@ MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") static __inline__ __attribute__((__al
     return _ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCWriteSync(PPCWritePBPtr pb);
+MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCWriteSync(PPCWritePBPtr pb) MAC_IMPORT(PPCWriteSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -471,7 +471,7 @@ MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") static __inline__ __attribute__((__al
     return _ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCWriteAsync(PPCWritePBPtr pb);
+MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCWriteAsync(PPCWritePBPtr pb) MAC_IMPORT(PPCWriteAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -485,7 +485,7 @@ MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") static __inline__ __attribute__((__al
     return _ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCReadSync(PPCReadPBPtr pb);
+MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCReadSync(PPCReadPBPtr pb) MAC_IMPORT(PPCReadSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -499,7 +499,7 @@ MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") static __inline__ __attribute__((__al
     return _ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCReadAsync(PPCReadPBPtr pb);
+MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCReadAsync(PPCReadPBPtr pb) MAC_IMPORT(PPCReadAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -513,7 +513,7 @@ MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") static __inline__ __attribute__((__al
     return _ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCEndSync(PPCEndPBPtr pb);
+MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCEndSync(PPCEndPBPtr pb) MAC_IMPORT(PPCEndSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -527,7 +527,7 @@ MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") static __inline__ __attribute__((__al
     return _ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCEndAsync(PPCEndPBPtr pb);
+MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCEndAsync(PPCEndPBPtr pb) MAC_IMPORT(PPCEndAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -541,7 +541,7 @@ MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") static __inline__ __attribute__((__al
     return _ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCCloseSync(PPCClosePBPtr pb);
+MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCCloseSync(PPCClosePBPtr pb) MAC_IMPORT(PPCCloseSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -555,7 +555,7 @@ MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") static __inline__ __attribute__((__al
     return _ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCCloseAsync(PPCClosePBPtr pb);
+MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCCloseAsync(PPCClosePBPtr pb) MAC_IMPORT(PPCCloseAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -569,7 +569,7 @@ MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") static __inline__ __attribute__((__al
     return _ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr IPCListPortsSync(IPCListPortsPBPtr pb);
+MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr IPCListPortsSync(IPCListPortsPBPtr pb) MAC_IMPORT(IPCListPortsSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -583,7 +583,7 @@ MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") static __inline__ __attribute__((__al
     return _ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr IPCListPortsAsync(IPCListPortsPBPtr pb);
+MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr IPCListPortsAsync(IPCListPortsPBPtr pb) MAC_IMPORT(IPCListPortsAsync);
 #endif
 
 #if TARGET_CPU_68K
@@ -597,16 +597,16 @@ MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") static __inline__ __attribute__((__al
     return _ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr DeleteUserIdentity(unsigned long userRef);
+MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr DeleteUserIdentity(unsigned long userRef) MAC_IMPORT(DeleteUserIdentity);
 #endif
 
-pascal OSErr GetDefaultUser(unsigned long *userRef, Str32 userName);
+pascal OSErr GetDefaultUser(unsigned long *userRef, Str32 userName) MAC_IMPORT(GetDefaultUser);
 
-pascal OSErr StartSecureSession(PPCStartPBPtr pb, Str32 userName, Boolean useDefault, Boolean allowGuest, Boolean *guestSelected, ConstStr255Param prompt);
+pascal OSErr StartSecureSession(PPCStartPBPtr pb, Str32 userName, Boolean useDefault, Boolean allowGuest, Boolean *guestSelected, ConstStr255Param prompt) MAC_IMPORT(StartSecureSession);
 
 enum { _Pack9 = 0xA82B };
 
-MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ppc '") pascal OSErr PPCBrowser(ConstStr255Param prompt, ConstStr255Param applListLabel, Boolean defaultSpecified, LocationNameRec *theLocation, PortInfoRec *thePortInfo, PPCFilterUPP portFilter, ConstStr32Param theLocNBPType) M68K_INLINE(0x303C, 0x0D00, 0xA82B);
+MAC_SINCE_GESTALT(0x0701, "7.0.1", "'ppc '") pascal OSErr PPCBrowser(ConstStr255Param prompt, ConstStr255Param applListLabel, Boolean defaultSpecified, LocationNameRec *theLocation, PortInfoRec *thePortInfo, PPCFilterUPP portFilter, ConstStr32Param theLocNBPType) MAC_IMPORT(PPCBrowser) M68K_INLINE(0x303C, 0x0D00, 0xA82B);
 
 #if TARGET_CPU_68K
 MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") static __inline__ __attribute__((__always_inline__)) OSErr PPCKillSync(void *pb) {
@@ -619,7 +619,7 @@ MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") static __inline__ __attribute__((__al
     return _ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCKillSync(void *pb);
+MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCKillSync(void *pb) MAC_IMPORT(PPCKillSync);
 #endif
 
 #if TARGET_CPU_68K
@@ -633,7 +633,7 @@ MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") static __inline__ __attribute__((__al
     return _ret;
 }
 #else
-MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCKillAsync(void *pb);
+MAC_SINCE_GESTALT(0x0700, "7.0", "'ppc '") pascal OSErr PPCKillAsync(void *pb) MAC_IMPORT(PPCKillAsync);
 #endif
 
 #ifdef __cplusplus

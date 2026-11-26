@@ -292,73 +292,73 @@ typedef WidthTablePtr *WidthTableHandle;
 enum { _FontDispatch = 0xA854 };
 
 enum { _InitFonts = 0xA8FE };
-pascal void InitFonts(void) M68K_INLINE(0xA8FE);
+pascal void InitFonts(void) MAC_IMPORT(InitFonts) M68K_INLINE(0xA8FE);
 
 enum { _GetFontName = 0xA8FF };
-pascal void GetFontName(INTEGER fnum, StringPtr fnam) M68K_INLINE(0xA8FF);
+pascal void GetFontName(INTEGER fnum, StringPtr fnam) MAC_IMPORT(GetFontName) M68K_INLINE(0xA8FF);
 
 enum { _GetFNum = 0xA900 };
-pascal void GetFNum(ConstStringPtr fnam, INTEGER *fnum) M68K_INLINE(0xA900);
+pascal void GetFNum(ConstStringPtr fnam, INTEGER *fnum) MAC_IMPORT(GetFNum) M68K_INLINE(0xA900);
 
 enum { _RealFont = 0xA902 };
-pascal Boolean RealFont(INTEGER fnum, INTEGER sz) M68K_INLINE(0xA902);
+pascal Boolean RealFont(INTEGER fnum, INTEGER sz) MAC_IMPORT(RealFont) M68K_INLINE(0xA902);
 
 enum { _SetFontLock = 0xA903 };
-pascal void SetFontLock(Boolean lflag) M68K_INLINE(0xA903);
+pascal void SetFontLock(Boolean lflag) MAC_IMPORT(SetFontLock) M68K_INLINE(0xA903);
 
 enum { _FMSwapFont = 0xA901 };
-pascal FMOutPtr FMSwapFont(FMInput *fmip) M68K_INLINE(0xA901);
+pascal FMOutPtr FMSwapFont(FMInput *fmip) MAC_IMPORT(FMSwapFont) M68K_INLINE(0xA901);
 
 enum { _FontMetrics = 0xA835 };
-MAC_SINCE(0x0070, "0.7") pascal void FontMetrics(FMetricRec *metrp) M68K_INLINE(0xA835);
+MAC_SINCE(0x0070, "0.7") pascal void FontMetrics(FMetricRec *metrp) MAC_IMPORT(FontMetrics) M68K_INLINE(0xA835);
 
 enum { _SetFScaleDisable = 0xA834 };
-MAC_SINCE(0x0070, "0.7") pascal void SetFScaleDisable(Boolean disable) M68K_INLINE(0xA834);
+MAC_SINCE(0x0070, "0.7") pascal void SetFScaleDisable(Boolean disable) MAC_IMPORT(SetFScaleDisable) M68K_INLINE(0xA834);
 
 enum { _SetFractEnable = 0xA814 };
-MAC_SINCE(0x0200, "2.0") pascal void SetFractEnable(Boolean enable) M68K_INLINE(0xA814);
+MAC_SINCE(0x0200, "2.0") pascal void SetFractEnable(Boolean enable) MAC_IMPORT(SetFractEnable) M68K_INLINE(0xA814);
 
-pascal void SetOutlinePreferred(Boolean _outline_perferred_p) M68K_INLINE(0x7001, 0xA854);
+pascal void SetOutlinePreferred(Boolean _outline_perferred_p) MAC_IMPORT(SetOutlinePreferred) M68K_INLINE(0x7001, 0xA854);
 
-pascal Boolean GetOutlinePreferred(void) M68K_INLINE(0x7009, 0xA854);
+pascal Boolean GetOutlinePreferred(void) MAC_IMPORT(GetOutlinePreferred) M68K_INLINE(0x7009, 0xA854);
 
-pascal Boolean IsOutline(Point numer, Point denom) M68K_INLINE(0x7000, 0xA854);
+pascal Boolean IsOutline(Point numer, Point denom) MAC_IMPORT(IsOutline) M68K_INLINE(0x7000, 0xA854);
 
-pascal OSErr OutlineMetrics(int16_t byte_count, Ptr text, Point numer, Point denom, int16_t *y_max, int16_t *y_min, Fixed *aw_array, Fixed *lsb_array, Rect *bounds_array) M68K_INLINE(0x7008, 0xA854);
+pascal OSErr OutlineMetrics(int16_t byte_count, Ptr text, Point numer, Point denom, int16_t *y_max, int16_t *y_min, Fixed *aw_array, Fixed *lsb_array, Rect *bounds_array) MAC_IMPORT(OutlineMetrics) M68K_INLINE(0x7008, 0xA854);
 
-pascal void SetPreserveGlyph(Boolean preserve_glyph) M68K_INLINE(0x700A, 0xA854);
+pascal void SetPreserveGlyph(Boolean preserve_glyph) MAC_IMPORT(SetPreserveGlyph) M68K_INLINE(0x700A, 0xA854);
 
-pascal Boolean GetPreserveGlyph(void) M68K_INLINE(0x700B, 0xA854);
+pascal Boolean GetPreserveGlyph(void) MAC_IMPORT(GetPreserveGlyph) M68K_INLINE(0x700B, 0xA854);
 
-pascal OSErr FlushFonts(void) M68K_INLINE(0x700C, 0xA854);
+pascal OSErr FlushFonts(void) MAC_IMPORT(FlushFonts) M68K_INLINE(0x700C, 0xA854);
 
 // On 68k these three read the low-memory globals, as Apple's 68k glue does.
 #if TARGET_CPU_68K
 #define GetSysFont() (LMGetSysFontFam())
 #else
-pascal INTEGER GetSysFont(void);
+pascal INTEGER GetSysFont(void) MAC_IMPORT(GetSysFont);
 #endif
 
 #if TARGET_CPU_68K
 #define GetAppFont() (LMGetApFontID())
 #else
-pascal INTEGER GetAppFont(void);
+pascal INTEGER GetAppFont(void) MAC_IMPORT(GetAppFont);
 #endif
 
 #if TARGET_CPU_68K
 #define GetDefFontSize() ((LMGetSysFontSiz() ? LMGetSysFontSiz() : 12))
 #else
-pascal INTEGER GetDefFontSize(void);
+pascal INTEGER GetDefFontSize(void) MAC_IMPORT(GetDefFontSize);
 #endif
 
 // Anti-aliased text and text measurement (QuickDraw in Mac OS 8.5)
-pascal OSStatus SetAntiAliasedTextEnabled(Boolean iEnable, SInt16 iMinFontSize) M68K_INLINE(0x7011, 0xA854);
+pascal OSStatus SetAntiAliasedTextEnabled(Boolean iEnable, SInt16 iMinFontSize) MAC_IMPORT(SetAntiAliasedTextEnabled) M68K_INLINE(0x7011, 0xA854);
 
-pascal Boolean IsAntiAliasedTextEnabled(SInt16 *oMinFontSize) M68K_INLINE(0x7012, 0xA854);
+pascal Boolean IsAntiAliasedTextEnabled(SInt16 *oMinFontSize) MAC_IMPORT(IsAntiAliasedTextEnabled) M68K_INLINE(0x7012, 0xA854);
 
-pascal void QDTextBounds(INTEGER byteCount, const void *textAddr, Rect *bounds) M68K_INLINE(0x7013, 0xA854);
+pascal void QDTextBounds(INTEGER byteCount, const void *textAddr, Rect *bounds) MAC_IMPORT(QDTextBounds) M68K_INLINE(0x7013, 0xA854);
 
-pascal OSErr FetchFontInfo(SInt16 fontID, SInt16 fontSize, SInt16 fontStyle, FontInfo *info) M68K_INLINE(0x7014, 0xA854);
+pascal OSErr FetchFontInfo(SInt16 fontID, SInt16 fontSize, SInt16 fontStyle, FontInfo *info) MAC_IMPORT(FetchFontInfo) M68K_INLINE(0x7014, 0xA854);
 
 #ifdef __cplusplus
 }

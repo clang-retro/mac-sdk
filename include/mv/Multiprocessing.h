@@ -138,231 +138,231 @@ enum {
 
 // Multiprocessing Services (MPLibrary; check MPLibraryIsLoaded() before calling)
 #if !TARGET_CPU_68K
-UInt32 MPProcessors(void);
+UInt32 MPProcessors(void) MAC_IMPORT(MPProcessors);
 #endif
 
 #if !TARGET_CPU_68K
-ItemCount MPProcessorsScheduled(void);
+ItemCount MPProcessorsScheduled(void) MAC_IMPORT(MPProcessorsScheduled);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPCreateTask(TaskProc entryPoint, void *parameter, ByteCount stackSize, MPQueueID notifyQueue, void *terminationParameter1, void *terminationParameter2, MPTaskOptions options, MPTaskID *task);
+OSStatus MPCreateTask(TaskProc entryPoint, void *parameter, ByteCount stackSize, MPQueueID notifyQueue, void *terminationParameter1, void *terminationParameter2, MPTaskOptions options, MPTaskID *task) MAC_IMPORT(MPCreateTask);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPTerminateTask(MPTaskID task, OSStatus terminationStatus);
+OSStatus MPTerminateTask(MPTaskID task, OSStatus terminationStatus) MAC_IMPORT(MPTerminateTask);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPSetTaskWeight(MPTaskID task, MPTaskWeight weight);
+OSStatus MPSetTaskWeight(MPTaskID task, MPTaskWeight weight) MAC_IMPORT(MPSetTaskWeight);
 #endif
 
 #if !TARGET_CPU_68K
-Boolean MPTaskIsPreemptive(MPTaskID taskID);
+Boolean MPTaskIsPreemptive(MPTaskID taskID) MAC_IMPORT(MPTaskIsPreemptive);
 #endif
 
 #if !TARGET_CPU_68K
-void MPExit(OSStatus status);
+void MPExit(OSStatus status) MAC_IMPORT(MPExit);
 #endif
 
 #if !TARGET_CPU_68K
-void MPYield(void);
+void MPYield(void) MAC_IMPORT(MPYield);
 #endif
 
 #if !TARGET_CPU_68K
-MPTaskID MPCurrentTaskID(void);
+MPTaskID MPCurrentTaskID(void) MAC_IMPORT(MPCurrentTaskID);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPSetTaskType(MPTaskID task, OSType taskType);
+OSStatus MPSetTaskType(MPTaskID task, OSType taskType) MAC_IMPORT(MPSetTaskType);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPAllocateTaskStorageIndex(TaskStorageIndex *index);
+OSStatus MPAllocateTaskStorageIndex(TaskStorageIndex *index) MAC_IMPORT(MPAllocateTaskStorageIndex);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPDeallocateTaskStorageIndex(TaskStorageIndex index);
+OSStatus MPDeallocateTaskStorageIndex(TaskStorageIndex index) MAC_IMPORT(MPDeallocateTaskStorageIndex);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPSetTaskStorageValue(TaskStorageIndex index, TaskStorageValue value);
+OSStatus MPSetTaskStorageValue(TaskStorageIndex index, TaskStorageValue value) MAC_IMPORT(MPSetTaskStorageValue);
 #endif
 
 #if !TARGET_CPU_68K
-TaskStorageValue MPGetTaskStorageValue(TaskStorageIndex index);
+TaskStorageValue MPGetTaskStorageValue(TaskStorageIndex index) MAC_IMPORT(MPGetTaskStorageValue);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPCreateQueue(MPQueueID *queue);
+OSStatus MPCreateQueue(MPQueueID *queue) MAC_IMPORT(MPCreateQueue);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPDeleteQueue(MPQueueID queue);
+OSStatus MPDeleteQueue(MPQueueID queue) MAC_IMPORT(MPDeleteQueue);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPNotifyQueue(MPQueueID queue, void *param1, void *param2, void *param3);
+OSStatus MPNotifyQueue(MPQueueID queue, void *param1, void *param2, void *param3) MAC_IMPORT(MPNotifyQueue);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPWaitOnQueue(MPQueueID queue, void **param1, void **param2, void **param3, Duration timeout);
+OSStatus MPWaitOnQueue(MPQueueID queue, void **param1, void **param2, void **param3, Duration timeout) MAC_IMPORT(MPWaitOnQueue);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPSetQueueReserve(MPQueueID queue, ItemCount count);
+OSStatus MPSetQueueReserve(MPQueueID queue, ItemCount count) MAC_IMPORT(MPSetQueueReserve);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPCreateSemaphore(MPSemaphoreCount maximumValue, MPSemaphoreCount initialValue, MPSemaphoreID *semaphore);
+OSStatus MPCreateSemaphore(MPSemaphoreCount maximumValue, MPSemaphoreCount initialValue, MPSemaphoreID *semaphore) MAC_IMPORT(MPCreateSemaphore);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPDeleteSemaphore(MPSemaphoreID semaphore);
+OSStatus MPDeleteSemaphore(MPSemaphoreID semaphore) MAC_IMPORT(MPDeleteSemaphore);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPSignalSemaphore(MPSemaphoreID semaphore);
+OSStatus MPSignalSemaphore(MPSemaphoreID semaphore) MAC_IMPORT(MPSignalSemaphore);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPWaitOnSemaphore(MPSemaphoreID semaphore, Duration timeout);
+OSStatus MPWaitOnSemaphore(MPSemaphoreID semaphore, Duration timeout) MAC_IMPORT(MPWaitOnSemaphore);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPCreateCriticalRegion(MPCriticalRegionID *criticalRegion);
+OSStatus MPCreateCriticalRegion(MPCriticalRegionID *criticalRegion) MAC_IMPORT(MPCreateCriticalRegion);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPDeleteCriticalRegion(MPCriticalRegionID criticalRegion);
+OSStatus MPDeleteCriticalRegion(MPCriticalRegionID criticalRegion) MAC_IMPORT(MPDeleteCriticalRegion);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPEnterCriticalRegion(MPCriticalRegionID criticalRegion, Duration timeout);
+OSStatus MPEnterCriticalRegion(MPCriticalRegionID criticalRegion, Duration timeout) MAC_IMPORT(MPEnterCriticalRegion);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPExitCriticalRegion(MPCriticalRegionID criticalRegion);
+OSStatus MPExitCriticalRegion(MPCriticalRegionID criticalRegion) MAC_IMPORT(MPExitCriticalRegion);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPCreateEvent(MPEventID *event);
+OSStatus MPCreateEvent(MPEventID *event) MAC_IMPORT(MPCreateEvent);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPDeleteEvent(MPEventID event);
+OSStatus MPDeleteEvent(MPEventID event) MAC_IMPORT(MPDeleteEvent);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPSetEvent(MPEventID event, MPEventFlags flags);
+OSStatus MPSetEvent(MPEventID event, MPEventFlags flags) MAC_IMPORT(MPSetEvent);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPWaitForEvent(MPEventID event, MPEventFlags *flags, Duration timeout);
+OSStatus MPWaitForEvent(MPEventID event, MPEventFlags *flags, Duration timeout) MAC_IMPORT(MPWaitForEvent);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPCreateNotification(MPNotificationID *notificationID);
+OSStatus MPCreateNotification(MPNotificationID *notificationID) MAC_IMPORT(MPCreateNotification);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPDeleteNotification(MPNotificationID notificationID);
+OSStatus MPDeleteNotification(MPNotificationID notificationID) MAC_IMPORT(MPDeleteNotification);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPModifyNotification(MPNotificationID notificationID, MPOpaqueID anID, void *notifyParam1, void *notifyParam2, void *notifyParam3);
+OSStatus MPModifyNotification(MPNotificationID notificationID, MPOpaqueID anID, void *notifyParam1, void *notifyParam2, void *notifyParam3) MAC_IMPORT(MPModifyNotification);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPModifyNotificationParameters(MPNotificationID notificationID, MPOpaqueIDClass kind, void *notifyParam1, void *notifyParam2, void *notifyParam3);
+OSStatus MPModifyNotificationParameters(MPNotificationID notificationID, MPOpaqueIDClass kind, void *notifyParam1, void *notifyParam2, void *notifyParam3) MAC_IMPORT(MPModifyNotificationParameters);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPCauseNotification(MPNotificationID notificationID);
+OSStatus MPCauseNotification(MPNotificationID notificationID) MAC_IMPORT(MPCauseNotification);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPDelayUntil(AbsoluteTime *expirationTime);
+OSStatus MPDelayUntil(AbsoluteTime *expirationTime) MAC_IMPORT(MPDelayUntil);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPCreateTimer(MPTimerID *timerID);
+OSStatus MPCreateTimer(MPTimerID *timerID) MAC_IMPORT(MPCreateTimer);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPDeleteTimer(MPTimerID timerID);
+OSStatus MPDeleteTimer(MPTimerID timerID) MAC_IMPORT(MPDeleteTimer);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPSetTimerNotify(MPTimerID timerID, MPOpaqueID anID, void *notifyParam1, void *notifyParam2, void *notifyParam3);
+OSStatus MPSetTimerNotify(MPTimerID timerID, MPOpaqueID anID, void *notifyParam1, void *notifyParam2, void *notifyParam3) MAC_IMPORT(MPSetTimerNotify);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPArmTimer(MPTimerID timerID, AbsoluteTime *expirationTime, OptionBits options);
+OSStatus MPArmTimer(MPTimerID timerID, AbsoluteTime *expirationTime, OptionBits options) MAC_IMPORT(MPArmTimer);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPCancelTimer(MPTimerID timerID, AbsoluteTime *timeRemaining);
+OSStatus MPCancelTimer(MPTimerID timerID, AbsoluteTime *timeRemaining) MAC_IMPORT(MPCancelTimer);
 #endif
 
 #if !TARGET_CPU_68K
-LogicalAddress MPAllocateAligned(ByteCount size, UInt8 alignment, OptionBits options);
+LogicalAddress MPAllocateAligned(ByteCount size, UInt8 alignment, OptionBits options) MAC_IMPORT(MPAllocateAligned);
 #endif
 
 #if !TARGET_CPU_68K
-LogicalAddress MPAllocate(ByteCount size);
+LogicalAddress MPAllocate(ByteCount size) MAC_IMPORT(MPAllocate);
 #endif
 
 #if !TARGET_CPU_68K
-void MPFree(LogicalAddress object);
+void MPFree(LogicalAddress object) MAC_IMPORT(MPFree);
 #endif
 
 #if !TARGET_CPU_68K
-ByteCount MPGetAllocatedBlockSize(LogicalAddress object);
+ByteCount MPGetAllocatedBlockSize(LogicalAddress object) MAC_IMPORT(MPGetAllocatedBlockSize);
 #endif
 
 #if !TARGET_CPU_68K
-void MPBlockCopy(LogicalAddress source, LogicalAddress destination, ByteCount size);
+void MPBlockCopy(LogicalAddress source, LogicalAddress destination, ByteCount size) MAC_IMPORT(MPBlockCopy);
 #endif
 
 #if !TARGET_CPU_68K
-void MPBlockClear(LogicalAddress address, ByteCount size);
+void MPBlockClear(LogicalAddress address, ByteCount size) MAC_IMPORT(MPBlockClear);
 #endif
 
 #if !TARGET_CPU_68K
-void MPDataToCode(LogicalAddress address, ByteCount size);
+void MPDataToCode(LogicalAddress address, ByteCount size) MAC_IMPORT(MPDataToCode);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPSetExceptionHandler(MPTaskID task, MPQueueID exceptionQ);
+OSStatus MPSetExceptionHandler(MPTaskID task, MPQueueID exceptionQ) MAC_IMPORT(MPSetExceptionHandler);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPDisposeTaskException(MPTaskID task, OptionBits action);
+OSStatus MPDisposeTaskException(MPTaskID task, OptionBits action) MAC_IMPORT(MPDisposeTaskException);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPThrowException(MPTaskID task, MPExceptionKind kind);
+OSStatus MPThrowException(MPTaskID task, MPExceptionKind kind) MAC_IMPORT(MPThrowException);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPRegisterDebugger(MPQueueID queue, MPDebuggerLevel level);
+OSStatus MPRegisterDebugger(MPQueueID queue, MPDebuggerLevel level) MAC_IMPORT(MPRegisterDebugger);
 #endif
 
 #if !TARGET_CPU_68K
-OSStatus MPUnregisterDebugger(MPQueueID queue);
+OSStatus MPUnregisterDebugger(MPQueueID queue) MAC_IMPORT(MPUnregisterDebugger);
 #endif
 
 #if !TARGET_CPU_68K
-void* MPRemoteCall(MPRemoteProcedure remoteProc, void *parameter, MPRemoteContext context);
+void* MPRemoteCall(MPRemoteProcedure remoteProc, void *parameter, MPRemoteContext context) MAC_IMPORT(MPRemoteCall);
 #endif
 
 #if !TARGET_CPU_68K
-Boolean _MPIsFullyInitialized(void);
+Boolean _MPIsFullyInitialized(void) MAC_IMPORT(_MPIsFullyInitialized);
 #endif
 
 #if !TARGET_CPU_68K
-Duration AbsoluteToDuration(AbsoluteTime absoluteTime);
+Duration AbsoluteToDuration(AbsoluteTime absoluteTime) MAC_IMPORT(AbsoluteToDuration);
 #endif
 
 #ifdef __cplusplus
