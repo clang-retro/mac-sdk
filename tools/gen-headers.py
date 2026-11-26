@@ -46,7 +46,7 @@ TYPE_SIZE = {"uint8_t": 1, "uint16_t": 2, "uint32_t": 4, "uint64_t": 8,
 APPLE_NAMES = [
     "AppleEvents", "Aliases", "CodeFragments", "Components", "CursorDevices", "DatabaseAccess",
     "ConditionalMacros", "Connections", "CommResources", "CTBUtilities", "Displays", "ADSP", "ENET", "FileTransfers", "Terminals", "AppleTalk", "Dictionary", "MIDI", "Power", "PPCToolbox", "SCSI", "Slots", "TextServices",
-    "Appearance", "Collections", "ControlDefinitions", "ContextualMenu", "Controls", "Devices", "Dialogs", "DiskInit", "Drag", "DriverServices", "Multiprocessing", "Threads", "TextCommon", "TextEncodingConverter", "UnicodeConverter", "URLAccess", "Keychain",
+    "Appearance", "Collections", "ControlDefinitions", "ContextualMenu", "Controls", "ControlStrip", "Devices", "Dialogs", "DiskInit", "Drag", "DriverServices", "Multiprocessing", "Threads", "TextCommon", "TextEncodingConverter", "UnicodeConverter", "URLAccess", "Keychain",
     "Movies", "ImageCompression", "QuickTimeComponents", "MediaHandler", "ImageCodec", "MoviesFormat",
     "Errors", "Events", "Files", "Finder", "FixMath", "Folders", "Fonts",
     "Gestalt", "Icons", "Interrupts", "Kernel", "Lists", "LowMem",

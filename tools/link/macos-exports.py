@@ -34,7 +34,7 @@ import struct
 import sys
 
 # Libraries that a program should not need to be present.
-WEAK = {"CarbonLib", "Apple;Carbon;Networking"}
+WEAK = {"CarbonLib", "Apple;Carbon;Networking", "ControlStripLib"}
 
 # The libraries that Apple's Universal Interfaces 3.4 link against. A
 # Mac OS install has hundreds more (drivers, Open Transport modules,
