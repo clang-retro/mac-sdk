@@ -362,7 +362,8 @@ def main():
                "TextFont", "TextSize", "EraseRect", "MoveTo", "SizeWindow",
                "MoveWindow", "ShowWindow", "DisposeWindow", "SystemTask",
                "BeginUpdate", "EndUpdate", "DragWindow", "SelectWindow",
-               "SystemClick", "ScrollRect"]
+               "SystemClick", "ScrollRect", "AppendMenu", "InsertMenu",
+               "DrawMenuBar", "AppendResMenu"]
     funcs = {n: (lambda: ret(0)) for n in nothing}
     funcs.update({
         "DrawText": draw_text,
@@ -372,6 +373,7 @@ def main():
         "GetNextEvent": next_event,
         "NewWindow": lambda: ret(0x30000),
         "NewRgn": lambda: ret(0x40000),
+        "NewMenu": lambda: ret(0x50000),
         "FindWindow": lambda: ret(0),
         "TrackGoAway": lambda: ret(0),
     })
