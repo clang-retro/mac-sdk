@@ -7,7 +7,9 @@
  * SPDX-License-Identifier: AGPL-3.0-only */
 #include <errno.h>
 #include <fcntl.h>
+#include <limits.h>
 #include <stdarg.h>
+#include <string.h>
 #include <unistd.h>
 #include <sys/uio.h>
 #include "macos.h"
@@ -43,13 +45,43 @@ static int fail(OSErr err) {
   return -1;
 }
 
-/* Opens the data fork of a file, and makes it if O_CREAT is set. */
+/* Gives the length of path without the suffix "/..namedfork/rsrc" or
+   "/..namedfork/data" (as on Mac OS X), and tells if it named the
+   resource fork. */
+static size_t fork_suffix(const char *path, int *rsrc) {
+  static const char tail[] = "/..namedfork/";
+  size_t n = strlen(path), t = sizeof tail - 1;
+  *rsrc = 0;
+  if (n > t + 4 && memcmp(path + n - t - 4, tail, t) == 0) {
+    if (strcmp(path + n - 4, "rsrc") == 0) {
+      *rsrc = 1;
+      return n - t - 4;
+    }
+    if (strcmp(path + n - 4, "data") == 0)
+      return n - t - 4;
+  }
+  return n;
+}
+
+/* Opens the data fork of a file, and makes it if O_CREAT is set. A path
+   that ends in "/..namedfork/rsrc" opens the resource fork. */
 int open(const char *path, int flags, ...) {
   Str255 name;
   ParamBlockRec pb;
   OSErr err;
-  int fd, acc = flags & O_ACCMODE;
+  int fd, acc = flags & O_ACCMODE, rsrc;
+  char file[PATH_MAX];
+  size_t len = fork_suffix(path, &rsrc);
 
+  if (len != strlen(path)) {
+    if (len >= sizeof file) {
+      errno = ENAMETOOLONG;
+      return -1;
+    }
+    memcpy(file, path, len);
+    file[len] = 0;
+    path = file;
+  }
   if (__mac_path(path, name) < 0)
     return -1;
   {
@@ -82,7 +114,7 @@ int open(const char *path, int flags, ...) {
   pb.ioParam.ioPermssn = acc == O_RDONLY ? fsRdPerm
                          : acc == O_WRONLY ? fsWrPerm : fsRdWrPerm;
   pb.ioParam.ioMisc = 0;
-  err = PBOpenSync(&pb);
+  err = rsrc ? PBOpenRFSync(&pb) : PBOpenSync(&pb);
   if (err != noErr)
     return fail(err);
   if ((flags & O_TRUNC) && acc != O_RDONLY) {

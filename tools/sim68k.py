@@ -138,7 +138,7 @@ GMT_DELTA = -8 * 3600     # the Mac's time zone, seconds east of UTC
 HEAP_AT, HEAP_END = 0x200000, 0x3E0000
 # Open, Close, Read, Write, Create, Delete, Rename, GetFileInfo,
 # SetFileInfo, GetEOF, SetEOF, FlushVol, GetFPos, SetFPos.
-FILE_TRAPS = {0xA000, 0xA001, 0xA002, 0xA003, 0xA008, 0xA009, 0xA00B,
+FILE_TRAPS = {0xA000, 0xA001, 0xA002, 0xA003, 0xA008, 0xA009, 0xA00A, 0xA00B,
               0xA00C, 0xA00D, 0xA011, 0xA012, 0xA013, 0xA015, 0xA018,
               0xA041, 0xA042, 0xA044, 0xA045}
 
@@ -695,6 +695,7 @@ class FakeOS:
     def __init__(self, uc):
         self.uc = uc
         self.files = {}         # name -> bytearray
+        self.forks = {}         # name -> resource fork (bytearray)
         self.types = {}         # name -> (type, creator)
         self.open = {}          # refNum -> [name, mark]
         self.next_ref = 100
@@ -987,7 +988,7 @@ class FakeOS:
                     uc.mem_write(ptr, bytes([len(raw)]) + raw)
                 parent = self.folder_of(f[0])
                 self.w32(pb + 32, self.file_id(f[0]))
-                self.w32(pb + 40, len(self.files[f[0]]))
+                self.w32(pb + 40, len(self.fork_of(f)))
                 self.w32(pb + 48, f[1])
                 self.w16(pb + 52, -1)
                 self.w32(pb + 58, self.dir_id(parent) if parent else 2)
@@ -1006,9 +1007,16 @@ class FakeOS:
                     err = -48
                 else:
                     self.files[new] = self.files.pop(n)
+                    if n in self.forks:
+                        self.forks[new] = self.forks.pop(n)
         self.w16(pb + 16, err)
         self.set_d0(err)
         return True
+
+    def fork_of(self, f):
+        """The bytes of the fork that the open file f ([name, mark,
+        resource fork]) reads and writes."""
+        return self.forks[f[0]] if f[2] else self.files[f[0]]
 
     # File Manager: parameter block in A0, result in D0 and ioResult.
     def file(self, word):
@@ -1029,18 +1037,21 @@ class FakeOS:
                 err = -48
             else:
                 self.files[n] = bytearray()
-        elif op == 0xA000:                      # Open
+        elif op in (0xA000, 0xA00A):            # Open, OpenRF
             n = self.name(self.r32(pb + 18))
             if n not in self.files:
                 err = -43
             else:
+                rsrc = op == 0xA00A
+                if rsrc:
+                    self.forks.setdefault(n, bytearray())
                 self.next_ref += 2
-                self.open[self.next_ref] = [n, 0]
+                self.open[self.next_ref] = [n, 0, rsrc]
                 self.w16(pb + 24, self.next_ref)
         elif op == 0xA001:                      # Close
             del self.open[ref]
         elif op in (0xA002, 0xA003):            # Read, Write
-            data = self.files[f[0]]
+            data = self.fork_of(f)
             buf, want = self.r32(pb + 32), self.r32(pb + 36)
             mode, off = self.r16(pb + 44), struct.unpack(
                 ">i", self.rd(pb + 46, 4))[0]
@@ -1066,9 +1077,9 @@ class FakeOS:
             self.w32(pb + 40, n)
             self.w32(pb + 46, f[1])
         elif op == 0xA011:                      # GetEOF
-            self.w32(pb + 28, len(self.files[f[0]]))
+            self.w32(pb + 28, len(self.fork_of(f)))
         elif op == 0xA012:                      # SetEOF
-            data, n = self.files[f[0]], self.r32(pb + 28)
+            data, n = self.fork_of(f), self.r32(pb + 28)
             if n < len(data):
                 del data[n:]
             else:
@@ -1079,11 +1090,11 @@ class FakeOS:
         elif op == 0xA044:                      # SetFPos
             mode = self.r16(pb + 44) & 3
             off = struct.unpack(">i", self.rd(pb + 46, 4))[0]
-            base = {1: 0, 2: len(self.files[f[0]]), 3: f[1]}.get(mode, f[1])
+            base = {1: 0, 2: len(self.fork_of(f)), 3: f[1]}.get(mode, f[1])
             if base + off < 0:
                 err = -40
-            elif base + off > len(self.files[f[0]]):
-                f[1] = len(self.files[f[0]])
+            elif base + off > len(self.fork_of(f)):
+                f[1] = len(self.fork_of(f))
                 err = -39
             else:
                 f[1] = base + off
@@ -1101,6 +1112,7 @@ class FakeOS:
                 err = -47
             else:
                 del self.files[n]
+                self.forks.pop(n, None)
         elif op == 0xA00B:                      # Rename
             n = self.name(self.r32(pb + 18))
             new = self.name(self.r32(pb + 28))
@@ -1110,6 +1122,8 @@ class FakeOS:
                 err = -48
             else:
                 self.files[new] = self.files.pop(n)
+                if n in self.forks:
+                    self.forks[new] = self.forks.pop(n)
         elif op == 0xA00C:                      # GetFileInfo
             n = self.name(self.r32(pb + 18))
             if n not in self.files:

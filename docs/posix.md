@@ -10,6 +10,7 @@ have the function. A program can find the failure and continue.
 | Functions | Behavior |
 | --- | --- |
 | `dup`, `dup2`, `fcntl` | Two descriptors share one open file and its mark. The file closes when its last descriptor closes. `fcntl` does `F_DUPFD`, `F_GETFD`, `F_SETFD`, `F_GETFL` and `F_SETFL` (`O_APPEND`, `O_NONBLOCK`). |
+| `open` | A path that ends in `/..namedfork/rsrc` opens the resource fork of the file, as on Mac OS X. `/..namedfork/data` opens the data fork. |
 | `pread`, `pwrite` | They read and write at an offset. The mark does not change. |
 | `fsync` | It writes the buffers of the file to the disk (`PBFlushFile`). |
 | `access` | It tells if the item exists. `W_OK` fails with `EACCES` for a locked file. |

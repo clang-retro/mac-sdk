@@ -76,6 +76,17 @@ static void check_posix(void) {
                      (fcntl(fd, F_GETFL) & O_APPEND) && fcntl(fd, F_SETFL, 0) == 0);
   check("fcntl dupfd", (n = fcntl(fd, F_DUPFD, 20)) >= 20 && close(n) == 0);
   check("close a copy", close(fd2) == 0 && pread(fd, buf, 1, 7) == 1 && buf[0] == 'h');
+  /* The resource fork, by the Mac OS X path suffix. */
+  fd2 = open("px.txt/..namedfork/rsrc", O_RDWR);
+  check("resource fork", fd2 >= 3 && write(fd2, "rsrc", 4) == 4 && lseek(fd2, 0, SEEK_END) == 4 &&
+                             pread(fd, buf, 2, 0) == 2 && memcmp(buf, "XY", 2) == 0 &&
+                             close(fd2) == 0);
+  fd2 = open("px.txt/..namedfork/rsrc", O_RDONLY);
+  check("resource fork again", fd2 >= 3 && read(fd2, buf, 8) == 4 && memcmp(buf, "rsrc", 4) == 0 &&
+                                   close(fd2) == 0);
+  fd2 = open("px.txt/..namedfork/data", O_RDONLY);
+  check("data fork by name", fd2 >= 3 && read(fd2, buf, 2) == 2 && memcmp(buf, "XY", 2) == 0 &&
+                                 close(fd2) == 0);
   check("fsync", fsync(fd) == 0);
   check("fchmod", fchmod(fd, 0444) == 0 && access("px.txt", W_OK) != 0 &&
                       fchmod(fd, 0644) == 0 && access("px.txt", W_OK) == 0);
