@@ -404,6 +404,7 @@ def main():
                                                  (22, ">h", sarg(1)),
                                                  (28, ">I", arg(2))])),
         "PBOpenSync": lambda: ret(os_.call("file", 0xA000, arg(0))[1]),
+        "PBOpenRFSync": lambda: ret(os_.call("file", 0xA00A, arg(0))[1]),
         "PBFlushFileSync": lambda: ret(os_.call("file", 0xA045, arg(0))[1]),
         "PBHSetFLockSync": lambda: ret(os_.call("file", 0xA241, arg(0))[1]),
         "PBHRstFLockSync": lambda: ret(os_.call("file", 0xA242, arg(0))[1]),
