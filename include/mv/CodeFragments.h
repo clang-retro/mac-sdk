@@ -66,6 +66,43 @@ enum {
 };
 
 enum {
+    cfragFirstErrCode = -2800,
+    cfragContextIDErr = -2800,
+    cfragConnectionIDErr = -2801,
+    cfragNoSymbolErr = -2802,
+    cfragNoSectionErr = -2803,
+    cfragNoLibraryErr = -2804,
+    cfragDupRegistrationErr = -2805,
+    cfragFragmentFormatErr = -2806,
+    cfragUnresolvedErr = -2807,
+    cfragNoPositionErr = -2808,
+    cfragNoPrivateMemErr = -2809,
+    cfragNoClientMemErr = -2810,
+    cfragNoIDsErr = -2811,
+    cfragInitOrderErr = -2812,
+    cfragImportTooOldErr = -2813,
+    cfragImportTooNewErr = -2814,
+    cfragInitLoopErr = -2815,
+    cfragInitAtBootErr = -2816,
+    cfragLibConnErr = -2817,
+    cfragCFMStartupErr = -2818,
+    cfragCFMInternalErr = -2819,
+    cfragFragmentCorruptErr = -2820,
+    cfragInitFunctionErr = -2821,
+    cfragNoApplicationErr = -2822,
+    cfragArchitectureErr = -2823,
+    cfragFragmentUsageErr = -2824,
+    cfragFileSizeErr = -2825,
+    cfragNotClosureErr = -2826,
+    cfragNoRegistrationErr = -2827,
+    cfragContainerIDErr = -2828,
+    cfragClosureIDErr = -2829,
+    cfragAbortClosureErr = -2830,
+    cfragOutputLengthErr = -2831,
+    cfragLastErrCode = -2899,
+};
+
+enum {
     kPowerPCArch = 'pwpc',
     kMotorola68KArch = 'm68k',
 };

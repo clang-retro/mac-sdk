@@ -513,7 +513,8 @@ def main():
     # The Code Fragment Manager: GetSharedLibrary connects to a library
     # that the simulator fakes, and FindSymbol gives a function's
     # transition vector, adding a stub for a name the program does not
-    # import.
+    # import. A gl* name that OpenGLLibrary does not have gives
+    # cfragNoSymbolErr, as on a real Mac.
     libraries = ["InterfaceLib", "ThreadsLib", "MathLib", "OpenGLLibrary",
                  "OpenGLUtility"]
 
@@ -534,7 +535,7 @@ def main():
         names = [n for n, _ in imports]
         if name in names:
             i = names.index(name)
-        elif name in funcs or name.startswith(("agl", "gl")):
+        elif name in funcs or gl.exports(name):
             i = len(imports)
             if i >= MAX_STUBS:
                 ret(-2802)                      # cfragNoSymbolErr

@@ -108,6 +108,79 @@
 
 - enum:
     values:
+      - name: cfragFirstErrCode
+        value: -2800
+      - name: cfragContextIDErr
+        value: -2800
+      - name: cfragConnectionIDErr
+        value: -2801
+      - name: cfragNoSymbolErr
+        value: -2802
+      - name: cfragNoSectionErr
+        value: -2803
+      - name: cfragNoLibraryErr
+        value: -2804
+      - name: cfragDupRegistrationErr
+        value: -2805
+      - name: cfragFragmentFormatErr
+        value: -2806
+      - name: cfragUnresolvedErr
+        value: -2807
+      - name: cfragNoPositionErr
+        value: -2808
+      - name: cfragNoPrivateMemErr
+        value: -2809
+      - name: cfragNoClientMemErr
+        value: -2810
+      - name: cfragNoIDsErr
+        value: -2811
+      - name: cfragInitOrderErr
+        value: -2812
+      - name: cfragImportTooOldErr
+        value: -2813
+      - name: cfragImportTooNewErr
+        value: -2814
+      - name: cfragInitLoopErr
+        value: -2815
+      - name: cfragInitAtBootErr
+        value: -2816
+      - name: cfragLibConnErr
+        value: -2817
+      - name: cfragCFMStartupErr
+        value: -2818
+      - name: cfragCFMInternalErr
+        value: -2819
+      - name: cfragFragmentCorruptErr
+        value: -2820
+      - name: cfragInitFunctionErr
+        value: -2821
+      - name: cfragNoApplicationErr
+        value: -2822
+      - name: cfragArchitectureErr
+        value: -2823
+      - name: cfragFragmentUsageErr
+        value: -2824
+      - name: cfragFileSizeErr
+        value: -2825
+      - name: cfragNotClosureErr
+        value: -2826
+      - name: cfragNoRegistrationErr
+        value: -2827
+      - name: cfragContainerIDErr
+        value: -2828
+      - name: cfragClosureIDErr
+        value: -2829
+      - name: cfragAbortClosureErr
+        value: -2830
+      - name: cfragOutputLengthErr
+        value: -2831
+      - name: cfragLastErrCode
+        value: -2899
+
+# ####
+
+- enum:
+    values:
       - name: kPowerPCArch
         value: "'pwpc'"
       - name: kMotorola68KArch

@@ -13,6 +13,8 @@ drawing.
 Copyright (C) clang-retro contributors.
 SPDX-License-Identifier: AGPL-3.0-only
 """
+import os
+import re
 import struct
 
 # The AGL attributes that are followed by a value.
@@ -30,6 +32,25 @@ STRINGS = {GL_VENDOR: "clang-retro", GL_RENDERER: "simppc fake OpenGL",
            GL_VERSION: "1.2 fake",
            GL_EXTENSIONS: "GL_ARB_multitexture GL_EXT_abgr GL_EXT_bgra "
                           "GL_EXT_compiled_vertex_array"}
+# The headers that declare the functions of OpenGLLibrary and
+# OpenGLUtility, from the directory of this file.
+HEADERS = ("GL/gl.h", "GL/glext.h", "GL/glu.h", "AGL/agl.h")
+INCLUDE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..",
+                       "include")
+
+
+def library_names():
+    """Give the names of the agl*, gl* and glu* functions that the SDK's
+    OpenGL headers declare: the functions that the real libraries
+    export."""
+    names = set()
+    for header in HEADERS:
+        with open(os.path.join(INCLUDE, header), encoding="latin-1") as f:
+            names.update(re.findall(r"\b((?:agl|glu?)[A-Z]\w*)\s*\(",
+                                    f.read()))
+    return names
+
+
 GLU_STRINGS = {GLU_VERSION: "1.3", GLU_EXTENSIONS: ""}
 GLU_ERRORS = {0: "no error", 0x0500: "invalid enumerant",
               0x0501: "invalid value", 0x0502: "invalid operation",
@@ -57,6 +78,7 @@ class FakeGL:
         self.strings = {}                   # text -> address
         self.calls = 0
         self.swaps = 0
+        self.names = library_names()
         self.funcs = {
             "aglChoosePixelFormat": self.choose_pixel_format,
             "aglDestroyPixelFormat": lambda: self.formats.pop(arg(0), None),
@@ -142,6 +164,12 @@ class FakeGL:
             self.ret(0)
         else:
             f()
+
+    def exports(self, name):
+        """Tell if the real OpenGLLibrary or OpenGLUtility has the
+        function name: one that the fake runs, or one that the SDK's
+        headers declare. FindSymbol finds no other name."""
+        return name in self.funcs or name in self.names
 
     def summary(self):
         """Print what the program did with OpenGL."""
