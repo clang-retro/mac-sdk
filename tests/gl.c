@@ -90,6 +90,10 @@ static void check_find_symbol(void) {
   check("FindSymbol", e == noErr && FindSymbol(conn, "\pglFlush", &addr, &cls) == noErr && addr);
   if (addr)
     ((void (*)(void))addr)();
+  // OpenGLLibrary has no function by this name.
+  Ptr none = 0;
+  check("FindSymbol of a missing name",
+        e == noErr && FindSymbol(conn, "\pglNoSuchFunctionXYZ", &none, &cls) == cfragNoSymbolErr);
 }
 
 /* Runs the checks. */

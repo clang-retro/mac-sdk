@@ -120,4 +120,6 @@ simulator's fake OpenGL (`tools/fakegl.py`) is not a renderer. It keeps
 the AGL objects, the current context, the viewport and the off-screen
 buffer, and writes the clear color on `glClear`. The other functions do
 nothing. The simulator also fakes `GetSharedLibrary` and `FindSymbol`
-for the libraries that it fakes. It checks the imports and the calls, not the drawing.
+for the libraries that it fakes. `FindSymbol` finds only the functions
+that the fake runs or that the SDK's OpenGL headers declare. For other
+names, it gives `cfragNoSymbolErr`, as on a real Mac. It checks the imports and the calls, not the drawing.
