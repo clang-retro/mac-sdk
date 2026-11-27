@@ -10,7 +10,8 @@ calls (on files in memory, all in one folder) work too, enough for the C
 library, and so do a pretend PowerBook's Power Manager (_PMgrOp) and the
 Sound Driver's volume, write and KillIO calls, and ReadLocation, for a
 Mac in UTC-8 (its clock, Time, is local time), the catalog calls of
-HFS (folders, catalog information), Gestalt for the Thread Manager, and
+HFS (folders, catalog information), Gestalt for the Thread Manager,
+TempNewHandle (8 MB of temporary memory after the Mac's memory), and
 the Thread Manager's cooperative threads (FakeThreads); --files then
 prints the files the program left. An asynchronous write to the Sound Driver ends
 at the program's next trap, which first runs its completion routine as
@@ -48,7 +49,8 @@ IRQ_RETURN = MEM_SIZE - 0x10  # where a completion routine returns to
 THREAD_END = MEM_SIZE - 0x20  # where a thread's entry function returns to
 THREAD_STACK = 24 * 1024      # the Thread Manager's default stack size
 GESTALT = {b"thds": 0x7,      # Thread Manager, specific match, ThreadsLib
-           b"ppc ": 0x7}      # PPC Toolbox, real-time sessions
+           b"ppc ": 0x7,      # PPC Toolbox, real-time sessions
+           b"os  ": 0x70}     # temporary memory: calls, real, tracked
 # SR first: writing it can switch stacks.
 REGS = [UC_M68K_REG_SR, UC_M68K_REG_PC] + [
     getattr(m68k_const, f"UC_M68K_REG_{r}{i}") for r in "DA" for i in range(8)]
@@ -739,6 +741,32 @@ class FakeOS:
         n = self.rd(ptr, 1)[0]
         return self.rd(ptr + 1, n).decode("mac_roman").lstrip(":")
 
+    # Temporary memory (TempNewHandle): a region of its own, outside the
+    # heap, as the Process Manager's free memory is outside the
+    # partition. map_temp maps it.
+    TEMP_SIZE = 8 << 20
+
+    def map_temp(self, at):
+        """Map the temporary memory region at address at."""
+        self.uc.mem_map(at, self.TEMP_SIZE)
+        self.temp_top, self.temp_end = at, at + self.TEMP_SIZE
+
+    def temp_new_handle(self, size):
+        """TempNewHandle: give a handle to size bytes of temporary memory,
+        and the result code."""
+        size = (max(size, 4) + 3) & ~3
+        end = getattr(self, "temp_end", 0)
+        if not end or self.temp_top + size > end:
+            return 0, -108                      # memFullErr
+        h = self.alloc(4)
+        if not h:
+            return 0, -108
+        p = self.temp_top
+        self.temp_top += size
+        self.uc.mem_write(p, bytes(size))
+        self.w32(h, p)
+        return h, 0
+
     def alloc(self, size):
         """Takes size bytes from the heap, as NewPtr does, for a thread's
         stack. Gives the address, or 0 when the heap is full."""
@@ -778,7 +806,7 @@ class FakeOS:
                 uc.mem_write(p, bytes(d0))
                 uc.mem_write(h, struct.pack(">I", p))
                 self.set_a0(h)
-        elif op == 0xA023:                      # DisposeHandle
+        elif op in (0xA023, 0xA029, 0xA02A):    # DisposeHandle, HLock, HUnlock
             pass
         elif op == 0xA01F:                      # DisposePtr
             if self.blocks.pop(a0, None) is None:
@@ -1206,6 +1234,8 @@ def main():
     state = {"clicks": a.clicks, "done": False, "log": [], "port": None,
              "keys": key_events(a.keys)}
     fake = FakeOS(uc) if a.os else None
+    if fake:
+        fake.map_temp(MEM_BASE + MEM_SIZE)
     screen = FakeScreen(fake) if fake else None
     net = FakeNet(fake) if fake else None
     if fake and a.cpu != "68000":
@@ -1353,6 +1383,19 @@ def main():
             sel = struct.pack(">I", uc.reg_read(UC_M68K_REG_D0) & 0xFFFFFFFF)
             uc.reg_write(UC_M68K_REG_A0, GESTALT.get(sel, 0))
             uc.reg_write(UC_M68K_REG_D0, 0 if sel in GESTALT else -5551)
+            uc.reg_write(UC_M68K_REG_PC, pc + 2)
+            return
+        if word == 0xA88F and fake and fake.r16(
+                uc.reg_read(UC_M68K_REG_A7)) == 0x1D:
+            # TempNewHandle(size, &resultCode): the selector, then the
+            # arguments, popped; the Handle result left on the stack.
+            sp = uc.reg_read(UC_M68K_REG_A7) & 0xFFFFFFFF
+            result_ptr, size = fake.r32(sp + 2), fake.r32(sp + 6)
+            h, err = fake.temp_new_handle(size)
+            if result_ptr:
+                fake.w16(result_ptr, err)
+            fake.w32(sp + 10, h)
+            uc.reg_write(UC_M68K_REG_A7, sp + 10)
             uc.reg_write(UC_M68K_REG_PC, pc + 2)
             return
         if word not in TRAPS:

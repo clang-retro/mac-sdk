@@ -275,6 +275,24 @@ int main(int argc, char **argv) {
   check("malloc", p && p[99] == 99 && calloc(4, 4) != NULL);
   free(p);
 
+  /* A block larger than the 68k heap of tools/sim68k.py comes from
+     temporary memory. */
+  {
+    size_t big = (size_t)6 << 20;
+    char *q = malloc(big);
+    int ok = q != NULL && malloc_usable_size(q) >= big;
+    if (q) {
+      q[0] = 1;
+      q[big - 1] = 2;
+      ok = ok && realloc(q, big / 2) == q && q[0] == 1;
+      free(q);
+    }
+    q = calloc(1, big);
+    ok = ok && q && q[0] == 0 && q[big - 1] == 0;
+    free(q);
+    check("malloc of a large block", ok);
+  }
+
   if (setjmp(env) == 0) {
     jumped = 1;
     longjmp(env, 7);
