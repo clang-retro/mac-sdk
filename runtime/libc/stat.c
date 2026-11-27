@@ -36,10 +36,36 @@ unsigned long __mac_time_to_date(long long t) {
   return (unsigned long)(t + (long long)MAC_EPOCH + __mac_gmt_delta());
 }
 
+/* Gives the reference number of the volume that the full Mac path name
+   starts with, or 0 when name is not a full path or the volume is not
+   found. */
+static short volume_of(const Str255 name) {
+  HParamBlockRec vp;
+  Str255 vol;
+  unsigned n = 0;
+  if (name[0] == 0 || name[1] == ':')
+    return 0;                   /* a name in the current folder */
+  while (n < name[0] && name[n + 1] != ':')
+    n++;
+  if (n == name[0])
+    return 0;                   /* no ':': a name in the current folder */
+  memcpy(vol + 1, name + 1, n + 1);   /* "Volume:" */
+  vol[0] = (unsigned char)(n + 1);
+  memset(&vp, 0, sizeof vp);
+  vp.volumeParam.ioNamePtr = vol;
+  vp.volumeParam.ioVolIndex = -1;     /* find the volume by its name */
+  if (PBHGetVInfoSync(&vp) != noErr)
+    return 0;
+  return vp.volumeParam.ioVRefNum;
+}
+
 /* Gets the catalog information of the item at a POSIX path into pb.
    name holds the Mac name that pb points to. Returns the File Manager
-   result. */
+   result. pb's volume reference number is the item's volume, also for
+   a full path: GetCatInfo does not set it, and 0 is the current
+   volume, which can be another one. */
 OSErr __mac_cat_info(const char *path, CInfoPBRec *pb, Str255 name) {
+  OSErr err;
   memset(pb, 0, sizeof *pb);
   if (path[0] == 0 || (path[0] == '.' && path[1] == 0)) {
     /* The current folder itself. */
@@ -51,7 +77,13 @@ OSErr __mac_cat_info(const char *path, CInfoPBRec *pb, Str255 name) {
       return bdNamErr;
     pb->hFileInfo.ioNamePtr = name;
   }
-  return PBGetCatInfoSync(pb);
+  err = PBGetCatInfoSync(pb);
+  if (err == noErr && pb->hFileInfo.ioVRefNum == 0) {
+    short vol = volume_of(name);
+    if (vol)
+      pb->hFileInfo.ioVRefNum = vol;
+  }
+  return err;
 }
 
 /* Fills st from the catalog information in pb. */

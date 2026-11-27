@@ -61,7 +61,8 @@ int main(void) {
   report("udiv32", ua / ub == 571428571UL && ua % ub == 3);
   report("mul64", a64 * b64 == MUL64);
   report("div64", a64 / b64 == DIV64 && a64 % b64 == MOD64);
-  report("shift64", (a64 << 13) >> 13 == a64 && ((unsigned long long)ua << 20) >> 20 == ua);
+  report("shift64", (a64 << 13) >> 13 == -123456789012345LL &&
+                        ((unsigned long long)ua << 20) >> 20 == 4000000000ULL);
   report("double", da * db == -1.875 && da / db < -3.33 && da / db > -3.34 &&
                        da + db == 1.75 && da - db == 3.25);
   report("float", fa * fb == 1.5f && fa / fb == 6.0f && fa - fb == 2.5f);
