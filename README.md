@@ -439,7 +439,9 @@ links both archives before `libmacrt.a`, and starts the program at
 - `malloc`, `calloc`, `realloc` and `free` over `NewPtr`, `SetPtrSize`
   and `DisposePtr`, and `aligned_alloc`, `posix_memalign` and
   `memalign`, which take a larger block when `NewPtr`'s is not aligned
-  enough.
+  enough. When the heap has no room for a block of 64 KB or more,
+  `malloc` takes it from temporary memory (`TempNewHandle`), on System 7
+  and later.
 - `time`, `gettimeofday` and `ftime` from `GetDateTime`, in UTC: the first call
   reads the time zone set in the Map control panel (`ReadLocation`)
   and, unless the environment has been set, sets `TZ` to that offset,

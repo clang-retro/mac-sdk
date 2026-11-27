@@ -201,6 +201,7 @@ def main():
     uc = Uc(UC_ARCH_PPC, UC_MODE_PPC32 | UC_MODE_BIG_ENDIAN)
     uc.mem_map(0, MEM_SIZE)
     os_ = PpcOS(uc)
+    os_.map_temp(MEM_SIZE)
     imports, entry, toc = load(uc, pef_of(a.app))
     screen = FakeScreen(os_)
     net = FakeNet(os_)
@@ -428,6 +429,14 @@ def main():
         state["ticks"] += 1
         ret(screen.wait_event(arg(1), state["ticks"]))
 
+    def temp_new_handle():
+        """TempNewHandle(size, &resultCode), from FakeOS's temporary
+        memory."""
+        h, err = os_.temp_new_handle(arg(0))
+        if arg(1):
+            uc.mem_write(arg(1), struct.pack(">h", err))
+        ret(h)
+
     # What a program that shows its own pictures uses (FakeScreen).
     for n in ("HideWindow", "SetWTitle", "ForeColor", "BackColor",
               "GlobalToLocal", "LocalToGlobal", "HiliteMenu"):
@@ -448,6 +457,9 @@ def main():
         "NewHandle": lambda: ret(memory(0xA122)[0]),
         "NewHandleClear": lambda: ret(memory(0xA322)[0]),
         "DisposeHandle": lambda: memory(0xA023),
+        "HLock": lambda: uc.mem_write(0x220, bytes(2)),
+        "HUnlock": lambda: uc.mem_write(0x220, bytes(2)),
+        "TempNewHandle": temp_new_handle,
     })
     def open_driver():
         if pstring(arg(0)) != ".IPP":
