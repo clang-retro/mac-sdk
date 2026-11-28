@@ -25,6 +25,7 @@ nav:
   - "Mac OS 8, 9 and QuickTime": headers-newer.md
   - "Which System has which call": availability.md
   - "Systems and availability": systems.md
+  - "The sysroot": sysroot.md
   - "Building applications": building.md
   - "C++": cxx.md
   - "Threads": threads.md

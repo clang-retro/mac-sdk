@@ -102,3 +102,10 @@ jobs:
           persist-credentials: false
       - name: Tests
         run: LLVM_SRC=$PWD/llvm PICOLIBC_SRC=$PWD/picolibc QUESA_SRC=$PWD/quesa tests/run.sh
+      # The sysroot that dos-sdk's nightly release publishes: build it, and
+      # build and run programs with it alone.
+      - name: Sysroot
+        run: |
+          LLVM_SRC=$PWD/llvm PICOLIBC_SRC=$PWD/picolibc sh build-sysroot.sh "$RUNNER_TEMP/macos-classic" >"$RUNNER_TEMP/sysroot.log" 2>&1 ||
+            { tail -50 "$RUNNER_TEMP/sysroot.log"; exit 1; }
+          sh tests/sysroot.sh "$RUNNER_TEMP/macos-classic"
