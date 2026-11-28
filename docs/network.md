@@ -2,7 +2,10 @@
 
 The C library has BSD sockets and pipes for 68k and PowerPC. Programs
 from Unix can use them without changes. The code is in
-`runtime/libc/socket.c`, `netdb.c`, `unix.c` and `pipe.c`.
+`runtime/libc/socket.c`, `netdb.c`, `dnr.c`, `unix.c` and `pipe.c`.
+
+For the Open Transport and MacTCP interfaces, see
+[Open Transport and MacTCP](opentransport.md).
 
 ## Summary
 
@@ -25,7 +28,8 @@ from Unix can use them without changes. The code is in
   Toolbox, the calls fail with `EAFNOSUPPORT`.
 - Names need the MacTCP resolver (`dnrp` resource of MacTCP or of the
   TCP/IP control panel). Without it, only numbers, `localhost` and the
-  name of the computer resolve.
+  name of the computer resolve. `runtime/libc/dnr.c` loads the
+  resolver; `AddressXlation.h` declares its calls.
 
 ## Sockets
 
@@ -107,3 +111,8 @@ named pipes. `tests/run.sh` runs it in `tools/sim68k.py --os` and
 `tools/simppc.py`. Their fake MacTCP uses the network of the host
 (loopback), and their fake PPC Toolbox connects ports in the
 simulator.
+
+`examples/net/fetch.c` gets a web page with BSD sockets (and with Open
+Transport). It ran on Mac OS 8.1 (68k, QEMU `q800`) and Mac OS 9.2.1
+(PowerPC, QEMU `mac99`) with `tools/qemu/nettest.py`. Names resolved
+through the MacTCP resolver of Open Transport on both systems.
