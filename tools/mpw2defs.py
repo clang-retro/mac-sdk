@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
-"""Write definitions for defs/ from Apple's MPW C interfaces, such as the
-QuickTime 1.5 interfaces on the 1992 Developer CD Series.
+"""Write definitions from Apple's MPW C interfaces, such as the QuickTime
+1.5 interfaces on the 1992 Developer CD Series, as a local check.
 
     python3 tools/mpw2defs.py -I path/to/CIncludes -I path/to/QuickTime \\
-        -o defs/QuickTime.yaml Movies.h ImageCompression.h ...
+        -o /tmp/apple.yaml Movies.h ImageCompression.h ...
+
+Compare the output with defs/ to find a wrong number or layout. Do not
+commit the output: it comes from Apple's headers, which cannot be passed
+on. defs/ is written from Apple's published documentation.
 
 The headers are parsed with clang (CLANG, default clang), so the types,
 record layouts and enum values are what a compiler sees. Each function's
