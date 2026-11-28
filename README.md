@@ -258,6 +258,14 @@ with 32-bit addresses, so it works in programs of any size.
 calls that never ran on 68k (Navigation Services, Driver Services, the
 Name Registry).
 
+## The sysroot
+
+A ready-made sysroot for 68k and PowerPC is in the nightly release of
+clang-retro/dos-sdk (`get-toolchain.sh -s macos-classic`). It has the
+headers, the C and C++ libraries, the builtins and `macapp.py`, so you
+do not need to build them. `build-sysroot.sh` builds it from source.
+See [docs/sysroot.md](docs/sysroot.md).
+
 ## Building applications
 
 `tools/macapp.py` compiles C sources with this SDK's headers and links
