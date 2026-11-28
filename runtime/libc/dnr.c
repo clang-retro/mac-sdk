@@ -19,6 +19,7 @@
 #include <Multiverse.h>
 #include <Resources.h>
 #include <AddressXlation.h>
+#include "macos.h"
 #include "socket.h"
 
 /* The selectors of the resolver's entry point. */
@@ -51,8 +52,11 @@ static OSErr dnr_call(long sel, long a, long b, long c, long d) {
   const ProcInfoType info = 1 | (3 << 4) | (3 << 6) | (3 << 8) | (3 << 10) | (3 << 12) | (3 << 14);
   return (OSErr)CallUniversalProc((UniversalProcPtr)*dnr, info, sel, a, b, c, d);
 #else
-  typedef long (*proc)(long, long, long, long, long);
-  return (OSErr)((proc)*dnr)(sel, a, b, c, d);
+  /* The resolver is MPW code: it can change D2, so call it through
+     __mac_mpw_call (aslm.c), which keeps the registers that clang
+     keeps. */
+  const long args[5] = {sel, a, b, c, d};
+  return (OSErr)__mac_mpw_call((const void *)*dnr, 5, args);
 #endif
 }
 

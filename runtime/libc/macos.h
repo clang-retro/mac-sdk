@@ -83,4 +83,9 @@ int __mac_fifo_open(const char *path, int flags);
    way to wait for a pipe, a socket or a driver. */
 void __mac_wait(void);
 
+/* Calls fn, a function of the MPW C calling convention (68k), with
+   nargs 4-byte arguments, and keeps the registers that clang keeps.
+   Gives D0. In aslm.c. */
+long __mac_mpw_call(const void *fn, int nargs, const long *args);
+
 #endif

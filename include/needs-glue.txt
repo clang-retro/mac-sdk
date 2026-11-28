@@ -35,6 +35,12 @@ MakeDataExecutable
 InstallExceptionHandler
 FSCreateResourceFile
 FSOpenResourceFile
+InitLibraryManager
+CleanupLibraryManager
+ASLMPresent
+ASLMLoadFunctionSet
+ASLMCallC
+ASLMCallPascal
 CallUniversalProc
 CallOSTrapUniversalProc
 RegistryEntryIDDispose

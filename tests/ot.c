@@ -3,8 +3,10 @@
  * program (a listener, a client and the endpoint that accepts), a UDP
  * datagram to this program, and an endpoint that a notifier follows.
  *
- * On PowerPC the calls go to Open Transport (runtime/libc/ot.c); on 68k
- * to the SDK's Open Transport over MacTCP (runtime/libc/ot68k.c).
+ * On PowerPC the calls go to Open Transport (runtime/libc/ot.c). On 68k
+ * they go to native Open Transport through the Apple Shared Library
+ * Manager (runtime/libc/otnative.c) when it is installed, else to the
+ * SDK's Open Transport over MacTCP (runtime/libc/ot68k.c).
  * tests/run.sh runs it in tools/sim68k.py --os, whose fake MacTCP uses
  * the host's loopback network; tools/qemu/nettest.py runs it on Mac OS
  * 8.1 (68k) and 9.2.1 (PowerPC) in QEMU. The output has one "ok" line
@@ -73,8 +75,10 @@ static void check(const char *what, int ok) {
 static EndpointRef open_ep(const char *name, TEndpointInfo *info) {
   OSStatus err = -1;
   EndpointRef ep = OTOpenEndpoint(OTCreateConfiguration(name), 0, info, &err);
-  if (err != kOTNoError)
+  if (err != kOTNoError) {
+    say("note: OTOpenEndpoint %s: error %ld", name, (long)err);
     return NULL;
+  }
   OTSetBlocking(ep);
   return ep;
 }
@@ -326,6 +330,12 @@ int main(void) {
   check("InitOpenTransport", err == kOTNoError);
   if (err != kOTNoError)
     return 1;
+#if defined(__m68k__)
+  {
+    int __ot68k_native(void);
+    say("note: %s", __ot68k_native() ? "native Open Transport (through ASLM)" : "Open Transport over MacTCP");
+  }
+#endif
   check_utilities();
   me = check_inet();
   if (me) {

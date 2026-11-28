@@ -10,7 +10,7 @@ how to test it.
 
 | Interface | Headers | 68k | PowerPC |
 | --- | --- | --- | --- |
-| Open Transport | `OpenTransport.h`, `OpenTransportProviders.h` (also `OpenTptInternet.h`) | The C library, over MacTCP | Mac OS's Open Transport libraries |
+| Open Transport | `OpenTransport.h`, `OpenTransportProviders.h` (also `OpenTptInternet.h`) | Apple's 68k Open Transport libraries (through ASLM), else the C library over MacTCP | Mac OS's Open Transport libraries |
 | MacTCP | `MacTCP.h` (TCP and UDP parameter blocks) | The `.IPP` driver | The `.IPP` driver |
 | Name resolver | `AddressXlation.h` | The C library, over the `dnrp` resource | The C library, over the `dnrp` resource |
 | BSD sockets | `sys/socket.h`, `netdb.h` | The C library, over MacTCP | The C library, over MacTCP |
@@ -21,9 +21,10 @@ how to test it.
   7.5.2 to 9.2.2). The SDK imports `OTClientLib`, `OTClientUtilLib`,
   `OTUtilityLib` and `OTInetClientLib` weakly. Without Open Transport,
   the program starts, and `InitOpenTransport` gives `kOTNotFoundErr`.
-- Open Transport on 68k needs the `.IPP` driver: MacTCP (System 7), or
-  Open Transport, which also has this driver. Without the driver,
-  `InitOpenTransport` gives `kOTNotFoundErr`.
+- Open Transport on 68k uses Apple's 68k Open Transport libraries when
+  Open Transport and the Shared Library Manager (ASLM) are installed.
+  Otherwise it needs the `.IPP` driver of MacTCP (System 7). Without
+  either, `InitOpenTransport` gives `kOTNotFoundErr`.
 - The MacTCP calls need the `.IPP` driver on both processors.
 - Names need the resolver: the `dnrp` resource of MacTCP or of the
   TCP/IP control panel. Without the resolver, only dotted addresses
@@ -53,13 +54,33 @@ All other calls (for example `OTBind`, `OTSnd`, `OTRcv`, `OTLook`,
 
 ## Open Transport on 68k
 
-Apple's 68k Open Transport libraries use the Apple Shared Library
-Manager. The SDK does not have this manager. Thus on 68k the C library
-gives the Open Transport calls itself, in `runtime/libc/ot68k.c`. The
-calls use the BSD sockets of the C library (MacTCP's `.IPP` driver) and
-the name resolver.
+On 68k, the C library has two forms of each Open Transport call:
 
-These parts work:
+- The native form (`runtime/libc/otnative.c`) calls Apple's 68k Open
+  Transport libraries through the Apple Shared Library Manager (ASLM).
+  See [Shared Library Manager (ASLM)](aslm.md).
+- The MacTCP form (`runtime/libc/ot68k.c`) gives the calls itself. It
+  uses the BSD sockets of the C library (MacTCP's `.IPP` driver) and
+  the name resolver.
+
+`InitOpenTransport` selects the form. When the `otan` Gestalt selector
+is present and ASLM is installed, it starts the native libraries.
+When that fails, it starts the MacTCP form. The program uses the same
+calls with each form. `runtime/libc/ot68k-names.h` lists the calls that
+have two forms.
+
+Differences of the native form:
+
+- `OTInetGetInterfaceInfo` and `OTInetGetSecondaryAddresses` always
+  use the MacTCP form. In the 68k library, these calls fail on Mac OS
+  8.1.
+- `OTOpenInternetServices` changes `kDefaultInternetServicesPath` to
+  the `dnr` configuration, because the 68k library does not accept
+  it.
+
+### The MacTCP form
+
+These parts of the MacTCP form work:
 
 - Endpoints of the `tcp` and `udp` configurations: `OTBind` (with
   `qlen` for a listener), `OTConnect`, `OTRcvConnect`, `OTListen`,
@@ -78,7 +99,7 @@ These parts work:
 - The utilities: memory, strings, lists, time stamps, atomic
   operations, and deferred and system tasks.
 
-Differences from Open Transport:
+Differences of the MacTCP form from Open Transport:
 
 - A notifier runs when the program calls `OTIdle`, and while a
   synchronous blocking call waits. A notifier never runs at interrupt
@@ -138,8 +159,10 @@ python3 tools/macapp.py --console window -o Fetch.bin -- examples/net/fetch.c
   and worker), a UDP datagram and an asynchronous endpoint with a
   notifier. It prints one `ok` line for each check, then `all ok`.
 - `tests/run.sh` runs `tests/ot.c` for 68k in `tools/sim68k.py --os`.
-  The fake MacTCP of the simulator uses the loopback network of the
-  host.
+  The simulator has no ASLM, so the test uses the MacTCP form. The fake
+  MacTCP of the simulator uses the loopback network of the host.
+- On 68k, `tests/ot.c` prints a `note` line that tells which form it
+  uses.
 - `tools/qemu/nettest.py` runs a program on Mac OS in QEMU. It puts the
   program in the Startup Items folder of a copy of the disk, starts a
   report server (port 7009) and a web server (port 8080) on the host,
@@ -150,9 +173,9 @@ These runs passed:
 
 | Program | System | Machine | Result |
 | --- | --- | --- | --- |
-| `tests/ot.c` (68k) | Mac OS 8.1, Open Transport 1.3 | QEMU `q800` | all ok |
+| `tests/ot.c` (68k, native form) | Mac OS 8.1, Open Transport 1.3 | QEMU `q800` | all ok |
 | `tests/ot.c` (PowerPC) | Mac OS 9.2.1 install CD | QEMU `mac99` | all ok |
-| `examples/net/fetch.c` (68k) | Mac OS 8.1 | QEMU `q800` | Both requests got `200 OK` |
+| `examples/net/fetch.c` (68k, native form) | Mac OS 8.1 | QEMU `q800` | Both requests got `200 OK` |
 | `examples/net/fetch.c` (PowerPC) | Mac OS 9.2.1 | QEMU `mac99` | Both requests got `200 OK` |
 
 Example commands:
@@ -170,8 +193,7 @@ installed. The SDK cannot supply them.
 
 ## Not done yet
 
-- Native Open Transport on 68k (through the Apple Shared Library
-  Manager).
+- A test of the native form on System 7.5 with Open Transport 1.1.
 - AppleTalk, serial and raw IP endpoints.
 - An Open Transport path for the BSD sockets on PowerPC. The sockets use
   MacTCP's `.IPP` driver, which Open Transport supplies.

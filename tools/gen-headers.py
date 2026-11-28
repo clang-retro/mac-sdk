@@ -50,6 +50,7 @@ STANDALONE = {
     "AddressXlation": ["AddressXlation"],
     "OpenTransport": ["OpenTransport"],
     "OpenTransportProviders": ["OpenTransportProviders", "OpenTptInternet"],
+    "LibraryManager": ["LibraryManager"],
 }
 
 # Headers from Apple's Universal Interfaces that programs include. Each

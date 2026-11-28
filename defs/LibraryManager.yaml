@@ -1,0 +1,149 @@
+# LibraryManager.yaml: the client side of the Apple Shared Library
+# Manager (ASLM) on 68k.
+#
+# Written from a study of how Open Transport's 68k code calls ASLM.
+# Clean-room: no Apple header text is reproduced.  Apple's own client
+# header for ASLM is C++; this header gives a small C interface:
+#
+#   - InitLibraryManager and CleanupLibraryManager, with the names and
+#     arguments of Apple's calls.
+#   - ASLMPresent, ASLMLoadFunctionSet and ASLMCallPascal, which are
+#     names of this SDK.
+#   - ASLM_FUNCTION_SET and ASLM_FUNCTION, which make the records and
+#     the stubs that a client needs to call the functions of a function
+#     set.  Apple's LibraryBuilder made these from an export file.
+#
+# The C library (runtime/libc/aslm.c) has the calls.  docs/aslm.md
+# tells how to use them.  There is no ASLM on PowerPC: there, shared
+# libraries are Code Fragment Manager fragments.
+
+- verbatim: |
+    #if TARGET_CPU_68K
+    #include <stddef.h>
+
+    /* The result code of Apple's glue when ASLM is not installed (the
+       name is the SDK's). */
+    enum { kASLMNotPresentErr = -3132 };
+
+    /* The zone and the memory kind that InitLibraryManager takes.
+       Open Transport's glue passes 1 for both; the SDK uses its values
+       as the defaults. */
+    enum { kASLMDefaultPoolSize = 1024, kASLMDefaultZone = 1, kASLMDefaultMemory = 1 };
+
+    /* The record that names a function set.  ASLM keeps its own data in
+       reserved.  version is the version that the client wants, and
+       minVersion the oldest version that it accepts.  The record must
+       be writable. */
+    #define ASLM_FUNCTION_SET(var, idString, ver, minVer) \
+      struct { long reserved[3]; unsigned short version, minVersion; \
+               char id[sizeof(idString)]; } var \
+      __attribute__((aligned(2))) = { {0, 0, 0}, (ver), (minVer), idString }
+
+    /* The slot of one stub: ASLM puts the address of the function in
+       fn when the stub binds for the first time. */
+    typedef struct ASLMStubSlot {
+      void *fn;
+      void *set;
+      long reserved;
+      short index;
+    } __attribute__((packed, aligned(2))) ASLMStubSlot;
+
+    /* Makes a stub with the name sym for the function number index of
+       the function set var.  Declare sym as an array of char, and call
+       it with ASLMCallC (a C function of MPW) or ASLMCallPascal (a
+       Pascal function).  Do not call it directly from C: MPW code can
+       change register D2, which clang keeps across a call, and gives a
+       pointer result in D0, where clang expects A0.  The first call
+       binds the stub through ASLM; the next calls go directly to the
+       function.  Call InitLibraryManager before the first call. */
+    #define ASLM_FUNCTION(sym, var, index) \
+      ASLMStubSlot sym##__aslm_slot __attribute__((used)) = { 0, &(var), 0, (index) }; \
+      __asm__(".text\n\t.globl " #sym "\n\t.p2align 1\n" #sym ":\n" \
+              "\tlea " #sym "__aslm_slot, %a0\n\tmove.l (%a0), %d0\n" \
+              "\tbeq 1f\n\tmove.l %d0, %a0\n\tjmp (%a0)\n1:\tjmp __aslm_bind\n")
+
+    #endif
+
+- function:
+    name: InitLibraryManager
+    return: OSErr
+    args:
+      - name: poolSize
+        type: size_t
+      - name: zoneType
+        type: int
+      - name: memType
+        type: int
+    callconv: C
+    comment: |
+      Starts the program's use of ASLM (68k only).  poolSize is the
+      size of the memory pool that ASLM makes for the program.  zoneType
+      and memType select where the pool comes from: use the
+      kASLMDefault values.  Gives noErr, or kASLMNotPresentErr when ASLM
+      is not installed.  The C library calls CleanupLibraryManager when
+      the program ends.
+
+- function:
+    name: CleanupLibraryManager
+    return: void
+    callconv: C
+    comment: |
+      Ends the program's use of ASLM and unloads its libraries.
+
+- function:
+    name: ASLMPresent
+    return: Boolean
+    callconv: C
+    comment: |
+      Gives true when ASLM is installed (SDK name).
+
+- function:
+    name: ASLMLoadFunctionSet
+    return: OSErr
+    args:
+      - name: id
+        type: const char*
+    callconv: C
+    comment: |
+      Loads the library that has the function set id (for example
+      "OTClnt$LclUtils"), so that the stubs of the set can bind.  Gives
+      noErr or an ASLM error (SDK name).
+
+- function:
+    name: ASLMCallC
+    return: long
+    args:
+      - name: fn
+        type: const void*
+      - name: nargs
+        type: int
+      - name: args
+        type: const long*
+    callconv: C
+    comment: |
+      Calls fn, a function of the MPW C calling convention, with nargs
+      4-byte arguments: args[0] is the first.  Gives the value of D0 (a
+      pointer result too).  Keeps all the registers that clang keeps
+      (SDK name).
+
+- function:
+    name: ASLMCallPascal
+    return: long
+    args:
+      - name: fn
+        type: const void*
+      - name: nargs
+        type: int
+      - name: wordMask
+        type: unsigned long
+      - name: resultSize
+        type: int
+      - name: args
+        type: const long*
+    callconv: C
+    comment: |
+      Calls the Pascal function fn with nargs arguments: args[0] is the
+      first.  Bit i of wordMask is 1 when argument i is a 2-byte value (a
+      short or a Boolean); else the argument is 4 bytes.  resultSize is
+      0, 2 or 4: the size of the result.  Gives the result.  A Boolean
+      result is in bits 8 to 15 (SDK name).

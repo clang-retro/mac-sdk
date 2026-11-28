@@ -407,9 +407,12 @@ links both archives before `libmacrt.a`, and starts the program at
   `gethostbyname`), and `AF_UNIX` sockets and named pipes (`mkfifo`)
   between programs over the PPC Toolbox. See docs/network.md.
 - Open Transport (`OpenTransport.h`, `OpenTransportProviders.h`): on
-  PowerPC over Mac OS's Open Transport, on 68k over MacTCP. Also the
+  PowerPC over Mac OS's Open Transport, on 68k over Apple's 68k
+  libraries (through the Shared Library Manager) or over MacTCP. Also the
   MacTCP TCP and UDP blocks (`MacTCP.h`) and the name resolver
   (`AddressXlation.h`). See docs/opentransport.md.
+- The Shared Library Manager client on 68k (`LibraryManager.h`): load
+  an ASLM library and call its functions. See docs/aslm.md.
 - OpenGL on PowerPC: `GL/gl.h` (OpenGL 1.2 and Apple's extensions),
   `GL/glu.h` and `AGL/agl.h`, imported weakly from Apple's
   `OpenGLLibrary` and `OpenGLUtility`. See docs/opengl.md.

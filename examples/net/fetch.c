@@ -2,8 +2,9 @@
  * BSD sockets, and shows the first line of each reply in a console
  * window. It builds for 68k and PowerPC from this one source.
  *
- * On PowerPC the Open Transport calls go to Mac OS's Open Transport; on
- * 68k they go to the SDK's Open Transport over MacTCP. The socket calls
+ * On PowerPC the Open Transport calls go to Mac OS's Open Transport. On
+ * 68k they go to Apple's 68k Open Transport through the Shared Library
+ * Manager, or to the SDK's Open Transport over MacTCP. The socket calls
  * use MacTCP's driver on both, which Open Transport also supplies. So
  * the program runs on System 7 with MacTCP and on Mac OS 7.6 to 9 with
  * Open Transport.

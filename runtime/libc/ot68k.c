@@ -1,11 +1,12 @@
 /* Open Transport on 68k: the client calls over MacTCP.
  *
- * Apple's 68k Open Transport libraries use the Apple Shared Library
- * Manager, which this SDK does not have. So on 68k this file supplies
- * the Open Transport calls itself, over the BSD sockets of socket.c
- * (MacTCP's .IPP driver) and the name resolver of dnr.c. A program
- * that uses Open Transport runs with MacTCP (System 7) and with Open
- * Transport (which also supplies .IPP).
+ * When Open Transport is installed, otnative.c sends the calls to it
+ * through the Apple Shared Library Manager. Without Open Transport,
+ * the calls come to this file, which supplies them over the BSD
+ * sockets of socket.c (MacTCP's .IPP driver) and the name resolver of
+ * dnr.c. So a program that uses Open Transport also runs with MacTCP
+ * (System 7). ot68k-names.h gives the calls of this file the names
+ * __otsock_X; otnative.c gives the public names.
  *
  * What it supplies:
  *   - "tcp" and "udp" endpoints: bind, listen and accept, connect,
@@ -37,6 +38,8 @@
 #include <AddressXlation.h>
 #include <Events.h>
 #include <Multiverse.h>
+#define OT68K_RENAME
+#include "ot68k-names.h"
 #include <OpenTransport.h>
 #include <OpenTransportProviders.h>
 #include "macos.h"
@@ -578,11 +581,15 @@ UInt32 OTElapsedMicroseconds(OTTimeStamp *startTime) {
 /* Gives the seconds since startup. */
 UInt32 OTGetClockTimeInSecs(void) { return TickCount() / 60; }
 
+/* The public OTIdle (otnative.c), which also lets native Open Transport
+   run. */
+extern void ot_public_idle(void) __asm__("OTIdle");
+
 /* Waits some seconds and lets the other programs run. */
 OSStatus OTDelay(UInt32 seconds) {
   unsigned long until = TickCount() + 60UL * seconds;
   while ((long)(until - TickCount()) > 0) {
-    pump();
+    ot_public_idle();
     __mac_wait();
   }
   return kOTNoError;

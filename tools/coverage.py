@@ -90,10 +90,12 @@ def main():
     r = subprocess.run([sys.executable, os.path.join(HERE, "check-traps.py")],
                        capture_output=True, text=True)
     summary = r.stderr.strip().splitlines()[-1].replace("check-traps: ", "")
-    # The C library supplies these on 68k: Open Transport (ot68k.c) and
-    # the MacTCP name resolver (dnr.c).
+    # The C library supplies these on 68k: Open Transport (ot68k.c and
+    # otnative.c), the MacTCP name resolver (dnr.c) and the ASLM client
+    # (aslm.c).
     libc_glue = set()
-    for f in ("OpenTransport.h", "OpenTransportProviders.h", "AddressXlation.h"):
+    for f in ("OpenTransport.h", "OpenTransportProviders.h", "AddressXlation.h",
+              "LibraryManager.h"):
         libc_glue |= set(re.findall(r"\b(\w+)\(", open(os.path.join(ROOT, "include", "mv", f)).read()))
     in_libc = [n for n in glue if n in libc_glue]
     funcs = set(re.findall(r"\b(\w+)\(", "".join(
@@ -111,8 +113,8 @@ def main():
            "## 68k", "",
            f"- {len(glue)} declared calls have no 68k trap and need glue code "
            "on 68k (listed in `include/needs-glue.txt`). The C library "
-           f"supplies {len(in_libc)} of them: Open Transport and the MacTCP "
-           "name resolver. Most of the others are Mac OS 9 "
+           f"supplies {len(in_libc)} of them: Open Transport, the MacTCP "
+           "name resolver and the Shared Library Manager client. Most of the others are Mac OS 9 "
            "calls that never ran on 68k: the HFS Plus API, Navigation "
            "Services, Driver Services and the Name Registry.",
            f"- The ROM's PowerPC glue describes {len(info)} 68k calls. Checked "
