@@ -10,10 +10,11 @@ build. It is not a Mac: only the functions in FUNCS are known, and a
 program that imports another one stops when it calls it.
 
     python3 simppc.py App.bin [--files] [--input TEXT] [--keys TEXT]
-        [--steps N]
+        [--nubus] [--steps N]
 
 It prints each DrawString and DrawText, and with --files the files the
-program left. --input fills "App Input" (the C library's stdin) and
+program left. --nubus leaves out DriverServicesLib (UpTime), as on a
+NuBus Power Mac before Mac OS 7.5.2. --input fills "App Input" (the C library's stdin) and
 --keys says what GetNextEvent types, as sim68k.py's do.
 
 Needs the "unicorn" Python package.
@@ -194,6 +195,9 @@ def main():
     ap.add_argument("--input", metavar="TEXT",
                     help="the file \"App Input\" holds TEXT, with \\n as "
                     "the Mac's \\r")
+    ap.add_argument("--nubus", action="store_true",
+                    help="no DriverServicesLib (a NuBus Power Mac before "
+                    "Mac OS 7.5.2): no UpTime")
     ap.add_argument("--steps", type=int, default=20_000_000,
                     help="the most instructions to run (default 20000000)")
     a = ap.parse_args()
@@ -313,6 +317,26 @@ def main():
     def tick_count():
         state["ticks"] += 1
         ret(state["ticks"])
+
+    # The fine clocks: Microseconds (InterfaceLib) and UpTime with
+    # AbsoluteToNanoseconds (DriverServicesLib), whose AbsoluteTime here
+    # counts 40 ns units, like a 25 MHz time base. Each call moves them
+    # forward 40 or 50 microseconds. UpTime gives its result through the
+    # hidden pointer in r3; AbsoluteToNanoseconds takes its argument in
+    # r4 and r5.
+    state["us"] = 5_000_000_000
+
+    def microseconds():
+        state["us"] += 50
+        uc.mem_write(arg(0), struct.pack(">Q", state["us"]))
+
+    def up_time():
+        state["us"] += 40
+        uc.mem_write(arg(0), struct.pack(">Q", state["us"] * 25 + 7))
+
+    def absolute_to_nanoseconds():
+        ticks = arg(1) << 32 | arg(2)
+        uc.mem_write(arg(0), struct.pack(">Q", ticks * 40))
 
     def gestalt():
         sel = struct.pack(">I", arg(0))
@@ -489,6 +513,9 @@ def main():
                 lambda sel=i + 1: ret(net.ppc(sel, arg(0))))
     funcs.update({
         "TickCount": tick_count,
+        "Microseconds": microseconds,
+        "UpTime": up_time,
+        "AbsoluteToNanoseconds": absolute_to_nanoseconds,
         "Gestalt": gestalt,
         "NewThread": new_thread,
         "YieldToAnyThread": lambda: yield_to(0),
@@ -528,7 +555,7 @@ def main():
     # import. A gl* name that OpenGLLibrary does not have gives
     # cfragNoSymbolErr, as on a real Mac.
     libraries = ["InterfaceLib", "ThreadsLib", "MathLib", "OpenGLLibrary",
-                 "OpenGLUtility"]
+                 "OpenGLUtility"] + ([] if a.nubus else ["DriverServicesLib"])
 
     def get_shared_library():
         name = pstring(arg(0))

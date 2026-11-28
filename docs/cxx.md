@@ -154,6 +154,9 @@ On 68k, programs with more than 32 KB of code use 32-bit addresses
   until it waits, locks a locked mutex, sleeps or calls
   `std::this_thread::yield`. `thread_local` variables use emulated
   TLS (see docs/threads.md).
+- `std::random_device` uses `arc4random`, which gets its key from
+  `getentropy` (see [Random bytes](posix.md#random-bytes)).
+  `std::chrono::steady_clock` is `CLOCK_MONOTONIC`, in microseconds.
 - `std::filesystem` is not available. The library is built without it
   (`--disable-libstdcxx-filesystem-ts`). Use the C library's directory
   functions (`opendir`, `readdir`, `stat`, `mkdir`) instead.

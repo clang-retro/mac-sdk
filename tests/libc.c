@@ -4,7 +4,8 @@
  * POSIX additions (dup, fcntl, pread, pwrite, fsync, access, chmod,
  * futimens, chdir, realpath, mmap, shm_open, poll, ioctl, uname, dlopen
  * and the functions that fail), malloc, realloc and the aligned allocations, setjmp, qsort, strtod,
- * printf's conversions, the time zone and static constructors. It is
+ * printf's conversions, the time zone, the fine clock (CLOCK_MONOTONIC
+ * and usleep), getentropy and arc4random, and static constructors. It is
  * over 32 KB of 68k code, so tools/macapp.py builds it with
  * -mcmodel=large. tests/run.sh runs the 68k build in tools/sim68k.py
  * --os, which keeps the files in memory, and checks the console output
@@ -50,6 +51,11 @@ static void check(const char *what, int ok) {
 /* The ioctl request of the C library (runtime/libc/posix.c). */
 #ifndef FIONREAD
 #define FIONREAD 0x541B
+#endif
+
+/* time.h gives CLOCK_MONOTONIC only with _GNU_SOURCE. */
+#ifndef CLOCK_MONOTONIC
+#define CLOCK_MONOTONIC 4
 #endif
 
 /* The sysconf name of the processor count (runtime/libc/posix.c). */
@@ -327,6 +333,42 @@ int main(int argc, char **argv) {
     struct timeb tb;
     check("ftime", ftime(&tb) == 0 && tb.time >= t && tb.time <= t + 2 &&
                        tb.millitm < 1000 && tb.timezone == 480 && tb.dstflag == 0);
+  }
+  {
+    /* CLOCK_MONOTONIC steps in microseconds (the simulators' fine clocks
+       move tens of microseconds at each call), not in ticks (16.7 ms). */
+    struct timespec a, b, res;
+    long long d;
+    check("clock_gettime monotonic", clock_gettime(CLOCK_MONOTONIC, &a) == 0 &&
+                                         clock_gettime(CLOCK_MONOTONIC, &b) == 0);
+    d = (long long)(b.tv_sec - a.tv_sec) * 1000000000LL + (b.tv_nsec - a.tv_nsec);
+    check("monotonic in microseconds", a.tv_sec > 0 && d > 0 && d < 1000000 &&
+                                           a.tv_nsec % 1000 == 0 && a.tv_nsec < 1000000000);
+    /* usleep waits on the fine clock too, not for whole ticks. */
+    check("usleep fine", usleep(300) == 0 && clock_gettime(CLOCK_MONOTONIC, &b) == 0);
+    d = (long long)(b.tv_sec - a.tv_sec) * 1000000000LL + (b.tv_nsec - a.tv_nsec);
+    check("usleep in microseconds", d >= 300000 && d < 5000000);
+    check("clock_getres", clock_getres(CLOCK_MONOTONIC, &res) == 0 && res.tv_sec == 0 &&
+                              res.tv_nsec == 1000 && clock_getres(99, &res) == -1 &&
+                              errno == EINVAL);
+  }
+  {
+    unsigned char e1[40], e2[40], big[257];
+    int i, zero = 1, same = 1;
+    memset(e1, 0, sizeof e1);
+    memset(e2, 0, sizeof e2);
+    check("getentropy", getentropy(e1, sizeof e1) == 0 && getentropy(e2, sizeof e2) == 0 &&
+                            getentropy(e1, 0) == 0);
+    for (i = 0; i < 40; i++) {
+      zero &= e1[i] == 0;
+      same &= e1[i] == e2[i];
+    }
+    check("getentropy bytes", !zero && !same);
+    errno = 0;
+    check("getentropy 257", getentropy(big, sizeof big) == -1 && errno == EIO &&
+                                getentropy(big, 256) == 0);
+    uint32_t r1 = arc4random(), r2 = arc4random();
+    check("arc4random", r1 != r2 && arc4random_uniform(10) < 10);
   }
   fprintf(stderr, "stderr too\n");
   printf(failures ? "FAILED\n" : "all ok\n");

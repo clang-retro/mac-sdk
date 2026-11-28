@@ -7,6 +7,11 @@
  * in another season are off by the daylight saving hour, since the Mac
  * does not know the rules.
  *
+ * CLOCK_MONOTONIC and the fractions of a second of gettimeofday come from
+ * a fine clock (__mac_microseconds): UpTime on PowerPC when
+ * DriverServicesLib has it, else Microseconds (System 7 and later on
+ * 68k, all PowerPC Macs), else TickCount (1/60 second, System 6).
+ *
  * Copyright (C) clang-retro contributors.
  * SPDX-License-Identifier: AGPL-3.0-only */
 #include <errno.h>
@@ -16,6 +21,12 @@
 #include <time.h>
 #include <OSUtils.h>
 #include <Events.h>
+#include <Timer.h>
+#if TARGET_CPU_PPC
+#include <CodeFragments.h>
+#include <DriverServices.h>
+#endif
+#include "macos.h"
 
 /* Seconds from 1904-01-01 to 1970-01-01. */
 #define MAC_EPOCH 2082844800UL
@@ -75,31 +86,108 @@ static void read_zone(void) {
   environ = env;
 }
 
-/* The Mac's clock counts whole seconds. gettimeofday adds the ticks
-   (1/60 second) since the clock was last read as the base, so that the
-   time moves in steps of a tick, as timed waits need. The base moves
-   forward when the clock is more than a second ahead of the sum; the
-   time never goes back. */
-static unsigned long base_secs, base_ticks;
+/* The trap word of Microseconds. */
+#define MICROSECONDS_TRAP 0xA193
+
+/* Which fine clock __mac_microseconds reads: FINE_UNKNOWN before the
+   first call, then one of the other values. */
+enum { FINE_UNKNOWN, FINE_UPTIME, FINE_MICROSECONDS, FINE_TICKS };
+static int fine_clock;
+
+#if TARGET_CPU_PPC
+/* AbsoluteToNanoseconds of DriverServicesLib, which the headers do not
+   declare. On PowerPC a structure result goes to a hidden pointer, as
+   the Mac's libraries expect. */
+typedef Nanoseconds (*abs_to_ns_fn)(AbsoluteTime t);
+static __typeof__(UpTime) *up_time;
+static abs_to_ns_fn abs_to_ns;
+
+/* Finds UpTime and AbsoluteToNanoseconds in DriverServicesLib. Gives 1
+   when both are there. NuBus Power Macs before Mac OS 7.5.2 do not have
+   the library. The program does not import it, so that it loads on
+   those Macs too. */
+static int find_uptime(void) {
+  ConnectionID conn;
+  Ptr entry, sym;
+  SymClass cls;
+  Str255 err;
+  if (GetSharedLibrary("\pDriverServicesLib", kPowerPCCFragArch, kReferenceCFrag,
+                       &conn, &entry, err) != noErr)
+    return 0;
+  if (FindSymbol(conn, "\pUpTime", &sym, &cls) != noErr)
+    return 0;
+  up_time = (__typeof__(UpTime) *)(void *)sym;
+  if (FindSymbol(conn, "\pAbsoluteToNanoseconds", &sym, &cls) != noErr)
+    return 0;
+  abs_to_ns = (abs_to_ns_fn)(void *)sym;
+  return 1;
+}
+#endif
+
+/* Selects the finest clock that this Mac has, one time. */
+static void select_fine_clock(void) {
+#if TARGET_CPU_PPC
+  fine_clock = find_uptime() ? FINE_UPTIME : FINE_MICROSECONDS;
+#else
+  fine_clock = TrapAvailable(MICROSECONDS_TRAP) ? FINE_MICROSECONDS : FINE_TICKS;
+#endif
+}
+
+/* Gives the microseconds since the Mac started. The value never goes
+   back. Its step is 1 microsecond with UpTime or Microseconds, and 1/60
+   second (16667 microseconds) on a Mac that has neither. */
+unsigned long long __mac_microseconds(void) {
+  UnsignedWide w;
+  if (fine_clock == FINE_UNKNOWN)
+    select_fine_clock();
+#if TARGET_CPU_PPC
+  if (fine_clock == FINE_UPTIME) {
+    Nanoseconds ns = abs_to_ns(up_time());
+    return (((unsigned long long)ns.hi << 32) | ns.lo) / 1000;
+  }
+#endif
+  if (fine_clock == FINE_MICROSECONDS) {
+    Microseconds(&w);
+    return ((unsigned long long)w.hi << 32) | w.lo;
+  }
+  return (unsigned long long)TickCount() * 50000 / 3;
+}
+
+/* Tells if the fine clock steps in microseconds (1), or in ticks (0). */
+int __mac_microseconds_fine(void) {
+  if (fine_clock == FINE_UNKNOWN)
+    select_fine_clock();
+  return fine_clock != FINE_TICKS;
+}
+
+/* The Mac's clock counts whole seconds. gettimeofday adds the time of
+   the fine clock since the clock was last read as the base, so that the
+   time moves in steps of a microsecond (of a tick without a fine clock).
+   The base moves forward when the clock is more than a second ahead of
+   the sum; the time never goes back. */
+static unsigned long base_secs;
+static unsigned long long base_us;
 static int have_base;
 
-/* Gives the time, with ticks for the fractions of a second. */
+/* Gives the time, with microseconds for the fractions of a second. */
 int gettimeofday(struct timeval *restrict tv, void *restrict tz) {
-  unsigned long secs, ticks, elapsed;
+  unsigned long secs;
+  unsigned long long us, elapsed;
   (void)tz;
   if (!zone_read)
     read_zone();
   GetDateTime(&secs);
-  ticks = TickCount();
-  if (!have_base || secs > base_secs + (ticks - base_ticks) / 60 + 1) {
+  us = __mac_microseconds();
+  if (!have_base || secs > base_secs + (us - base_us) / 1000000 + 1) {
     base_secs = secs;
-    base_ticks = ticks;
+    base_us = us;
     have_base = 1;
   }
-  elapsed = ticks - base_ticks;
+  elapsed = us - base_us;
   if (tv) {
-    tv->tv_sec = (time_t)(base_secs + elapsed / 60 - MAC_EPOCH) - gmt_delta;
-    tv->tv_usec = (suseconds_t)((elapsed % 60) * 1000000UL / 60);
+    tv->tv_sec = (time_t)(base_secs + (unsigned long)(elapsed / 1000000) - MAC_EPOCH) -
+                 gmt_delta;
+    tv->tv_usec = (suseconds_t)(elapsed % 1000000);
   }
   return 0;
 }
@@ -112,16 +200,16 @@ long __mac_gmt_delta(void) {
   return gmt_delta;
 }
 
-/* The time of a clock: CLOCK_REALTIME is the Mac's clock in UTC, to the
-   second; CLOCK_MONOTONIC counts from the start of the Mac in ticks (60
-   per second). */
+/* The time of a clock: CLOCK_REALTIME is the Mac's clock in UTC, with
+   the fine clock for the fractions of a second; CLOCK_MONOTONIC is the
+   fine clock, from the start of the Mac. */
 int clock_gettime(clockid_t clock_id, struct timespec *tp) {
   struct timeval tv;
-  unsigned long ticks;
+  unsigned long long us;
   if (clock_id == CLOCK_MONOTONIC) {
-    ticks = TickCount();
-    tp->tv_sec = (time_t)(ticks / 60);
-    tp->tv_nsec = (long)(ticks % 60) * 16666667L;
+    us = __mac_microseconds();
+    tp->tv_sec = (time_t)(us / 1000000);
+    tp->tv_nsec = (long)(us % 1000000) * 1000L;
     return 0;
   }
   if (clock_id != CLOCK_REALTIME) {
@@ -131,6 +219,21 @@ int clock_gettime(clockid_t clock_id, struct timespec *tp) {
   gettimeofday(&tv, NULL);
   tp->tv_sec = tv.tv_sec;
   tp->tv_nsec = (long)tv.tv_usec * 1000;
+  return 0;
+}
+
+/* Gives the step of a clock in *res (when res is not NULL): 1
+   microsecond with a fine clock, else 1/60 second. Gives 0, or -1 with
+   errno set to EINVAL for an unknown clock. */
+int clock_getres(clockid_t clock_id, struct timespec *res) {
+  if (clock_id != CLOCK_MONOTONIC && clock_id != CLOCK_REALTIME) {
+    errno = EINVAL;
+    return -1;
+  }
+  if (res) {
+    res->tv_sec = 0;
+    res->tv_nsec = __mac_microseconds_fine() ? 1000L : 16666667L;
+  }
   return 0;
 }
 

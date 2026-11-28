@@ -27,6 +27,14 @@ short __mac_fd_ref(int fd);
    errno set on an error. */
 char *__mac_folder_path(short vol, long dir, char *buf, size_t size);
 
+/* The microseconds since the Mac started, from the finest clock that
+   the Mac has (runtime/libc/time.c). The value never goes back. */
+unsigned long long __mac_microseconds(void);
+
+/* 1 when __mac_microseconds steps in microseconds, 0 when it steps in
+   ticks (1/60 second). */
+int __mac_microseconds_fine(void);
+
 /* Seconds east of UTC of the Mac's clock. */
 long __mac_gmt_delta(void);
 

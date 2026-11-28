@@ -47,6 +47,18 @@ for ex in examples/*.c; do
     -- -Wall -Werror "$ex" >/dev/null
 done
 echo "examples: linked"
+# Debug information: peflink.py discards the DWARF sections of the XCOFF
+# objects, so a PowerPC build with -g gives the same PEF as one without.
+# (-gdwarf-4 is explicit so that a clang older than DWARF v4 by default on
+# XCOFF can also run this.)
+mkdir "$APPS/nodebug" "$APPS/debug"
+CLANG="$CLANG" python3 tools/macapp.py --cpu ppc -o "$APPS/nodebug/hello.bin" \
+  -- -Wall -Werror examples/hello.c >/dev/null
+CLANG="$CLANG" python3 tools/macapp.py --cpu ppc -o "$APPS/debug/hello.bin" \
+  -- -Wall -Werror -gdwarf-4 examples/hello.c >/dev/null
+cmp -s "$APPS/nodebug/hello.bin" "$APPS/debug/hello.bin" || {
+  echo "debug: the application made with -g is not the same as without"; exit 1; }
+echo "debug: ok"
 # A 68k code resource and a faceless background application: the file
 # types, the resource and the SIZE flags.
 CLANG="$CLANG" python3 tools/macapp.py --cpu 68k --no-libc --no-runtime \
@@ -146,6 +158,13 @@ if [ -n "$LLVM_SRC" ] && [ -n "$PICOLIBC_SRC" ]; then
       "$APPS/libc-ppc.bin" >"$APPS/sim.txt" || { cat "$APPS/sim.txt"; exit 1; }
     if grep -q FAILED "$APPS/sim.txt" || ! grep -q "^all ok" "$APPS/sim.txt"; then
       echo "libc on PowerPC:"; cat "$APPS/sim.txt"; exit 1
+    fi
+    # A NuBus Power Mac before Mac OS 7.5.2: no DriverServicesLib, so the
+    # fine clock is Microseconds, not UpTime.
+    python3 tools/simppc.py --files --nubus --input "typed\nline\n" \
+      "$APPS/libc-ppc.bin" >"$APPS/sim.txt" || { cat "$APPS/sim.txt"; exit 1; }
+    if grep -q FAILED "$APPS/sim.txt" || ! grep -q "^all ok" "$APPS/sim.txt"; then
+      echo "libc on a NuBus PowerPC:"; cat "$APPS/sim.txt"; exit 1
     fi
     # The threads, over the simulators' fake Thread Manager.
     for c in 68000 68020; do
@@ -248,7 +267,8 @@ if [ -n "$LLVM_SRC" ] && [ -n "$PICOLIBC_SRC" ] && [ -n "$GCC_SRC" ]; then
   if python3 -c "import unicorn" 2>/dev/null; then
     for t in cxx cxxthread; do
       for c in 68000 68020; do
-        python3 tools/sim68k.py --cpu $c --os --files --exit-anywhere \
+        # More than the default 2 million steps: the C++ test is long.
+        python3 tools/sim68k.py --cpu $c --os --files --exit-anywhere --steps 10000000 \
           "$APPS/$t-68k.bin" >"$APPS/sim.txt" || { cat "$APPS/sim.txt"; exit 1; }
         if grep -q FAILED "$APPS/sim.txt" || ! grep -q "^all ok" "$APPS/sim.txt"; then
           echo "$t on a $c:"; cat "$APPS/sim.txt"; exit 1

@@ -123,12 +123,14 @@ there in the 68k emulator.
 `<MediaHandler.h>`, `<ImageCodec.h>` and `<MoviesFormat.h>` declare the
 QuickTime 1.5 API: the Movie Toolbox, the Image Compression Manager, the
 movie controller, sequence grabber, standard compression, video
-digitizer, media handler and codec component calls (677 calls), with
+digitizer, media handler and codec component calls (662 calls), with
 QuickTime's own 68k code (`0xAAAA` for the Movie Toolbox, `0xAAA3` for
 the Image Compression Manager, `_ComponentDispatch` for components). On
-PowerPC they import from QuickTimeLib. Thirteen 1992 names were renamed
-or became macros before QuickTimeLib shipped (`SetImageDescriptionExtension`,
-`MCGetMovie`, `SCGetCompression`, ...); those link on 68k only.
+PowerPC they import from QuickTimeLib. Some 1992 names were renamed or
+became macros before QuickTimeLib shipped (`SetImageDescriptionExtension`,
+`MCGetMovie`, ...); those link on 68k only. `<MoviesFormat.h>` has no
+declarations: the movie file atom records are not in the documentation
+that the definitions are written from.
 
 `examples/quicktime.c` lists the installed compressors, draws 30 frames
 in a GWorld, compresses them with the Animation compressor into a new
@@ -166,19 +168,19 @@ the Communications Toolbox (Connection, Terminal and File Transfer
 Managers, the Communications Resource Manager and the CTB utilities),
 the HFS Plus API and more.
 
-The QuickTime definitions (`defs/QuickTime.yaml`, after the first 21
-calls) are different: `tools/mpw2defs.py` generated them from Apple's
-QuickTime 1.5 C interfaces on the Developer CD Series (1992). It parses
-the headers with clang, so the records, constants and each call's
-inline 68k code are what Apple's compiler saw, and writes them as
-definitions; Apple's headers themselves are not in this repository.
-Point the tool at your own copy to regenerate them:
+The QuickTime definitions (`defs/QuickTime.yaml`) follow *Inside
+Macintosh: QuickTime* and *Inside Macintosh: QuickTime Components*
+(1993): each call, record, type and constant in the file is one that
+those books document, with the books' names. The 68k code of each call
+(its trap and selector) and the record layouts are interface facts,
+checked against QuickTime 1.5 itself (the examples run on it, above).
+Calls, records and constants that the books do not document are not in
+the file.
 
-```sh
-CLANG=clang python3 tools/mpw2defs.py -I path/to/CIncludes -I path/to/QuickTime \
-    -o defs/QuickTime.yaml ImageCompression.h Movies.h MoviesFormat.h \
-    QuickTimeComponents.h MediaHandler.h ImageCodec.h
-```
+`tools/mpw2defs.py` reads a copy of Apple's MPW C interfaces that you
+have and writes definitions from them. Use it only as a local check, to
+compare with `defs/`: do not commit its output, which comes from Apple's
+headers.
 
 ### Checked against a real ROM
 
@@ -454,6 +456,13 @@ links both archives before `libmacrt.a`, and starts the program at
   and, unless the environment has been set, sets `TZ` to that offset,
   so `localtime` gives the Mac's local time. The Mac knows no daylight
   saving rules, so times in the other season are an hour off.
+- a fine clock for `CLOCK_MONOTONIC`, `std::chrono::steady_clock`,
+  `nanosleep` and `usleep`, and the fractions of a second of
+  `gettimeofday`: `UpTime`, `Microseconds` or, on System 6,
+  `TickCount`. See docs/posix.md.
+- `getentropy`, for `arc4random` and `std::random_device`, from the
+  jitter of the fine clock and the state of the Mac, mixed with SHA-256.
+  See docs/posix.md.
 - `exit` and `_exit` through `ExitToShell`.
 - `errno` from File Manager and Memory Manager errors.
 

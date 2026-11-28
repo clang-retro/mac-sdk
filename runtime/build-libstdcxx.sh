@@ -162,6 +162,7 @@ EOF
       AR="$bindir/llvm-ar" RANLIB="$bindir/llvm-ranlib" NM="$bindir/llvm-nm" \
       CFLAGS="-O2" CXXFLAGS="-O2 -D_GNU_SOURCE $WARN" \
       ac_cv_func_fcntl=no ac_cv_func_getexecname=no \
+      glibcxx_cv_getentropy=yes glibcxx_cv_arc4random=yes \
       >"$WORK/configure-$cpu.log" 2>&1) || {
     tail -n 40 "$build/config.log" >&2
     exit 1
@@ -174,6 +175,13 @@ EOF
     sed -i.orig "s|^/\* #undef _GLIBCXX_$m \*/|#define _GLIBCXX_$m 1|" "$build/config.h"
     grep -q "^#define _GLIBCXX_$m 1" "$build/config.h" ||
       { echo "$cpu: config.h has no _GLIBCXX_$m" >&2; exit 1; }
+  done
+  # std::random_device reads getentropy (runtime/libc/random.c) and
+  # arc4random (picolibc). Without them it is a fixed mt19937, which gives
+  # the same numbers at each run.
+  for m in HAVE_GETENTROPY HAVE_ARC4RANDOM; do
+    grep -q "^#define $m 1" "$build/config.h" ||
+      { echo "$cpu: config.h has no $m" >&2; exit 1; }
   done
   make -C "$build" -j"$jobs" >"$WORK/build-$cpu.log" 2>&1 || {
     grep -n -B2 -A8 'error' "$WORK/build-$cpu.log" | head -n 80 >&2
