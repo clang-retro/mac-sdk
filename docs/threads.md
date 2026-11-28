@@ -95,9 +95,9 @@ cannot compile thread-local variables.
   `pthread_attr_setstacksize` for a larger or smaller stack.
 - `errno` is one variable for all threads. The functions that wait keep
   its value across a switch to another thread.
-- `CLOCK_REALTIME` has a resolution of one second. Thus a timed wait can
-  continue for up to one second after its time. `CLOCK_MONOTONIC` and
-  the sleep functions use the tick count, 60 ticks each second.
+- `CLOCK_REALTIME`, `CLOCK_MONOTONIC` and the sleep functions use the
+  fine clock, which steps in microseconds (in ticks, 60 each second, on
+  System 6). See [Clocks](posix.md#clocks).
 - There are no preemptive threads, no thread priorities and no read-write
   locks. A thread cannot be cancelled: `pthread_cancel` gives `ENOTSUP`.
 - The C++ library uses these threads (thread model `posix`). Thus

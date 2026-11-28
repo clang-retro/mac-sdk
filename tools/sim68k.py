@@ -21,7 +21,9 @@ an interrupt would.
         [--os] [--files] [--exit-anywhere]
 
 It runs as a 68000 unless --cpu says otherwise. --system6 makes
-_FlushCodeCache unimplemented, as on System 6 on a Mac Plus or SE.
+_FlushCodeCache and _Microseconds unimplemented, as on System 6 on a Mac
+Plus or SE. Otherwise _Microseconds gives a clock that moves forward
+50 microseconds at each call.
 
 Needs the "unicorn" Python package.
 """
@@ -1260,6 +1262,7 @@ def main():
 
     saved = []                  # registers while a completion routine runs
     state["ticks"] = 1000
+    state["us"] = 5_000_000_000
 
     def save():
         return [uc.reg_read(r) for r in REGS]
@@ -1398,6 +1401,13 @@ def main():
             uc.reg_write(UC_M68K_REG_A7, sp + 10)
             uc.reg_write(UC_M68K_REG_PC, pc + 2)
             return
+        if word == 0xA193 and not a.system6:
+            # Microseconds: the high half in A0, the low half in D0.
+            state["us"] += 50
+            uc.reg_write(UC_M68K_REG_A0, state["us"] >> 32)
+            uc.reg_write(UC_M68K_REG_D0, state["us"] & 0xFFFFFFFF)
+            uc.reg_write(UC_M68K_REG_PC, pc + 2)
+            return
         if word not in TRAPS:
             print(f"unknown trap {word:04X} at {pc - seg_start:#x}")
             uc.emu_stop()
@@ -1411,7 +1421,8 @@ def main():
         if name in ("GetToolTrapAddress", "GetOSTrapAddress"):
             num = uc.reg_read(UC_M68K_REG_D0) & 0x3FF
             missing = (name == "GetToolTrapAddress" and num == 0x9F) or \
-                (name == "GetOSTrapAddress" and num == 0xBD and a.system6)
+                (name == "GetOSTrapAddress" and num in (0xBD, 0x93) and
+                 a.system6)
             addr = UNIMPL_ADDR if missing else 0x00F00000 + 4 * num
             uc.reg_write(UC_M68K_REG_A0, addr)
             print(f"{name}({num:#x}) = {addr:#x}")

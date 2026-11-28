@@ -4,7 +4,8 @@
  * from the library, and out of a nested function with saved registers),
  * RTTI (typeid, dynamic_cast), virtual functions, new and delete, and the
  * standard library: string, vector, map, unique_ptr, shared_ptr, sort,
- * function, iostream and stringstream. tests/run.sh runs the 68k build in
+ * function, iostream, stringstream and random_device (getentropy, not a
+ * fixed mt19937), and steady_clock in microseconds. tests/run.sh runs the 68k build in
  * tools/sim68k.py --os and the PowerPC build in tools/simppc.py, and
  * checks the console output that each leaves: one "ok" line per check,
  * then "all ok".
@@ -12,12 +13,14 @@
  * Copyright (C) clang-retro contributors.
  * SPDX-License-Identifier: AGPL-3.0-only */
 #include <algorithm>
+#include <chrono>
 #include <cstdio>
 #include <cstring>
 #include <functional>
 #include <iostream>
 #include <map>
 #include <memory>
+#include <random>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -179,6 +182,19 @@ int main() {
     int x = 0, y = 0;
     is >> x >> y;
     check("std::istringstream", x == 34 && y == 56);
+  }
+
+  {
+    // A fixed mt19937 has entropy() 0 and gives 3499211612 first.
+    std::random_device rd;
+    unsigned a = rd(), b = rd();
+    check("std::random_device", rd.entropy() > 0 && a != b && a != 3499211612u);
+    // steady_clock is CLOCK_MONOTONIC: the simulators' fine clocks move
+    // tens of microseconds at each call, a tick is 16667.
+    auto t0 = std::chrono::steady_clock::now();
+    auto t1 = std::chrono::steady_clock::now();
+    auto us = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0).count();
+    check("std::chrono::steady_clock", us > 0 && us < 1000);
   }
 
   std::cout << "std::cout works" << std::endl;
