@@ -325,6 +325,107 @@ struct GetAddrParamBlock {
     ip_addr ourNetMask;
 };
 
+// Event codes that MacTCP gives to a UDP notification routine.
+typedef enum {
+    UDPDataArrival = 1,
+    UDPICMPReceived = 2,
+} UDPEventCode;
+
+// UDP notification routine (ASR).  Pascal convention.  MacTCP
+// calls it at interrupt level.
+typedef pascal void (*UDPNotifyProcPtr)(StreamPtr udpStream, uint16_t eventCode, Ptr userDataPtr, ICMPReport *icmpMsg);
+#if TARGET_RT_MAC_CFM
+typedef UniversalProcPtr UDPNotifyUPP;
+enum { uppUDPNotifyProcInfo = 0x00003EC0 };
+#define NewUDPNotifyUPP(proc) ((UDPNotifyUPP)NewRoutineDescriptor((ProcPtr)(proc), uppUDPNotifyProcInfo, GetCurrentArchitecture()))
+#define DisposeUDPNotifyUPP(upp) DisposeRoutineDescriptor((UniversalProcPtr)(upp))
+#else
+typedef UDPNotifyProcPtr UDPNotifyUPP;
+#define NewUDPNotifyUPP(proc) (proc)
+#define DisposeUDPNotifyUPP(upp) ((void)0)
+#endif
+#define NewUDPNotifyProc(proc) NewUDPNotifyUPP(proc)
+#define DisposeUDPNotifyProc(proc) DisposeUDPNotifyUPP(proc)
+
+// udpCreate and udpMultiCreate.  localPort 0 asks MacTCP for a
+// free port; MacTCP puts the port it used here.
+typedef struct UDPCreatePB UDPCreatePB;
+struct UDPCreatePB {
+    Ptr rcvBuff;
+    unsigned long rcvBuffLen;
+    UDPNotifyUPP notifyProc;
+    uint16_t localPort;
+    Ptr userDataPtr;
+    uint16_t endingPort;
+};
+
+// udpWrite.  wdsPtr points to a wdsEntry list that ends with a
+// zero length.
+typedef struct UDPSendPB UDPSendPB;
+struct UDPSendPB {
+    uint16_t reserved;
+    ip_addr remoteHost;
+    uint16_t remotePort;
+    Ptr wdsPtr;
+    Boolean checkSum;
+    uint16_t sendLength;
+    Ptr userDataPtr;
+    uint16_t localPort;
+};
+
+// udpRead and udpBfrReturn.  MacTCP gives rcvBuff and rcvBuffLen;
+// return the buffer with udpBfrReturn.  timeOut is in seconds
+// (0: wait without a limit).
+typedef struct UDPReceivePB UDPReceivePB;
+struct UDPReceivePB {
+    uint16_t timeOut;
+    ip_addr remoteHost;
+    uint16_t remotePort;
+    Ptr rcvBuff;
+    uint16_t rcvBuffLen;
+    uint16_t secondTimeStamp;
+    Ptr userDataPtr;
+    ip_addr destHost;
+    uint16_t destPort;
+};
+
+// udpMaxMTUSize: the largest datagram to remoteHost.
+typedef struct UDPMTUPB UDPMTUPB;
+struct UDPMTUPB {
+    uint16_t mtuSize;
+    ip_addr remoteHost;
+    Ptr userDataPtr;
+};
+
+typedef union UDPcsParam UDPcsParam;
+union UDPcsParam {
+    UDPMTUPB mtu;
+    UDPCreatePB create;
+    UDPSendPB send;
+    UDPReceivePB receive;
+};
+
+// The UDP I/O parameter block passed to PBControl on the .IPP
+// driver.  The header is the same as in TCPiopb: udpStream 28,
+// csParam 32.
+typedef struct UDPiopb UDPiopb;
+struct UDPiopb {
+    QElemPtr qLink;
+    INTEGER qType;
+    INTEGER ioTrap;
+    Ptr ioCmdAddr;
+    ProcPtr ioCompletion;
+    OSErr ioResult;
+    StringPtr ioNamePtr;
+    INTEGER ioVRefNum;
+    INTEGER ioCRefNum;
+    INTEGER csCode;
+    StreamPtr udpStream;
+    UDPcsParam csParam;
+};
+
+typedef UDPiopb *UDPiopbPtr;
+
 #ifdef __cplusplus
 }
 #endif

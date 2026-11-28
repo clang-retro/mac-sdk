@@ -19,6 +19,14 @@ PrepareMemoryForIO
 CheckpointIO
 ATEvent
 ATPreFlightEvent
+OpenResolver
+CloseResolver
+StrToAddr
+AddrToStr
+EnumCache
+AddrToName
+HInfo
+MXInfo
 GetDefaultUser
 StartSecureSession
 KillProcess

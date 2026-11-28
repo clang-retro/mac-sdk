@@ -1,4 +1,5 @@
 #include <Multiverse.h>
+#include <AddressXlation.h>
 #include <AGL/agl.h>
 #include <GL/gl.h>
 #include <GL/glext.h>

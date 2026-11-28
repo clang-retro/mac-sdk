@@ -580,15 +580,174 @@
         type: ip_addr               # 32
     size: 36
 
+# #### UDP
+
+- enum:
+    name: UDPEventCode
+    comment: |
+      Event codes that MacTCP gives to a UDP notification routine.
+    values:
+      - name: UDPDataArrival
+        value: 1
+      - name: UDPICMPReceived
+        value: 2
+
+- funptr:
+    name: UDPNotifyUPP
+    comment: |
+      UDP notification routine (ASR).  Pascal convention.  MacTCP
+      calls it at interrupt level.
+    args:
+      - name: udpStream
+        type: StreamPtr
+      - name: eventCode
+        type: uint16_t
+      - name: userDataPtr
+        type: Ptr
+      - name: icmpMsg
+        type: ICMPReport*
+
+- struct:
+    name: UDPCreatePB
+    comment: |
+      udpCreate and udpMultiCreate.  localPort 0 asks MacTCP for a
+      free port; MacTCP puts the port it used here.
+    members:
+      - name: rcvBuff
+        type: Ptr                   #  0
+      - name: rcvBuffLen
+        type: uint32_t              #  4
+      - name: notifyProc
+        type: UDPNotifyUPP          #  8
+      - name: localPort
+        type: uint16_t              # 12
+      - name: userDataPtr
+        type: Ptr                   # 14
+      - name: endingPort
+        type: uint16_t              # 18
+    size: 20
+
+- struct:
+    name: UDPSendPB
+    comment: |
+      udpWrite.  wdsPtr points to a wdsEntry list that ends with a
+      zero length.
+    members:
+      - name: reserved
+        type: uint16_t              #  0
+      - name: remoteHost
+        type: ip_addr               #  2
+      - name: remotePort
+        type: uint16_t              #  6
+      - name: wdsPtr
+        type: Ptr                   #  8
+      - name: checkSum
+        type: Boolean               # 12
+      - name: sendLength
+        type: uint16_t              # 14
+      - name: userDataPtr
+        type: Ptr                   # 16
+      - name: localPort
+        type: uint16_t              # 20
+    size: 22
+
+- struct:
+    name: UDPReceivePB
+    comment: |
+      udpRead and udpBfrReturn.  MacTCP gives rcvBuff and rcvBuffLen;
+      return the buffer with udpBfrReturn.  timeOut is in seconds
+      (0: wait without a limit).
+    members:
+      - name: timeOut
+        type: uint16_t              #  0
+      - name: remoteHost
+        type: ip_addr               #  2
+      - name: remotePort
+        type: uint16_t              #  6
+      - name: rcvBuff
+        type: Ptr                   #  8
+      - name: rcvBuffLen
+        type: uint16_t              # 12
+      - name: secondTimeStamp
+        type: uint16_t              # 14
+      - name: userDataPtr
+        type: Ptr                   # 16
+      - name: destHost
+        type: ip_addr               # 20
+      - name: destPort
+        type: uint16_t              # 24
+    size: 26
+
+- struct:
+    name: UDPMTUPB
+    comment: |
+      udpMaxMTUSize: the largest datagram to remoteHost.
+    members:
+      - name: mtuSize
+        type: uint16_t              #  0
+      - name: remoteHost
+        type: ip_addr               #  2
+      - name: userDataPtr
+        type: Ptr                   #  6
+    size: 10
+
+- union:
+    name: UDPcsParam
+    members:
+      - name: mtu
+        type: UDPMTUPB
+      - name: create
+        type: UDPCreatePB
+      - name: send
+        type: UDPSendPB
+      - name: receive
+        type: UDPReceivePB
+    size: 26
+
+- struct:
+    name: UDPiopb
+    comment: |
+      The UDP I/O parameter block passed to PBControl on the .IPP
+      driver.  The header is the same as in TCPiopb: udpStream 28,
+      csParam 32.
+    members:
+      - name: qLink
+        type: QElemPtr              #  0
+      - name: qType
+        type: INTEGER               #  4
+      - name: ioTrap
+        type: INTEGER               #  6
+      - name: ioCmdAddr
+        type: Ptr                   #  8
+      - name: ioCompletion
+        type: ProcPtr               # 12
+      - name: ioResult
+        type: OSErr                 # 16
+      - name: ioNamePtr
+        type: StringPtr             # 18
+      - name: ioVRefNum
+        type: INTEGER               # 22
+      - name: ioCRefNum
+        type: INTEGER               # 24
+      - name: csCode
+        type: INTEGER               # 26
+      - name: udpStream
+        type: StreamPtr             # 28
+      - name: csParam
+        type: UDPcsParam            # 32
+    size: 58
+
+- typedef:
+    name: UDPiopbPtr
+    type: UDPiopb*
+
 # ####
 #
-# Deliberately not yet defined (phase 3):
-#   - UDPiopb and the UDP csParam blocks
+# Not yet defined:
 #   - TCPGlobalInfoPB / TCPExtendedStat result blocks
-#   - AddressXlation.h material (hostInfo, DNR selectors) — the DNR is
-#     a code resource loaded by applications, not a driver interface,
-#     and will be specified in its own defs file alongside the 'dnrp'
-#     stub resource.
+#   - The name resolver (AddressXlation.h) is a code resource, not a
+#     driver interface.  defs/AddressXlation.yaml declares it, and
+#     runtime/libc/dnr.c loads and calls it.
 #
 # Verification: tests/mactcp_abi.cpp asserts every size and offset
 # above.  It is dual-mode, so the same assertions can be rebuilt
