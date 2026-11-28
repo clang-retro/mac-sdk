@@ -32,58 +32,6 @@
 #include "macos.h"
 #include "socket.h"
 
-/* The UDP parameter blocks, which MacTCP.h does not have. The layout is
-   that of Apple's MacTCP.h. */
-#pragma options align=mac68k
-struct udp_create {
-  Ptr rcvBuff;
-  unsigned long rcvBuffLen;
-  ProcPtr notifyProc;
-  unsigned short localPort;
-  Ptr userDataPtr;
-  Byte endingPort;
-};
-struct udp_send {
-  unsigned short reserved;
-  ip_addr remoteHost;
-  unsigned short remotePort;
-  Ptr wdsPtr;
-  Boolean checkSum;
-  unsigned short sendLength;
-  Ptr userDataPtr;
-  unsigned short localPort;
-};
-struct udp_receive {
-  unsigned short timeOut;
-  ip_addr remoteHost;
-  unsigned short remotePort;
-  Ptr rcvBuff;
-  unsigned short rcvBuffLen;
-  unsigned short secondTimeStamp;
-  Ptr userDataPtr;
-  ip_addr destHost;
-  unsigned short destPort;
-};
-struct udp_iopb {
-  QElemPtr qLink;
-  INTEGER qType;
-  INTEGER ioTrap;
-  Ptr ioCmdAddr;
-  ProcPtr ioCompletion;
-  OSErr ioResult;
-  StringPtr ioNamePtr;
-  INTEGER ioVRefNum;
-  INTEGER ioCRefNum;
-  INTEGER csCode;
-  StreamPtr udpStream;
-  union {
-    struct udp_create create;
-    struct udp_send send;
-    struct udp_receive receive;
-  } csParam;
-};
-#pragma options align=reset
-
 #define TCP_BUFFER 16384      /* a TCP stream's receive buffer */
 #define UDP_BUFFER 8192       /* a UDP stream's receive buffer */
 #define MAX_PENDING 4         /* streams that wait for connections */
@@ -104,7 +52,7 @@ struct inet {
   int closing;
   char in[1024];                    /* bytes taken from MacTCP but not read */
   size_t inlen;
-  struct udp_iopb upb;              /* the UDP read in progress */
+  UDPiopb upb;              /* the UDP read in progress */
   int reading;
   char *ubuf;
   StreamPtr us;
@@ -340,7 +288,7 @@ static int inet_bind(struct sock *k, const struct sockaddr *a, socklen_t len) {
 /* Makes a UDP socket's stream the first time. */
 static int udp_open(struct sock *k) {
   struct inet *n = k->impl;
-  struct udp_iopb pb;
+  UDPiopb pb;
   OSErr err;
   if (n->us)
     return 0;
@@ -520,7 +468,7 @@ static long inet_send(struct sock *k, const void *buf, size_t len, int nonblock,
   size_t sent = 0;
   (void)nonblock;
   if (k->type == SOCK_DGRAM) {
-    struct udp_iopb pb;
+    UDPiopb pb;
     wdsEntry wds[2];
     ip_addr host = k->peer_host;
     unsigned short port = k->peer_port;
@@ -667,7 +615,7 @@ static long inet_recv(struct sock *k, void *buf, size_t len, int nonblock, int p
       *fromlen = sizeof in;
     }
     if (!peek) {
-      struct udp_iopb pb;
+      UDPiopb pb;
       memset(&pb, 0, sizeof pb);
       pb.udpStream = n->us;
       pb.csParam.receive.rcvBuff = n->upb.csParam.receive.rcvBuff;
@@ -785,7 +733,7 @@ static void inet_close(struct sock *k) {
   set_bound(k, 0);
   if (k->type == SOCK_DGRAM) {
     if (n->us) {
-      struct udp_iopb pb;
+      UDPiopb pb;
       memset(&pb, 0, sizeof pb);
       pb.udpStream = n->us;
       call(&pb, udpRelease);

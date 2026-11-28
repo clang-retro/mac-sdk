@@ -121,7 +121,7 @@ fi
 # in tools/simppc.py, checking the console output file each leaves, and tests/console.c
 # with the console window, typing into it, tests/thread.c with the
 # simulators' fake Thread Manager, tests/net.c with their fake MacTCP
-# and PPC Toolbox, and tests/gl.c with the PowerPC simulator's fake
+# and PPC Toolbox, tests/ot.c (68k) with the fake MacTCP, and tests/gl.c with the PowerPC simulator's fake
 # OpenGL.
 if [ -n "$LLVM_SRC" ] && [ -n "$PICOLIBC_SRC" ]; then
   CLANG="$CLANG" PICOLIBC_SRC="$PICOLIBC_SRC" runtime/build-libc.sh "$APPS/lib"
@@ -135,6 +135,13 @@ if [ -n "$LLVM_SRC" ] && [ -n "$PICOLIBC_SRC" ]; then
       -o "$APPS/thread-$cpu.bin" -- -Wall -Werror tests/thread.c >/dev/null
     CLANG="$CLANG" python3 tools/macapp.py --cpu $cpu --lib "$APPS/lib" \
       -o "$APPS/net-$cpu.bin" -- -Wall -Werror tests/net.c >/dev/null
+    CLANG="$CLANG" python3 tools/macapp.py --cpu $cpu --lib "$APPS/lib" \
+      -o "$APPS/ot-$cpu.bin" -- -Wall -Werror tests/ot.c >/dev/null
+    # The examples that need the C library.
+    for ex in examples/net/*.c; do
+      CLANG="$CLANG" python3 tools/macapp.py --cpu $cpu --lib "$APPS/lib" \
+        --console window -o "$APPS/$(basename "$ex" .c)-$cpu.bin" -- -Wall -Werror "$ex" >/dev/null
+    done
   done
   # OpenGL is PowerPC only.
   CLANG="$CLANG" python3 tools/macapp.py --cpu ppc --lib "$APPS/lib" \
@@ -186,6 +193,16 @@ if [ -n "$LLVM_SRC" ] && [ -n "$PICOLIBC_SRC" ]; then
     if grep -q FAILED "$APPS/sim.txt" || ! grep -q "^all ok" "$APPS/sim.txt"; then
       echo "sockets on PowerPC:"; cat "$APPS/sim.txt"; exit 1
     fi
+    # Open Transport on 68k (over MacTCP), over the fake MacTCP. On
+    # PowerPC the calls go to Mac OS's Open Transport, which the
+    # simulator does not have: tools/qemu/nettest.py runs that build.
+    for c in 68000 68020; do
+      python3 tools/sim68k.py --cpu $c --os --files --exit-anywhere \
+        "$APPS/ot-68k.bin" >"$APPS/sim.txt" || { cat "$APPS/sim.txt"; exit 1; }
+      if grep -q FAILED "$APPS/sim.txt" || ! grep -q "^all ok" "$APPS/sim.txt"; then
+        echo "Open Transport on a $c:"; cat "$APPS/sim.txt"; exit 1
+      fi
+    done
     # OpenGL and AGL, over the PowerPC simulator's fake OpenGL.
     python3 tools/simppc.py --files "$APPS/gl-ppc.bin" >"$APPS/sim.txt" ||
       { cat "$APPS/sim.txt"; exit 1; }

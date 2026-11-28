@@ -1,0 +1,352 @@
+- verbatim: "/* Open Transport TCP/IP: addresses, Internet services (the name\n   resolver) and the TCP,\
+    \ UDP and IP options. */"
+- typedef:
+    name: InetPort
+    type: UInt16
+- typedef:
+    name: InetHost
+    type: UInt32
+    comment: An IPv4 address in network order.
+- typedef:
+    name: InetSvcRef
+    type: ProviderRef
+    comment: An open Internet services provider. All provider calls take it.
+- typedef:
+    name: InetDomainName
+    type: char[256]
+- verbatim: '#ifndef AF_INET
+
+    #define AF_INET 2
+
+    #endif
+
+    #ifndef AF_DNS
+
+    #define AF_DNS 42
+
+    #endif'
+- enum:
+    values:
+    - name: kOTAnyInetAddress
+      value: 0
+    - name: kMaxHostAddrs
+      value: 10
+    - name: kMaxSysStringLen
+      value: 32
+    - name: kMaxHostNameLen
+      value: 255
+    - name: kDefaultInetInterface
+      value: -1
+    - name: kInetInterfaceInfoVersion
+      value: 3
+- define:
+    name: kTCPName
+    value: '"tcp"'
+- define:
+    name: kUDPName
+    value: '"udp"'
+- define:
+    name: kRawIPName
+    value: '"rawip"'
+- define:
+    name: kDNRName
+    value: '"dnr"'
+- define:
+    name: kDefaultInternetServicesPath
+    value: ((OTConfigurationRef)(long)-3)
+- enum:
+    comment: Events of the Internet services provider.
+    values:
+    - name: T_DNRSTRINGTOADDRCOMPLETE
+      value: 268435457
+    - name: T_DNRADDRTONAMECOMPLETE
+      value: 268435458
+    - name: T_DNRSYSINFOCOMPLETE
+      value: 268435459
+    - name: T_DNRMAILEXCHANGECOMPLETE
+      value: 268435460
+    - name: T_DNRQUERYCOMPLETE
+      value: 268435461
+- enum:
+    comment: Option levels.
+    values:
+    - name: INET_IP
+      value: 0
+    - name: INET_TCP
+      value: 6
+    - name: INET_UDP
+      value: 17
+- verbatim: "/* Option names. The BSD socket headers use some of the same names with\n   other values:\
+    \ a file that includes <netinet/in.h> or <netinet/tcp.h>\n   first keeps their values. */\n#ifndef\
+    \ TCP_NODELAY\n#define TCP_NODELAY 0x1\n#endif\n#ifndef TCP_MAXSEG\n#define TCP_MAXSEG 0x2\n#endif\n\
+    #ifndef TCP_NOTIFY_THRESHOLD\n#define TCP_NOTIFY_THRESHOLD 0x10\n#endif\n#ifndef TCP_ABORT_THRESHOLD\n\
+    #define TCP_ABORT_THRESHOLD 0x11\n#endif\n#ifndef TCP_CONN_NOTIFY_THRESHOLD\n#define TCP_CONN_NOTIFY_THRESHOLD\
+    \ 0x12\n#endif\n#ifndef TCP_CONN_ABORT_THRESHOLD\n#define TCP_CONN_ABORT_THRESHOLD 0x13\n#endif\n\
+    #ifndef TCP_OOBINLINE\n#define TCP_OOBINLINE 0x14\n#endif\n#ifndef TCP_URGENT_PTR_TYPE\n#define TCP_URGENT_PTR_TYPE\
+    \ 0x15\n#endif\n#ifndef TCP_KEEPALIVE\n#define TCP_KEEPALIVE 0x8\n#endif\n#ifndef UDP_CHECKSUM\n#define\
+    \ UDP_CHECKSUM 0x600\n#endif\n#ifndef IP_OPTIONS\n#define IP_OPTIONS 0x1\n#endif\n#ifndef IP_TOS\n\
+    #define IP_TOS 0x2\n#endif\n#ifndef IP_TTL\n#define IP_TTL 0x3\n#endif\n#ifndef IP_REUSEADDR\n#define\
+    \ IP_REUSEADDR 0x4\n#endif\n#ifndef IP_DONTROUTE\n#define IP_DONTROUTE 0x10\n#endif\n#ifndef IP_BROADCAST\n\
+    #define IP_BROADCAST 0x20\n#endif\n#ifndef IP_REUSEPORT\n#define IP_REUSEPORT 0x200\n#endif\n#ifndef\
+    \ IP_HDRINCL\n#define IP_HDRINCL 0x1002\n#endif\n#ifndef IP_RCVOPTS\n#define IP_RCVOPTS 0x1005\n#endif\n\
+    #ifndef IP_RCVDSTADDR\n#define IP_RCVDSTADDR 0x1006\n#endif\n#ifndef IP_MULTICAST_IF\n#define IP_MULTICAST_IF\
+    \ 0x1010\n#endif\n#ifndef IP_MULTICAST_TTL\n#define IP_MULTICAST_TTL 0x1011\n#endif\n#ifndef IP_MULTICAST_LOOP\n\
+    #define IP_MULTICAST_LOOP 0x1012\n#endif\n#ifndef IP_ADD_MEMBERSHIP\n#define IP_ADD_MEMBERSHIP 0x1013\n\
+    #endif\n#ifndef IP_DROP_MEMBERSHIP\n#define IP_DROP_MEMBERSHIP 0x1014\n#endif"
+- struct:
+    name: InetAddress
+    comment: An IPv4 address and port (fAddressType AF_INET).
+    members:
+    - name: fAddressType
+      type: OTAddressType
+    - name: fPort
+      type: InetPort
+    - name: fHost
+      type: InetHost
+    - name: fUnused[8]
+      type: UInt8
+    size: 16
+    align: power
+- struct:
+    name: DNSAddress
+    comment: A host name and port as text, "name:port" (fAddressType AF_DNS).
+    members:
+    - name: fAddressType
+      type: OTAddressType
+    - name: fName
+      type: InetDomainName
+    size: 258
+    align: power
+- struct:
+    name: InetHostInfo
+    comment: 'The result of OTInetStringToAddress: the full name and up to
+
+      kMaxHostAddrs addresses (the unused ones are 0).'
+    members:
+    - name: name
+      type: InetDomainName
+    - name: addrs[10]
+      type: InetHost
+    size: 296
+    align: power
+- struct:
+    name: InetSysInfo
+    members:
+    - name: cpuType[32]
+      type: char
+    - name: osType[32]
+      type: char
+    size: 64
+    align: power
+- struct:
+    name: InetMailExchange
+    members:
+    - name: preference
+      type: UInt16
+    - name: exchange
+      type: InetDomainName
+    size: 258
+    align: power
+- struct:
+    name: DNSQueryInfo
+    members:
+    - name: qType
+      type: UInt16
+    - name: qClass
+      type: UInt16
+    - name: ttl
+      type: UInt32
+    - name: name
+      type: InetDomainName
+    - name: responseType
+      type: UInt16
+    - name: resourceLen
+      type: UInt16
+    - name: resourceData[4]
+      type: char
+    size: 272
+    align: power
+- struct:
+    name: InetInterfaceInfo
+    comment: The settings of an IP interface (OTInetGetInterfaceInfo).
+    members:
+    - name: fAddress
+      type: InetHost
+    - name: fNetmask
+      type: InetHost
+    - name: fBroadcastAddr
+      type: InetHost
+    - name: fDefaultGatewayAddr
+      type: InetHost
+    - name: fDNSAddr
+      type: InetHost
+    - name: fVersion
+      type: UInt16
+    - name: fHWAddrLen
+      type: UInt16
+    - name: fHWAddr
+      type: UInt8*
+    - name: fIfMTU
+      type: UInt32
+    - name: fReservedPtrs[2]
+      type: UInt8*
+    - name: fDomainName
+      type: InetDomainName
+    - name: fIPSecondaryCount
+      type: UInt32
+    - name: fReserved[252]
+      type: UInt8
+    size: 552
+    align: power
+- function:
+    name: OTOpenInternetServices
+    return: InetSvcRef
+    args:
+    - name: cfig
+      type: OTConfigurationRef
+    - name: oflag
+      type: OTOpenFlags
+    - name: err
+      type: OSStatus*
+    callconv: C
+    comment: 'Opens the Internet services provider (the name resolver), synchronous.
+
+      Pass kDefaultInternetServicesPath as cfig.'
+- function:
+    name: OTAsyncOpenInternetServices
+    return: OSStatus
+    args:
+    - name: cfig
+      type: OTConfigurationRef
+    - name: oflag
+      type: OTOpenFlags
+    - name: proc
+      type: OTNotifyUPP
+    - name: contextPtr
+      type: void*
+    callconv: C
+- function:
+    name: OTInetStringToHost
+    return: OSStatus
+    args:
+    - name: str
+      type: const char*
+    - name: host
+      type: InetHost*
+    callconv: C
+- function:
+    name: OTInetHostToString
+    args:
+    - name: host
+      type: InetHost
+    - name: str
+      type: char*
+    callconv: C
+- function:
+    name: OTInetGetInterfaceInfo
+    return: OSStatus
+    args:
+    - name: info
+      type: InetInterfaceInfo*
+    - name: val
+      type: SInt32
+    callconv: C
+- function:
+    name: OTInetGetSecondaryAddresses
+    return: OSStatus
+    args:
+    - name: addr
+      type: InetHost*
+    - name: count
+      type: UInt32*
+    - name: val
+      type: SInt32
+    callconv: C
+- function:
+    name: OTInetStringToAddress
+    return: OSStatus
+    args:
+    - name: ref
+      type: InetSvcRef
+    - name: name
+      type: char*
+    - name: hinfo
+      type: InetHostInfo*
+    callconv: C
+- function:
+    name: OTInetAddressToName
+    return: OSStatus
+    args:
+    - name: ref
+      type: InetSvcRef
+    - name: addr
+      type: InetHost
+    - name: name
+      type: char*
+    callconv: C
+- function:
+    name: OTInetSysInfo
+    return: OSStatus
+    args:
+    - name: ref
+      type: InetSvcRef
+    - name: name
+      type: char*
+    - name: sysinfo
+      type: InetSysInfo*
+    callconv: C
+- function:
+    name: OTInetMailExchange
+    return: OSStatus
+    args:
+    - name: ref
+      type: InetSvcRef
+    - name: name
+      type: char*
+    - name: num
+      type: UInt16*
+    - name: mx
+      type: InetMailExchange*
+    callconv: C
+- function:
+    name: OTInetQuery
+    return: OSStatus
+    args:
+    - name: ref
+      type: InetSvcRef
+    - name: name
+      type: char*
+    - name: qClass
+      type: UInt16
+    - name: qType
+      type: UInt16
+    - name: buf
+      type: char*
+    - name: buflen
+      type: OTByteCount
+    - name: argv
+      type: void**
+    - name: argvlen
+      type: OTByteCount
+    - name: requestFlags
+      type: OTFlags
+    callconv: C
+- function:
+    name: OTInitInetAddress
+    args:
+    - name: addr
+      type: InetAddress*
+    - name: port
+      type: InetPort
+    - name: host
+      type: InetHost
+    callconv: C
+- function:
+    name: OTInitDNSAddress
+    return: OTByteCount
+    args:
+    - name: addr
+      type: DNSAddress*
+    - name: str
+      type: char*
+    callconv: C

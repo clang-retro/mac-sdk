@@ -1,4 +1,8 @@
 #include <Multiverse.h>
+#include <AddressXlation.h>
+#include <OpenTransport.h>
+#include <OpenTransportProviders.h>
+#include <OpenTptInternet.h>
 #include <AGL/agl.h>
 #include <GL/gl.h>
 #include <GL/glext.h>

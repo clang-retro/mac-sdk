@@ -27,6 +27,7 @@
 #include <MacMemory.h>
 #include <MixedMode.h>
 #include <Resources.h>
+#include <AddressXlation.h>
 #include "macos.h"
 #include "socket.h"
 
@@ -245,114 +246,23 @@ int inet_pton(int family, const char *text, void *addr) {
 }
 
 /* ------------------------------------------------------------------ */
-/* The resolver of MacTCP and Open Transport */
+/* The resolver of MacTCP and Open Transport (dnr.c) */
 
-#define OPENRESOLVER 1
-#define CLOSERESOLVER 2
-#define STRTOADDR 3
-#define ADDRTONAME 6
-
-#pragma options align=mac68k
-struct host_info {
-  long rtnCode;
-  char cname[255];
-  unsigned long addr[4];
-};
-#pragma options align=reset
-
-/* A Pascal result procedure in 68k code that does nothing: it takes
-   its two arguments off the stack. The caller looks at rtnCode.
-     movea.l (sp)+,a0 ; addq.l #8,sp ; jmp (a0) */
-static const unsigned short no_result[] = {0x205F, 0x508F, 0x4ED0};
-
-static Handle dnr;      /* the resolver's code, locked */
-static int dnr_state;   /* 0 not tried, 1 open, -1 not there */
-
-/* Calls the resolver with a selector and up to four long arguments. */
-static long dnr_call(long sel, long a, long b, long c, long d) {
-#if defined(__powerpc__)
-  /* C on the stack, a 4-byte result, five 4-byte arguments. */
-  const ProcInfoType info = 1 | (3 << 4) | (3 << 6) | (3 << 8) | (3 << 10) | (3 << 12) | (3 << 14);
-  return CallUniversalProc((UniversalProcPtr)*dnr, info, sel, a, b, c, d);
-#else
-  typedef long (*proc)(long, long, long, long, long);
-  return ((proc)*dnr)(sel, a, b, c, d);
-#endif
-}
-
-/* Looks in one folder for the MacTCP control panel (type 'cdev', creator
-   'ztcp' or 'mtcp') and opens its resource fork. Gives its reference
-   number, or -1. */
-static short open_panel(short vol, long dir) {
-  CInfoPBRec pb;
-  Str255 name;
-  short i;
-  for (i = 1;; i++) {
-    OSType type, creator;
-    memset(&pb, 0, sizeof pb);
-    pb.hFileInfo.ioNamePtr = name;
-    pb.hFileInfo.ioVRefNum = vol;
-    pb.hFileInfo.ioDirID = dir;
-    pb.hFileInfo.ioFDirIndex = i;
-    if (PBGetCatInfoSync(&pb) != noErr)
-      return -1;
-    if (pb.hFileInfo.ioFlAttrib & 0x10)
-      continue;
-    type = pb.hFileInfo.ioFlFndrInfo.fdType;
-    creator = pb.hFileInfo.ioFlFndrInfo.fdCreator;
-    if (type == 'cdev' && (creator == 'ztcp' || creator == 'mtcp')) {
-      short ref = HOpenResFile(vol, dir, name, fsRdPerm);
-      if (ref != -1)
-        return ref;
-    }
-  }
-}
-
-/* Closes the resolver when the program ends. */
-static void dnr_close(void) {
-  if (dnr_state > 0)
-    dnr_call(CLOSERESOLVER, 0, 0, 0, 0);
-  dnr_state = -1;
-}
-
-/* Loads and opens the resolver the first time. Gives 0, or -1. */
+/* Opens the resolver the first time. Gives 0, or -1. */
 static int dnr_open(void) {
-  static const OSType folders[] = {kControlPanelFolderType, kExtensionFolderType, kSystemFolderType};
-  short ref = -1, vol;
-  long dir;
-  unsigned i;
-  if (dnr_state)
-    return dnr_state > 0 ? 0 : -1;
-  dnr_state = -1;
-  if (__mac_ip_address() == 0)
+  static int failed;
+  if (failed)
     return -1;
-  for (i = 0; ref == -1 && i < sizeof folders / sizeof folders[0]; i++)
-    if (FindFolder(kOnSystemDisk, folders[i], 0, &vol, &dir) == noErr)
-      ref = open_panel(vol, dir);
-  /* Open Transport keeps the resolver in the System file. */
-  dnr = ref != -1 ? Get1IndResource('dnrp', 1) : 0;
-  if (!dnr)
-    dnr = GetIndResource('dnrp', 1);
-  if (dnr)
-    DetachResource(dnr);
-  if (ref != -1)
-    CloseResFile(ref);
-  if (!dnr)
-    return -1;
-  HLock(dnr);
-  if (dnr_call(OPENRESOLVER, 0, 0, 0, 0) != noErr) {
-    DisposeHandle(dnr);
-    dnr = 0;
+  if (OpenResolver(NULL) != noErr) {
+    failed = 1;
     return -1;
   }
-  dnr_state = 1;
-  atexit(dnr_close);
   return 0;
 }
 
 /* Waits for a resolver call: its rtnCode stays cacheFault (or
    inProgress) until it ends. */
-static long dnr_wait(long rc, volatile struct host_info *hi) {
+static long dnr_wait(long rc, volatile hostInfo *hi) {
   if (rc != cacheFault)
     return rc;
   while (hi->rtnCode == cacheFault || hi->rtnCode == inProgress)
@@ -363,7 +273,7 @@ static long dnr_wait(long rc, volatile struct host_info *hi) {
 /* Finds the addresses of a name with the resolver. Gives how many (up
    to max), or 0 with h_errno set. */
 static int dnr_lookup(const char *name, in_addr_t *out, int max, char *cname, size_t cnamelen) {
-  static struct host_info hi;
+  static hostInfo hi;
   long rc;
   int n = 0;
   if (dnr_open() < 0) {
@@ -372,7 +282,7 @@ static int dnr_lookup(const char *name, in_addr_t *out, int max, char *cname, si
   }
   memset(&hi, 0, sizeof hi);
   hi.rtnCode = cacheFault;
-  rc = dnr_call(STRTOADDR, (long)name, (long)&hi, (long)no_result, 0);
+  rc = StrToAddr((char *)name, &hi, NULL, NULL);
   rc = dnr_wait(rc, &hi);
   if (rc != noErr) {
     h_errno = rc == noNameServer || rc == noAnsErr ? TRY_AGAIN : HOST_NOT_FOUND;
@@ -394,13 +304,13 @@ static int dnr_lookup(const char *name, in_addr_t *out, int max, char *cname, si
 
 /* Finds the name of an address with the resolver. Gives 0, or -1. */
 static int dnr_name(in_addr_t addr, char *name, size_t len) {
-  static struct host_info hi;
+  static hostInfo hi;
   long rc;
   if (dnr_open() < 0)
     return -1;
   memset(&hi, 0, sizeof hi);
   hi.rtnCode = cacheFault;
-  rc = dnr_call(ADDRTONAME, (long)addr, (long)&hi, (long)no_result, 0);
+  rc = AddrToName(addr, &hi, NULL, NULL);
   if (dnr_wait(rc, &hi) != noErr || !hi.cname[0])
     return -1;
   strncpy(name, hi.cname, len - 1);

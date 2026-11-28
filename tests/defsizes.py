@@ -8,6 +8,13 @@ import yaml
 
 root = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 print("#include <Multiverse.h>")
+# The headers that Multiverse.h leaves out (tools/gen-headers.py
+# STANDALONE).
+for f in sorted(os.listdir(os.path.join(root, "include", "mv"))):
+    if not f.endswith(".h"):
+        continue
+    if f'"mv/{f}"' not in open(os.path.join(root, "include", "Multiverse.h")).read():
+        print(f'#include <mv/{f}>')
 for f in sorted(os.listdir(os.path.join(root, "defs"))):
     if not f.endswith(".yaml") or f == "MPW.yaml":  # MPW.h is separate
         continue

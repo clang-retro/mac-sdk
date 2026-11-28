@@ -30,6 +30,8 @@ nav:
   - "Threads": threads.md
   - "POSIX functions": posix.md
   - "Networking and pipes": network.md
+  - "Open Transport and MacTCP": opentransport.md
+  - "Shared Library Manager (ASLM)": aslm.md
   - "OpenGL": opengl.md
   - "Soft float on the 68000": softfloat.md
   - "QuickDraw 3D (Quesa)": quesa.md

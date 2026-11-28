@@ -408,6 +408,13 @@ links both archives before `libmacrt.a`, and starts the program at
   driver), names from the MacTCP resolver (`getaddrinfo`,
   `gethostbyname`), and `AF_UNIX` sockets and named pipes (`mkfifo`)
   between programs over the PPC Toolbox. See docs/network.md.
+- Open Transport (`OpenTransport.h`, `OpenTransportProviders.h`): on
+  PowerPC over Mac OS's Open Transport, on 68k over Apple's 68k
+  libraries (through the Shared Library Manager) or over MacTCP. Also the
+  MacTCP TCP and UDP blocks (`MacTCP.h`) and the name resolver
+  (`AddressXlation.h`). See docs/opentransport.md.
+- The Shared Library Manager client on 68k (`LibraryManager.h`): load
+  an ASLM library and call its functions. See docs/aslm.md.
 - OpenGL on PowerPC: `GL/gl.h` (OpenGL 1.2 and Apple's extensions),
   `GL/glu.h` and `AGL/agl.h`, imported weakly from Apple's
   `OpenGLLibrary` and `OpenGLUtility`. See docs/opengl.md.
@@ -519,7 +526,9 @@ the C library. `runtime/build-libstdcxx.sh` builds the library, and
   install CD (`-boot d`) does not mount a disk that `hformat` made,
   since it has no partition map; put that image in the second CD drive
   instead, from the monitor: `change ide1-cd0 xfer.img raw`. And `tools/qemu/mon.py` takes
-  screenshots and clicks through the QEMU monitor.
+  screenshots and clicks through the QEMU monitor. `tools/qemu/nettest.py`
+  runs a network test on Mac OS in QEMU and collects its report (see
+  docs/opentransport.md).
 - For PowerPC on Mac OS 8.1 and earlier, use SheepShaver with an
   OldWorld ROM image (such as the beige G3's), with the install CD
   attached as a CD-ROM.
@@ -536,8 +545,8 @@ definition gives one, checks the argument-block calls against the ROM,
 and links every example into a fat application. With `LLVM_SRC` set it
 also builds the runtime library and runs its test, and with
 `PICOLIBC_SRC` set as well it builds the C library and runs its tests
-(`tests/libc.c`, `tests/console.c`, `tests/thread.c`, `tests/net.c` and
-the soft float test, `tests/softfloat68k.c`).
+(`tests/libc.c`, `tests/console.c`, `tests/thread.c`, `tests/net.c`,
+`tests/ot.c` and the soft float test, `tests/softfloat68k.c`).
 With `GCC_SRC` set too, it builds the C++ library and runs
 `tests/cxx.cpp`.
 
@@ -561,7 +570,8 @@ and also fails when `include/` or `docs/coverage.md` differ from what
 - Threads on a real Thread Manager: `tests/thread.c` has run only on
   the simulators' fake Thread Manager.
 - Sockets on a real network: `tests/net.c` has run only on the
-  simulators' fake MacTCP and PPC Toolbox.
+  simulators' fake MacTCP and PPC Toolbox. `examples/net/fetch.c` (TCP
+  and names) has run on Mac OS 8.1 and 9.2.1 in QEMU.
 - Shared libraries in the linkers.
 - Programs over 32 KB of 68k code are one CODE segment that large.
   `tests/cxx.cpp` (415 KB of 68k code) has run on System 7.6.1, but no

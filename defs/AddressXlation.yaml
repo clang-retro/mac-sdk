@@ -1,0 +1,267 @@
+# AddressXlation.yaml: the MacTCP name resolver (DNR)
+#
+# Written from the MacTCP Programmer's Guide and Inside Macintosh:
+# Networking.  Clean-room: no Apple header text is reproduced.
+#
+# The resolver is a code resource ('dnrp') in the MacTCP control panel
+# or, with Open Transport, in the System file.  Applications do not
+# call a trap: the SDK's C library (runtime/libc/dnr.c) finds the
+# resource, loads it and calls it.  These functions use the C calling
+# convention on both CPUs, as in Apple's dnr.c.
+#
+# A call that must ask a name server gives cacheFault at once.  The
+# resolver then calls the result procedure (at interrupt level) when
+# the answer comes; the rtnCode field stays cacheFault until then.
+
+- enum:
+    values:
+      - name: NUM_ALT_ADDRS
+        value: 4
+        comment: |
+          The most addresses that one hostInfo record holds.
+
+- struct:
+    name: hostInfo
+    comment: |
+      The result of StrToAddr and AddrToName.  cname is a C string
+      (the resolver ends a domain name with a dot).
+    members:
+      - name: rtnCode
+        type: int32_t               #   0
+      - name: cname
+        type: char[255]             #   4
+      - name: addr
+        type: uint32_t[4]           # 260
+    size: 276
+
+- enum:
+    name: AddrClasses
+    comment: |
+      Resource record types of the domain name system.
+    values:
+      - name: A
+        value: 1
+      - name: NS
+        value: 2
+      - name: CNAME
+        value: 5
+      - name: HINFO
+        value: 13
+      - name: MX
+        value: 15
+      - name: lastClass
+        value: 32767
+
+- struct:
+    name: HInfoRec
+    comment: |
+      A host information record: CPU and system names (C strings).
+    members:
+      - name: cpuType
+        type: char[30]              #  0
+      - name: osType
+        type: char[30]              # 30
+    size: 60
+
+- struct:
+    name: MXRec
+    comment: |
+      A mail exchange record.
+    members:
+      - name: preference
+        type: uint16_t              #   0
+      - name: exchange
+        type: char[255]             #   2
+    size: 258
+
+- union:
+    name: returnRecData
+    members:
+      - name: addr
+        type: uint32_t[4]
+      - name: hinfo
+        type: HInfoRec
+      - name: mx
+        type: MXRec
+    size: 258
+
+- struct:
+    name: returnRec
+    comment: |
+      The result of HInfo and MXInfo.
+    members:
+      - name: rtnCode
+        type: int32_t               #   0
+      - name: cname
+        type: char[255]             #   4
+      - name: rdata
+        type: returnRecData         # 260
+    size: 518
+
+- union:
+    name: cacheEntryRecordData
+    members:
+      - name: name
+        type: char*
+      - name: addr
+        type: ip_addr
+    size: 4
+
+- struct:
+    name: cacheEntryRecord
+    comment: |
+      One entry of the resolver's cache, which EnumCache gives.
+    members:
+      - name: cname
+        type: char*                 #  0
+      - name: type
+        type: uint16_t              #  4
+      - name: cacheClass
+        type: uint16_t              #  6
+      - name: ttl
+        type: uint32_t              #  8
+      - name: rdata
+        type: cacheEntryRecordData  # 12
+    size: 16
+
+- funptr:
+    name: ResultUPP
+    comment: |
+      Called when StrToAddr or AddrToName ends.  Pascal convention,
+      at interrupt level.
+    args:
+      - name: hostInfoPtr
+        type: hostInfo*
+      - name: userDataPtr
+        type: char*
+
+- funptr:
+    name: ResultProc2UPP
+    comment: |
+      Called when HInfo or MXInfo ends.  Pascal convention, at
+      interrupt level.
+    args:
+      - name: returnRecPtr
+        type: returnRec*
+      - name: userDataPtr
+        type: char*
+
+- funptr:
+    name: EnumResultUPP
+    comment: |
+      Called by EnumCache once for each cache entry.  Pascal
+      convention.
+    args:
+      - name: cacheEntryRecordPtr
+        type: cacheEntryRecord*
+      - name: userDataPtr
+        type: char*
+
+- function:
+    name: OpenResolver
+    return: OSErr
+    args:
+      - name: fileName
+        type: char*
+    callconv: C
+    comment: |
+      Loads and opens the resolver.  fileName is ignored (pass NULL):
+      the library finds the resolver in the MacTCP control panel or
+      in the System file.
+
+- function:
+    name: CloseResolver
+    return: OSErr
+    callconv: C
+    comment: |
+      Closes the resolver.
+
+- function:
+    name: StrToAddr
+    return: OSErr
+    args:
+      - name: hostName
+        type: char*
+      - name: rtnStruct
+        type: hostInfo*
+      - name: resultproc
+        type: ResultUPP
+      - name: userDataPtr
+        type: char*
+    callconv: C
+    comment: |
+      Finds the addresses of a host name or a dotted number.  Gives
+      noErr when the answer is ready now, cacheFault when the result
+      procedure will get it, or an error.
+
+- function:
+    name: AddrToStr
+    return: OSErr
+    args:
+      - name: addr
+        type: uint32_t
+      - name: addrStr
+        type: char*
+    callconv: C
+    comment: |
+      Writes an address as a dotted number (C string, 16 bytes).
+
+- function:
+    name: EnumCache
+    return: OSErr
+    args:
+      - name: resultproc
+        type: EnumResultUPP
+      - name: userDataPtr
+        type: char*
+    callconv: C
+    comment: |
+      Calls resultproc for each entry of the resolver's cache.
+
+- function:
+    name: AddrToName
+    return: OSErr
+    args:
+      - name: addr
+        type: ip_addr
+      - name: rtnStruct
+        type: hostInfo*
+      - name: resultproc
+        type: ResultUPP
+      - name: userDataPtr
+        type: char*
+    callconv: C
+    comment: |
+      Finds the name of an address.  Results as for StrToAddr.
+
+- function:
+    name: HInfo
+    return: OSErr
+    args:
+      - name: hostName
+        type: char*
+      - name: returnRecPtr
+        type: returnRec*
+      - name: resultProc
+        type: ResultProc2UPP
+      - name: userDataPtr
+        type: char*
+    callconv: C
+    comment: |
+      Finds the host information record of a name.
+
+- function:
+    name: MXInfo
+    return: OSErr
+    args:
+      - name: hostName
+        type: char*
+      - name: returnRecPtr
+        type: returnRec*
+      - name: resultProc
+        type: ResultProc2UPP
+      - name: userDataPtr
+        type: char*
+    callconv: C
+    comment: |
+      Finds the mail exchange record of a name.
