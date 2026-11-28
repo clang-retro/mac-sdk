@@ -42,15 +42,17 @@ static const unsigned short no_result[] = {0x205F, 0x508F, 0x4ED0};
 static Handle dnr; /* the resolver's code, locked; NULL when closed */
 
 /* Calls the resolver with a selector and up to four long arguments.
-   Gives the resolver's result. */
-static long dnr_call(long sel, long a, long b, long c, long d) {
+   Gives the resolver's result: an OSErr in the low word of D0. The high
+   word is not defined (Open Transport's resolver leaves other bits
+   there), so the result is only that word. */
+static OSErr dnr_call(long sel, long a, long b, long c, long d) {
 #if defined(__powerpc__)
   /* C on the stack, a 4-byte result, five 4-byte arguments. */
   const ProcInfoType info = 1 | (3 << 4) | (3 << 6) | (3 << 8) | (3 << 10) | (3 << 12) | (3 << 14);
-  return CallUniversalProc((UniversalProcPtr)*dnr, info, sel, a, b, c, d);
+  return (OSErr)CallUniversalProc((UniversalProcPtr)*dnr, info, sel, a, b, c, d);
 #else
   typedef long (*proc)(long, long, long, long, long);
-  return ((proc)*dnr)(sel, a, b, c, d);
+  return (OSErr)((proc)*dnr)(sel, a, b, c, d);
 #endif
 }
 
@@ -111,7 +113,7 @@ static void close_at_exit(void) { CloseResolver(); }
    it was open before), or an error. */
 OSErr OpenResolver(char *fileName) {
   static int registered;
-  long rc;
+  OSErr rc;
   (void)fileName;
   if (dnr)
     return noErr;
@@ -125,7 +127,7 @@ OSErr OpenResolver(char *fileName) {
   if (rc != noErr) {
     DisposeHandle(dnr);
     dnr = NULL;
-    return (OSErr)rc;
+    return rc;
   }
   if (!registered) {
     registered = 1;
@@ -153,7 +155,7 @@ static long result_proc(void *proc) { return proc ? (long)proc : (long)no_result
 OSErr StrToAddr(char *hostName, hostInfo *rtnStruct, ResultUPP resultproc, char *userDataPtr) {
   if (!dnr)
     return notOpenErr;
-  return (OSErr)dnr_call(STRTOADDR, (long)hostName, (long)rtnStruct, result_proc((void *)resultproc),
+  return dnr_call(STRTOADDR, (long)hostName, (long)rtnStruct, result_proc((void *)resultproc),
                          (long)userDataPtr);
 }
 
@@ -161,21 +163,21 @@ OSErr StrToAddr(char *hostName, hostInfo *rtnStruct, ResultUPP resultproc, char 
 OSErr AddrToStr(unsigned long addr, char *addrStr) {
   if (!dnr)
     return notOpenErr;
-  return (OSErr)dnr_call(ADDRTOSTR, (long)addr, (long)addrStr, 0, 0);
+  return dnr_call(ADDRTOSTR, (long)addr, (long)addrStr, 0, 0);
 }
 
 /* Calls resultproc for each entry of the resolver's cache. */
 OSErr EnumCache(EnumResultUPP resultproc, char *userDataPtr) {
   if (!dnr)
     return notOpenErr;
-  return (OSErr)dnr_call(ENUMCACHE, result_proc((void *)resultproc), (long)userDataPtr, 0, 0);
+  return dnr_call(ENUMCACHE, result_proc((void *)resultproc), (long)userDataPtr, 0, 0);
 }
 
 /* Finds the name of an address. */
 OSErr AddrToName(ip_addr addr, hostInfo *rtnStruct, ResultUPP resultproc, char *userDataPtr) {
   if (!dnr)
     return notOpenErr;
-  return (OSErr)dnr_call(ADDRTONAME, (long)addr, (long)rtnStruct, result_proc((void *)resultproc),
+  return dnr_call(ADDRTONAME, (long)addr, (long)rtnStruct, result_proc((void *)resultproc),
                          (long)userDataPtr);
 }
 
@@ -183,7 +185,7 @@ OSErr AddrToName(ip_addr addr, hostInfo *rtnStruct, ResultUPP resultproc, char *
 OSErr HInfo(char *hostName, returnRec *returnRecPtr, ResultProc2UPP resultProc, char *userDataPtr) {
   if (!dnr)
     return notOpenErr;
-  return (OSErr)dnr_call(HXINFO, (long)hostName, (long)returnRecPtr, result_proc((void *)resultProc),
+  return dnr_call(HXINFO, (long)hostName, (long)returnRecPtr, result_proc((void *)resultProc),
                          (long)userDataPtr);
 }
 
@@ -191,6 +193,6 @@ OSErr HInfo(char *hostName, returnRec *returnRecPtr, ResultProc2UPP resultProc, 
 OSErr MXInfo(char *hostName, returnRec *returnRecPtr, ResultProc2UPP resultProc, char *userDataPtr) {
   if (!dnr)
     return notOpenErr;
-  return (OSErr)dnr_call(MXINFO, (long)hostName, (long)returnRecPtr, result_proc((void *)resultProc),
+  return dnr_call(MXINFO, (long)hostName, (long)returnRecPtr, result_proc((void *)resultProc),
                          (long)userDataPtr);
 }
