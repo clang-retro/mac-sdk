@@ -140,6 +140,13 @@ if [ -n "$LLVM_SRC" ] && [ -n "$PICOLIBC_SRC" ]; then
     if grep -q FAILED "$APPS/sim.txt" || ! grep -q "^all ok" "$APPS/sim.txt"; then
       echo "libc on PowerPC:"; cat "$APPS/sim.txt"; exit 1
     fi
+    # A NuBus Power Mac before Mac OS 7.5.2: no DriverServicesLib, so the
+    # fine clock is Microseconds, not UpTime.
+    python3 tools/simppc.py --files --nubus --input "typed\nline\n" \
+      "$APPS/libc-ppc.bin" >"$APPS/sim.txt" || { cat "$APPS/sim.txt"; exit 1; }
+    if grep -q FAILED "$APPS/sim.txt" || ! grep -q "^all ok" "$APPS/sim.txt"; then
+      echo "libc on a NuBus PowerPC:"; cat "$APPS/sim.txt"; exit 1
+    fi
     # The threads, over the simulators' fake Thread Manager.
     for c in 68000 68020; do
       python3 tools/sim68k.py --cpu $c --os --files --exit-anywhere \
@@ -231,7 +238,8 @@ if [ -n "$LLVM_SRC" ] && [ -n "$PICOLIBC_SRC" ] && [ -n "$GCC_SRC" ]; then
   if python3 -c "import unicorn" 2>/dev/null; then
     for t in cxx cxxthread; do
       for c in 68000 68020; do
-        python3 tools/sim68k.py --cpu $c --os --files --exit-anywhere \
+        # More than the default 2 million steps: the C++ test is long.
+        python3 tools/sim68k.py --cpu $c --os --files --exit-anywhere --steps 10000000 \
           "$APPS/$t-68k.bin" >"$APPS/sim.txt" || { cat "$APPS/sim.txt"; exit 1; }
         if grep -q FAILED "$APPS/sim.txt" || ! grep -q "^all ok" "$APPS/sim.txt"; then
           echo "$t on a $c:"; cat "$APPS/sim.txt"; exit 1

@@ -447,6 +447,13 @@ links both archives before `libmacrt.a`, and starts the program at
   and, unless the environment has been set, sets `TZ` to that offset,
   so `localtime` gives the Mac's local time. The Mac knows no daylight
   saving rules, so times in the other season are an hour off.
+- a fine clock for `CLOCK_MONOTONIC`, `std::chrono::steady_clock`,
+  `nanosleep` and `usleep`, and the fractions of a second of
+  `gettimeofday`: `UpTime`, `Microseconds` or, on System 6,
+  `TickCount`. See docs/posix.md.
+- `getentropy`, for `arc4random` and `std::random_device`, from the
+  jitter of the fine clock and the state of the Mac, mixed with SHA-256.
+  See docs/posix.md.
 - `exit` and `_exit` through `ExitToShell`.
 - `errno` from File Manager and Memory Manager errors.
 
