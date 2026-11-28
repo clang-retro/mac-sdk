@@ -106,6 +106,7 @@ TRAPS = {
     0xA91E: ("TrackGoAway", 8, 2), 0xA91F: ("SelectWindow", 4, 0),
     0xA9B3: ("SystemClick", 8, 0), 0xA8D8: ("NewRgn", 0, 4),
     0xA8EF: ("ScrollRect", 12, 0), 0xA975: ("TickCount", 0, 4),
+    0xA823: ("FindFolder", 16, 2), 0xA99D: ("GetIndResource", 6, 4),
     # What a program that shows its own pictures uses (FakeScreen).
     0xA916: ("HideWindow", 4, 0), 0xA91A: ("SetWTitle", 8, 0),
     0xA917: ("GetWRefCon", 4, 4), 0xA862: ("ForeColor", 4, 0),
@@ -1378,6 +1379,14 @@ def main():
         if word == 0xABF2 and threads:
             thread_call(pc)
             return
+        if word == 0xA193:
+            # Microseconds: the high long in A0, the low long in D0. The
+            # time follows the fake ticks (one tick is 16667 us).
+            us = state["ticks"] * 16667
+            uc.reg_write(UC_M68K_REG_A0, (us >> 32) & 0xFFFFFFFF)
+            uc.reg_write(UC_M68K_REG_D0, us & 0xFFFFFFFF)
+            uc.reg_write(UC_M68K_REG_PC, pc + 2)
+            return
         if word == 0xA1AD and fake:
             # Gestalt: the selector in D0; the answer in A0, the result in D0.
             sel = struct.pack(">I", uc.reg_read(UC_M68K_REG_D0) & 0xFFFFFFFF)
@@ -1491,6 +1500,10 @@ def main():
             uc.mem_write(sp, struct.pack(">I", 0x40000))
         elif name == "NewMenu":
             uc.mem_write(sp, struct.pack(">I", 0x50000))
+        elif name == "GetIndResource":          # finds no resource
+            uc.mem_write(sp, b"\0\0\0\0")
+        elif name == "FindFolder":              # finds no folder
+            uc.mem_write(sp, struct.pack(">h", -43))
         elif name == "TickCount":               # one tick per call
             state["ticks"] += 1
             uc.mem_write(sp, struct.pack(">I", state["ticks"]))
