@@ -353,8 +353,6 @@ MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr DecompressSequenceBegin(
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr DecompressSequenceFrame(ImageSequence seqID, Ptr data, CodecFlags inFlags, CodecFlags *outFlags, CompletionProcRecordPtr asyncCompletionProc) MAC_IMPORT(DecompressSequenceFrame) M68K_INLINE(0x700E, 0xAAA3);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr DecompressSequenceFrameS(ImageSequence seqID, Ptr data, long dataSize, CodecFlags inFlags, CodecFlags *outFlags, CompletionProcRecordPtr asyncCompletionProc) MAC_IMPORT(DecompressSequenceFrameS) M68K_INLINE(0x203C, 0x0016, 0x0047, 0xAAA3);
-
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr SetDSequenceMatrix(ImageSequence seqID, MatrixRecordPtr matrix) MAC_IMPORT(SetDSequenceMatrix) M68K_INLINE(0x7010, 0xAAA3);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr SetDSequenceMatte(ImageSequence seqID, PixMapHandle matte, const Rect *matteRect) MAC_IMPORT(SetDSequenceMatte) M68K_INLINE(0x7011, 0xAAA3);
@@ -397,9 +395,9 @@ MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr GetImageDescriptionCTabl
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr SetImageDescriptionCTable(ImageDescriptionHandle desc, CTabHandle ctable) MAC_IMPORT(SetImageDescriptionCTable) M68K_INLINE(0x701F, 0xAAA3);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr GetImageDescriptionExtension(ImageDescriptionHandle desc, Handle *extension, long type, long index) MAC_IMPORT(GetImageDescriptionExtension) M68K_INLINE(0x7020, 0xAAA3);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr GetImageDescriptionExtension(ImageDescriptionHandle desc, Handle *extension, long idType, long index) MAC_IMPORT(GetImageDescriptionExtension) M68K_INLINE(0x7020, 0xAAA3);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr SetImageDescriptionExtension(ImageDescriptionHandle desc, Handle extension, long type) MAC_IMPORT(SetImageDescriptionExtension) M68K_INLINE(0x7021, 0xAAA3);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr SetImageDescriptionExtension(ImageDescriptionHandle desc, Handle extension, long idType) MAC_IMPORT(SetImageDescriptionExtension) M68K_INLINE(0x7021, 0xAAA3);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr RemoveImageDescriptionExtension(ImageDescription **desc, long type, long index) MAC_IMPORT(RemoveImageDescriptionExtension) M68K_INLINE(0x203C, 0x000C, 0x003A, 0xAAA3);
 
@@ -441,7 +439,7 @@ MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr SetCompressedPixMapInfo(
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal void StdPix(PixMapPtr src, const Rect *srcRect, MatrixRecordPtr matrix, INTEGER mode, RgnHandle mask, PixMapPtr matte, const Rect *matteRect, INTEGER flags) MAC_IMPORT(StdPix) M68K_INLINE(0x700C, 0xAAA3);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr TransformRgn(MatrixRecordPtr matrix, RgnHandle rgn) MAC_IMPORT(TransformRgn) M68K_INLINE(0x7039, 0xAAA3);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr TransformRgn(MatrixRecordPtr mp, RgnHandle r) MAC_IMPORT(TransformRgn) M68K_INLINE(0x7039, 0xAAA3);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal void SFGetFilePreview(Point where, ConstStr255Param prompt, FileFilterProcPtr fileFilter, INTEGER numTypes, OSType *typeList, DlgHookProcPtr dlgHook, SFReply *reply) MAC_IMPORT(SFGetFilePreview) M68K_INLINE(0x303C, 0x0041, 0xAAA3);
 
@@ -462,18 +460,6 @@ enum {
     sfpItemCreatePreviewButton = 14,
     sfpItemShowPreviewButton = 15,
 };
-
-typedef struct PreviewResourceRecord PreviewResourceRecord;
-struct PreviewResourceRecord {
-    unsigned long modDate;
-    INTEGER version;
-    OSType resType;
-    INTEGER resID;
-};
-
-typedef PreviewResourceRecord *PreviewResourcePtr;
-
-typedef PreviewResourceRecord **PreviewResource;
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal void AlignScreenRect(Rect *rp, AlignmentProcRecordPtr alignmentProc) MAC_IMPORT(AlignScreenRect) M68K_INLINE(0x203C, 0x0008, 0x004C, 0xAAA3);
 
@@ -905,9 +891,7 @@ typedef unsigned long dataRefAttributesFlags;
 
 enum {
     hintsScrubMode = 1,
-    hintsUseScreenBuffer = 32,
     hintsAllowInterlace = 64,
-    hintsUseSoundLerp = 128,
 };
 
 typedef unsigned long playHintsEnum;
@@ -1000,7 +984,7 @@ MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal void SetTrackMatte(Track theTr
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal void DisposeMatte(PixMapHandle theMatte) MAC_IMPORT(DisposeMatte) M68K_INLINE(0x303C, 0x014A, 0xAAAA);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal Movie NewMovie(long flags) MAC_IMPORT(NewMovie) M68K_INLINE(0x303C, 0x0187, 0xAAAA);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal Movie NewMovie(long newMovieFlags) MAC_IMPORT(NewMovie) M68K_INLINE(0x303C, 0x0187, 0xAAAA);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr PutMovieIntoHandle(Movie theMovie, Handle publicMovie) MAC_IMPORT(PutMovieIntoHandle) M68K_INLINE(0x303C, 0x0022, 0xAAAA);
 
@@ -1232,7 +1216,7 @@ MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr UseTrackEditState(Track 
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr DisposeTrackEditState(TrackEditState state) MAC_IMPORT(DisposeTrackEditState) M68K_INLINE(0x303C, 0x0109, 0xAAAA);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr ConvertFileToMovieFile(const FSSpec *inputFile, const FSSpec *outputFile, OSType creator, ScriptCode scriptTag, INTEGER *resID, long flags, ComponentInstance userComp, MovieProgressProcPtr proc, long refCon) MAC_IMPORT(ConvertFileToMovieFile) M68K_INLINE(0x303C, 0x01CB, 0xAAAA);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr ConvertFileToMovieFile(const FSSpec *inputFile, const FSSpec *outputFile, OSType creator, ScriptCode scriptTag, INTEGER *resID, long flags, ComponentInstance userComp, MovieProgressProcPtr proc, long refcon) MAC_IMPORT(ConvertFileToMovieFile) M68K_INLINE(0x303C, 0x01CB, 0xAAAA);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr ConvertMovieToFile(Movie theMovie, Track onlyTrack, const FSSpec *outputFile, OSType fileType, OSType creator, ScriptCode scriptTag, INTEGER *resID, long flags, ComponentInstance userComp) MAC_IMPORT(ConvertMovieToFile) M68K_INLINE(0x303C, 0x01CC, 0xAAAA);
 
@@ -1286,7 +1270,7 @@ MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal void GetTrackNextInterestingTi
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal void GetMovieNextInterestingTime(Movie theMovie, INTEGER interestingTimeFlags, INTEGER numMediaTypes, const OSType *whichMediaTypes, TimeValue time, Fixed rate, TimeValue *interestingTime, TimeValue *interestingDuration) MAC_IMPORT(GetMovieNextInterestingTime) M68K_INLINE(0x303C, 0x010E, 0xAAAA);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr CreateMovieFile(const FSSpec *fileSpec, OSType creator, ScriptCode scriptTag, long createMovieFileFlags, INTEGER *resRefNum, Movie *newmovie) MAC_IMPORT(CreateMovieFile) M68K_INLINE(0x303C, 0x0191, 0xAAAA);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr CreateMovieFile(const FSSpec *fileSpec, OSType creator, ScriptCode scriptTag, long createMovieFileFlags, INTEGER *resRefNum, Movie *newMovie) MAC_IMPORT(CreateMovieFile) M68K_INLINE(0x303C, 0x0191, 0xAAAA);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr DeleteMovieFile(const FSSpec *fileSpec) MAC_IMPORT(DeleteMovieFile) M68K_INLINE(0x303C, 0x0175, 0xAAAA);
 
@@ -1303,10 +1287,6 @@ MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr RemoveMovieResource(INTE
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal Boolean HasMovieChanged(Movie theMovie) MAC_IMPORT(HasMovieChanged) M68K_INLINE(0x303C, 0x00D9, 0xAAAA);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal void ClearMovieChanged(Movie theMovie) MAC_IMPORT(ClearMovieChanged) M68K_INLINE(0x303C, 0x0113, 0xAAAA);
-
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr SetMovieDefaultDataRef(Movie theMovie, Handle dataRef, OSType dataRefType) MAC_IMPORT(SetMovieDefaultDataRef) M68K_INLINE(0x303C, 0x01C1, 0xAAAA);
-
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr GetMovieDefaultDataRef(Movie theMovie, Handle *dataRef, OSType *dataRefType) MAC_IMPORT(GetMovieDefaultDataRef) M68K_INLINE(0x303C, 0x01D2, 0xAAAA);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal void FlattenMovie(Movie theMovie, long movieFlattenFlags, const FSSpec *theFile, OSType creator, ScriptCode scriptTag, long createMovieFileFlags, INTEGER *resId, const StringPtr resName) MAC_IMPORT(FlattenMovie) M68K_INLINE(0x303C, 0x019B, 0xAAAA);
 
@@ -1344,7 +1324,7 @@ typedef TextMediaProcPtr TextMediaUPP;
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult SetTextProc(MediaHandler mh, TextMediaProcPtr TextProc, long refcon) MAC_IMPORT(SetTextProc) M68K_INLINE(0x2F3C, 0x0008, 0x0101, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult AddTextSample(MediaHandler mh, Ptr text, unsigned long size, INTEGER fontNumber, INTEGER fontSize, Style textFace, RGBColor *textColor, RGBColor *backColor, INTEGER textJustification, Rect *textBox, long displayFlags, TimeValue scrollDelay, INTEGER hiliteStart, INTEGER hiliteEnd, RGBColor *rgbHiliteColor, TimeValue duration, TimeValue *sampleTime) MAC_IMPORT(AddTextSample) M68K_INLINE(0x2F3C, 0x0034, 0x0102, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult AddTextSample(MediaHandler mh, Ptr text, unsigned long size, INTEGER fontNum, INTEGER fontSize, Style textFace, RGBColor *textColor, RGBColor *backColor, INTEGER textJustification, Rect *textBox, long displayFlags, TimeValue scrollDelay, INTEGER hiliteStart, INTEGER hiliteEnd, RGBColor *rgbHiliteColor, TimeValue duration, TimeValue *sampleTime) MAC_IMPORT(AddTextSample) M68K_INLINE(0x2F3C, 0x0034, 0x0102, 0x7000, 0xA82A);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult AddTESample(MediaHandler mh, TEHandle hTE, RGBColor *backColor, INTEGER textJustification, Rect *textBox, long displayFlags, TimeValue scrollDelay, INTEGER hiliteStart, INTEGER hiliteEnd, RGBColor *rgbHiliteColor, TimeValue duration, TimeValue *sampleTime) MAC_IMPORT(AddTESample) M68K_INLINE(0x2F3C, 0x0026, 0x0103, 0x7000, 0xA82A);
 
@@ -1357,7 +1337,7 @@ enum {
     findTextWrapAround = 8,
 };
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult FindNextText(MediaHandler mh, Ptr text, long size, INTEGER findFlags, TimeValue startTime, TimeValue *foundTime, TimeValue *foundDuration, long *offset) MAC_IMPORT(FindNextText) M68K_INLINE(0x2F3C, 0x001A, 0x0105, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult FindNextText(MediaHandler mh, Ptr Text, long size, INTEGER findFlags, TimeValue startTime, TimeValue *foundTime, TimeValue *foundDuration, long *offset) MAC_IMPORT(FindNextText) M68K_INLINE(0x2F3C, 0x001A, 0x0105, 0x7000, 0xA82A);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult HiliteTextSample(MediaHandler mh, TimeValue sampleTime, INTEGER hiliteStart, INTEGER hiliteEnd, RGBColor *rgbHiliteColor) MAC_IMPORT(HiliteTextSample) M68K_INLINE(0x2F3C, 0x000C, 0x0106, 0x7000, 0xA82A);
 
@@ -1383,8 +1363,6 @@ MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr GetMediaDataRef(Media th
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr SetMediaDataRef(Media theMedia, INTEGER index, Handle dataRef, OSType dataRefType) MAC_IMPORT(SetMediaDataRef) M68K_INLINE(0x303C, 0x01C9, 0xAAAA);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr SetMediaDataRefAttributes(Media theMedia, INTEGER index, long dataRefAttributes) MAC_IMPORT(SetMediaDataRefAttributes) M68K_INLINE(0x303C, 0x01CA, 0xAAAA);
-
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr AddMediaDataRef(Media theMedia, INTEGER *index, Handle dataRef, OSType dataRefType) MAC_IMPORT(AddMediaDataRef) M68K_INLINE(0x303C, 0x0198, 0xAAAA);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr GetMediaDataRefCount(Media theMedia, INTEGER *count) MAC_IMPORT(GetMediaDataRefCount) M68K_INLINE(0x303C, 0x0199, 0xAAAA);
@@ -1394,7 +1372,6 @@ MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal void SetMoviePlayHints(Movie t
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal void SetMediaPlayHints(Media theMedia, long flags, long flagsMask) MAC_IMPORT(SetMediaPlayHints) M68K_INLINE(0x303C, 0x01A2, 0xAAAA);
 
 enum {
-    firstMoviesError = -2000,
     couldNotResolveDataRef = -2000,
     badImageDescription = -2001,
     badPublicMovieAtom = -2002,
@@ -1447,11 +1424,8 @@ enum {
     invalidDataRefContainer = -2049,
     badDataRefIndex = -2050,
     noDefaultDataRef = -2051,
-    couldNotUseAnExistingSample = -2052,
     featureUnsupported = -2053,
     unsupportedAuxiliaryImportData = -2057,
-    lastMoviesError = -2056,
-    noRecordOfApp = -2020,
 };
 
 typedef ComponentInstance MovieController;
@@ -1476,7 +1450,6 @@ enum {
     mcActionControllerSizeChanged = 26,
     mcActionSetSelectionBegin = 29,
     mcActionSetSelectionDuration = 30,
-    mcActionSetPosterTime = 31,
     mcActionSetKeysEnabled = 32,
     mcActionGetKeysEnabled = 33,
     mcActionSetPlaySelection = 34,
@@ -1526,22 +1499,6 @@ typedef MCActionFilterProcPtr MCActionFilterUPP;
 
 typedef MCActionFilterProcPtr MCActionFilter;
 
-typedef pascal Boolean (*MCActionFilterWithRefConProcPtr)(MovieController, INTEGER, void*, long);
-#if TARGET_RT_MAC_CFM
-typedef UniversalProcPtr MCActionFilterWithRefConUPP;
-enum { uppMCActionFilterWithRefConProcInfo = 0x00003ED0 };
-#define NewMCActionFilterWithRefConUPP(proc) ((MCActionFilterWithRefConUPP)NewRoutineDescriptor((ProcPtr)(proc), uppMCActionFilterWithRefConProcInfo, GetCurrentArchitecture()))
-#define DisposeMCActionFilterWithRefConUPP(upp) DisposeRoutineDescriptor((UniversalProcPtr)(upp))
-#else
-typedef MCActionFilterWithRefConProcPtr MCActionFilterWithRefConUPP;
-#define NewMCActionFilterWithRefConUPP(proc) (proc)
-#define DisposeMCActionFilterWithRefConUPP(upp) ((void)0)
-#endif
-#define NewMCActionFilterWithRefConProc(proc) NewMCActionFilterWithRefConUPP(proc)
-#define DisposeMCActionFilterWithRefConProc(proc) DisposeMCActionFilterWithRefConUPP(proc)
-
-typedef MCActionFilterWithRefConProcPtr MCActionFilterWithRefCon;
-
 enum {
     mcInfoUndoAvailable = 1,
     mcInfoCutAvailable = 2,
@@ -1572,15 +1529,11 @@ enum {
     badControllerHeight = -9994,
 };
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult MCSetMovie(MovieController mc, Movie m, WindowPtr movieWindow, Point where) MAC_IMPORT(MCSetMovie) M68K_INLINE(0x2F3C, 0x000C, 0x0002, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult MCSetMovie(MovieController mc, Movie theMovie, WindowPtr movieWindow, Point where) MAC_IMPORT(MCSetMovie) M68K_INLINE(0x2F3C, 0x000C, 0x0002, 0x7000, 0xA82A);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal Movie MCGetMovie(MovieController mc) MAC_IMPORT(MCGetMovie) M68K_INLINE(0x4267, 0x2F3C, 0x0002, 0x0005, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult MCRemoveMovie(MovieController mc) MAC_IMPORT(MCRemoveMovie) M68K_INLINE(0x2F3C, 0x0000, 0x0006, 0x7000, 0xA82A);
-
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult MCIsPlayerEvent(MovieController mc, const EventRecord *e) MAC_IMPORT(MCIsPlayerEvent) M68K_INLINE(0x2F3C, 0x0004, 0x0007, 0x7000, 0xA82A);
-
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult MCSetActionFilter(MovieController mc, MCActionFilter blob) MAC_IMPORT(MCSetActionFilter) M68K_INLINE(0x2F3C, 0x0004, 0x0008, 0x7000, 0xA82A);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult MCDoAction(MovieController mc, INTEGER action, void *params) MAC_IMPORT(MCDoAction) M68K_INLINE(0x2F3C, 0x0006, 0x0009, 0x7000, 0xA82A);
 
@@ -1604,13 +1557,13 @@ MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal RgnHandle MCGetControllerBound
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal RgnHandle MCGetWindowRgn(MovieController mc, WindowPtr w) MAC_IMPORT(MCGetWindowRgn) M68K_INLINE(0x2F3C, 0x0004, 0x0013, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult MCMovieChanged(MovieController mc, Movie m) MAC_IMPORT(MCMovieChanged) M68K_INLINE(0x2F3C, 0x0004, 0x0014, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult MCMovieChanged(MovieController mc, Movie theMovie) MAC_IMPORT(MCMovieChanged) M68K_INLINE(0x2F3C, 0x0004, 0x0014, 0x7000, 0xA82A);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult MCSetDuration(MovieController mc, TimeValue duration) MAC_IMPORT(MCSetDuration) M68K_INLINE(0x2F3C, 0x0004, 0x0015, 0x7000, 0xA82A);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal TimeValue MCGetCurrentTime(MovieController mc, TimeScale *scale) MAC_IMPORT(MCGetCurrentTime) M68K_INLINE(0x2F3C, 0x0004, 0x0016, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult MCNewAttachedController(MovieController mc, Movie m, WindowPtr w, Point where) MAC_IMPORT(MCNewAttachedController) M68K_INLINE(0x2F3C, 0x000C, 0x0017, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult MCNewAttachedController(MovieController mc, Movie theMovie, WindowPtr w, Point where) MAC_IMPORT(MCNewAttachedController) M68K_INLINE(0x2F3C, 0x000C, 0x0017, 0x7000, 0xA82A);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult MCDraw(MovieController mc, WindowPtr w) MAC_IMPORT(MCDraw) M68K_INLINE(0x2F3C, 0x0004, 0x0018, 0x7000, 0xA82A);
 
@@ -1650,7 +1603,23 @@ MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult MCSetUpEditMen
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult MCGetMenuString(MovieController mc, long modifiers, INTEGER item, uint8_t *aString) MAC_IMPORT(MCGetMenuString) M68K_INLINE(0x2F3C, 0x000A, 0x002C, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult MCSetActionFilterWithRefCon(MovieController mc, MCActionFilterWithRefCon blob, long refCon) MAC_IMPORT(MCSetActionFilterWithRefCon) M68K_INLINE(0x2F3C, 0x0008, 0x002D, 0x7000, 0xA82A);
+typedef pascal Boolean (*MCActionFilterWithRefConProcPtr)(MovieController, INTEGER, void*, long);
+#if TARGET_RT_MAC_CFM
+typedef UniversalProcPtr MCActionFilterWithRefConUPP;
+enum { uppMCActionFilterWithRefConProcInfo = 0x00003ED0 };
+#define NewMCActionFilterWithRefConUPP(proc) ((MCActionFilterWithRefConUPP)NewRoutineDescriptor((ProcPtr)(proc), uppMCActionFilterWithRefConProcInfo, GetCurrentArchitecture()))
+#define DisposeMCActionFilterWithRefConUPP(upp) DisposeRoutineDescriptor((UniversalProcPtr)(upp))
+#else
+typedef MCActionFilterWithRefConProcPtr MCActionFilterWithRefConUPP;
+#define NewMCActionFilterWithRefConUPP(proc) (proc)
+#define DisposeMCActionFilterWithRefConUPP(upp) ((void)0)
+#endif
+#define NewMCActionFilterWithRefConProc(proc) NewMCActionFilterWithRefConUPP(proc)
+#define DisposeMCActionFilterWithRefConProc(proc) DisposeMCActionFilterWithRefConUPP(proc)
+
+typedef MCActionFilterWithRefConProcPtr MCActionFilterWithRefCon;
+
+MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult MCSetActionFilterWithRefCon(MovieController mc, MCActionFilterWithRefCon filter, long refCon) MAC_IMPORT(MCSetActionFilterWithRefCon) M68K_INLINE(0x2F3C, 0x0008, 0x002D, 0x7000, 0xA82A);
 
 enum {
     kMCSetMovieSelect = 2,
@@ -1750,7 +1719,7 @@ MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal INTEGER GetCallBackType(QTCall
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal TimeBase GetCallBackTimeBase(QTCallBack cb) MAC_IMPORT(GetCallBackTimeBase) M68K_INLINE(0x303C, 0x00EE, 0xAAAA);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr CallMeWhen(QTCallBack cb, QTCallBackProc callBackProc, long refCon, long param1, long param2, long param3) MAC_IMPORT(CallMeWhen) M68K_INLINE(0x303C, 0x00B8, 0xAAAA);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal OSErr CallMeWhen(QTCallBack cb, QTCallBackProc callBackProc, long refcon, long param1, long param2, long param3) MAC_IMPORT(CallMeWhen) M68K_INLINE(0x303C, 0x00B8, 0xAAAA);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal void CancelCallBack(QTCallBack cb) MAC_IMPORT(CancelCallBack) M68K_INLINE(0x303C, 0x00B9, 0xAAAA);
 
@@ -1764,362 +1733,11 @@ MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal QTCallBack GetNextCallBack(QTC
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal void ExecuteCallBack(QTCallBack cb) MAC_IMPORT(ExecuteCallBack) M68K_INLINE(0x303C, 0x012D, 0xAAAA);
 
-typedef struct MoviesUserData MoviesUserData;
-struct MoviesUserData {
-    long size;
-    long type;
-    char data[1];
-};
-
-typedef struct UserDataAtom UserDataAtom;
-struct UserDataAtom {
-    long size;
-    long type;
-    MoviesUserData userData[1];
-};
-
-typedef struct SampleDescriptionAtom SampleDescriptionAtom;
-struct SampleDescriptionAtom {
-    long size;
-    long type;
-    long flags;
-    long numEntries;
-    SampleDescription sampleDescTable[1];
-};
-
-typedef struct TimeToSampleNum TimeToSampleNum;
-struct TimeToSampleNum {
-    long sampleCount;
-    TimeValue sampleDuration;
-};
-
-typedef struct TimeToSampleNumAtom TimeToSampleNumAtom;
-struct TimeToSampleNumAtom {
-    long size;
-    long type;
-    long flags;
-    long numEntries;
-    TimeToSampleNum timeToSampleNumTable[1];
-};
-
-typedef struct SyncSampleAtom SyncSampleAtom;
-struct SyncSampleAtom {
-    long size;
-    long type;
-    long flags;
-    long numEntries;
-    long syncSampleTable[1];
-};
-
-typedef struct SampleToChunk SampleToChunk;
-struct SampleToChunk {
-    long firstChunk;
-    long samplesPerChunk;
-    long sampleDescriptionID;
-};
-
-typedef struct SampleToChunkAtom SampleToChunkAtom;
-struct SampleToChunkAtom {
-    long size;
-    long type;
-    long flags;
-    long numEntries;
-    SampleToChunk sampleToChunkTable[1];
-};
-
-typedef struct ChunkOffsetAtom ChunkOffsetAtom;
-struct ChunkOffsetAtom {
-    long size;
-    long type;
-    long flags;
-    long numEntries;
-    long chunkOffsetTable[1];
-};
-
-typedef struct SampleSizeAtom SampleSizeAtom;
-struct SampleSizeAtom {
-    long size;
-    long type;
-    long flags;
-    long sampleSize;
-    long numEntries;
-    long sampleSizeTable[1];
-};
-
-typedef struct ShadowSync ShadowSync;
-struct ShadowSync {
-    long fdSampleNum;
-    long syncSampleNum;
-};
-
-typedef struct ShadowSyncAtom ShadowSyncAtom;
-struct ShadowSyncAtom {
-    long size;
-    long type;
-    long flags;
-    long numEntries;
-    ShadowSync shadowSyncTable[1];
-};
-
-typedef struct SampleTableAtom SampleTableAtom;
-struct SampleTableAtom {
-    long size;
-    long type;
-    SampleDescriptionAtom sampleDescription;
-    TimeToSampleNumAtom timeToSampleNum;
-    SampleToChunkAtom sampleToChunk;
-    SyncSampleAtom syncSample;
-    SampleSizeAtom sampleSize;
-    ChunkOffsetAtom chunkOffset;
-    ShadowSyncAtom shadowSync;
-};
-
-typedef struct PublicHandlerInfo PublicHandlerInfo;
-struct PublicHandlerInfo {
-    long flags;
-    long componentType;
-    long componentSubType;
-    long componentManufacturer;
-    long componentFlags;
-    long componentFlagsMask;
-    char componentName[1];
-};
-
-typedef struct HandlerAtom HandlerAtom;
-struct HandlerAtom {
-    long size;
-    long type;
-    PublicHandlerInfo hInfo;
-};
-
-typedef long DataRefAtom;
-
-typedef struct DataInfoAtom DataInfoAtom;
-struct DataInfoAtom {
-    long size;
-    long type;
-    DataRefAtom dataRef;
-};
-
-typedef struct RgnAtom RgnAtom;
-struct RgnAtom {
-    long size;
-    long type;
-    INTEGER rgnSize;
-    Rect rgnBBox;
-    char data[1];
-};
-
-typedef struct MatteCompressedAtom MatteCompressedAtom;
-struct MatteCompressedAtom {
-    long size;
-    long type;
-    long flags;
-    ImageDescription matteImageDescription;
-    char matteData[1];
-};
-
-typedef struct MatteAtom MatteAtom;
-struct MatteAtom {
-    long size;
-    long type;
-    MatteCompressedAtom aCompressedMatte;
-};
-
-typedef struct ClippingAtom ClippingAtom;
-struct ClippingAtom {
-    long size;
-    long type;
-    RgnAtom aRgnClip;
-};
-
-typedef struct VideoMediaInfoHeader VideoMediaInfoHeader;
-struct VideoMediaInfoHeader {
-    long flags;
-    INTEGER graphicsMode;
-    INTEGER opColorRed;
-    INTEGER opColorGreen;
-    INTEGER opColorBlue;
-};
-
-typedef struct VideoMediaInfoHeaderAtom VideoMediaInfoHeaderAtom;
-struct VideoMediaInfoHeaderAtom {
-    long size;
-    long type;
-    VideoMediaInfoHeader vmiHeader;
-};
-
-typedef struct VideoMediaInfo VideoMediaInfo;
-struct VideoMediaInfo {
-    long size;
-    long type;
-    VideoMediaInfoHeaderAtom header;
-    HandlerAtom dataHandler;
-    DataInfoAtom dataInfo;
-    SampleTableAtom sampleTable;
-};
-
-typedef struct SoundMediaInfoHeader SoundMediaInfoHeader;
-struct SoundMediaInfoHeader {
-    long flags;
-    INTEGER balance;
-    INTEGER rsrvd;
-};
-
-typedef struct SoundMediaInfoHeaderAtom SoundMediaInfoHeaderAtom;
-struct SoundMediaInfoHeaderAtom {
-    long size;
-    long type;
-    SoundMediaInfoHeader smiHeader;
-};
-
-typedef struct SoundMediaInfo SoundMediaInfo;
-struct SoundMediaInfo {
-    long size;
-    long type;
-    SoundMediaInfoHeaderAtom header;
-    HandlerAtom dataHandler;
-    DataRefAtom dataReference;
-    SampleTableAtom sampleTable;
-};
-
-typedef struct MediaInfo MediaInfo;
-struct MediaInfo {
-    long size;
-    long type;
-};
-
-typedef struct MediaHeader MediaHeader;
-struct MediaHeader {
-    long flags;
-    long creationTime;
-    long modificationTime;
-    TimeValue timeScale;
-    TimeValue duration;
-    INTEGER language;
-    INTEGER quality;
-};
-
-typedef struct MediaHeaderAtom MediaHeaderAtom;
-struct MediaHeaderAtom {
-    long size;
-    long type;
-    MediaHeader header;
-};
-
-typedef struct MediaDirectory MediaDirectory;
-struct MediaDirectory {
-    long size;
-    long type;
-    MediaHeaderAtom mediaHeader;
-    HandlerAtom mediaHandler;
-    MediaInfo mediaInfo;
-};
-
 enum {
     TrackEnable = 1,
     TrackInMovie = 2,
     TrackInPreview = 4,
     TrackInPoster = 8,
-};
-
-typedef struct TrackHeader TrackHeader;
-struct TrackHeader {
-    long flags;
-    long creationTime;
-    long modificationTime;
-    long trackID;
-    long reserved1;
-    TimeValue duration;
-    long reserved2;
-    long reserved3;
-    INTEGER layer;
-    INTEGER alternateGroup;
-    INTEGER volume;
-    INTEGER reserved4;
-    MatrixRecord matrix;
-    Fixed trackWidth;
-    Fixed trackHeight;
-};
-
-typedef struct TrackHeaderAtom TrackHeaderAtom;
-struct TrackHeaderAtom {
-    long size;
-    long type;
-    TrackHeader header;
-};
-
-typedef struct EditListType EditListType;
-struct EditListType {
-    TimeValue trackDuration;
-    TimeValue mediaTime;
-    Fixed mediaRate;
-};
-
-typedef struct EditListAtom EditListAtom;
-struct EditListAtom {
-    long size;
-    long type;
-    long flags;
-    long numEntries;
-    EditListType editListTable[1];
-};
-
-typedef struct EditsAtom EditsAtom;
-struct EditsAtom {
-    long size;
-    long type;
-    EditListAtom editList;
-};
-
-typedef struct TrackDirectory TrackDirectory;
-struct TrackDirectory {
-    long size;
-    long type;
-    TrackHeaderAtom trackHeader;
-    ClippingAtom trackClip;
-    EditsAtom edits;
-    MediaDirectory media;
-    UserDataAtom userData;
-};
-
-typedef struct MovieHeader MovieHeader;
-struct MovieHeader {
-    long flags;
-    long creationTime;
-    long modificationTime;
-    TimeValue timeScale;
-    TimeValue duration;
-    Fixed preferredRate;
-    INTEGER preferredVolume;
-    INTEGER reserved1;
-    long preferredLong1;
-    long preferredLong2;
-    MatrixRecord matrix;
-    TimeValue previewTime;
-    TimeValue previewDuration;
-    TimeValue posterTime;
-    TimeValue selectionTime;
-    TimeValue selectionDuration;
-    TimeValue currentTime;
-    long nextTrackID;
-};
-
-typedef struct MovieHeaderAtom MovieHeaderAtom;
-struct MovieHeaderAtom {
-    long size;
-    long type;
-    MovieHeader header;
-};
-
-typedef struct MovieDirectory MovieDirectory;
-struct MovieDirectory {
-    long size;
-    long type;
-    MovieHeaderAtom header;
-    ClippingAtom movieClip;
-    TrackDirectory track[1];
-    UserDataAtom userData;
 };
 
 enum {
@@ -2139,11 +1757,9 @@ MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult ClockRateChang
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult ClockTimeChanged(ComponentInstance aClock, QTCallBack cb) MAC_IMPORT(ClockTimeChanged) M68K_INLINE(0x2F3C, 0x0004, 0x0007, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult ClockSetTimeBase(ComponentInstance aClock, TimeBase tb) MAC_IMPORT(ClockSetTimeBase) M68K_INLINE(0x2F3C, 0x0004, 0x0008, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult ClockSetTimeBase(ComponentInstance clock, TimeBase tb) MAC_IMPORT(ClockSetTimeBase) M68K_INLINE(0x2F3C, 0x0004, 0x0008, 0x7000, 0xA82A);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult ClockStartStopChanged(ComponentInstance aClock, QTCallBack cb, Boolean startChanged, Boolean stopChanged) MAC_IMPORT(ClockStartStopChanged) M68K_INLINE(0x2F3C, 0x0008, 0x0009, 0x7000, 0xA82A);
-
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult ClockGetRate(ComponentInstance aClock, Fixed *rate) MAC_IMPORT(ClockGetRate) M68K_INLINE(0x2F3C, 0x0004, 0x000A, 0x7000, 0xA82A);
 
 enum {
     kClockGetTimeSelect = 1,
@@ -2169,7 +1785,6 @@ enum {
     seqGrabAppendToFile = 8,
     seqGrabDontAddMovieResource = 16,
     seqGrabDontMakeMovie = 32,
-    seqGrabPreExtendFile = 64,
 };
 
 typedef unsigned long SeqGrabDataOutputEnum;
@@ -2272,10 +1887,6 @@ typedef SGModalFilterProcPtr SGModalFilterUPP;
 #define NewSGModalFilterProc(proc) NewSGModalFilterUPP(proc)
 #define DisposeSGModalFilterProc(proc) DisposeSGModalFilterUPP(proc)
 
-enum {
-    sgPanelFlagForPanel = 1,
-};
-
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult SGInitialize(SeqGrabComponent s) MAC_IMPORT(SGInitialize) M68K_INLINE(0x2F3C, 0x0000, 0x0001, 0x7000, 0xA82A);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult SGSetDataOutput(SeqGrabComponent s, FSSpec *movieFile, long whereFlags) MAC_IMPORT(SGSetDataOutput) M68K_INLINE(0x2F3C, 0x0008, 0x0002, 0x7000, 0xA82A);
@@ -2322,7 +1933,7 @@ MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult SGSetFlags(Seq
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult SGGetFlags(SeqGrabComponent s, long *sgFlags) MAC_IMPORT(SGGetFlags) M68K_INLINE(0x2F3C, 0x0004, 0x001F, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult SGSetDataProc(SeqGrabComponent s, SGDataProc proc, long refCon) MAC_IMPORT(SGSetDataProc) M68K_INLINE(0x2F3C, 0x0008, 0x0020, 0x7000, 0xA82A);
+MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult SGSetDataProc(SeqGrabComponent sg, SGDataProc proc, long refCon) MAC_IMPORT(SGSetDataProc) M68K_INLINE(0x2F3C, 0x0008, 0x0020, 0x7000, 0xA82A);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult SGNewChannelFromComponent(SeqGrabComponent s, SGChannel *newChannel, Component sgChannelComponent) MAC_IMPORT(SGNewChannelFromComponent) M68K_INLINE(0x2F3C, 0x0008, 0x0021, 0x7000, 0xA82A);
 
@@ -2409,10 +2020,6 @@ MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult SGWriteSamples
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult SGGetDataRate(SGChannel c, long *bytesPerSecond) MAC_IMPORT(SGGetDataRate) M68K_INLINE(0x2F3C, 0x0004, 0x0182, 0x7000, 0xA82A);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult SGAlignChannelRect(SGChannel c, Rect *r) MAC_IMPORT(SGAlignChannelRect) M68K_INLINE(0x2F3C, 0x0004, 0x0183, 0x7000, 0xA82A);
-
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult SGPanelGetDitl(SeqGrabComponent s, Handle *ditl) MAC_IMPORT(SGPanelGetDitl) M68K_INLINE(0x2F3C, 0x0004, 0x0200, 0x7000, 0xA82A);
-
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult SGPanelGetTitle(SeqGrabComponent s, uint8_t *title) MAC_IMPORT(SGPanelGetTitle) M68K_INLINE(0x2F3C, 0x0004, 0x0201, 0x7000, 0xA82A);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult SGPanelCanRun(SeqGrabComponent s, SGChannel c) MAC_IMPORT(SGPanelCanRun) M68K_INLINE(0x2F3C, 0x0004, 0x0202, 0x7000, 0xA82A);
 
@@ -2755,7 +2362,6 @@ enum {
     kSGCGetDataRateSelect = 386,
     kSGCAlignChannelRectSelect = 387,
     kSGCPanelGetDitlSelect = 512,
-    kSGCPanelGetTitleSelect = 513,
     kSGCPanelCanRunSelect = 514,
     kSGCPanelInstallSelect = 515,
     kSGCPanelEventSelect = 516,
@@ -2827,18 +2433,6 @@ struct DigitizerInfo {
     long reserved;
 };
 
-typedef struct VdigType VdigType;
-struct VdigType {
-    long type;
-    long reserved;
-};
-
-typedef struct VdigTypeList VdigTypeList;
-struct VdigTypeList {
-    INTEGER count;
-    VdigType list[1];
-};
-
 typedef struct VdigBufferRec VdigBufferRec;
 struct VdigBufferRec {
     PixMapHandle dest;
@@ -2899,10 +2493,6 @@ enum {
     dmaDepth2Gray = 64,
     dmaDepth4Gray = 128,
     dmaDepth8Gray = 256,
-};
-
-enum {
-    kvdigSelectors = 82,
 };
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal VideoDigitizerError VDGetMaxSrcRect(VideoDigitizerComponent ci, INTEGER inputStd, Rect *maxSrcRect) MAC_IMPORT(VDGetMaxSrcRect) M68K_INLINE(0x2F3C, 0x0006, 0x0001, 0x7000, 0xA82A);
@@ -3258,10 +2848,6 @@ struct SCParams {
     long reserved2;
 };
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult SCGetCompressionExtended(ComponentInstance ci, SCParams *params, Point where, SCModalFilterProcPtr filterProc, SCModalHookProcPtr hookProc, long refcon, StringPtr customName) MAC_IMPORT(SCGetCompressionExtended) M68K_INLINE(0x2F3C, 0x0018, 0x0001, 0x7000, 0xA82A);
-
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult SCGetCompression(ComponentInstance ci, SCParams *params, Point where) MAC_IMPORT(SCGetCompression) M68K_INLINE(0x42A7, 0x42A7, 0x42A7, 0x42A7, 0x2F3C, 0x0018, 0x0001, 0x7000, 0xA82A);
-
 typedef ComponentInstance MovieImportComponent;
 
 typedef ComponentInstance MovieExportComponent;
@@ -3277,13 +2863,8 @@ enum {
 };
 
 enum {
-    kMovieImportExportOpenSelect = -1,
-    kMovieImportExportCloseSelect = -2,
-    kMovieImportExportCanDoSelect = -3,
-    kMovieImportExportVersionSelect = -4,
     kMovieImportHandleSelect = 1,
     kMovieImportFileSelect = 2,
-    kMovieImportSetFrameDurationSelect = 3,
     kMovieImportSetSampleDescriptionSelect = 4,
     kMovieImportSetMediaFileSelect = 5,
     kMovieImportSetDimensionsSelect = 6,
@@ -3352,10 +2933,6 @@ enum {
 };
 
 enum {
-    kPreviewOpenSelector = 0,
-    kPreviewCloseSelector = -1,
-    kPreviewCanDoSelector = -2,
-    kPreviewVersionSelector = -3,
     kPreviewShowDataSelector = 1,
     kPreviewMakePreviewSelector = 2,
     kPreviewMakePreviewReferenceSelector = 3,
@@ -3474,15 +3051,7 @@ MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult MediaSetMatrix
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult MediaGetTrackOpaque(ComponentInstance ci, Boolean *trackIsOpaque) MAC_IMPORT(MediaGetTrackOpaque) M68K_INLINE(0x2F3C, 0x0004, 0x0510, 0x7000, 0xA82A);
 
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult MediaSetGraphicsMode(ComponentInstance ci, long mode, RGBColor *opColor) MAC_IMPORT(MediaSetGraphicsMode) M68K_INLINE(0x2F3C, 0x0008, 0x0511, 0x7000, 0xA82A);
-
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult MediaGetGraphicsMode(ComponentInstance ci, long *mode, RGBColor *opColor) MAC_IMPORT(MediaGetGraphicsMode) M68K_INLINE(0x2F3C, 0x0008, 0x0512, 0x7000, 0xA82A);
-
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult MediaGSetVolume(ComponentInstance ci, INTEGER volume) MAC_IMPORT(MediaGSetVolume) M68K_INLINE(0x2F3C, 0x0002, 0x0513, 0x7000, 0xA82A);
-
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult MediaSetSoundBalance(ComponentInstance ci, INTEGER balance) MAC_IMPORT(MediaSetSoundBalance) M68K_INLINE(0x2F3C, 0x0002, 0x0514, 0x7000, 0xA82A);
-
-MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult MediaGetSoundBalance(ComponentInstance ci, INTEGER *balance) MAC_IMPORT(MediaGetSoundBalance) M68K_INLINE(0x2F3C, 0x0004, 0x0515, 0x7000, 0xA82A);
 
 MAC_SINCE_GESTALT(0x0710, "7.1", "'qtim'") pascal ComponentResult MediaGetNextBoundsChange(ComponentInstance ci, TimeValue *when) MAC_IMPORT(MediaGetNextBoundsChange) M68K_INLINE(0x2F3C, 0x0004, 0x0516, 0x7000, 0xA82A);
 
@@ -3618,7 +3187,6 @@ enum {
     codecImageBufErr = -8965,
     codecSpoolErr = -8966,
     codecAbortErr = -8967,
-    codecWouldOffscreenErr = -8968,
     codecBadDataErr = -8969,
     codecDataVersErr = -8970,
     codecExtensionNotFoundErr = -8971,
@@ -3653,45 +3221,12 @@ enum {
     kFullVolume = 256,
     kNoVolume = 0,
     MovieControllerComponentType = 'play',
-    kMovieVersion = 0,
-    sgChannelAtom = 'chan',
-    sgChannelSettingsAtom = 'ctom',
-    sgChannelDescription = 'cdsc',
-    sgChannelSettings = 'cset',
-    sgDeviceNameType = 'name',
-    sgUsageType = 'use ',
-    sgPlayFlagsType = 'plyf',
     sgClipType = 'clip',
     sgMatrixType = 'mtrx',
-    sgVolumeType = 'volu',
-    sgPanelSettingsAtom = 'ptom',
-    sgPanelDescription = 'pdsc',
-    sgPanelSettings = 'pset',
-    sgcSoundCompressionType = 'scmp',
-    sgcSoundSampleRateType = 'srat',
-    sgcSoundChannelCountType = 'schn',
-    sgcSoundSampleSizeType = 'ssiz',
-    sgcSoundInputType = 'sinp',
-    sgcSoundGainType = 'gain',
-    sgcVideoHueType = 'hue ',
-    sgcVideoSaturationType = 'satr',
-    sgcVideoContrastType = 'trst',
-    sgcVideoSharpnessType = 'shrp',
-    sgcVideoBrigtnessType = 'brit',
-    sgcVideoBlackLevelType = 'blkl',
-    sgcVideoWhiteLevelType = 'whtl',
-    sgcVideoInputType = 'vinp',
-    sgcVideoFormatType = 'vstd',
-    sgcVideoFilterType = 'vflt',
-    sgcVideoRectType = 'vrct',
-    sgVideoDigitizerType = 'vdig',
     videoDigitizerComponentType = 'vdig',
-    vdigInterfaceRev = 2,
     ntscIn = 0,
-    currentIn = 0,
     palIn = 1,
     secamIn = 2,
-    ntscReallyIn = 3,
     compositeIn = 0,
     sVideoIn = 1,
     rgbComponentIn = 2,
@@ -3711,9 +3246,7 @@ enum {
     digiUnimpErr = -2201,
     qtParamErr = -2202,
     matrixErr = -2203,
-    notExactMatrix = -2204,
     noMoreKeyColors = -2205,
-    notExactSize = -2206,
     badDepth = -2207,
     noDMA = -2208,
     badCallOrder = -2209,
@@ -3787,7 +3320,6 @@ enum {
     scCompressSequenceBegin = 15,
     scCompressSequenceFrame = 16,
     scCompressSequenceEnd = 17,
-    scDefaultPictHandleSettings = 18,
     scDefaultPictFileSettings = 19,
     scDefaultPixMapSettings = 20,
     scGetInfo = 21,
@@ -3811,7 +3343,6 @@ enum {
     MovieImportType = 'eat ',
     MovieExportType = 'spit',
     ShowFilePreviewComponentType = 'pnot',
-    CreateFilePreviewrComponentType = 'pmak',
     codecGetCodecInfo = 0,
     codecGetCompressionTime = 1,
     codecGetMaxCompressionSize = 2,
@@ -3852,8 +3383,6 @@ enum {
     codecConditionNewAccuracy = 1024,
     codecConditionNewDestination = 2048,
     codecConditionCodecChangedMask = -2147483648,
-    codecInfoResourceType = 'cdci',
-    codecInterfaceVersion = 1,
 };
 
 #ifdef __cplusplus

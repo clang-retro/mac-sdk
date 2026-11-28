@@ -808,20 +808,6 @@
 # ####
 
 - function:
-    name: DecompressSequenceFrameS
-    return: OSErr
-    args:
-    - {name: seqID, type: ImageSequence}
-    - {name: data, type: Ptr}
-    - {name: dataSize, type: int32_t}
-    - {name: inFlags, type: CodecFlags}
-    - {name: outFlags, type: CodecFlags*}
-    - {name: asyncCompletionProc, type: CompletionProcRecordPtr}
-    m68k-inline: [8252, 22, 71, 43683]
-
-# ####
-
-- function:
     name: SetDSequenceMatrix
     return: OSErr
     args:
@@ -1047,7 +1033,7 @@
     args:
     - {name: desc, type: ImageDescriptionHandle}
     - {name: extension, type: Handle*}
-    - {name: type, type: int32_t}
+    - {name: idType, type: int32_t}
     - {name: index, type: int32_t}
     m68k-inline: [28704, 43683]
 
@@ -1059,7 +1045,7 @@
     args:
     - {name: desc, type: ImageDescriptionHandle}
     - {name: extension, type: Handle}
-    - {name: type, type: int32_t}
+    - {name: idType, type: int32_t}
     m68k-inline: [28705, 43683]
 
 # ####
@@ -1336,8 +1322,8 @@
     name: TransformRgn
     return: OSErr
     args:
-    - {name: matrix, type: MatrixRecordPtr}
-    - {name: rgn, type: RgnHandle}
+    - {name: mp, type: MatrixRecordPtr}
+    - {name: r, type: RgnHandle}
     m68k-inline: [28729, 43683]
 
 # ####
@@ -1433,24 +1419,6 @@
     - {name: sfpItemPreviewDividerUser, value: 13}
     - {name: sfpItemCreatePreviewButton, value: 14}
     - {name: sfpItemShowPreviewButton, value: 15}
-
-# ####
-
-- struct:
-    name: PreviewResourceRecord
-    members:
-    - {name: modDate, type: uint32_t}
-    - {name: version, type: INTEGER}
-    - {name: resType, type: OSType}
-    - {name: resID, type: INTEGER}
-
-# ####
-
-- typedef: {name: PreviewResourcePtr, type: PreviewResourceRecord*}
-
-# ####
-
-- typedef: {name: PreviewResource, type: PreviewResourceRecord**}
 
 # ####
 
@@ -2235,9 +2203,7 @@
 - enum:
     values:
     - {name: hintsScrubMode, value: 1}
-    - {name: hintsUseScreenBuffer, value: 32}
     - {name: hintsAllowInterlace, value: 64}
-    - {name: hintsUseSoundLerp, value: 128}
 
 # ####
 
@@ -2593,7 +2559,7 @@
     name: NewMovie
     return: Movie
     args:
-    - {name: flags, type: int32_t}
+    - {name: newMovieFlags, type: int32_t}
     m68k-inline: [12348, 391, 43690]
 
 # ####
@@ -3802,7 +3768,7 @@
     - {name: flags, type: int32_t}
     - {name: userComp, type: ComponentInstance}
     - {name: proc, type: MovieProgressProcPtr}
-    - {name: refCon, type: int32_t}
+    - {name: refcon, type: int32_t}
     m68k-inline: [12348, 459, 43690]
 
 # ####
@@ -4116,7 +4082,7 @@
     - {name: scriptTag, type: ScriptCode}
     - {name: createMovieFileFlags, type: int32_t}
     - {name: resRefNum, type: INTEGER*}
-    - {name: newmovie, type: Movie*}
+    - {name: newMovie, type: Movie*}
     m68k-inline: [12348, 401, 43690]
 
 # ####
@@ -4204,28 +4170,6 @@
     args:
     - {name: theMovie, type: Movie}
     m68k-inline: [12348, 275, 43690]
-
-# ####
-
-- function:
-    name: SetMovieDefaultDataRef
-    return: OSErr
-    args:
-    - {name: theMovie, type: Movie}
-    - {name: dataRef, type: Handle}
-    - {name: dataRefType, type: OSType}
-    m68k-inline: [12348, 449, 43690]
-
-# ####
-
-- function:
-    name: GetMovieDefaultDataRef
-    return: OSErr
-    args:
-    - {name: theMovie, type: Movie}
-    - {name: dataRef, type: Handle*}
-    - {name: dataRefType, type: OSType*}
-    m68k-inline: [12348, 466, 43690]
 
 # ####
 
@@ -4349,7 +4293,7 @@
     - {name: mh, type: MediaHandler}
     - {name: text, type: Ptr}
     - {name: size, type: uint32_t}
-    - {name: fontNumber, type: INTEGER}
+    - {name: fontNum, type: INTEGER}
     - {name: fontSize, type: INTEGER}
     - {name: textFace, type: Style}
     - {name: textColor, type: RGBColor*}
@@ -4415,7 +4359,7 @@
     return: ComponentResult
     args:
     - {name: mh, type: MediaHandler}
-    - {name: text, type: Ptr}
+    - {name: Text, type: Ptr}
     - {name: size, type: int32_t}
     - {name: findFlags, type: INTEGER}
     - {name: startTime, type: TimeValue}
@@ -4557,17 +4501,6 @@
 # ####
 
 - function:
-    name: SetMediaDataRefAttributes
-    return: OSErr
-    args:
-    - {name: theMedia, type: Media}
-    - {name: index, type: INTEGER}
-    - {name: dataRefAttributes, type: int32_t}
-    m68k-inline: [12348, 458, 43690]
-
-# ####
-
-- function:
     name: AddMediaDataRef
     return: OSErr
     args:
@@ -4613,7 +4546,6 @@
 
 - enum:
     values:
-    - {name: firstMoviesError, value: -2000}
     - {name: couldNotResolveDataRef, value: -2000}
     - {name: badImageDescription, value: -2001}
     - {name: badPublicMovieAtom, value: -2002}
@@ -4666,11 +4598,8 @@
     - {name: invalidDataRefContainer, value: -2049}
     - {name: badDataRefIndex, value: -2050}
     - {name: noDefaultDataRef, value: -2051}
-    - {name: couldNotUseAnExistingSample, value: -2052}
     - {name: featureUnsupported, value: -2053}
     - {name: unsupportedAuxiliaryImportData, value: -2057}
-    - {name: lastMoviesError, value: -2056}
-    - {name: noRecordOfApp, value: -2020}
 
 # ####
 
@@ -4699,7 +4628,6 @@
     - {name: mcActionControllerSizeChanged, value: 26}
     - {name: mcActionSetSelectionBegin, value: 29}
     - {name: mcActionSetSelectionDuration, value: 30}
-    - {name: mcActionSetPosterTime, value: 31}
     - {name: mcActionSetKeysEnabled, value: 32}
     - {name: mcActionGetKeysEnabled, value: 33}
     - {name: mcActionSetPlaySelection, value: 34}
@@ -4756,21 +4684,6 @@
 
 # ####
 
-- funptr:
-    name: MCActionFilterWithRefConProcPtr
-    return: Boolean
-    args:
-    - {type: MovieController}
-    - {type: INTEGER}
-    - {type: void*}
-    - {type: int32_t}
-
-# ####
-
-- typedef: {name: MCActionFilterWithRefCon, type: MCActionFilterWithRefConProcPtr}
-
-# ####
-
 - enum:
     values:
     - {name: mcInfoUndoAvailable, value: 1}
@@ -4812,7 +4725,7 @@
     return: ComponentResult
     args:
     - {name: mc, type: MovieController}
-    - {name: m, type: Movie}
+    - {name: theMovie, type: Movie}
     - {name: movieWindow, type: WindowPtr}
     - {name: where, type: Point}
     m68k-inline: [12092, 12, 2, 28672, 43050]
@@ -4829,31 +4742,12 @@
 # ####
 
 - function:
-    name: MCRemoveMovie
-    return: ComponentResult
-    args:
-    - {name: mc, type: MovieController}
-    m68k-inline: [12092, 0, 6, 28672, 43050]
-
-# ####
-
-- function:
     name: MCIsPlayerEvent
     return: ComponentResult
     args:
     - {name: mc, type: MovieController}
     - {name: e, type: const EventRecord*}
     m68k-inline: [12092, 4, 7, 28672, 43050]
-
-# ####
-
-- function:
-    name: MCSetActionFilter
-    return: ComponentResult
-    args:
-    - {name: mc, type: MovieController}
-    - {name: blob, type: MCActionFilter}
-    m68k-inline: [12092, 4, 8, 28672, 43050]
 
 # ####
 
@@ -4969,7 +4863,7 @@
     return: ComponentResult
     args:
     - {name: mc, type: MovieController}
-    - {name: m, type: Movie}
+    - {name: theMovie, type: Movie}
     m68k-inline: [12092, 4, 20, 28672, 43050]
 
 # ####
@@ -4999,7 +4893,7 @@
     return: ComponentResult
     args:
     - {name: mc, type: MovieController}
-    - {name: m, type: Movie}
+    - {name: theMovie, type: Movie}
     - {name: w, type: WindowPtr}
     - {name: where, type: Point}
     m68k-inline: [12092, 12, 23, 28672, 43050]
@@ -5203,12 +5097,27 @@
 
 # ####
 
+- funptr:
+    name: MCActionFilterWithRefConProcPtr
+    return: Boolean
+    args:
+    - {type: MovieController}
+    - {type: INTEGER}
+    - {type: void*}
+    - {type: int32_t}
+
+# ####
+
+- typedef: {name: MCActionFilterWithRefCon, type: MCActionFilterWithRefConProcPtr}
+
+# ####
+
 - function:
     name: MCSetActionFilterWithRefCon
     return: ComponentResult
     args:
     - {name: mc, type: MovieController}
-    - {name: blob, type: MCActionFilterWithRefCon}
+    - {name: filter, type: MCActionFilterWithRefCon}
     - {name: refCon, type: int32_t}
     m68k-inline: [12092, 8, 45, 28672, 43050]
 
@@ -5538,7 +5447,7 @@
     args:
     - {name: cb, type: QTCallBack}
     - {name: callBackProc, type: QTCallBackProc}
-    - {name: refCon, type: int32_t}
+    - {name: refcon, type: int32_t}
     - {name: param1, type: int32_t}
     - {name: param2, type: int32_t}
     - {name: param3, type: int32_t}
@@ -5600,443 +5509,12 @@
 
 # ####
 
-- struct:
-    name: MoviesUserData
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-    - {name: data, type: 'char[1]'}
-
-# ####
-
-- struct:
-    name: UserDataAtom
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-    - {name: userData, type: 'MoviesUserData[1]'}
-
-# ####
-
-- struct:
-    name: SampleDescriptionAtom
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-    - {name: flags, type: int32_t}
-    - {name: numEntries, type: int32_t}
-    - {name: sampleDescTable, type: 'SampleDescription[1]'}
-
-# ####
-
-- struct:
-    name: TimeToSampleNum
-    members:
-    - {name: sampleCount, type: int32_t}
-    - {name: sampleDuration, type: TimeValue}
-
-# ####
-
-- struct:
-    name: TimeToSampleNumAtom
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-    - {name: flags, type: int32_t}
-    - {name: numEntries, type: int32_t}
-    - {name: timeToSampleNumTable, type: 'TimeToSampleNum[1]'}
-
-# ####
-
-- struct:
-    name: SyncSampleAtom
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-    - {name: flags, type: int32_t}
-    - {name: numEntries, type: int32_t}
-    - {name: syncSampleTable, type: 'int32_t[1]'}
-
-# ####
-
-- struct:
-    name: SampleToChunk
-    members:
-    - {name: firstChunk, type: int32_t}
-    - {name: samplesPerChunk, type: int32_t}
-    - {name: sampleDescriptionID, type: int32_t}
-
-# ####
-
-- struct:
-    name: SampleToChunkAtom
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-    - {name: flags, type: int32_t}
-    - {name: numEntries, type: int32_t}
-    - {name: sampleToChunkTable, type: 'SampleToChunk[1]'}
-
-# ####
-
-- struct:
-    name: ChunkOffsetAtom
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-    - {name: flags, type: int32_t}
-    - {name: numEntries, type: int32_t}
-    - {name: chunkOffsetTable, type: 'int32_t[1]'}
-
-# ####
-
-- struct:
-    name: SampleSizeAtom
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-    - {name: flags, type: int32_t}
-    - {name: sampleSize, type: int32_t}
-    - {name: numEntries, type: int32_t}
-    - {name: sampleSizeTable, type: 'int32_t[1]'}
-
-# ####
-
-- struct:
-    name: ShadowSync
-    members:
-    - {name: fdSampleNum, type: int32_t}
-    - {name: syncSampleNum, type: int32_t}
-
-# ####
-
-- struct:
-    name: ShadowSyncAtom
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-    - {name: flags, type: int32_t}
-    - {name: numEntries, type: int32_t}
-    - {name: shadowSyncTable, type: 'ShadowSync[1]'}
-
-# ####
-
-- struct:
-    name: SampleTableAtom
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-    - {name: sampleDescription, type: SampleDescriptionAtom}
-    - {name: timeToSampleNum, type: TimeToSampleNumAtom}
-    - {name: sampleToChunk, type: SampleToChunkAtom}
-    - {name: syncSample, type: SyncSampleAtom}
-    - {name: sampleSize, type: SampleSizeAtom}
-    - {name: chunkOffset, type: ChunkOffsetAtom}
-    - {name: shadowSync, type: ShadowSyncAtom}
-
-# ####
-
-- struct:
-    name: PublicHandlerInfo
-    members:
-    - {name: flags, type: int32_t}
-    - {name: componentType, type: int32_t}
-    - {name: componentSubType, type: int32_t}
-    - {name: componentManufacturer, type: int32_t}
-    - {name: componentFlags, type: int32_t}
-    - {name: componentFlagsMask, type: int32_t}
-    - {name: componentName, type: 'char[1]'}
-
-# ####
-
-- struct:
-    name: HandlerAtom
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-    - {name: hInfo, type: PublicHandlerInfo}
-
-# ####
-
-- typedef: {name: DataRefAtom, type: int32_t}
-
-# ####
-
-- struct:
-    name: DataInfoAtom
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-    - {name: dataRef, type: DataRefAtom}
-
-# ####
-
-- struct:
-    name: RgnAtom
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-    - {name: rgnSize, type: INTEGER}
-    - {name: rgnBBox, type: Rect}
-    - {name: data, type: 'char[1]'}
-
-# ####
-
-- struct:
-    name: MatteCompressedAtom
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-    - {name: flags, type: int32_t}
-    - {name: matteImageDescription, type: ImageDescription}
-    - {name: matteData, type: 'char[1]'}
-
-# ####
-
-- struct:
-    name: MatteAtom
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-    - {name: aCompressedMatte, type: MatteCompressedAtom}
-
-# ####
-
-- struct:
-    name: ClippingAtom
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-    - {name: aRgnClip, type: RgnAtom}
-
-# ####
-
-- struct:
-    name: VideoMediaInfoHeader
-    members:
-    - {name: flags, type: int32_t}
-    - {name: graphicsMode, type: INTEGER}
-    - {name: opColorRed, type: INTEGER}
-    - {name: opColorGreen, type: INTEGER}
-    - {name: opColorBlue, type: INTEGER}
-
-# ####
-
-- struct:
-    name: VideoMediaInfoHeaderAtom
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-    - {name: vmiHeader, type: VideoMediaInfoHeader}
-
-# ####
-
-- struct:
-    name: VideoMediaInfo
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-    - {name: header, type: VideoMediaInfoHeaderAtom}
-    - {name: dataHandler, type: HandlerAtom}
-    - {name: dataInfo, type: DataInfoAtom}
-    - {name: sampleTable, type: SampleTableAtom}
-
-# ####
-
-- struct:
-    name: SoundMediaInfoHeader
-    members:
-    - {name: flags, type: int32_t}
-    - {name: balance, type: INTEGER}
-    - {name: rsrvd, type: INTEGER}
-
-# ####
-
-- struct:
-    name: SoundMediaInfoHeaderAtom
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-    - {name: smiHeader, type: SoundMediaInfoHeader}
-
-# ####
-
-- struct:
-    name: SoundMediaInfo
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-    - {name: header, type: SoundMediaInfoHeaderAtom}
-    - {name: dataHandler, type: HandlerAtom}
-    - {name: dataReference, type: DataRefAtom}
-    - {name: sampleTable, type: SampleTableAtom}
-
-# ####
-
-- struct:
-    name: MediaInfo
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-
-# ####
-
-- struct:
-    name: MediaHeader
-    members:
-    - {name: flags, type: int32_t}
-    - {name: creationTime, type: int32_t}
-    - {name: modificationTime, type: int32_t}
-    - {name: timeScale, type: TimeValue}
-    - {name: duration, type: TimeValue}
-    - {name: language, type: INTEGER}
-    - {name: quality, type: INTEGER}
-
-# ####
-
-- struct:
-    name: MediaHeaderAtom
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-    - {name: header, type: MediaHeader}
-
-# ####
-
-- struct:
-    name: MediaDirectory
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-    - {name: mediaHeader, type: MediaHeaderAtom}
-    - {name: mediaHandler, type: HandlerAtom}
-    - {name: mediaInfo, type: MediaInfo}
-
-# ####
-
 - enum:
     values:
     - {name: TrackEnable, value: 1}
     - {name: TrackInMovie, value: 2}
     - {name: TrackInPreview, value: 4}
     - {name: TrackInPoster, value: 8}
-
-# ####
-
-- struct:
-    name: TrackHeader
-    members:
-    - {name: flags, type: int32_t}
-    - {name: creationTime, type: int32_t}
-    - {name: modificationTime, type: int32_t}
-    - {name: trackID, type: int32_t}
-    - {name: reserved1, type: int32_t}
-    - {name: duration, type: TimeValue}
-    - {name: reserved2, type: int32_t}
-    - {name: reserved3, type: int32_t}
-    - {name: layer, type: INTEGER}
-    - {name: alternateGroup, type: INTEGER}
-    - {name: volume, type: INTEGER}
-    - {name: reserved4, type: INTEGER}
-    - {name: matrix, type: MatrixRecord}
-    - {name: trackWidth, type: Fixed}
-    - {name: trackHeight, type: Fixed}
-
-# ####
-
-- struct:
-    name: TrackHeaderAtom
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-    - {name: header, type: TrackHeader}
-
-# ####
-
-- struct:
-    name: EditListType
-    members:
-    - {name: trackDuration, type: TimeValue}
-    - {name: mediaTime, type: TimeValue}
-    - {name: mediaRate, type: Fixed}
-
-# ####
-
-- struct:
-    name: EditListAtom
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-    - {name: flags, type: int32_t}
-    - {name: numEntries, type: int32_t}
-    - {name: editListTable, type: 'EditListType[1]'}
-
-# ####
-
-- struct:
-    name: EditsAtom
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-    - {name: editList, type: EditListAtom}
-
-# ####
-
-- struct:
-    name: TrackDirectory
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-    - {name: trackHeader, type: TrackHeaderAtom}
-    - {name: trackClip, type: ClippingAtom}
-    - {name: edits, type: EditsAtom}
-    - {name: media, type: MediaDirectory}
-    - {name: userData, type: UserDataAtom}
-
-# ####
-
-- struct:
-    name: MovieHeader
-    members:
-    - {name: flags, type: int32_t}
-    - {name: creationTime, type: int32_t}
-    - {name: modificationTime, type: int32_t}
-    - {name: timeScale, type: TimeValue}
-    - {name: duration, type: TimeValue}
-    - {name: preferredRate, type: Fixed}
-    - {name: preferredVolume, type: INTEGER}
-    - {name: reserved1, type: INTEGER}
-    - {name: preferredLong1, type: int32_t}
-    - {name: preferredLong2, type: int32_t}
-    - {name: matrix, type: MatrixRecord}
-    - {name: previewTime, type: TimeValue}
-    - {name: previewDuration, type: TimeValue}
-    - {name: posterTime, type: TimeValue}
-    - {name: selectionTime, type: TimeValue}
-    - {name: selectionDuration, type: TimeValue}
-    - {name: currentTime, type: TimeValue}
-    - {name: nextTrackID, type: int32_t}
-
-# ####
-
-- struct:
-    name: MovieHeaderAtom
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-    - {name: header, type: MovieHeader}
-
-# ####
-
-- struct:
-    name: MovieDirectory
-    members:
-    - {name: size, type: int32_t}
-    - {name: type, type: int32_t}
-    - {name: header, type: MovieHeaderAtom}
-    - {name: movieClip, type: ClippingAtom}
-    - {name: track, type: 'TrackDirectory[1]'}
-    - {name: userData, type: UserDataAtom}
 
 # ####
 
@@ -6115,7 +5593,7 @@
     name: ClockSetTimeBase
     return: ComponentResult
     args:
-    - {name: aClock, type: ComponentInstance}
+    - {name: clock, type: ComponentInstance}
     - {name: tb, type: TimeBase}
     m68k-inline: [12092, 4, 8, 28672, 43050]
 
@@ -6130,16 +5608,6 @@
     - {name: startChanged, type: Boolean}
     - {name: stopChanged, type: Boolean}
     m68k-inline: [12092, 8, 9, 28672, 43050]
-
-# ####
-
-- function:
-    name: ClockGetRate
-    return: ComponentResult
-    args:
-    - {name: aClock, type: ComponentInstance}
-    - {name: rate, type: Fixed*}
-    m68k-inline: [12092, 4, 10, 28672, 43050]
 
 # ####
 
@@ -6174,7 +5642,6 @@
     - {name: seqGrabAppendToFile, value: 8}
     - {name: seqGrabDontAddMovieResource, value: 16}
     - {name: seqGrabDontMakeMovie, value: 32}
-    - {name: seqGrabPreExtendFile, value: 64}
 
 # ####
 
@@ -6303,12 +5770,6 @@
     - {type: EventRecord*}
     - {type: INTEGER*}
     - {type: int32_t}
-
-# ####
-
-- enum:
-    values:
-    - {name: sgPanelFlagForPanel, value: 1}
 
 # ####
 
@@ -6548,7 +6009,7 @@
     name: SGSetDataProc
     return: ComponentResult
     args:
-    - {name: s, type: SeqGrabComponent}
+    - {name: sg, type: SeqGrabComponent}
     - {name: proc, type: SGDataProc}
     - {name: refCon, type: int32_t}
     m68k-inline: [12092, 8, 32, 28672, 43050]
@@ -7010,26 +6471,6 @@
     - {name: c, type: SGChannel}
     - {name: r, type: Rect*}
     m68k-inline: [12092, 4, 387, 28672, 43050]
-
-# ####
-
-- function:
-    name: SGPanelGetDitl
-    return: ComponentResult
-    args:
-    - {name: s, type: SeqGrabComponent}
-    - {name: ditl, type: Handle*}
-    m68k-inline: [12092, 4, 512, 28672, 43050]
-
-# ####
-
-- function:
-    name: SGPanelGetTitle
-    return: ComponentResult
-    args:
-    - {name: s, type: SeqGrabComponent}
-    - {name: title, type: uint8_t*}
-    m68k-inline: [12092, 4, 513, 28672, 43050]
 
 # ####
 
@@ -7797,7 +7238,6 @@
     - {name: kSGCGetDataRateSelect, value: 386}
     - {name: kSGCAlignChannelRectSelect, value: 387}
     - {name: kSGCPanelGetDitlSelect, value: 512}
-    - {name: kSGCPanelGetTitleSelect, value: 513}
     - {name: kSGCPanelCanRunSelect, value: 514}
     - {name: kSGCPanelInstallSelect, value: 515}
     - {name: kSGCPanelEventSelect, value: 516}
@@ -7877,22 +7317,6 @@
 # ####
 
 - struct:
-    name: VdigType
-    members:
-    - {name: type, type: int32_t}
-    - {name: reserved, type: int32_t}
-
-# ####
-
-- struct:
-    name: VdigTypeList
-    members:
-    - {name: count, type: INTEGER}
-    - {name: list, type: 'VdigType[1]'}
-
-# ####
-
-- struct:
     name: VdigBufferRec
     members:
     - {name: dest, type: PixMapHandle}
@@ -7964,12 +7388,6 @@
     - {name: dmaDepth2Gray, value: 64}
     - {name: dmaDepth4Gray, value: 128}
     - {name: dmaDepth8Gray, value: 256}
-
-# ####
-
-- enum:
-    values:
-    - {name: kvdigSelectors, value: 82}
 
 # ####
 
@@ -9188,32 +8606,6 @@
 
 # ####
 
-- function:
-    name: SCGetCompressionExtended
-    return: ComponentResult
-    args:
-    - {name: ci, type: ComponentInstance}
-    - {name: params, type: SCParams*}
-    - {name: where, type: Point}
-    - {name: filterProc, type: SCModalFilterProcPtr}
-    - {name: hookProc, type: SCModalHookProcPtr}
-    - {name: refcon, type: int32_t}
-    - {name: customName, type: StringPtr}
-    m68k-inline: [12092, 24, 1, 28672, 43050]
-
-# ####
-
-- function:
-    name: SCGetCompression
-    return: ComponentResult
-    args:
-    - {name: ci, type: ComponentInstance}
-    - {name: params, type: SCParams*}
-    - {name: where, type: Point}
-    m68k-inline: [17063, 17063, 17063, 17063, 12092, 24, 1, 28672, 43050]
-
-# ####
-
 - typedef: {name: MovieImportComponent, type: ComponentInstance}
 
 # ####
@@ -9236,13 +8628,8 @@
 
 - enum:
     values:
-    - {name: kMovieImportExportOpenSelect, value: -1}
-    - {name: kMovieImportExportCloseSelect, value: -2}
-    - {name: kMovieImportExportCanDoSelect, value: -3}
-    - {name: kMovieImportExportVersionSelect, value: -4}
     - {name: kMovieImportHandleSelect, value: 1}
     - {name: kMovieImportFileSelect, value: 2}
-    - {name: kMovieImportSetFrameDurationSelect, value: 3}
     - {name: kMovieImportSetSampleDescriptionSelect, value: 4}
     - {name: kMovieImportSetMediaFileSelect, value: 5}
     - {name: kMovieImportSetDimensionsSelect, value: 6}
@@ -9490,10 +8877,6 @@
 
 - enum:
     values:
-    - {name: kPreviewOpenSelector, value: 0}
-    - {name: kPreviewCloseSelector, value: -1}
-    - {name: kPreviewCanDoSelector, value: -2}
-    - {name: kPreviewVersionSelector, value: -3}
     - {name: kPreviewShowDataSelector, value: 1}
     - {name: kPreviewMakePreviewSelector, value: 2}
     - {name: kPreviewMakePreviewReferenceSelector, value: 3}
@@ -9797,54 +9180,12 @@
 # ####
 
 - function:
-    name: MediaSetGraphicsMode
-    return: ComponentResult
-    args:
-    - {name: ci, type: ComponentInstance}
-    - {name: mode, type: int32_t}
-    - {name: opColor, type: RGBColor*}
-    m68k-inline: [12092, 8, 1297, 28672, 43050]
-
-# ####
-
-- function:
-    name: MediaGetGraphicsMode
-    return: ComponentResult
-    args:
-    - {name: ci, type: ComponentInstance}
-    - {name: mode, type: int32_t*}
-    - {name: opColor, type: RGBColor*}
-    m68k-inline: [12092, 8, 1298, 28672, 43050]
-
-# ####
-
-- function:
     name: MediaGSetVolume
     return: ComponentResult
     args:
     - {name: ci, type: ComponentInstance}
     - {name: volume, type: INTEGER}
     m68k-inline: [12092, 2, 1299, 28672, 43050]
-
-# ####
-
-- function:
-    name: MediaSetSoundBalance
-    return: ComponentResult
-    args:
-    - {name: ci, type: ComponentInstance}
-    - {name: balance, type: INTEGER}
-    m68k-inline: [12092, 2, 1300, 28672, 43050]
-
-# ####
-
-- function:
-    name: MediaGetSoundBalance
-    return: ComponentResult
-    args:
-    - {name: ci, type: ComponentInstance}
-    - {name: balance, type: INTEGER*}
-    m68k-inline: [12092, 4, 1301, 28672, 43050]
 
 # ####
 
@@ -10032,7 +9373,6 @@
     - {name: codecImageBufErr, value: -8965}
     - {name: codecSpoolErr, value: -8966}
     - {name: codecAbortErr, value: -8967}
-    - {name: codecWouldOffscreenErr, value: -8968}
     - {name: codecBadDataErr, value: -8969}
     - {name: codecDataVersErr, value: -8970}
     - {name: codecExtensionNotFoundErr, value: -8971}
@@ -10067,45 +9407,12 @@
     - {name: kFullVolume, value: 256}
     - {name: kNoVolume, value: 0}
     - {name: MovieControllerComponentType, value: '''play'''}
-    - {name: kMovieVersion, value: 0}
-    - {name: sgChannelAtom, value: '''chan'''}
-    - {name: sgChannelSettingsAtom, value: '''ctom'''}
-    - {name: sgChannelDescription, value: '''cdsc'''}
-    - {name: sgChannelSettings, value: '''cset'''}
-    - {name: sgDeviceNameType, value: '''name'''}
-    - {name: sgUsageType, value: '''use '''}
-    - {name: sgPlayFlagsType, value: '''plyf'''}
     - {name: sgClipType, value: '''clip'''}
     - {name: sgMatrixType, value: '''mtrx'''}
-    - {name: sgVolumeType, value: '''volu'''}
-    - {name: sgPanelSettingsAtom, value: '''ptom'''}
-    - {name: sgPanelDescription, value: '''pdsc'''}
-    - {name: sgPanelSettings, value: '''pset'''}
-    - {name: sgcSoundCompressionType, value: '''scmp'''}
-    - {name: sgcSoundSampleRateType, value: '''srat'''}
-    - {name: sgcSoundChannelCountType, value: '''schn'''}
-    - {name: sgcSoundSampleSizeType, value: '''ssiz'''}
-    - {name: sgcSoundInputType, value: '''sinp'''}
-    - {name: sgcSoundGainType, value: '''gain'''}
-    - {name: sgcVideoHueType, value: '''hue '''}
-    - {name: sgcVideoSaturationType, value: '''satr'''}
-    - {name: sgcVideoContrastType, value: '''trst'''}
-    - {name: sgcVideoSharpnessType, value: '''shrp'''}
-    - {name: sgcVideoBrigtnessType, value: '''brit'''}
-    - {name: sgcVideoBlackLevelType, value: '''blkl'''}
-    - {name: sgcVideoWhiteLevelType, value: '''whtl'''}
-    - {name: sgcVideoInputType, value: '''vinp'''}
-    - {name: sgcVideoFormatType, value: '''vstd'''}
-    - {name: sgcVideoFilterType, value: '''vflt'''}
-    - {name: sgcVideoRectType, value: '''vrct'''}
-    - {name: sgVideoDigitizerType, value: '''vdig'''}
     - {name: videoDigitizerComponentType, value: '''vdig'''}
-    - {name: vdigInterfaceRev, value: 2}
     - {name: ntscIn, value: 0}
-    - {name: currentIn, value: 0}
     - {name: palIn, value: 1}
     - {name: secamIn, value: 2}
-    - {name: ntscReallyIn, value: 3}
     - {name: compositeIn, value: 0}
     - {name: sVideoIn, value: 1}
     - {name: rgbComponentIn, value: 2}
@@ -10125,9 +9432,7 @@
     - {name: digiUnimpErr, value: -2201}
     - {name: qtParamErr, value: -2202}
     - {name: matrixErr, value: -2203}
-    - {name: notExactMatrix, value: -2204}
     - {name: noMoreKeyColors, value: -2205}
-    - {name: notExactSize, value: -2206}
     - {name: badDepth, value: -2207}
     - {name: noDMA, value: -2208}
     - {name: badCallOrder, value: -2209}
@@ -10201,7 +9506,6 @@
     - {name: scCompressSequenceBegin, value: 15}
     - {name: scCompressSequenceFrame, value: 16}
     - {name: scCompressSequenceEnd, value: 17}
-    - {name: scDefaultPictHandleSettings, value: 18}
     - {name: scDefaultPictFileSettings, value: 19}
     - {name: scDefaultPixMapSettings, value: 20}
     - {name: scGetInfo, value: 21}
@@ -10225,7 +9529,6 @@
     - {name: MovieImportType, value: '''eat '''}
     - {name: MovieExportType, value: '''spit'''}
     - {name: ShowFilePreviewComponentType, value: '''pnot'''}
-    - {name: CreateFilePreviewrComponentType, value: '''pmak'''}
     - {name: codecGetCodecInfo, value: 0}
     - {name: codecGetCompressionTime, value: 1}
     - {name: codecGetMaxCompressionSize, value: 2}
@@ -10266,5 +9569,3 @@
     - {name: codecConditionNewAccuracy, value: 1024}
     - {name: codecConditionNewDestination, value: 2048}
     - {name: codecConditionCodecChangedMask, value: -2147483648}
-    - {name: codecInfoResourceType, value: '''cdci'''}
-    - {name: codecInterfaceVersion, value: 1}
