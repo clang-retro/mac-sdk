@@ -1382,14 +1382,6 @@ def main():
         if word == 0xABF2 and threads:
             thread_call(pc)
             return
-        if word == 0xA193:
-            # Microseconds: the high long in A0, the low long in D0. The
-            # time follows the fake ticks (one tick is 16667 us).
-            us = state["ticks"] * 16667
-            uc.reg_write(UC_M68K_REG_A0, (us >> 32) & 0xFFFFFFFF)
-            uc.reg_write(UC_M68K_REG_D0, us & 0xFFFFFFFF)
-            uc.reg_write(UC_M68K_REG_PC, pc + 2)
-            return
         if word == 0xA1AD and fake:
             # Gestalt: the selector in D0; the answer in A0, the result in D0.
             sel = struct.pack(">I", uc.reg_read(UC_M68K_REG_D0) & 0xFFFFFFFF)
