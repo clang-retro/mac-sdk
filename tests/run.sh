@@ -47,6 +47,18 @@ for ex in examples/*.c; do
     -- -Wall -Werror "$ex" >/dev/null
 done
 echo "examples: linked"
+# Debug information: peflink.py discards the DWARF sections of the XCOFF
+# objects, so a PowerPC build with -g gives the same PEF as one without.
+# (-gdwarf-4 is explicit so that a clang older than DWARF v4 by default on
+# XCOFF can also run this.)
+mkdir "$APPS/nodebug" "$APPS/debug"
+CLANG="$CLANG" python3 tools/macapp.py --cpu ppc -o "$APPS/nodebug/hello.bin" \
+  -- -Wall -Werror examples/hello.c >/dev/null
+CLANG="$CLANG" python3 tools/macapp.py --cpu ppc -o "$APPS/debug/hello.bin" \
+  -- -Wall -Werror -gdwarf-4 examples/hello.c >/dev/null
+cmp -s "$APPS/nodebug/hello.bin" "$APPS/debug/hello.bin" || {
+  echo "debug: the application made with -g is not the same as without"; exit 1; }
+echo "debug: ok"
 # A 68k code resource and a faceless background application: the file
 # types, the resource and the SIZE flags.
 CLANG="$CLANG" python3 tools/macapp.py --cpu 68k --no-libc --no-runtime \

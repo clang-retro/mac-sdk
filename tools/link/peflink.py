@@ -157,8 +157,14 @@ class XcoffObject:
             self.symbols[i] = sym
             i += 1 + numaux
 
-        # Give every relocation to the csect that holds its address.
+        # Give every relocation to the csect that holds its address. Only
+        # the loaded sections (.text, .data and .bss) go in the PEF
+        # container. Ignore the relocations of the other sections, such as
+        # the DWARF debug sections that -g makes (STYP_DWARF): PEF has no
+        # place for debug information, so the linker discards it.
         for sect in self.sections:
+            if not sect["flags"] & (STYP_TEXT | STYP_DATA | STYP_BSS):
+                continue
             # An empty csect (the TOC anchor) shares its address with the
             # one after it, which owns the relocation: try sized ones first.
             owners = sorted((c for c in self.csects if c.sect is sect),
